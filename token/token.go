@@ -54,7 +54,6 @@ const (
 	MOD             = "%"
 	NOT_CONTAINS    = "!~"
 	NOT_EQ          = "!="
-	NULL            = "null"
 	OR              = "||"
 	PERIOD          = "."
 	PLUS            = "+"
@@ -89,7 +88,6 @@ var keywords = map[string]Type{
 	"if":       IF,
 	"in":       IN,
 	"let":      LET,
-	"null":     NULL,
 	"return":   RETURN,
 	"switch":   SWITCH,
 	"true":     TRUE,
