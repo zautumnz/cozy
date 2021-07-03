@@ -22,11 +22,11 @@ for (len(r) > 0) {
 
      # strip newlines / space, and show the output
      r = r.trim()
-     print("Read: '", r, "'\n");
+     print("Read: '", r, "'");
 
      # loop
      r = fh.read();
 };
 fh.close();
 
-print("Read:" , lines, " lines.\n");
+print("Read:" , lines, " lines.");

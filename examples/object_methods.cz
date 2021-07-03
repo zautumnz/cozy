@@ -4,7 +4,7 @@
 #
 # For example if you defined the function string.blah():
 #
-#  function string.blah() { print("OK\n"); };
+#  function string.blah() { print("OK"); };
 #
 # You could then invoke it via:
 #
@@ -31,12 +31,12 @@ for (i < len(t)) {
     # Show the type + methods.
     let item  = t[i];
     let metod = item.methods();
-    print("Object type ", type(item), "\n");
+    print("Object type ", type(item));
 
     # Show the methods.
     let j = 0;
     for (j < len(metod)) {
-        print("\t", metod[j], "\n");
+        print("\t", metod[j]);
         j++;
     }
     i++;

@@ -5,21 +5,21 @@
 
 let input = "  Steve Kemp  ";
 
-print("Input: '", input, "'\n");
+print("Input: '", input, "'");
 
 # Case-conversion
-print("Upper: '", input.toupper(), "'\n");
-print("Lower: '", input.tolower(), "'\n");
+print("Upper: '", input.toupper(), "'");
+print("Lower: '", input.tolower(), "'");
 
 # Removing whitespace
-print("ltrim: '", input.ltrim(), "'\n");
-print("rtrim: '", input.rtrim(), "'\n");
-print("trim: '",  input.trim(), "'\n");
+print("ltrim: '", input.ltrim(), "'");
+print("rtrim: '", input.rtrim(), "'");
+print("trim: '",  input.trim(), "'");
 
 # Reversing
 let str = "The quick brown 狐 jumped over the lazy 犬";
-print("String  : '" + str + "'\n");
-print("Reversed: '" + str.reverse() + "'\n");
+print("String  : '" + str + "'");
+print("Reversed: '" + str.reverse() + "'");
 
 # Escapes are good.
-print("We also allow escaping quotes, like so: \"\n");
+print("We also allow escaping quotes, like so: \"");

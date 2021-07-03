@@ -73,7 +73,7 @@ function object.string() {
 #
 function assert(val, msg = "Result was not 'true'!" ) {
    if ( type(val) == "string") {
-      result = eval( val );
+      let result = eval( val );
       if ( !result ) {
         puts( "assert(\"" , val, "\") failed - ", msg, "\n" );
         exit(1);
@@ -119,7 +119,7 @@ assert( "!first([])" );
 function rest( array ) {
   let result = [];
 
-  if ( len(array) > 1 ) {
+  if (len(array) > 1) {
     let i = 1;
     for( i < len(array) ) {
       result = push(result, array[i]);
@@ -568,7 +568,7 @@ assert( "let a = [2,-1,-12];
 # array.uniq returns the unique members of an array.
 #
 function array.uniq() {
-    tmp = {};
+    let tmp = {};
 
     foreach item in self {
          tmp = set( tmp, item, true );
@@ -819,10 +819,10 @@ function string.find( needle ) {
 
    # get a substring at each possible position
    for( i < l ) {
-     possible = self.substr( i, L );
+     let possible = self.substr( i, L );
 
      # does this match?
-     if ( possible == needle ) {
+     if (possible == needle) {
        return i;
      }
 

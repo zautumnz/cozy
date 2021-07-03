@@ -5,4 +5,4 @@
 # Here we test that function.
 #
 
-print("This is cozy version " + version() + "\n")
+print("This is cozy version " + version())

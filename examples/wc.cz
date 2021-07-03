@@ -34,5 +34,5 @@ for (len(r) > 0) {
    r = fh.read();
 }
 
-print("Read " , c, " characters from ", path , "\n");
+print("Read " , c, " characters from ", path);
 fh.close();

@@ -4,7 +4,7 @@
 #
 function dump(hash) {
     let k = keys(hash);
-    print("\tHash has ", len(k) , " keys.\n");
+    print("\tHash has ", len(k) , " keys.");
 
     let i = 0;
     for (i < len(k)) {
@@ -12,7 +12,7 @@ function dump(hash) {
        # Show the name / type / value
        print("\tEntry has key:" , k[i] ,
              " (type:", type(k[i]), ")",
-             " with value:", h[k[i]], "\n");
+             " with value:", h[k[i]]);
        i++;
     }
 }
@@ -26,7 +26,7 @@ let h = {"Steve": "Kemp" , "Moi": 7, 3.14:"pi?"};
 #
 # Show it.
 #
-print("The original hash:\n");
+print("The original hash:");
 dump(h);
 
 #
@@ -37,7 +37,7 @@ let h = set(h, "Updated", "Value");
 #
 # Show it
 #
-print("After adding a new key:\n");
+print("After adding a new key:");
 dump(h);
 
 #
@@ -45,14 +45,14 @@ dump(h);
 #
 let h = delete(h, "Moi");
 let h = delete(h, 3.14);
-print("After deleting two keys:\n");
+print("After deleting two keys:");
 dump(h);
 
 
-print("Running command: /bin/ls\n");
+print("Running command: /bin/ls");
 let h = `/bin/ls / /fdsf`;
 dump(h);
 
-print("Running via bash:\n");
+print("Running via bash:");
 let h = `/bin/sh -c "/bin/ls /etc"`;
 dump(h);

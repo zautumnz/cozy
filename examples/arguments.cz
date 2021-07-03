@@ -6,10 +6,10 @@
 
 let a = args();
 
-print("We received ", len(a), " arguments to our script.\n");
+print("We received ", len(a), " arguments to our script.");
 
 let i = 0;
 for (i < len(a)) {
-   print("\t", i, " " , a[i], "\n");
+   print("\t", i, " " , a[i]);
    i++
 }

@@ -65,30 +65,30 @@ let ints = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
              11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ];
 
 # Show them ..
-print("\nIntegers:\n");
-print("\t", ints, "\n");
+print("\nIntegers:");
+print("\t", ints);
 
 #
 # Show their squares ..
 #
-print("\nSquares:\n");
-print("\t", ints.map(square), "\n");
+print("\nSquares:");
+print("\t", ints.map(square));
 
 #
 # Show their cubes, using an anonymous function
 #
-print("\nCubes:\n");
-print("\t", ints.map(fn(n) { return n * n * n; }), "\n");
-print("\nCubes via POW:\n");
-print("\t", ints.map(fn(n) { return n ** 3; }), "\n");
+print("\nCubes:");
+print("\t", ints.map(fn(n) { return n * n * n; }));
+print("\nCubes via POW:");
+print("\t", ints.map(fn(n) { return n ** 3; }));
 
 #
 # Now use our functional-methods to show odd/even/prime
 # numbers contained in our list.
 #
-print("\nOdd numbers:\n");
-print("\t", ints.filter(odd?), "\n");
-print("\nEven numbers:\n");
-print("\t", ints.filter(even?), "\n");
-print("\nPrime numbers:\n");
-print("\t", ints.filter(prime?), "\n");
+print("\nOdd numbers:");
+print("\t", ints.filter(odd?));
+print("\nEven numbers:");
+print("\t", ints.filter(even?));
+print("\nPrime numbers:");
+print("\t", ints.filter(prime?));

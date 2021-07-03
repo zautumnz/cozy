@@ -65,6 +65,7 @@ the [Go Interpreters Book](https://interpreterbook.com).
 * Remove C-Style comments, only Shell-style are valid
 * No switch statements
 * No pragma, strict mode is always on
+* `print` adds an ending newline; use stdout.write for raw text
 
 ---
 
@@ -360,11 +361,11 @@ naming/invocation purposes:
 
 
     let add = fn(a, b) { return a + b;};
-    puts(add(1,2));  // Outputs: 3
+    print(add(1,2));  // Outputs: 3
 
     // functions can be used via their variables
     let addTwo = fn(a,b, f) { return 2 + f(a, b);};
-    puts( addTwo(1,2, add) ); // outputs: 5.
+    print( addTwo(1,2, add) ); // outputs: 5.
 
 It is also possible to define a function without the use of `let`, via the `function` keyword.  This was added to make the language feel more natural to C-developers:
 
@@ -374,7 +375,7 @@ It is also possible to define a function without the use of `let`, via the `func
 You may specify a default value for arguments which are not provided, for example:
 
     let foo = fn( name = "World!") {
-      puts( "Hello, " + name + "\n" );
+      print( "Hello, " + name + "\n" );
     };
 
     foo();
@@ -389,7 +390,7 @@ The same thing works for literal functions:
 
     // Function with a default (string) argument
     function meh( arg = "Steve" ) {
-      puts( "Argument:", arg, " has type:", type(arg), "\n");
+      print( "Argument:", arg, " has type:", type(arg), "\n");
     };
 
     // Call it with no argument and the default will be used.

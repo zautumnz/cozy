@@ -1,14 +1,15 @@
 #!/usr/bin/env cozy
 
-#
-# This program demonstrates the use of variable-updates without the need
-# for `let`.
-#
-
-
 let i = 3;
 i = 2 * PI ;
-print("2xPI ", i, "\n");
+print("2xPI ", i);
 
 let x = 3;
-print("X:", x, "\n");
+print("X:", x);
+
+# Unicode works fine in identifiers
+let 天 = "tian";
+print(天);
+
+const FOO = 123;
+print(FOO);

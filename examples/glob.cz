@@ -14,12 +14,12 @@ let files = directory.glob(pattern);
 # If that worked
 #
 if (len(files) > 0) {
-    print("Pattern ", pattern, " matched " , len(files), " files\n");
+    print("Pattern ", pattern, " matched " , len(files), " files");
 
     # Show each result.
     let i = 0;
     for (i < len(files)) {
-        print("\t", files[i], "\n");
+        print("\t", files[i]);
         i++;
     }
 }

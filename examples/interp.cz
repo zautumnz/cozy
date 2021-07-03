@@ -7,12 +7,12 @@
 
 
 let data = {"Name":"Foo", "Contact":"foo@bar.com", "Age": 31};
-let str  = "My name is ${Name}, I am ${Age}\n";
+let str  = "My name is ${Name}, I am ${Age}";
 let out  = str.interpolate data);
 print(out);
 
 let out = "My ${Key} is ${null} missing!\n\tContact me at .. ${Contact}".interpolate(data);
-print(out, "\n");
+print(out);
 
 
-print("Surname:${surname}".interpolate({"surname": "Anger"}) , "\n");
+print("Surname:${surname}".interpolate({"surname": "Anger"}));

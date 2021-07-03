@@ -6,10 +6,10 @@
 let uptime = `/usr/bin/uptime`;
 
 if (uptime) {
-   print("STDOUT: ", uptime["stdout"].trim() , "\n");
-   print("STDERR: ", uptime["stderr"].trim() , "\n");
+   print("STDOUT: ", uptime["stdout"].trim());
+   print("STDERR: ", uptime["stderr"].trim());
 } else {
-   print("Failed to run command\n");
+   print("Failed to run command");
 }
 
 #
@@ -17,8 +17,8 @@ if (uptime) {
 #
 let ls = `/bin/sh -c "/bin/ls /etc /missing-path"`;
 if (ls) {
-   print("STDOUT: ", ls["stdout"].trim() , "\n");
-   print("STDERR: ", ls["stderr"].trim() , "\n");
+   print("STDOUT: ", ls["stdout"].trim());
+   print("STDERR: ", ls["stderr"].trim());
 } else {
-   print("Failed to run command\n");
+   print("Failed to run command");
 }

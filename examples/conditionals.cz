@@ -3,9 +3,9 @@
 let x = "x";
 
 if (x == "y") {
-    print("x is somehow y\n");
+    print("x is somehow y");
 } else if (x == "z") {
-    print("this isn't right either\n");
+    print("this isn't right either");
 } else {
-    print("x == x\n");
+    print("x == x");
 }

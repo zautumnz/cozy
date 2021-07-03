@@ -5,8 +5,8 @@
 #
 
 function show(input) {
-   print("Type of input was ", type(input), "\n");
-   print("\tAfter converting to string we found: ", string(input), "\n");
+   print("Type of input was ", type(input));
+   print("\tAfter converting to string we found: ", string(input));
 }
 
 
