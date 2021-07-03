@@ -1,31 +1,31 @@
-//
-// Simple test of regular expressions
-//
+#
+# Simple test of regular expressions
+#
 
-//
-// Substring match
-//
+#
+# Substring match
+#
 if ( match( "eve", "Steve Kemp" ) ) {
    print( "'Steve Kemp' contains the substring 'eve'\n");
 }
 
-//
-// Suffix Match
-//
+#
+# Suffix Match
+#
 if ( match( "emp$", "Steve Kemp" ) ) {
    print( "Suffix-match OK\n");
 }
 
-//
-// Prefix-match
-//
+#
+# Prefix-match
+#
 if ( match( "^[A-Z]", "Steve Kemp" ) ) {
    print( "Prefix-match OK\n");
 }
 
-//
-// IP-address regexp
-//
+#
+# IP-address regexp
+#
 let reg =  "([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$";
 let out = match(reg, "12.23.21.224");
 if (out) {
@@ -36,9 +36,9 @@ if (out) {
 }
 
 
-//
-// The same thing using literal a regular expression
-//
+#
+# The same thing using literal a regular expression
+#
 
 ip = "192.168.1.1";
 

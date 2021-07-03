@@ -201,49 +201,11 @@ func TestUnicodeLexer(t *testing.T) {
 }
 
 func TestSimpleComment(t *testing.T) {
-	input := `=+// This is a comment
-// This is still a comment
-# I like comments
-let a = 1; # This is a comment too.
-// This is a final
-// comment on two-lines`
-
-	tests := []struct {
-		expectedType    token.Type
-		expectedLiteral string
-	}{
-		{token.ASSIGN, "="},
-		{token.PLUS, "+"},
-		{token.LET, "let"},
-		{token.IDENT, "a"},
-		{token.ASSIGN, "="},
-		{token.INT, "1"},
-		{token.SEMICOLON, ";"},
-		{token.EOF, ""},
-	}
-	l := New(input)
-	for i, tt := range tests {
-		tok := l.NextToken()
-		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
-		}
-		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
-		}
-	}
-}
-
-func TestMultiLineComment(t *testing.T) {
-	input := `=+/* This is a comment
-
-We're still in a comment
-let c = 2; */
-let a = 1;
-// This isa comment
-// This is still a comment.
-/* Now a multi-line again
-   Which is two-lines
- */`
+	input := `=+# This is a comment
+# This is a comment
+let a = 1; # This is a comment
+# This is a final
+# comment on two-lines`
 
 	tests := []struct {
 		expectedType    token.Type

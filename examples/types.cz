@@ -1,8 +1,8 @@
-//
-// The `string` function allow something to be converted to a string.
-//
-// The `type` function returns the type of an item.
-//
+#
+# The `string` function allow something to be converted to a string.
+#
+# The `type` function returns the type of an item.
+#
 
 function show( input ) {
    print( "Type of input was ", type( input ), "\n" );

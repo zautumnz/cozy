@@ -16,7 +16,6 @@ the [Go Interpreters Book](https://interpreterbook.com).
 
 ## Basics
 
-* Shell style comments, no multiline comment syntax
 * No null, no undefined
 * All functions must return a value
 * All variables must be initialized to something
@@ -32,6 +31,7 @@ the [Go Interpreters Book](https://interpreterbook.com).
 
 ## TODO
 
+* Garbage collection
 * Generally make it look like the cozy example
 * Remove function keyword (only let foo = fn () {})
 * Remove mutations
@@ -61,6 +61,7 @@ the [Go Interpreters Book](https://interpreterbook.com).
 
 * No `null`
 * `puts` -> `print`
+* Remove C-Style comments, only Shell-style are valid
 
 ---
 
@@ -512,11 +513,7 @@ When iterating over hashes you can receive either the keys, or the keys and valu
 
 ## 2.9 Comments
 
-`cozy` support two kinds of comments:
-
-* Single-line comments begin with `//` and last until the end of the line.
-* Multiline comments between `/*` and `*/`.
-
+`cozy` supports one kind of comment `#` (Python/Shell style)
 
 ## 2.10 Postfix Operators
 

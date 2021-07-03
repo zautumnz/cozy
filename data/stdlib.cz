@@ -1,65 +1,65 @@
-//
-// This file contains functions available by default, implemented in 100%
-// pure monkey.
-//
-// i.e. This is part of our standard-library.
-//
-// If you wish to make changes to the standard-library functions in this
-// file you'll need to rebuild the interpreter after making your changes.
-//
-// This file it is embedded in the generated-binary as part of the build
-// process.
-//
-//    go build .
-//
+#
+# This file contains functions available by default, implemented in 100%
+# pure cozy.
+#
+# i.e. This is part of our standard-library.
+#
+# If you wish to make changes to the standard-library functions in this
+# file you'll need to rebuild the interpreter after making your changes.
+#
+# This file it is embedded in the generated-binary as part of the build
+# process.
+#
+#    go build .
+#
 
 
-//
-// Mathematical constants
-//
+#
+# Mathematical constants
+#
 const PI = 3.141592653589793;
 const E  =  2.718281828459045;
 
-//
-// File-objects for STDIN, STDOUT, and STDERR.
-//
-// Rather than opening these by name/path we have magic-strings which
-// are recognized by our "open" primitive.
-//
+#
+# File-objects for STDIN, STDOUT, and STDERR.
+#
+# Rather than opening these by name/path we have magic-strings which
+# are recognized by our "open" primitive.
+#
 const STDIN = open( "!STDIN!" );
 const STDOUT = open( "!STDOUT!" );
 const STDERR = open( "!STDERR!" );
 
 
-//
-// Functions with an "object." prefix are available to all types.
-//
-// With this definition in-place you can invoke the object-methods:
-//
-//     "".type();
-//     3.type();
-//     [].type();
-//     etc
-//
-// instead of having to run type( blah );
-//
+#
+# Functions with an "object." prefix are available to all types.
+#
+# With this definition in-place you can invoke the object-methods:
+#
+#     "".type();
+#     3.type();
+#     [].type();
+#     etc
+#
+# instead of having to run type( blah );
+#
 function object.type() {
    return(type(self));
 }
 
 
-//
-// Functions with an "object." prefix are available to all types.
-//
-// With this definition in-place you can invoke the object-methods:
-//
-//     "".string();
-//     3.string();
-//     [].string();
-//     etc
-//
-// instead of having to run string( blah );
-//
+#
+# Functions with an "object." prefix are available to all types.
+#
+# With this definition in-place you can invoke the object-methods:
+#
+#     "".string();
+#     3.string();
+#     [].string();
+#     etc
+#
+# instead of having to run string( blah );
+#
 function object.string() {
    return(string(self));
 }
@@ -67,10 +67,10 @@ function object.string() {
 
 
 
-//
-// The `assert` method allows the code in our standard-library to be
-// tested every time it is loaded.
-//
+#
+# The `assert` method allows the code in our standard-library to be
+# tested every time it is loaded.
+#
 function assert(val, msg = "Result was not 'true'!" ) {
    if ( type(val) == "string") {
       result = eval( val );
@@ -96,15 +96,15 @@ assert( "type( STDOUT ) == \"file\"" );
 assert( "type( STDERR ) == \"file\"" );
 
 
-//
-// First element of an array
-//
+#
+# First element of an array
+#
 function first( array ) {
   if ( len(array) >= 1 ) {
     return( array[0] );
   }
 
-  // return nil is implicit here.
+  # return nil is implicit here.
 }
 
 assert( "first( [0,1] ) == 0" );
@@ -113,9 +113,9 @@ assert( "!first([])" );
 
 
 
-//
-// The rest of an array - i.e. all elements EXCEPT the first
-//
+#
+# The rest of an array - i.e. all elements EXCEPT the first
+#
 function rest( array ) {
   let result = [];
 
@@ -137,15 +137,15 @@ assert( "string(rest([\"steve\",1])) == \"[1]\"" );
 
 
 
-//
-// Last element of an array
-//
+#
+# Last element of an array
+#
 function last( array ) {
   if ( len( array ) > 0 ) {
     return(array[len(array)-1]);
   }
 
-  // `return null` is implicit here.
+  # `return null` is implicit here.
 }
 
 assert( "last([0,2]) == 2" );
@@ -155,9 +155,9 @@ assert( "!last([])" );
 
 
 
-//
-// Is the given array empty?
-//
+#
+# Is the given array empty?
+#
 function array.empty?() {
    if ( len(self) == 0 ) {
       return true;
@@ -173,10 +173,10 @@ assert( "![\"steve\",3].empty?()" );
 
 
 
-//
-// Call the given function on each entry, and return an array of the
-// items for which the predicate returned true.
-//
+#
+# Call the given function on each entry, and return an array of the
+# items for which the predicate returned true.
+#
 function array.filter( predicate ) {
    let i = 0;
    let l = len(self);
@@ -194,7 +194,7 @@ function array.filter( predicate ) {
 }
 
 
-// Filter an array and keep only values which are "2".
+# Filter an array and keep only values which are "2".
 assert( "let a = [ 1, 2, 3 , -1, \"steve\", 44 ];
          let a = a.filter( fn(n) { return n == 2 ; } );
          if ( a.string() == \"[2]\" ) {
@@ -207,9 +207,9 @@ assert( "let a = [ 1, 2, 3 , -1, \"steve\", 44 ];
 
 
 
-//
-// Return the offset, if any, of the specified item in the array.
-//
+#
+# Return the offset, if any, of the specified item in the array.
+#
 function array.find(item) {
    foreach index, value in self {
        if ( value == item ) {
@@ -217,7 +217,7 @@ function array.find(item) {
        }
    }
 
-   // not found.
+   # not found.
    return -1;
 }
 
@@ -228,9 +228,9 @@ assert( "[1,2,3,3].find(3) == 2" );
 
 
 
-//
-// Does the given value exist inside the array?
-//
+#
+# Does the given value exist inside the array?
+#
 function array.includes?( obj ) {
    return( self.find( obj ) != -1 );
 }
@@ -238,9 +238,9 @@ function array.includes?( obj ) {
 assert( "[1,2,3].includes?(2)" );
 assert( "! [1,2,3].includes?(23)" );
 
-//
-// Find minimum value in array
-//
+#
+# Find minimum value in array
+#
 function array.min() {
 
    let i = 0;
@@ -250,19 +250,19 @@ function array.min() {
       return 0;
    }
 
-   // Assume first value is minimum
+   # Assume first value is minimum
    let min = self[0];
 
-   // type checking.
+   # type checking.
    if ( type(min) != "integer" && type(min) != "float" ) {
       puts( "array.min only works on numbers - not " , type(min), "\n");
       exit(1);
    }
 
-   // If we find a smaller one, set it.
+   # If we find a smaller one, set it.
    for( i < l ) {
 
-     // type checking.
+     # type checking.
      if ( type(self[i]) != "integer" && type(self[i]) != "float" ) {
         puts( "array.min only works on numbers - not " , type(self[i]), "\n");
         exit(1);
@@ -283,9 +283,9 @@ assert( "( [-1,-2,-3].min() == -3 )" );
 assert( "( [].min() == 0 )", "minimum of an empty array is zero" );
 
 
-//
-// Find maximum value in array
-//
+#
+# Find maximum value in array
+#
 function array.max() {
 
    let i = 0;
@@ -295,19 +295,19 @@ function array.max() {
       return 0;
    }
 
-   // Assume first value is maximum
+   # Assume first value is maximum
    let max = self[0];
 
-   // ensure we're dealing with types
+   # ensure we're dealing with types
    if ( type(max) != "integer" && type(max) != "float" ) {
       puts( "array.max only works on numbers - not " , type(max), "\n");
       exit(1);
    }
 
-   // If we find a greater one, set it.
+   # If we find a greater one, set it.
    for( i < l ) {
 
-     // type checking.
+     # type checking.
      if ( type(self[i]) != "integer" && type(self[i]) != "float" ) {
         puts( "array.max only works on numbers - not " , type(self[i]), "\n");
         exit(1);
@@ -328,23 +328,23 @@ assert( "( [-1,-2,-3].max() == -1 )" );
 assert( "( [].max() == 0 )", "maximum of an empty array is zero" );
 
 
-//
-// Join the elements of an array by the given string.
-//
+#
+# Join the elements of an array by the given string.
+#
 function array.join( char ) {
    let r = "";
    let i = 0;
    let l = len(self);
 
-   // For each entry.
+   # For each entry.
    for( i < l ) {
 
-     // If the result is non-empty add the separator.
+     # If the result is non-empty add the separator.
      if ( len(r) > 0 ) {
        r+= char;
      }
 
-     // add on the next element.
+     # add on the next element.
      r += string(self[i])
      i++;
    }
@@ -360,9 +360,9 @@ assert( "[1,2,3].join( \"\" ) == \"123\"" );
 
 
 
-//
-// Reverse an array.
-//
+#
+# Reverse an array.
+#
 function array.reverse() {
   let r = [];
   let l = len(self);
@@ -381,22 +381,22 @@ assert( "string([1,2,3].reverse()) == \"[3, 2, 1]\"" );
 
 
 
-//
-// sorted? returns true if the specified array is sorted.
-//
+#
+# sorted? returns true if the specified array is sorted.
+#
 function array.sorted?() {
 
-  // Ensure each array-member has the same type.
+  # Ensure each array-member has the same type.
   let tmp = {};
   let i = 0;
 
-  // Record the types.
+  # Record the types.
   for( i < len(self) ) {
      tmp = set(tmp, self[i].type(), true );
      i++;
   }
 
-  // There can be only one!
+  # There can be only one!
   if ( len( keys( tmp ) ) > 1 ) {
      puts( "Attempting to check an array with mixed-type values!\n" );
      puts( string(self), "\n" );
@@ -406,13 +406,13 @@ function array.sorted?() {
   let i = 1;
   let l = len(self);
 
-  // Array of zero/one element is always sorted.
+  # Array of zero/one element is always sorted.
   if ( l < 2 ) {
     return true;
   }
 
-  // If a later item is smaller than the
-  // earlier item the array is not sorted.
+  # If a later item is smaller than the
+  # earlier item the array is not sorted.
   for( i < l ) {
      if ( self[i] < self[i-1]) {
        return false;
@@ -433,16 +433,16 @@ assert( "[].sorted?()" );
 
 
 
-//
-// Swap the value of two array indexes.
-//
-// This is used by our sorting function.  Currently it isn't possible
-// to mutate an array-member in-place.  So we create a new array
-// correctly swapping the values at the given index.
-//
-// This would be easier if we had "elseif" support, or even a case
-// statement.  (Due to the nested if usage here.)
-//
+#
+# Swap the value of two array indexes.
+#
+# This is used by our sorting function.  Currently it isn't possible
+# to mutate an array-member in-place.  So we create a new array
+# correctly swapping the values at the given index.
+#
+# This would be easier if we had "elseif" support, or even a case
+# statement.  (Due to the nested if usage here.)
+#
 function array.swap( a, b ) {
   let aVal = self[b];
   let bVal = self[a];
@@ -475,39 +475,39 @@ assert( "let a = [10,20]; a = a.swap(0,1); if ( a[1] == 10 ) { true; } else { fa
 
 
 
-//
-// Sort the given array.
-//
-// This is grossly inefficient, obviously.
-//
+#
+# Sort the given array.
+#
+# This is grossly inefficient, obviously.
+#
 function array.sort() {
 
-  // Ensure each array-member has the same type.
+  # Ensure each array-member has the same type.
   let tmp = {};
   let i = 0;
 
-  // Record the types.
+  # Record the types.
   for( i < len(self) ) {
      tmp = set(tmp, self[i].type(), true );
      i++;
   }
 
-  // There can be only one!
+  # There can be only one!
   if ( len( keys( tmp ) ) > 1 ) {
      puts( "Attempting to sort an array with mixed-type values!\n" );
      puts( string(self), "\n" );
      exit(1);
   }
 
-  // While the given array isn't sorted.
+  # While the given array isn't sorted.
   for( ! self.sorted?() ) {
 
-     // make a pass over the array.
+     # make a pass over the array.
      let i = 1;
      let l = len(self);
      for( i < l ) {
 
-        // if this element is wrong swap it.
+        # if this element is wrong swap it.
         if ( self[i] < self[i-1] ) {
           self = self.swap( i-1, i);
         }
@@ -515,7 +515,7 @@ function array.sort() {
      }
   }
 
-  // Should be done now.
+  # Should be done now.
   return self;
 }
 
@@ -526,13 +526,13 @@ assert( "let a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3" );
 
 
 
-//
-// Return an array containing the result of applying the specified
-// function to each element in the array.
-//
-// This is out of alphabetical order because our assert-based testing
-// invokes sort, just to ensure consistent results.
-//
+#
+# Return an array containing the result of applying the specified
+# function to each element in the array.
+#
+# This is out of alphabetical order because our assert-based testing
+# invokes sort, just to ensure consistent results.
+#
 function array.map( fnc ) {
 
    let result = [];
@@ -564,9 +564,9 @@ assert( "let a = [2,-1,-12];
 
 
 
-//
-// array.uniq returns the unique members of an array.
-//
+#
+# array.uniq returns the unique members of an array.
+#
 function array.uniq() {
     tmp = {};
 
@@ -574,7 +574,7 @@ function array.uniq() {
          tmp = set( tmp, item, true );
     }
 
-    // return the sorted keys
+    # return the sorted keys
     return( tmp.keys().sort() );
 }
 
@@ -586,11 +586,11 @@ assert( "string([1,1,1,1,2].uniq()) == \"[1, 2]\"" );
 
 
 
-//
-// Convert a float to an integer.
-//
-// Like Go we discard the value after the period, so 4.9 will become 4.
-//
+#
+# Convert a float to an integer.
+#
+# Like Go we discard the value after the period, so 4.9 will become 4.
+#
 function float.to_i() {
    return( int( self ) );
 }
@@ -603,9 +603,9 @@ assert( "let a = 3.1; if ( a.to_i() == 3 ) { return true; } else { return false 
 
 
 
-//
-// Is the given hash empty?
-//
+#
+# Is the given hash empty?
+#
 function hash.empty?() {
    if ( len(self.keys()) == 0 ) {
       return true;
@@ -622,9 +622,9 @@ assert( "! {\"name\":\"steve\"}.empty?()" );
 
 
 
-//
-// Convert an integer to a float.
-//
+#
+# Convert an integer to a float.
+#
 function integer.to_f() {
    return( self + 0.0);
 }
@@ -636,9 +636,9 @@ assert( "3.to_f() == 3.0" );
 
 
 
-//
-// Count occurences of the given character in the string.
-//
+#
+# Count occurences of the given character in the string.
+#
 function string.count(char) {
   let c = 0;
 
@@ -660,9 +660,9 @@ assert( "\"犬犬犬犬犬犬狐\".count(\"犬\") == 6" );
 
 
 
-//
-// Remove leading whitespace from the string.
-//
+#
+# Remove leading whitespace from the string.
+#
 function string.ltrim() {
    let reg = "^(\\s+)(.*)$";
    let out = match(reg, self);
@@ -683,9 +683,9 @@ assert( ( "  steve  ".ltrim() == "steve  "), "string.ltrim failed" );
 
 
 
-//
-// Repeat a string N times.
-//
+#
+# Repeat a string N times.
+#
 function string.repeat(count) {
   let r= "";
 
@@ -709,9 +709,9 @@ assert( ( "*".repeat(-1) == "*"), "string.repeat failed" );
 
 
 
-//
-// Reverse a string,
-//
+#
+# Reverse a string,
+#
 function string.reverse() {
   let r= "";
   let l = len(self);
@@ -731,9 +731,9 @@ assert( ( "322".reverse() == "223"), "string.reverse failed" );
 
 
 
-//
-// Remove trailing whitespace from the string.
-//
+#
+# Remove trailing whitespace from the string.
+#
 function string.rtrim() {
    let reg = "^(.*?)(\\s*)$";
    let out = match(reg, self);
@@ -751,31 +751,31 @@ assert( ( "  狐犬  ".rtrim() == "  狐犬"), "string.rtrim failed" );
 
 
 
-// string.substr returns the given substring
-// from our input.  The length of the string
-// to return is optional, and will default to
-// the length available.
-//
-// Note: Moved this ahead of where it is used in string.replace.
-//
+# string.substr returns the given substring
+# from our input.  The length of the string
+# to return is optional, and will default to
+# the length available.
+#
+# Note: Moved this ahead of where it is used in string.replace.
+#
 function string.substr(start,length = -1) {
 
-   // if there is no length then default to the rest of the string.
+   # if there is no length then default to the rest of the string.
    if ( length == -1 ) {
      length = len(self) - start ;
    }
 
-   // start must be positive
+   # start must be positive
    if ( start < 0 ) {
      start = 0;
    }
 
-   // if the length of the string is too big then we'll cap it too.
+   # if the length of the string is too big then we'll cap it too.
    if ( start + length > self.len() ) {
      length = len(self) - start ;
    }
 
-   // catch bounding-errors.
+   # catch bounding-errors.
    if ( start >= len(self) ) {
       return "";
    }
@@ -804,24 +804,24 @@ assert( "狐犬".substr( -1,100 ) == "狐犬" , "string.substr() failed");
 
 
 
-//
-// string.find returns the offset of the given substring
-// or -1 if it isn't found.
-//
+#
+# string.find returns the offset of the given substring
+# or -1 if it isn't found.
+#
 function string.find( needle ) {
 
-   // get details about ourself
+   # get details about ourself
    let i = 0;
    let l = len(self);
 
-   // the length of our search string.
+   # the length of our search string.
    let L = len(needle);
 
-   // get a substring at each possible position
+   # get a substring at each possible position
    for( i < l ) {
      possible = self.substr( i, L );
 
-     // does this match?
+     # does this match?
      if ( possible == needle ) {
        return i;
      }
@@ -842,10 +842,10 @@ assert( "\"st狐eve犬es\".find(\"犬\" ) == 6" );
 
 
 
-//
-// string.interpolate replaces ${blah} with the value of "blah" from
-// the specified hash.
-//
+#
+# string.interpolate replaces ${blah} with the value of "blah" from
+# the specified hash.
+#
 function string.interpolate( hsh ) {
    let reg = "(?s)^(.*?)\\$\\{([^\\}]+)\\}(.*)";
    let out = match(reg, self);
@@ -864,12 +864,12 @@ function string.interpolate( hsh ) {
 
 
 
-//
-// string.split returns an array splitting on any characters included
-// in the separator string.
-//
-// By default the split is on whitespace: " ", "TAB", & "RETURN".
-//
+#
+# string.split returns an array splitting on any characters included
+# in the separator string.
+#
+# By default the split is on whitespace: " ", "TAB", & "RETURN".
+#
 function string.split(sep = " \r\t\n" ) {
   let i = 0;
   let l = len(self);
@@ -879,13 +879,13 @@ function string.split(sep = " \r\t\n" ) {
 
   for( i < l ) {
 
-     // get the character.
+     # get the character.
      let c = self[i];
 
-     // is the character one of our split-characters?
+     # is the character one of our split-characters?
      if ( sep.find( c ) != -1 ) {
 
-        // OK push any previously-accumulated token into our array.
+        # OK push any previously-accumulated token into our array.
         if ( len(tmp) > 0 ) {
           r = push( r, tmp );
         }
@@ -893,13 +893,13 @@ function string.split(sep = " \r\t\n" ) {
 
      } else {
 
-       // store the character into our accumulator.
+       # store the character into our accumulator.
        tmp += c;
      }
      i++;
   }
 
-  // Do we have a dangling-string?  If so append it.
+  # Do we have a dangling-string?  If so append it.
   if ( len(tmp) > 0 ) {
      r = push(r,tmp);
   }
@@ -918,20 +918,20 @@ assert( "type(\"1 2 3\".split(\"2\")) == \"array\"" );
 
 
 
-//
-// string.replace removes a value from a string, replacing it
-// with a new value.
-//
+#
+# string.replace removes a value from a string, replacing it
+# with a new value.
+#
 function string.replace( old, new ) {
   let s = self;
   let index = s.find( old );
 
   for( index >= 0 ) {
 
-     // get the prefix
+     # get the prefix
      let pre = s.substr(0, index);
 
-     // get the suffix
+     # get the suffix
      let suf = s.substr( index + len(old) );
 
      s = pre + new + suf;
@@ -951,9 +951,9 @@ assert( "steve".replace( "A", "EE" ) == "steve", "string.replace() failed" );
 
 
 
-//
-// Trim leading & trailing whitespace from the given string.
-//
+#
+# Trim leading & trailing whitespace from the given string.
+#
 function string.trim() {
    let l = self.ltrim();
    return( l.rtrim() );
@@ -967,9 +967,9 @@ assert( " 1 ".trim() == "1", "string.trim failed" );
 
 
 
-//
-// Convert the given string to lower-case.
-//
+#
+# Convert the given string to lower-case.
+#
 function string.tolower() {
    let r = "";
 
@@ -995,11 +995,11 @@ assert( "狐犬".tolower() == "狐犬", "string.tolower() failed" );
 
 
 
-//
-// Convert a string to a number
-//
-// (Possibly an int, possibly a float)
-//
+#
+# Convert a string to a number
+#
+# (Possibly an int, possibly a float)
+#
 function string.to_number() {
    let reg = "\\.";
    let out = match(reg, self);
@@ -1023,9 +1023,9 @@ assert( type("313".to_number() ) == "integer", "string.tonumber() failed" );
 
 
 
-//
-// Convert the given string to upper-case.
-//
+#
+# Convert the given string to upper-case.
+#
 function string.toupper() {
    let r = "";
 

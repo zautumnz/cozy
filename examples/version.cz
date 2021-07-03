@@ -1,8 +1,8 @@
-//
-// The cozy.go intepreter registers a new
-// custom function called `version()`.
-//
-// Here we test that function.
-//
+#
+# The cozy.go intepreter registers a new
+# custom function called `version()`.
+#
+# Here we test that function.
+#
 
 print("This is cozy version " + version() + "\n")

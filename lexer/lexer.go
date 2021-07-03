@@ -68,16 +68,10 @@ func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 	l.skipWhitespace()
 
-	// skip single-line comments
-	if l.ch == rune('#') ||
-		(l.ch == rune('/') && l.peekChar() == rune('/')) {
+	// skip comments
+	if l.ch == rune('#') {
 		l.skipComment()
 		return (l.NextToken())
-	}
-
-	// multi-line comments
-	if l.ch == rune('/') && l.peekChar() == rune('*') {
-		l.skipMultiLineComment()
 	}
 
 	switch l.ch {
@@ -409,32 +403,6 @@ func (l *Lexer) skipComment() {
 	for l.ch != '\n' && l.ch != rune(0) {
 		l.readChar()
 	}
-	l.skipWhitespace()
-}
-
-// Consume all tokens until we've had the close of a multi-line
-// comment.
-func (l *Lexer) skipMultiLineComment() {
-	found := false
-
-	for !found {
-		// break at the end of our input.
-		if l.ch == rune(0) {
-			found = true
-		}
-
-		// otherwise keep going until we find "*/".
-		if l.ch == '*' && l.peekChar() == '/' {
-			found = true
-
-			// Our current position is "*", so skip
-			// forward to consume the "/".
-			l.readChar()
-		}
-
-		l.readChar()
-	}
-
 	l.skipWhitespace()
 }
 

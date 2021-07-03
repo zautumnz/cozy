@@ -1,16 +1,16 @@
-// A simple script to read a file and count the characters.
-//
-//   $ ./cozy wc.cz
-//
-//   Read 2572 characters
-//
-// That matches :)
-//
-//   $ wc -c /etc/passwd
-//   2572
-//
+# A simple script to read a file and count the characters.
+#
+#   $ ./cozy wc.cz
+#
+#   Read 2572 characters
+#
+# That matches :)
+#
+#   $ wc -c /etc/passwd
+#   2572
+#
 
-// Open the file
+# Open the file
 let path = "/etc/passwd";
 let fh = open(path);
 if ( ! fh ) {
@@ -18,19 +18,19 @@ if ( ! fh ) {
    exit(0);
 }
 
-// Count of characters
+# Count of characters
 let c = 0;
 
-// Read a line
+# Read a line
 let r = fh.read();
 
-// Loop while that is none-empty
+# Loop while that is none-empty
 for( len(r) > 0  ) {
 
-   // Add this line
+   # Add this line
    c += len(r);
 
-   // Read the next one.
+   # Read the next one.
    r = fh.read();
 }
 
