@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/skx/monkey/token"
+	"github.com/zacanger/cozy/token"
 )
 
 // Node reresents a node.

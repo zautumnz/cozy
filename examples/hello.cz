@@ -1,0 +1,3 @@
+#!/usr/bin/env cozy
+print( "Hello, world!\n" );
+

@@ -1,0 +1,34 @@
+// Iterating over the contents of an array
+print( "Array: value\n")
+a = [ "My", "name", "is", "Steve" ]
+foreach item in a {
+     print( "\t",  item , "\n");
+}
+print( "Array: index/value\n")
+foreach index, item in a {
+     print( "\t", index, "\t",  item , "\n");
+}
+
+// Iterating over the contents of a string.
+print( "String: value\n")
+foreach char in "Steve Kemp" {
+     print( "\t", char , "\n");
+}
+
+// character + index
+print( "String: index/value\n")
+foreach idx, char in "Steve Kemp" {
+     print( "\t", idx, "\t", char , "\n");
+}
+
+
+// Iterating over a hash
+h = { "Foo": "Bar", "Steve": "Kemp"}
+print( "Hash: key\n")
+foreach key in h {
+     print( "\t", key, "\n");
+}
+print( "Hash: key/value\n")
+foreach key,val in h {
+     print( "\t", key, "\t=>\t", val, "\n");
+}

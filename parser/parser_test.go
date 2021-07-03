@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/skx/monkey/ast"
-	"github.com/skx/monkey/lexer"
+	"github.com/zacanger/cozy/ast"
+	"github.com/zacanger/cozy/lexer"
 )
 
 func TestLetStatements(t *testing.T) {
@@ -875,7 +875,7 @@ func TestObjectMethodCall(t *testing.T) {
 func TestIncompleThings(t *testing.T) {
 	input := []string{
 		`if ( true ) { `,
-		`if ( true ) { puts( "OK" ) ; } else { `,
+		`if ( true ) { print( "OK" ) ; } else { `,
 		`return 3`,
 		`let x = `,
 		`const x =`,

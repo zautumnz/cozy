@@ -12,8 +12,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/skx/monkey/ast"
-	"github.com/skx/monkey/object"
+	"github.com/zacanger/cozy/ast"
+	"github.com/zacanger/cozy/object"
 )
 
 // pre-defined object including Null, True and False
@@ -1183,7 +1183,7 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 		// succeed, that probably means that the function wasn't
 		// implemented in go.
 		//
-		// So now we want to look for it in monkey, and we have
+		// So now we want to look for it in cozy, and we have
 		// enough details to find the appropriate function.
 		//
 		//  * We have the object involved.
@@ -1204,7 +1204,7 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 		// For this case we'll be looking for `array.foo()`.
 		//
 		//   let a = [ 1, 2, 3 ];
-		//   puts( a.foo() );
+		//   print( a.foo() );
 		//
 		// As a final fall-back we'll look for "object.foo()"
 		// if "array.foo()" isn't defined.
@@ -1254,7 +1254,7 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 
 	//
 	// If we hit this point we have had a method invoked which
-	// was neither defined in go nor monkey.
+	// was neither defined in go nor cozy.
 	//
 	// e.g. "steve".md5sum()
 	//

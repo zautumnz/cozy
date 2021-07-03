@@ -1,19 +1,24 @@
+# cozy
+
 Forked from [skx's version](https://github.com/skx/monkey) of the language from
 the [Go Interpreters Book](https://interpreterbook.com).
 
-TODO:
+## TODO
 
 * Remove function keyword
 * Remove mutations
 * Generally make it look like the cozy example
+* Automatic semicolon insertion
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/skx/monkey)](https://goreportcard.com/report/github.com/skx/monkey)
-[![license](https://img.shields.io/github/license/skx/monkey.svg)](https://github.com/skx/monkey/blob/master/LICENSE)
-[![Release](https://img.shields.io/github/release/skx/monkey.svg)](https://github.com/skx/monkey/releases/latest)
+## Difference's from Steve Kemp's version
+* No `null`
+* `puts` -> `print`
 
+---
 
+## Original Readme
 
-* [Monkey](#monkey)
+* [cozy](#cozy)
   * [My changes](#my-changes)
 * [1. Installation](#1-installation)
   * [Binary Releases](#binary-releases)
@@ -43,9 +48,9 @@ TODO:
 * [Github Setup](#github-setup)
 
 
-# Monkey
+# cozy
 
-This repository contains an interpreter for the "Monkey" programming language, as described in [Write an Interpreter in Go](https://interpreterbook.com).
+This repository contains an interpreter for the "cozy" programming language, as described in [Write an Interpreter in Go](https://interpreterbook.com).
 
 
 #### My changes
@@ -56,7 +61,7 @@ The interpreter in _this_ repository has been significantly extended from the st
 * Added postfix operators (`i++`, `i--`).
 * Allow accessing individual characters of a string via the index-operator.
 * Added a driver to read from STDIN, or a named file, rather than a REPL.
-    * This allows executing the examples easily (for example "`./monkey examples/hello.mon`".)
+    * This allows executing the examples easily (for example "`./cozy examples/hello.mon`".)
 * Added a collection of standard-library functions.
     * Including file input/output, type-discovery, string, and math functions.
 * Added a new way to define functions, via `function`.
@@ -74,11 +79,11 @@ The interpreter in _this_ repository has been significantly extended from the st
     * To correct/detect "obvious" errors add `pragma("strict");` to your script, which will cause the interpreter to show a suitable error-message and terminate.
 * Function arguments may have defaults.  For example:
   * `function greet( name = "World" ) { puts("Hello, " + name + "\n"); }`
-* Moved parts of the standard-library to 100% pure monkey, rather than implementing it in go.
+* Moved parts of the standard-library to 100% pure cozy, rather than implementing it in go.
   * See [data/stdlib.mon](data/stdlib.mon) for the implementation.
   * See also the notes on [object-based methods](#31-defininig-new-object-methods).
 * Added the `eval` function.
-  * Which allows executing monkey-code from a string.
+  * Which allows executing cozy-code from a string.
 * Improved error-reporting from the parser.
   * It will now show the line-number of failures (where possible).
 * Added support for regular expressions, both literally and via `match`
@@ -94,32 +99,32 @@ The interpreter in _this_ repository has been significantly extended from the st
 
 ## 1. Installation
 
-Due to the embedded [standard-library implementation](data/stdlib.mon), which is implemented in monkey, you'll need to compile this project with go version 1.16beta1 or higher.
+Due to the embedded [standard-library implementation](data/stdlib.mon), which is implemented in cozy, you'll need to compile this project with go version 1.16beta1 or higher.
 
 You can install from source like so:
 
-    git clone https://github.com/skx/monkey
-    cd monkey
+    git clone https://github.com/skx/cozy
+    cd cozy
     go install
 
 
 ### Binary Releases
 
-Alternatively you could install a binary-release, from the [release page](https://github.com/skx/monkey/releases).
+Alternatively you could install a binary-release, from the [release page](https://github.com/skx/cozy/releases).
 
-If you're an [emacs](https://www.gnu.org/software/emacs/) user might also wish to install the [monkey.el](emacs/monkey.el) file, which provides syntax highlighting for monkey-scripts.
+If you're an [emacs](https://www.gnu.org/software/emacs/) user might also wish to install the [cozy.el](emacs/cozy.el) file, which provides syntax highlighting for cozy-scripts.
 
 
 ### 1.1 Usage
 
-To execute a monkey-script simply pass the name to the interpreter:
+To execute a cozy-script simply pass the name to the interpreter:
 
-     $ monkey ./example/hello.mon
+     $ cozy ./example/hello.mon
 
 Scripts can be made executable by adding a suitable shebang line:
 
      $ cat hello.mon
-     #!/usr/bin/env monkey
+     #!/usr/bin/env cozy
      puts( "Hello, world!\n" );
 
 Execution then works as you would expect:
@@ -169,7 +174,7 @@ typos will cause much confusion!
 
 ## 2.2 Arithmetic operations
 
-`monkey` supports all the basic arithmetic operation of `int` and `float` types.
+`cozy` supports all the basic arithmetic operation of `int` and `float` types.
 
 The `int` type is represented by `int64` and `float` type is represented by `float64`.
 
@@ -189,7 +194,7 @@ When operating with integers the modulus operator is available too, via `%`.
 
 ## 2.3 Builtin containers
 
-`monkey` contains two builtin containers: `array` and `hash`.
+`cozy` contains two builtin containers: `array` and `hash`.
 
 
 ### 2.3.1 Arrays
@@ -229,19 +234,19 @@ As a helper you may define an array of consecutive integers via the range operat
 A hash is a key/value container, but note that keys may only be of type `boolean`, `int` and `string`.
 
 
-    let a = {"name":"monkey",
+    let a = {"name":"cozy",
              true:1,
              7:"seven"};
 
-    puts(a); // Outputs: {name: monkey, true: 1, 7: seven}
+    puts(a); // Outputs: {name: cozy, true: 1, 7: seven}
 
-    puts(a["name"]); // Outputs: monkey
+    puts(a["name"]); // Outputs: cozy
 
 Updating a hash is done via the `set` function, but note that this returns
 an updated hash - rather than changing in-place:
 
     let b = set(a, 8, "eight");
-    puts(b);  // Outputs: {name: monkey, true: 1, 7: seven, 8: eight}
+    puts(b);  // Outputs: {name: cozy, true: 1, 7: seven, 8: eight}
 
 You can iterate over the keys in a hash via the `keys` function, or delete
 keys via `delete` (again these functions returns an updated value rather than
@@ -283,7 +288,7 @@ The core primitives are:
   * returns the type of a variable.
 
 The following functions are also part of our standard library, but are
-implemented in 100% pure monkey:
+implemented in 100% pure cozy:
 
 * `first`
   * yield the first element of array.
@@ -300,11 +305,11 @@ In addition to the core built-in functions we also have a minimal-standard libra
 
 You can see the implementation of the go-based standard-library beneath [evaluator/stdlib*](evaluator/), and several of these functions are documented in the various [examples/](examples/).
 
-**NOTE**: Parts of our standard-library are implemented in 100% pure monkey,
+**NOTE**: Parts of our standard-library are implemented in 100% pure cozy,
 and these are embedded in our compiled interpreter.  The source of the functions
 can be viewed in [data/stdlib.mon](data/stdlib.mon).
 
-If you wish to make changes to the monkey-based standard-library you'll
+If you wish to make changes to the cozy-based standard-library you'll
 need to rebuild the interpreter after making your changes, to ensure they are bundled into the executable.
 
 Nothing special is required, the following will suffice as you'd expect:
@@ -314,7 +319,7 @@ Nothing special is required, the following will suffice as you'd expect:
 
 ## 2.5 Functions
 
-`monkey` uses `fn` to define a function which will be assigned to a variable for
+`cozy` uses `fn` to define a function which will be assigned to a variable for
 naming/invocation purposes:
 
 
@@ -364,7 +369,7 @@ The same thing works for literal functions:
 
 ## 2.6 If-else statements
 
-`monkey` supports if-else statements.
+`cozy` supports if-else statements.
 
     let max = fn(a, b) {
       if (a > b) {
@@ -379,7 +384,7 @@ The same thing works for literal functions:
 
 ### 2.6.1 Ternary Expressions
 
-`monkey` supports the use of ternary expressions, which work as you
+`cozy` supports the use of ternary expressions, which work as you
 would expect with a C-background:
 
     function max(a,b) {
@@ -393,7 +398,7 @@ Note that in the interests of clarity nested ternary-expressions are illegal!
 
 ## 2.7 Switch Statements
 
-Monkey supports the `switch` and `case` expressions, as the following example demonstrates:
+cozy supports the `switch` and `case` expressions, as the following example demonstrates:
 
 ```
   name = "Steve";
@@ -419,7 +424,7 @@ See also [examples/switch.mon](examples/switch.mon).
 
 ## 2.8 For-loop statements
 
-`monkey` supports a golang-style for-loop statement.
+`cozy` supports a golang-style for-loop statement.
 
      let sum = fn(x) {
         let i = 1;
@@ -459,7 +464,7 @@ When iterating over hashes you can receive either the keys, or the keys and valu
 
 ## 2.9 Comments
 
-`monkey` support two kinds of comments:
+`cozy` support two kinds of comments:
 
 * Single-line comments begin with `//` and last until the end of the line.
 * Multiline comments between `/*` and `*/`.
@@ -635,7 +640,7 @@ no doubt things will change over time.
 ## 3.1 Defininig New Object Methods
 
 The object-methods mentioned above are implemented in Go, however it is also
-possible to define such methods in 100% monkey!
+possible to define such methods in 100% cozy!
 
 You can define a method via something like:
 
@@ -652,18 +657,3 @@ implicit `self` name.  Invocation would look as you expect:
 You can see [data/stdlib.mon](data/stdlib.mon) implements some primitives
 in this fashion, for example the functional-programming methods `array.map`,
 `array.filter`, `string.toupper`, etc, etc.
-
-
-## Github Setup
-
-This repository is configured to run tests upon every commit, and when
-pull-requests are created/updated.  The testing is carried out via
-[.github/run-tests.sh](.github/run-tests.sh) which is used by the
-[github-action-tester](https://github.com/skx/github-action-tester) action.
-
-Releases are automated in a similar fashion via [.github/build](.github/build),
-and the [github-action-publish-binaries](https://github.com/skx/github-action-publish-binaries) action.
-
-
-Steve
---

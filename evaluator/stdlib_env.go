@@ -3,7 +3,7 @@ package evaluator
 import (
 	"os"
 
-	"github.com/skx/monkey/object"
+	"github.com/zacanger/cozy/object"
 )
 
 // os.getenv() -> ( Hash )
@@ -45,7 +45,7 @@ func getEnvFun(args ...object.Object) object.Object {
 
 }
 
-// os.setenv( "PATH", "/home/skx/bin:/usr/bin" );
+// os.setenv( "PATH", "/home/z/bin:/usr/bin" );
 func setEnvFun(args ...object.Object) object.Object {
 	if len(args) != 2 {
 		return newError("wrong number of arguments. got=%d, want=1",

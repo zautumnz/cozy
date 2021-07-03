@@ -1,4 +1,4 @@
-// Package parser is used to parse input-programs written in monkey
+// Package parser is used to parse input-programs written in cozy
 // and convert them to an abstract-syntax tree.
 package parser
 
@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/skx/monkey/ast"
-	"github.com/skx/monkey/lexer"
-	"github.com/skx/monkey/token"
+	"github.com/zacanger/cozy/ast"
+	"github.com/zacanger/cozy/lexer"
+	"github.com/zacanger/cozy/token"
 )
 
 // prefix Parse function

@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/skx/monkey/ast"
+	"github.com/zacanger/cozy/ast"
 )
 
 // Function wraps ast.Identifier array, ast.BlockStatement and Environment and implements Object interface.

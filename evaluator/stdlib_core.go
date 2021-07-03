@@ -8,9 +8,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/skx/monkey/lexer"
-	"github.com/skx/monkey/object"
-	"github.com/skx/monkey/parser"
+	"github.com/zacanger/cozy/lexer"
+	"github.com/zacanger/cozy/object"
+	"github.com/zacanger/cozy/parser"
 )
 
 // Change a mode of a file - note the second argument is a string
@@ -45,7 +45,7 @@ func chmodFun(args ...object.Object) object.Object {
 	return &object.Boolean{Value: true}
 }
 
-// evaluate a string containing monkey-code
+// evaluate a string containing cozy-code
 func evalFun(env *object.Environment, args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return newError("wrong number of arguments. got=%d, want=1",
@@ -333,7 +333,7 @@ func pushFun(args ...object.Object) object.Object {
 }
 
 // output a string to stdout
-func putsFun(args ...object.Object) object.Object {
+func printFun(args ...object.Object) object.Object {
 	for _, arg := range args {
 		fmt.Print(arg.Inspect())
 	}
@@ -648,9 +648,9 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (pushFun(args...))
 		})
-	RegisterBuiltin("puts",
+	RegisterBuiltin("print",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (putsFun(args...))
+			return (printFun(args...))
 		})
 	RegisterBuiltin("printf",
 		func(env *object.Environment, args ...object.Object) object.Object {

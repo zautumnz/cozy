@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/skx/monkey/token"
+	"github.com/zacanger/cozy/token"
 )
 
 func TestNextToken1(t *testing.T) {
@@ -302,7 +302,7 @@ func TestIntegers(t *testing.T) {
 
 // Test that the shebang-line is handled specially.
 func TestShebang(t *testing.T) {
-	input := `#!/bin/monkey
+	input := `#!/bin/cozy
 10;`
 
 	tests := []struct {
@@ -327,7 +327,7 @@ func TestShebang(t *testing.T) {
 
 // TestMoreHandling does nothing real, but it bumps our coverage!
 func TestMoreHandling(t *testing.T) {
-	input := `#!/bin/monkey
+	input := `#!/bin/cozy
 1 += 1;
 2 -= 2;
 3 /= 3;
@@ -336,8 +336,8 @@ x */ 3;
 let t = true;
 let f = false;
 
-if ( t && f ) { puts( "What?" ); }
-if ( t || f ) { puts( "What?" ); }
+if ( t && f ) { print( "What?" ); }
+if ( t || f ) { print( "What?" ); }
 
 let a = 1;
 a++;
@@ -346,14 +346,14 @@ let b = a % 1;
 b--;
 b -= 2;
 
-if ( a<3 ) { puts( "Blah!"); }
-if ( a>3 ) { puts( "Blah!"); }
+if ( a<3 ) { print( "Blah!"); }
+if ( a>3 ) { print( "Blah!"); }
 
 let b = 3;
 b**b;
 b *= 3;
-if ( b <= 3  ) { puts "blah\n" }
-if ( b >= 3  ) { puts "blah\n" }
+if ( b <= 3  ) { print "blah\n" }
+if ( b >= 3  ) { print "blah\n" }
 
 let a = "steve";
 let a = "steve\n";

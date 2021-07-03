@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/skx/monkey/lexer"
-	"github.com/skx/monkey/object"
-	"github.com/skx/monkey/parser"
+	"github.com/zacanger/cozy/lexer"
+	"github.com/zacanger/cozy/object"
+	"github.com/zacanger/cozy/parser"
 )
 
 func TestEvalArithmeticExpression(t *testing.T) {
@@ -610,7 +610,7 @@ func TestTypeBuiltin(t *testing.T) {
 			"array",
 		},
 		{
-			"type( { \"name\":\"monkey\", true:1, 7:\"sevent\"} );",
+			"type( { \"name\":\"cozy\", true:1, 7:\"sevent\"} );",
 			"hash",
 		},
 	}
