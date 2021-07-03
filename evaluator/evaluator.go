@@ -21,7 +21,6 @@ var (
 	NULL    = &object.Null{}
 	TRUE    = &object.Boolean{Value: true}
 	FALSE   = &object.Boolean{Value: false}
-	PRAGMAS = make(map[string]int)
 	CTX     = context.Background()
 )
 
@@ -82,9 +81,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		res := evalInfixExpression(node.Operator, left, right, env)
 		if isError(res) {
 			fmt.Printf("Error: %s\n", res.Inspect())
-			if PRAGMAS["strict"] == 1 {
-				os.Exit(1)
-			}
+			os.Exit(1)
 		}
 		return (res)
 
@@ -135,9 +132,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		res := evalObjectCallExpression(node, env)
 		if isError(res) {
 			fmt.Fprintf(os.Stderr, "Error calling object-method %s\n", res.Inspect())
-			if PRAGMAS["strict"] == 1 {
-				os.Exit(1)
-			}
+			os.Exit(1)
 		}
 		return res
 	case *ast.CallExpression:
@@ -152,9 +147,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		res := applyFunction(env, function, args)
 		if isError(res) {
 			fmt.Fprintf(os.Stderr, "Error calling `%s` : %s\n", node.Function, res.Inspect())
-			if PRAGMAS["strict"] == 1 {
-				os.Exit(1)
-			}
+			os.Exit(1)
 			return res
 		}
 		return res
@@ -735,14 +728,10 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 		return res
 
 	case "=":
-		// If we're running with the strict-pragma it is
-		// a bug to set a variable which wasn't declared (via let).
-		if PRAGMAS["strict"] == 1 {
-			_, ok := env.Get(a.Name.String())
-			if !ok {
-				fmt.Printf("Setting unknown variable '%s' is a bug under strict-pragma!\n", a.Name.String())
-				os.Exit(1)
-			}
+		_, ok := env.Get(a.Name.String())
+		if !ok {
+			fmt.Printf("Setting unknown variable '%s' is an error!\n", a.Name.String())
+			os.Exit(1)
 		}
 
 		env.Set(a.Name.String(), evaluated)
@@ -872,9 +861,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 		return builtin
 	}
 	fmt.Fprintf(os.Stderr, "identifier not found: %s\n", node.Value)
-	if PRAGMAS["strict"] == 1 {
-		os.Exit(1)
-	}
+	os.Exit(1)
 	return newError("identifier not found: " + node.Value)
 }
 

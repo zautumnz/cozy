@@ -6,13 +6,13 @@
 #
 
 
-let data = { "Name":"Steve", "Contact":"+358449...",  "Age": 32 };
+let data = {"Name":"Foo", "Contact":"foo@bar.com", "Age": 31};
 let str  = "My name is ${Name}, I am ${Age}\n";
-let out  = str.interpolate( data );
+let out  = str.interpolate data);
 print(out);
 
-let out = "My ${Key} is ${null} missing!\n\tContact me at .. ${Contact}".interpolate( data );
+let out = "My ${Key} is ${null} missing!\n\tContact me at .. ${Contact}".interpolate(data);
 print(out, "\n");
 
 
-print( "Forename: Steve  Surname:${surname}".interpolate( { "surname": "Kemp" } ) , "\n");
+print("Surname:${surname}".interpolate({"surname": "Anger"}) , "\n");

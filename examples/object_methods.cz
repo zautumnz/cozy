@@ -4,7 +4,7 @@
 #
 # For example if you defined the function string.blah():
 #
-#  function string.blah() { print( "OK\n"); };
+#  function string.blah() { print("OK\n"); };
 #
 # You could then invoke it via:
 #
@@ -27,22 +27,17 @@ let t = [ [], 3.13, fn(){} , {} , 3, "steve" ];
 # Walk over the types
 #
 let i = 0;
-for( i < len(t) ) {
+for (i < len(t)) {
+    # Show the type + methods.
+    let item  = t[i];
+    let metod = item.methods();
+    print("Object type ", type(item), "\n");
 
-  #
-  # Show the type + methods.
-  #
-  let item  = t[i];
-  let metod = item.methods();
-  print( "Object type ", type(item), "\n");
-
-  #
-  # Show the methods.
-  #
-  let j = 0;
-  for ( j < len( metod ) ) {
-     print( "\t", metod[j], "\n");
-     j++;
-  }
-  i++;
+    # Show the methods.
+    let j = 0;
+    for (j < len(metod)) {
+        print("\t", metod[j], "\n");
+        j++;
+    }
+    i++;
 }

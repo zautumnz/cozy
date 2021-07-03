@@ -5,7 +5,6 @@ import (
 	"os"
 	"regexp"
 	"strconv"
-	"strings"
 	"unicode/utf8"
 
 	"github.com/zacanger/cozy/lexer"
@@ -269,49 +268,6 @@ func openFun(args ...object.Object) object.Object {
 	file := &object.File{Filename: path}
 	file.Open(mode)
 	return (file)
-}
-
-// set a global pragma
-func pragmaFun(args ...object.Object) object.Object {
-
-	// If more than one argument that's an error
-	if len(args) > 1 {
-		return newError("wrong number of arguments. got=%d, want=0|1",
-			len(args))
-	}
-
-	// If one argument update to enable the given pragma
-	if len(args) == 1 {
-		switch args[0].(type) {
-		case *object.String:
-			input := args[0].(*object.String).Value
-			input = strings.ToLower(input)
-
-			if strings.HasPrefix(input, "no-") {
-				real := strings.TrimPrefix(input, "no-")
-				delete(PRAGMAS, real)
-			} else {
-				PRAGMAS[input] = 1
-			}
-		default:
-			return newError("argument to `pragma` not supported, got=%s",
-				args[0].Type())
-		}
-	}
-
-	// Now return the pragmas that are in-use.
-	len := len(PRAGMAS)
-
-	// Create a new array for the results.
-	array := make([]object.Object, len)
-
-	i := 0
-	for key := range PRAGMAS {
-		array[i] = &object.String{Value: key}
-		i++
-
-	}
-	return &object.Array{Elements: array}
 }
 
 // push something onto an array
@@ -635,10 +591,6 @@ func init() {
 	RegisterBuiltin("mkdir",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (mkdirFun(args...))
-		})
-	RegisterBuiltin("pragma",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return (pragmaFun(args...))
 		})
 	RegisterBuiltin("open",
 		func(env *object.Environment, args ...object.Object) object.Object {

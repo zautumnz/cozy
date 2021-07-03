@@ -38,6 +38,7 @@ the [Go Interpreters Book](https://interpreterbook.com).
 * Automatic semicolon insertion
 * Modules
 * See about building in a basic HTTP library
+* JSON parsing/stringifying
 * curry, memo, and other FP utils
 * docstrings, embedded markdown?
 * comment syntax, is this good or not?
@@ -63,6 +64,7 @@ the [Go Interpreters Book](https://interpreterbook.com).
 * `puts` -> `print`
 * Remove C-Style comments, only Shell-style are valid
 * No switch statements
+* No pragma, strict mode is always on
 
 ---
 
@@ -124,10 +126,8 @@ The interpreter in _this_ repository has been significantly extended from the st
 * Added command-line handling, so that scripts can read their own arguments.
 * Added global-constants available by default
     * For example `PI`, `E`, `STDIN`, `STDOUT`, & `STDERR`.
-* Most scripts will continue running in the face of errors.
-    * To correct/detect "obvious" errors add `pragma("strict");` to your script, which will cause the interpreter to show a suitable error-message and terminate.
 * Function arguments may have defaults.  For example:
-  * `function greet( name = "World" ) { puts("Hello, " + name + "\n"); }`
+  * `function greet( name = "World" ) { print("Hello, " + name + "\n"); }`
 * Moved parts of the standard-library to 100% pure cozy, rather than implementing it in go.
   * See [data/stdlib.mon](data/stdlib.mon) for the implementation.
   * See also the notes on [object-based methods](#31-defininig-new-object-methods).
@@ -136,7 +136,7 @@ The interpreter in _this_ repository has been significantly extended from the st
 * Improved error-reporting from the parser.
   * It will now show the line-number of failures (where possible).
 * Added support for regular expressions, both literally and via `match`
-  * `if ( name ~= /steve/i ) { puts( "Hello Steve\n"); } `
+  * `if ( name ~= /steve/i ) { print( "Hello Steve\n"); } `
 * Added support for [ternary expressions](#261-ternary-expressions).
 * Added support for creating arrays of consecutive integers via the range operator (`1..10`).
 * Added the ability to iterate over the contents of arrays, hashes, and strings via the `foreach` statement.
@@ -172,7 +172,7 @@ Scripts can be made executable by adding a suitable shebang line:
 
      $ cat hello.mon
      #!/usr/bin/env cozy
-     puts( "Hello, world!\n" );
+     print( "Hello, world!\n" );
 
 Execution then works as you would expect:
 
@@ -201,23 +201,15 @@ Variables may be integers, floats, strings, or arrays/hashes (which are discusse
 
 Some variables are defined by default, for example:
 
-    puts( PI ); // Outputs: 3.14159..
-    puts( E );  // Outputs: 2.71828..
+    print( PI ); // Outputs: 3.14159..
+    print( E );  // Outputs: 2.71828..
 
 Variables may be updated without the need for `let`, for example this works
 as you would expect:
 
     let world = "Earth";
     world = "world";
-    puts( "Hello, " + world + "!\n");
-
-If you're __not__ running with `pragma("strict");` you can also declare and
-use variables without the need for `let`, but that should be avoided as
-typos will cause much confusion!
-
-     name = "Steve";
-     puts( "Hello, " + name + "\n");
-
+    print( "Hello, " + world + "!\n");
 
 ## 2.2 Arithmetic operations
 
@@ -229,11 +221,11 @@ The `int` type is represented by `int64` and `float` type is represented by `flo
        let a = 3;
        let b = 1.2;
 
-       puts( a + b  );  // Outputs: 4.2
-       puts( a - b  );  // Outputs: 1.8
-       puts( a * b  );  // Outputs: 3.6
-       puts( a / b  );  // Outputs: 2.5
-       puts( 2 ** 3 ) ; // Outputs: 8
+       print( a + b  );  // Outputs: 4.2
+       print( a - b  );  // Outputs: 1.8
+       print( a * b  );  // Outputs: 3.6
+       print( a / b  );  // Outputs: 2.5
+       print( 2 ** 3 ) ; // Outputs: 8
 
 Here `**` is used to raise the first number to the power of the second.
 When operating with integers the modulus operator is available too, via `%`.
@@ -260,7 +252,7 @@ You can iterate over the contents of an array like so:
 
      let i = 0;
      for( i < len(a) ) {
-        puts( "Array index ", i, " contains ", a[i], "\n");
+        print( "Array index ", i, " contains ", a[i], "\n");
         i++
      }
 
@@ -285,15 +277,15 @@ A hash is a key/value container, but note that keys may only be of type `boolean
              true:1,
              7:"seven"};
 
-    puts(a); // Outputs: {name: cozy, true: 1, 7: seven}
+    print(a); // Outputs: {name: cozy, true: 1, 7: seven}
 
-    puts(a["name"]); // Outputs: cozy
+    print(a["name"]); // Outputs: cozy
 
 Updating a hash is done via the `set` function, but note that this returns
 an updated hash - rather than changing in-place:
 
     let b = set(a, 8, "eight");
-    puts(b);  // Outputs: {name: cozy, true: 1, 7: seven, 8: eight}
+    print(b);  // Outputs: {name: cozy, true: 1, 7: seven, 8: eight}
 
 You can iterate over the keys in a hash via the `keys` function, or delete
 keys via `delete` (again these functions returns an updated value rather than
@@ -316,12 +308,9 @@ The core primitives are:
   * Yield the length of builtin containers.
 * `match`
   * Regular-expression matching.
-* `pragma`
-  * Allow the run-time environment to be controlled.
-  * We currently support only `pragma("strict");`.
 * `push`
   * push an elements into the array.
-* `puts`
+* `print`
   * Write literal value of objects to STDOUT.
 * `printf`
   * Write values to STDOUT, via a format-string.
@@ -419,14 +408,14 @@ The same thing works for literal functions:
 `cozy` supports if-else statements.
 
     let max = fn(a, b) {
-      if (a > b) {
-        return a;
-      } else {
-        return b;
+        if (a > b) {
+            return a;
+        } else {
+            return b;
         }
     };
 
-    puts( max(1, 2) );  // Outputs: 2
+    print( max(1, 2) );  // Outputs: 2
 
 
 ### 2.6.1 Ternary Expressions
@@ -438,8 +427,8 @@ would expect with a C-background:
       return( a > b ? a : b );
     };
 
-    puts( "max(1,2) -> ", max(1, 2), "\n" );
-    puts( "max(-1,-2) -> ", max(-1, -2), "\n" );
+    print( "max(1,2) -> ", max(1, 2), "\n" );
+    print( "max(-1,-2) -> ", max(-1, -2), "\n" );
 
 Note that in the interests of clarity nested ternary-expressions are illegal!
 
@@ -458,7 +447,7 @@ Note that in the interests of clarity nested ternary-expressions are illegal!
         return sum;
      };
 
-     puts(sum(100));  // Outputs: 4950
+     print(sum(100));  // Outputs: 4950
 
 
 ## 2.8.1 Foreach statements
@@ -469,13 +458,13 @@ For example to iterate over an array:
 
      a = [ "My", "name", "is", "Steve" ]
      foreach item in a {
-          puts( "\t",  item , "\n");
+          print( "\t",  item , "\n");
      }
 
 Here you see that we've iterated over the items of the array, we can also see their offsets like so:
 
      foreach offset, item in a {
-          puts( offset, "\t",  item , "\n");
+          print( offset, "\t",  item , "\n");
      }
 
 The same style of iteration works for Arrays, Hashes, and the characters which make up a string.  You can see examples of this support in [examples/iteration.mon](examples/iteration.mon).
@@ -493,7 +482,7 @@ The `++` and `--` modifiers are permitted for integer-variables, for example the
 
     let i = 0;
     for ( i <= 5 ) {
-       puts( i, "\n" );
+       print( i, "\n" );
        i++;
     }
 
@@ -503,7 +492,7 @@ Using `+=` our previous example could be rewritten as:
 
     let i = 0;
     for ( i <= 5 ) {
-       puts( i, "\n" );
+       print( i, "\n" );
        i += 1;
     }
 
@@ -512,7 +501,7 @@ The update-operators work with integers and doubles by default, when it comes to
     let str = "Forename";
     str += " Surname";
     str += "\n";
-    puts( str );           // -> "Forename Surname\n"
+    print( str );           // -> "Forename Surname\n"
 
 
 ## 2.11 Command Execution
@@ -523,10 +512,10 @@ operator.
       let uptime = `/usr/bin/uptime`;
 
       if ( uptime ) {
-          puts( "STDOUT: ", uptime["stdout"].trim() , "\n");
-          puts( "STDERR: ", uptime["stderr"].trim() , "\n");
+          print( "STDOUT: ", uptime["stdout"].trim() , "\n");
+          print( "STDERR: ", uptime["stderr"].trim() , "\n");
       } else {
-          puts( "Failed to run command\n");
+          print( "Failed to run command\n");
       }
 
 The output will be a hash with two keys `stdout` and `stderr`.  NULL is
@@ -544,8 +533,8 @@ This is demonstrated in the [examples/regexp.mon](examples/regexp.mon) example.
 
 You can also perform matching (complete with captures), with a literal regular expression object:
 
-    if ( Name ~= /steve/i ) { puts( "Hello Steve\n" ); }
-    if ( Name !~ /[aeiou]/i ) { puts( "You have no vowels.\n" ); }
+    if ( Name ~= /steve/i ) { print( "Hello Steve\n" ); }
+    if ( Name !~ /[aeiou]/i ) { print( "You have no vowels.\n" ); }
 
     // captures become $1, $2, $N, etc.
     ip = "192.168.1.1";
@@ -624,14 +613,14 @@ Similarly each of them implement a `type()` function which returns the
 type involved:
 
     let i = 1;
-    puts( i.type() );
+    print( i.type() );
 
     let s = "Steve";
-    puts( s.type() );
+    print( s.type() );
 
 Or even:
 
-    puts( "Steve".type() );
+    print( "Steve".type() );
 
 Seeing methods available works as you would expect:
 
@@ -639,7 +628,7 @@ Seeing methods available works as you would expect:
 
     let i = 0;
     for ( i < len(a.methods() ) ) {
-       puts( "Method " + a.methods()[i] + "\n" );
+       print( "Method " + a.methods()[i] + "\n" );
        i++;
     }
 
@@ -662,7 +651,7 @@ possible to define such methods in 100% cozy!
 You can define a method via something like:
 
     function string.steve() {
-       puts( "Hello, I received '", self, "' as an argument\n" );
+       print( "Hello, I received '", self, "' as an argument\n" );
     }
 
 Note that the function has access to the object it was invoked upon via the

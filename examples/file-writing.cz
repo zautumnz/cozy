@@ -1,22 +1,22 @@
 #
 # Usually you'd open a file for reading via:
 #
-#    let handle = file.open( "/tmp/blah" )
+#    let handle = file.open("/tmp/blah")
 #
 # Or
 #
-#    let handle = file.open( "/tmp/blah", "r" )
+#    let handle = file.open("/tmp/blah", "r")
 #
 # However you can open a file for writing by using "w" as the
 # second argument:
 #
 let name = "/tmp/moi";
-let fh   = open(name, "w");
+let fh = open(name, "w");
 
 #
 # Now we have a handle we can write (strings) to it:
-fh.write( "This is a test\n" );
-fh.write( string({ "Steve": "Kemp", "Age": 128}) + "\n" );
+fh.write("This is a test\n");
+fh.write(string({"Steve": "Kemp", "Age": 128}) + "\n");
 
 #
 # And close it.
@@ -26,4 +26,4 @@ fh.close();
 #
 # Show what we did.
 #
-print( "We wrote to ", name , "\n");
+print("We wrote to ", name , "\n");

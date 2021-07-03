@@ -8,14 +8,7 @@
 
 let i = 3;
 i = 2 * PI ;
-print( "2xPI ", i, "\n" );
+print("2xPI ", i, "\n");
 
-x = 3;
-print("X:", x, "\n" );
-
-#
-# The following works, but it is a fatal-error to assign a value
-# to an unknown variable when running with `pragma("strict");`.
-#
-yfds = 33.312;
-print("X:", yfds, "\n" );
+let x = 3;
+print("X:", x, "\n");

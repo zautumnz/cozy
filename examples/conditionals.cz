@@ -1,0 +1,11 @@
+#!/usr/bin/env cozy
+
+let x = "x";
+
+if (x == "y") {
+    print("x is somehow y\n");
+} else if (x == "z") {
+    print("this isn't right either\n");
+} else {
+    print("x == x\n");
+}
