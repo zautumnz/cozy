@@ -32,7 +32,6 @@
     "fn"
     "for"
     "foreach"
-    "function"
     "if"
     "in"
     "let"

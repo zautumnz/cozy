@@ -10,7 +10,7 @@ install:
 	chmod 755 $(PREFIX)/bin/cozy
 
 clean:
-	rm cozy
+	rm -f cozy
 
 test:
 	go test ./...

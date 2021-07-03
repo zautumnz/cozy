@@ -62,6 +62,7 @@ the [Go Interpreters Book](https://interpreterbook.com).
 * No `null`
 * `puts` -> `print`
 * Remove C-Style comments, only Shell-style are valid
+* No switch statements
 
 ---
 
@@ -83,7 +84,6 @@ the [Go Interpreters Book](https://interpreterbook.com).
   * [2.5 Functions](#25-functions)
   * [2.6 If-else statements](#26-if-else-statements)
     * [2.6.1 Ternary expressions](#261-ternary-expressions)
-  * [2.7 Switch statements](#27-switch-statements)
   * [2.8 For-loop statements](#28-for-loop-statements)
     * [2.8.1 Foreach statements](#281-foreach-statements)
   * [2.9 Comments](#29-comments)
@@ -142,8 +142,6 @@ The interpreter in _this_ repository has been significantly extended from the st
 * Added the ability to iterate over the contents of arrays, hashes, and strings via the `foreach` statement.
 * Added `printf` and `sprintf` primitives, which work as you would expect.
   * `printf( "%d %s", 3, "Steve" );`
-* Added support for `switch` statements, with block-based `case` expressions.
-  * No bugs due to C-style "fall-through".
 
 
 ## 1. Installation
@@ -444,32 +442,6 @@ would expect with a C-background:
     puts( "max(-1,-2) -> ", max(-1, -2), "\n" );
 
 Note that in the interests of clarity nested ternary-expressions are illegal!
-
-## 2.7 Switch Statements
-
-cozy supports the `switch` and `case` expressions, as the following example demonstrates:
-
-```
-  name = "Steve";
-
-  switch( name ) {
-    case /^steve$/i {
-       printf("Hello Steve - we matched you via a regexp\n");
-    }
-    case "St" + "even" {
-       printf("Hello SteveN, you were matched via an expression\n" );
-    }
-    case 3 {
-       printf("Hello number three, we matched you literally.\n");
-    }
-    default {
-       printf("Default case: %s\n", string(name) );
-    }
-  }
-```
-
-See also [examples/switch.mon](examples/switch.mon).
-
 
 ## 2.8 For-loop statements
 

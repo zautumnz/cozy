@@ -12,7 +12,7 @@
 # Return true if the given number is even
 #
 function even?(n) {
-  return( n % 2 == 0 );
+    return( n % 2 == 0 );
 }
 
 
@@ -20,7 +20,7 @@ function even?(n) {
 # Return true if the given number is odd.
 #
 function odd?(n) {
-  return( n % 2 == 1 );
+    return( n % 2 == 1 );
 }
 
 
@@ -31,10 +31,14 @@ function odd?(n) {
 #
 function prime?(n) {
    # negative numbers are not prime
-   if ( n < 0 ) { return false ; }
+   if ( n < 0 ) {
+       return false;
+    }
 
    # 0, 1, 2 are prime
-   if ( n < 3 ) { return true ; }
+   if ( n < 3 ) {
+       return true;
+    }
 
    # Now the rest - we're testing all factors between 2 & SQRT(n).
    let i = int(math.sqrt(n)) + 1;
