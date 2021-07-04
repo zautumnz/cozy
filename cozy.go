@@ -25,7 +25,7 @@ import (
 // This version-string will be updated via CI system for generated binaries.
 var version = "master/unreleased"
 
-//go:embed data/stdlib.cz
+//go:embed stdlib.cz
 var stdlib string
 
 //

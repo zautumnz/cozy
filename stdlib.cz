@@ -25,7 +25,7 @@ function assert(val, msg = "Result was not 'true'!" ) {
         }
     } else {
         if (!val) {
-            puts(msg);
+            print(msg);
             exit(1);
         }
     }
@@ -200,7 +200,7 @@ function array.max() {
     for (i < l) {
         # type checking.
         if (type(self[i]) != "integer" && type(self[i]) != "float") {
-            puts( "array.max only works on numbers - not " , type(self[i]), "\n");
+            print( "array.max only works on numbers - not " , type(self[i]), "\n");
             exit(1);
         }
 
@@ -775,3 +775,30 @@ function string.toupper() {
 
 assert("zac".toupper() == "ZAC", "string.toupper() failed");
 assert("狐犬".toupper() == "狐犬", "string.toupper() failed");
+
+# Reduce. The fun should take an item and the accumulator.
+function reduce (fun, xs, init) {
+    let acc = init;
+    foreach _, x in xs {
+        acc = fun(x, acc);
+    }
+
+    return acc;
+}
+
+function sum (xs) {
+    return reduce(
+        fn(x, acc) {
+            return x + acc;
+        }, xs, 0);
+}
+
+assert(sum([1, 2, 3, 4]) == 10, "reduce failed!")
+
+# Flips args for a function that takes two.
+# TODO: test
+function flip (f) {
+    return fn (a, b) {
+        return f(b, a);
+    }
+}

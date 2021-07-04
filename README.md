@@ -25,6 +25,9 @@ Interpreters Book](https://interpreterbook.com).
     * OS/sys/process builtins
     * Cryptography builtins
 * Minor things:
+    * Variadic arguments
+    * Improve assertion library
+    * Remove parens in `if` conditions
     * Remove `self`
     * Remove function keyword (only let foo = fn () {})
     * Change declaration keywords to make mutable variables explicit

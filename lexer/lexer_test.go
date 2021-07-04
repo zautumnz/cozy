@@ -351,7 +351,7 @@ string.tolower
 string.trim
 string.reverse
 string.split
-moi.kissa
+foo.bar
 `
 
 	tests := []struct {
@@ -371,9 +371,9 @@ moi.kissa
 		{token.IDENT, "string.trim"},
 		{token.IDENT, "string.reverse"},
 		{token.IDENT, "string.split"},
-		{token.IDENT, "moi"},
+		{token.IDENT, "foo"},
 		{token.PERIOD, "."},
-		{token.IDENT, "kissa"},
+		{token.IDENT, "bar"},
 		{token.EOF, ""},
 	}
 	l := New(input)
@@ -393,7 +393,6 @@ moi.kissa
 func TestDotMethod(t *testing.T) {
 	input := `
 foo.bar();
-moi.kissa();
 a?.b?();
 `
 
@@ -407,9 +406,9 @@ a?.b?();
 		{token.LPAREN, "("},
 		{token.RPAREN, ")"},
 		{token.SEMICOLON, ";"},
-		{token.IDENT, "moi"},
+		{token.IDENT, "foo"},
 		{token.PERIOD, "."},
-		{token.IDENT, "kissa"},
+		{token.IDENT, "bar"},
 		{token.LPAREN, "("},
 		{token.RPAREN, ")"},
 		{token.SEMICOLON, ";"},
