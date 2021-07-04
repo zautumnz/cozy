@@ -1,13 +1,10 @@
-#
 # Sample function showing some simple math operations
-#
 
 print("maths.abs(1)     -> " ,math.abs(1),);
 print("maths.abs(-1)    -> " ,math.abs(-1),);
 print("maths.abs(3.13)  -> " ,math.abs(3.13),);
 print("maths.abs(-3.13) -> " ,math.abs(-3.13),);
 
-#
 # The random function returns a floating-point number between 0 & 1
 #
 # To show a number from 0-10 we need to multiply and convert to an

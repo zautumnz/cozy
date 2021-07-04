@@ -1,9 +1,9 @@
-function example (...args) {
+let example = fn(...args) {
     print(string(args));
-}
+};
 
-function withOtherArgs(foo, bar, ...rest) {
+let withOtherArgs = fn(foo, bar, ...rest) {
     print("foo", foo);
     print("bar", bar);
     print("rest", rest.join(", "));
-}
+};

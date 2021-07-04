@@ -24,7 +24,6 @@ const (
 	CONST           = "CONST"
 	CONTAINS        = "~="
 	DEFAULT         = "DEFAULT"
-	DEFINE_FUNCTION = "DEFINE_FUNCTION"
 	DOTDOT          = ".."
 	ELSE            = "ELSE"
 	EOF             = "EOF"
@@ -81,7 +80,6 @@ var keywords = map[string]Type{
 	"fn":       FUNCTION,
 	"for":      FOR,
 	"foreach":  FOREACH,
-	"function": DEFINE_FUNCTION,
 	"if":       IF,
 	"in":       IN,
 	"let":      LET,

@@ -6,13 +6,13 @@
 
 
 # Dump the array.
-function dump(in) {
+let dump = fn(in) {
     if (in.sorted?()) {
         print("\tThe array is sorted");
     } else {
         print("\tThe array is not sorted");
     }
-}
+};
 
 
 # An array of integers.

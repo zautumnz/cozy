@@ -11,17 +11,17 @@
 #
 # Return true if the given number is even
 #
-function even?(n) {
+let even? = fn(n) {
     return(n % 2 == 0);
-}
+};
 
 
 #
 # Return true if the given number is odd.
 #
-function odd?(n) {
+let odd? = fn(n) {
     return(n % 2 == 1);
-}
+};
 
 
 #
@@ -29,7 +29,7 @@ function odd?(n) {
 #
 # Remember we can use multi-line comments too!
 #
-function prime?(n) {
+let prime? = fn(n) {
     # negative numbers are not prime
     if (n < 0) {
         return false;
@@ -50,13 +50,13 @@ function prime?(n) {
         }
     }
     return true;
-}
+};
 
 
 #
 # Square the given number.
 #
-function square(n) { return n * n ; }
+let square = fn(n) { return n * n; };
 
 #
 # The list of numbers we'll operate upon.

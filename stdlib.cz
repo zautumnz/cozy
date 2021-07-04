@@ -16,7 +16,7 @@ const STDERR = open("!STDERR!");
 
 # The `assert` method allows the code in our standard-library to be
 # tested every time it is loaded.
-function assert(val, msg = "Result was not 'true'!" ) {
+let assert = fn(val, msg = "Result was not 'true'!") {
     if (type(val) == "string") {
         let result = eval(val);
         if (!result) {
@@ -29,7 +29,7 @@ function assert(val, msg = "Result was not 'true'!" ) {
             exit(1);
         }
     }
-}
+};
 
 assert("true");
 assert(true );
@@ -41,19 +41,19 @@ assert("type(STDERR) == \"file\"");
 
 
 # First element of an array
-function first(array) {
+let first = fn(array) {
     assert(len(array) >= 1, "Array contains no values!")
 
     if (len(array) >= 1) {
         return(array[0]);
     }
-}
+};
 
 assert("first( [0,1] ) == 0");
 assert("first([\"zac\",1]) == \"zac\"");
 
 # The rest of an array - i.e. all elements EXCEPT the first
-function rest(array) {
+let rest = fn(array) {
     let result = [];
 
     if (len(array) >= 1) {
@@ -65,7 +65,7 @@ function rest(array) {
     }
 
     return result;
-}
+};
 
 assert("len(rest([0,2])) == 1");
 assert("len(rest([0,1,2])) == 2");
@@ -73,16 +73,16 @@ assert("len(rest([0,1,2,3,4,5])) == 5");
 assert("string(rest([\"steve\",1])) == \"[1]\"");
 
 # Last element of an array
-function last( array ) {
+let last = fn(array) {
     assert(len(array) >= 1, "Array contains no values!")
     return(array[len(array) - 1]);
-}
+};
 
 assert("last([0,2]) == 2");
 
 # Call the given function on each entry, and return an array of the
 # items for which the predicate returned true.
-function array.filter(predicate) {
+let array.filter = fn(predicate) {
     let i = 0;
     let l = len(self);
     let result = [];
@@ -97,7 +97,7 @@ function array.filter(predicate) {
     }
 
     return result;
-}
+};
 
 # Filter an array and keep only values which are "2".
 assert("
@@ -113,7 +113,7 @@ if (string(a) == \"[2]\") {
 
 
 # Return the offset, if any, of the specified item in the array.
-function array.find(item) {
+let array.find = fn(item) {
     foreach index, value in self {
         if (value == item) {
             return index;
@@ -122,7 +122,7 @@ function array.find(item) {
 
     # not found.
     return -1;
-}
+};
 
 assert("[1,2,3].find(7) == -1");
 assert("[1,2,3].find(1) == 0");
@@ -130,15 +130,15 @@ assert("[1,2,3].find(3) == 2");
 assert("[1,2,3,3].find(3) == 2");
 
 # Does the given value exist inside the array?
-function array.includes?(obj) {
+let array.includes? = fn(obj) {
     return(self.find(obj) != -1);
-}
+};
 
 assert("[1,2,3].includes?(2)");
 assert("! [1,2,3].includes?(23)");
 
 # Find minimum value in array
-function array.min() {
+let array.min = fn() {
     let i = 0;
 
     let l = len(self);
@@ -171,7 +171,7 @@ function array.min() {
     }
 
     return min;
-}
+};
 
 assert("( [1,2,3].min() == 1 )");
 assert("( 1..10.min() == 1 )");
@@ -179,7 +179,7 @@ assert("( [-1,-2,-3].min() == -3 )");
 assert("( [].min() == 0 )", "minimum of an empty array is zero");
 
 # Find maximum value in array
-function array.max() {
+let array.max = fn() {
     let i = 0;
 
     let l = len(self);
@@ -212,7 +212,7 @@ function array.max() {
     }
 
     return max;
-}
+};
 
 assert("( 1..15.max() == 15 )");
 assert("( [1,2,3].max() == 3 )");
@@ -220,7 +220,7 @@ assert("( [-1,-2,-3].max() == -1 )");
 assert("( [].max() == 0 )", "maximum of an empty array is zero");
 
 # Join the elements of an array by the given string.
-function array.join(char) {
+let array.join = fn(char) {
     let r = "";
     let i = 0;
     let l = len(self);
@@ -237,13 +237,13 @@ function array.join(char) {
     }
 
     return r;
-}
+};
 
 assert("[1,2,3].join( \".\" ) == \"1.2.3\"");
 assert("[1,2,3].join( \"\" ) == \"123\"");
 
 # Reverse an array.
-function array.reverse() {
+let array.reverse = fn() {
     let r = [];
     let l = len(self);
 
@@ -252,12 +252,12 @@ function array.reverse() {
         l--;
     }
     return r;
-}
+};
 
 assert("string([1,2,3].reverse()) == \"[3, 2, 1]\"");
 
 # sorted? returns true if the specified array is sorted.
-function array.sorted?() {
+let array.sorted? = fn() {
     # Ensure each array-member has the same type.
     let tmp = {};
     let i = 0;
@@ -294,7 +294,7 @@ function array.sorted?() {
     }
 
     return true;
-}
+};
 
 assert("[-1,0,1].sorted?()");
 assert("[1].sorted?()");
@@ -308,7 +308,7 @@ assert("[].sorted?()");
 #
 # This would be easier if we had "elseif" support, or even a case
 # statement. (Due to the nested if usage here.)
-function array.swap(a, b) {
+let array.swap = fn(a, b) {
     let aVal = self[b];
     let bVal = self[a];
 
@@ -329,7 +329,7 @@ function array.swap(a, b) {
     }
 
     return r;
-}
+};
 
 assert("let a = [10,20]; a = a.swap(0,1); if ( a[0] == 20 ) { true; } else { false ; }");
 assert("let a = [10,20]; a = a.swap(0,1); if ( a[1] == 10 ) { true; } else { false ; }");
@@ -337,7 +337,7 @@ assert("let a = [10,20]; a = a.swap(0,1); if ( a[1] == 10 ) { true; } else { fal
 
 # Sort the given array.
 # This is grossly inefficient, obviously.
-function array.sort() {
+let array.sort = fn() {
     # Ensure each array-member has the same type.
     let tmp = {};
     let i = 0;
@@ -372,7 +372,7 @@ function array.sort() {
 
     # Should be done now.
     return self;
-}
+};
 
 assert("let a = [ 3, 2, 1 ]; a = a.sort(); a.sorted?()");
 assert("let a = [ 3, 2, 1 ]; a = a.sort(); a[0] == 1");
@@ -381,7 +381,7 @@ assert("let a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3");
 
 # Return an array containing the result of applying the specified
 # function to each element in the array.
-function array.map(fnc) {
+let array.map = fn(fnc) {
     let result = [];
 
     foreach item in self {
@@ -389,7 +389,7 @@ function array.map(fnc) {
     }
 
     return result;
-}
+};
 
 
 assert("
@@ -414,7 +414,7 @@ if (string(a) == \"[-10, 1, 4]\") {
 ");
 
 # array.uniq returns the unique members of an array.
-function array.uniq() {
+let array.uniq = fn() {
     let tmp = {};
 
     foreach item in self {
@@ -423,53 +423,53 @@ function array.uniq() {
 
     # return the sorted keys
     return(tmp.keys().sort());
-}
+};
 
 assert("string([1,1,1,1,2].uniq()) == \"[1, 2]\"");
 
 # Convert a float to an integer.
 # Like Go we discard the value after the period, so 4.9 will become 4.
-function float.to_i() {
+let float.to_i = fn() {
     return(int(self));
-}
+};
 
 assert("type(3.1.to_i()) == \"integer\"");
 assert("let a = 3.1; if (a.to_i() == 3) { return true; } else { return false; }");
 
 # Is the given array empty?
-function array.empty?() {
+let array.empty? = fn() {
     if (len(self) == 0) {
         return true;
     }
     return false;
-}
+};
 
 assert("[].empty?()");
 assert("![1,2].empty?()");
 assert("![\"zacanger\",3].empty?()");
 
 # Is the given hash empty?
-function hash.empty?() {
+let hash.empty? = fn() {
     if (len(self.keys()) == 0) {
         return true;
     }
     return false;
-}
+};
 
 assert("{}.empty?()");
 assert("! {\"name\":\"zac\"}.empty?()");
 
 
 # Convert an integer to a float.
-function integer.to_f() {
+let integer.to_f = fn() {
     return(self + 0.0);
-}
+};
 
 assert("type( 3.to_f() ) == \"float\"");
 assert("3.to_f() == 3.0");
 
 # Count occurences of the given character in the string.
-function string.count(char) {
+let string.count = fn(char) {
     let c = 0;
 
     foreach chr in self {
@@ -479,7 +479,7 @@ function string.count(char) {
     }
 
     return c;
-}
+};
 
 assert("\"zac\".count(\"a\") == 1");
 assert("\"zac\".count(\"E\") == 0");
@@ -487,7 +487,7 @@ assert("\"犬狐\".count(\"狐\") == 1");
 assert("\"犬犬犬犬犬犬狐\".count(\"犬\") == 6");
 
 # Remove leading whitespace from the string.
-function string.ltrim() {
+let string.ltrim = fn() {
     let reg = "^(\\s+)(.*)$";
     let out = match(reg, self);
 
@@ -496,13 +496,13 @@ function string.ltrim() {
     } else {
         return self;
     }
-}
+};
 
 assert(("  狐犬  ".ltrim() == "狐犬  "), "string.ltrim failed");
 assert(("  zac  ".ltrim() == "zac  "), "string.ltrim failed");
 
 # Repeat a string N times.
-function string.repeat(count) {
+let string.repeat = fn(count) {
     let r= "";
 
     if (count < 1) {
@@ -515,7 +515,7 @@ function string.repeat(count) {
     }
 
     return r;
-}
+};
 
 assert(("狐犬".repeat(3) == "狐犬狐犬狐犬"), "string.repeat failed");
 assert(("*".repeat(1) == "*"), "string.repeat failed");
@@ -523,7 +523,7 @@ assert(("*".repeat(0) == "*"), "string.repeat failed");
 assert(("*".repeat(-1) == "*"), "string.repeat failed");
 
 # Reverse a string,
-function string.reverse() {
+let string.reverse = fn() {
     let r= "";
     let l = len(self);
 
@@ -533,13 +533,13 @@ function string.reverse() {
     }
 
     return r;
-}
+};
 
 assert(("狐犬".reverse() == "犬狐"), "string.reverse failed");
 assert(("322".reverse() == "223"), "string.reverse failed");
 
 # Remove trailing whitespace from the string.
-function string.rtrim() {
+let string.rtrim = fn() {
     let reg = "^(.*?)(\\s*)$";
     let out = match(reg, self);
 
@@ -548,13 +548,13 @@ function string.rtrim() {
     } else {
         return self;
     }
-}
+};
 
 assert(("  狐犬  ".rtrim() == "  狐犬"), "string.rtrim failed");
 
 # string.substr returns the given substring from our input. The length of
 # the string to return is optional, and will default to the length available.
-function string.substr(start,length = -1) {
+let string.substr = fn(start, length = -1) {
     # if there is no length then default to the rest of the string.
     if (length == -1) {
         length = len(self) - start;
@@ -585,7 +585,7 @@ function string.substr(start,length = -1) {
     }
 
     return res;
-}
+};
 
 assert("Hello world".substr(1, 4) == "ello" , "string.substr() failed");
 assert("Hello world".substr(6) == "world" , "string.substr() failed");
@@ -599,7 +599,7 @@ assert("狐犬".substr(-1, 100) == "狐犬" , "string.substr() failed");
 
 # string.find returns the offset of the given substring
 # or -1 if it isn't found.
-function string.find(needle) {
+let string.find = fn(needle) {
     # get details about ourself
     let i = 0;
     let l = len(self);
@@ -619,8 +619,7 @@ function string.find(needle) {
     }
 
     return -1;
-}
-
+};
 
 assert("\"steve\".find(\"e\" ) == 2");
 assert("\"steve\".find(\"v\" ) == 3");
@@ -630,7 +629,7 @@ assert("\"st狐eve犬es\".find(\"犬\" ) == 6");
 
 # string.interpolate replaces ${blah} with the value of "blah" from
 # the specified hash.
-function string.interpolate(hsh) {
+let string.interpolate = fn(hsh) {
     let reg = "(?s)^(.*?)\\$\\{([^\\}]+)\\}(.*)";
     let out = match(reg, self);
 
@@ -643,12 +642,12 @@ function string.interpolate(hsh) {
     }
 
     return self;
-}
+};
 
 # string.split returns an array splitting on any characters included
 # in the separator string.
 # By default the split is on whitespace: " ", "TAB", & "RETURN".
-function string.split(sep = " \r\t\n" ) {
+let string.split = fn(sep = " \r\t\n" ) {
     let i = 0;
     let l = len(self);
     let r = [];
@@ -682,13 +681,13 @@ function string.split(sep = " \r\t\n" ) {
     }
 
     return r;
-}
+};
 
 assert("len(\"1 2 3\".split()) == 3");
 assert("type(\"1 2 3\".split(\"2\")) == \"array\"");
 
 # string.replace removes a value from a string, replacing it with a new value.
-function string.replace(old, new) {
+let string.replace = fn(old, new) {
     let s = self;
     let index = s.find(old);
 
@@ -705,22 +704,21 @@ function string.replace(old, new) {
     }
 
     return s;
-}
+};
 
 assert("steve".replace("e", "E") == "stEvE", "string.replace() failed");
 assert("steve".replace("A", "EE") == "steve", "string.replace() failed");
 
 # Trim leading & trailing whitespace from the given string.
-function string.trim() {
-    let l = self.ltrim();
-    return l.rtrim();
-}
+let string.trim = fn() {
+    return self.ltrim().rtrim();
+};
 
 assert("  ".trim() == "", "string.trim failed");
 assert(" 1 ".trim() == "1", "string.trim failed");
 
 # Convert the given string to lower-case.
-function string.tolower() {
+let string.tolower = fn() {
     let r = "";
 
     foreach char in self {
@@ -734,13 +732,13 @@ function string.tolower() {
     }
 
     return r;
-}
+};
 
 assert("Steve".tolower() == "steve", "string.tolower() failed");
 assert("狐犬".tolower() == "狐犬", "string.tolower() failed");
 
 # Convert a string to a number (Possibly an int, possibly a float)
-function string.to_number() {
+let string.to_number = fn() {
     let reg = "\\.";
     let out = match(reg, self);
 
@@ -749,7 +747,7 @@ function string.to_number() {
     } else {
         return( self.to_i() );
     }
-}
+};
 
 assert("3.13".to_number() == 3.13, "string.tonumber() failed");
 assert(type("3.13".to_number()) == "float", "string.tonumber() failed");
@@ -757,7 +755,7 @@ assert("313".to_number() == 313, "string.tonumber() failed");
 assert(type("313".to_number()) == "integer", "string.tonumber() failed");
 
 # Convert the given string to upper-case.
-function string.toupper() {
+let string.toupper = fn() {
     let r = "";
 
     foreach char in self {
@@ -771,34 +769,26 @@ function string.toupper() {
     }
 
     return r;
-}
+};
 
 assert("zac".toupper() == "ZAC", "string.toupper() failed");
 assert("狐犬".toupper() == "狐犬", "string.toupper() failed");
 
 # Reduce. The fun should take an item and the accumulator.
-function reduce (fun, xs, init) {
+let reduce = fn(fun, xs, init) {
     let acc = init;
     foreach _, x in xs {
         acc = fun(x, acc);
     }
 
     return acc;
-}
+};
 
-function sum (xs) {
+let sum = fn(xs) {
     return reduce(
         fn(x, acc) {
             return x + acc;
         }, xs, 0);
-}
+};
 
 assert(sum([1, 2, 3, 4]) == 10, "reduce failed!")
-
-# Flips args for a function that takes two.
-# TODO: test
-function flip (f) {
-    return fn (a, b) {
-        return f(b, a);
-    }
-}

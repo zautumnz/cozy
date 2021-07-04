@@ -30,7 +30,6 @@ Interpreters Book](https://interpreterbook.com).
     * Add a TAP-compatible testing library on top of `assert`
     * Remove parens in `if` conditions
     * Remove `self`
-    * Remove function keyword (only let foo = fn () {})
     * Change declaration keywords to make mutable variables explicit
     * Curry, memo, and other FP utils
     * Docstrings

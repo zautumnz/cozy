@@ -1,8 +1,5 @@
-
-#
 # Dump the hash specified
-#
-function dump(hash) {
+let dump = fn(hash) {
     let k = keys(hash);
     print("\tHash has ", len(k) , " keys.");
 
@@ -15,39 +12,28 @@ function dump(hash) {
              " with value:", h[k[i]]);
        i++;
     }
-}
+};
 
 
-#
 # Here is a sample hash
-#
 let h = {"Steve": "Kemp" , "Moi": 7, 3.14:"pi?"};
 
-#
 # Show it.
-#
 print("The original hash:");
 dump(h);
 
-#
 # Add a new key
-#
 let h = set(h, "Updated", "Value");
 
-#
 # Show it
-#
 print("After adding a new key:");
 dump(h);
 
-#
 # Delete two keys
-#
 let h = delete(h, "Moi");
 let h = delete(h, 3.14);
 print("After deleting two keys:");
 dump(h);
-
 
 print("Running command: /bin/ls");
 let h = `/bin/ls / /fdsf`;

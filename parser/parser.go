@@ -121,7 +121,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.prefixParseFns = make(map[token.Type]prefixParseFn)
 	p.registerPrefix(token.BACKTICK, p.parseBacktickLiteral)
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
-	p.registerPrefix(token.DEFINE_FUNCTION, p.parseFunctionDefinition)
 	p.registerPrefix(token.EOF, p.parsingBroken)
 	p.registerPrefix(token.FALSE, p.parseBoolean)
 	p.registerPrefix(token.FLOAT, p.parseFloatLiteral)
@@ -665,21 +664,6 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 // parseFunctionLiteral parses a function-literal.
 func (p *Parser) parseFunctionLiteral() ast.Expression {
 	lit := &ast.FunctionLiteral{Token: p.curToken}
-	if !p.expectPeek(token.LPAREN) {
-		return nil
-	}
-	lit.Defaults, lit.Parameters = p.parseFunctionParameters()
-	if !p.expectPeek(token.LBRACE) {
-		return nil
-	}
-	lit.Body = p.parseBlockStatement()
-	return lit
-}
-
-// parseFunctionDefinition parses the definition of a function.
-func (p *Parser) parseFunctionDefinition() ast.Expression {
-	p.nextToken()
-	lit := &ast.FunctionDefineLiteral{Token: p.curToken}
 	if !p.expectPeek(token.LPAREN) {
 		return nil
 	}

@@ -4,7 +4,7 @@
 #
 # For example if you defined the function string.blah():
 #
-#  function string.blah() { print("OK"); };
+#  let string.blah = fn() { print("OK"); };
 #
 # You could then invoke it via:
 #
