@@ -2,62 +2,35 @@
 
 [![Support with PayPal](https://img.shields.io/badge/paypal-donate-yellow.png)](https://paypal.me/zacanger) [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/zacanger) [![ko-fi](https://img.shields.io/badge/donate-KoFi-yellow.svg)](https://ko-fi.com/U7U2110VB)
 
-Forked from [skx's version](https://github.com/skx/monkey) of the language from
-the [Go Interpreters Book](https://interpreterbook.com).
-
-## Goals
-
-* Simple, human-readable, high level
-* Dynamic, strong
-* Functional ideas but Python/Go/Shell/Ruby-ish syntax
-* No classes or other OOP-specific constructs (just functions and data)
-* Small-ish implementation in host language, with as many features as possible
-  implemented in the standard library
-
-## Basics
-
-* No null, no undefined
-* All functions must return a value
-* All variables must be initialized to something
-* Block scope, file scope, and application scope (export)
-* All variables are immutable unless 1. in a function and 2. ending with !
-* Indentation has no semantic impact, but four spaces is the recommendation
-* Line lengths should not exceed 80 chars
-* camelCase is preferred but PascalCase or snake_case also work
-* Modules (use the word module instead of library or package) based on Git, no
-  centralized module repository. Modules are just one or more source files,
-  compiled along with your app, not distributed as binaries.
-* Errors are values that work like dictionaries?
+Simple, medium-level programming language that sits somewhere between scripting
+and general-purpose programming. Dynamically and strongly typed, with some with
+semantics that work well with pseudo-functional programming but syntax similar
+to Python, Go, and Shell. No OOP constructs like classes. Originally designed by
+writing a bunch of examples and a small stdlib; implementation started as a fork
+from [skx's version](https://github.com/skx/monkey) of the language from the [Go
+Interpreters Book](https://interpreterbook.com).
 
 ## TODO
 
-* Remove `self`
-* Garbage collection
-* Generally make it look like the cozy example
-* Remove function keyword (only let foo = fn () {})
-* Remove mutations
-* Automatic semicolon insertion
-* Modules
-* See about building in a basic HTTP library
-* JSON parsing/stringifying
-* curry, memo, and other FP utils
-* docstrings, embedded markdown?
-* comment syntax, is this good or not?
-* module management (tooling, metadata)
-* Improve Vim and Emacs files
-* timers, async and concurrency models
-* core/builtin modules:
-  * cryptography, random
-  * network (tcp, http, http2, dns, tls, anything else? more than one
-    namespace?)
-  * process-related
-  * argv, argument/flag parsing?
-  * stdin, stdout, tty
-  * filesystem, path
-  * constants, os info
-  * module-related
-  * how much should be stdlib, how much should be in modules? should stdlib
-    be a module?
+* Major things missing:
+    * Async/futures/generators
+    * Timers
+    * Concurrency
+    * Modules
+    * Garbage collection
+    * Generally make it look more like the initial example code
+    * Automatic semicolon insertion
+    * JSON, YAML, and TOML built-in support
+    * Networking builtins
+    * OS/sys/process builtins
+    * Cryptography builtins
+* Minor things:
+    * Remove `self`
+    * Remove function keyword (only let foo = fn () {})
+    * Change declaration keywords to make mutable variables explicit
+    * Curry, memo, and other FP utils
+    * Docstrings
+    * Improve Vim and Emacs files
 
 ## Difference's from Steve Kemp's version
 
