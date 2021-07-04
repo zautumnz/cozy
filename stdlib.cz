@@ -775,9 +775,9 @@ assert("zac".toupper() == "ZAC", "string.toupper() failed");
 assert("狐犬".toupper() == "狐犬", "string.toupper() failed");
 
 # Reduce. The fun should take an item and the accumulator.
-let reduce = fn(fun, xs, init) {
+let array.reduce = fn(fun, init) {
     let acc = init;
-    foreach _, x in xs {
+    foreach _, x in self {
         acc = fun(x, acc);
     }
 
@@ -785,10 +785,10 @@ let reduce = fn(fun, xs, init) {
 };
 
 let sum = fn(xs) {
-    return reduce(
+    return xs.reduce(
         fn(x, acc) {
             return x + acc;
-        }, xs, 0);
+        }, 0);
 };
 
 assert(sum([1, 2, 3, 4]) == 10, "reduce failed!")

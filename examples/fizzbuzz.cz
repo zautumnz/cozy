@@ -5,7 +5,7 @@ let fb = fn(n) {
     return string(n);
 };
 
-let fizzbuzz = fn(n) {
+let fizzbuzz = fn(n = 100) {
     let ret = [];
 
     foreach i in 0..n {
@@ -15,4 +15,4 @@ let fizzbuzz = fn(n) {
     return ret.join("\n");
 };
 
-print(fizzbuzz(100));
+print(fizzbuzz(10));

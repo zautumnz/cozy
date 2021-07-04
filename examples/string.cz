@@ -19,8 +19,16 @@ print("Reversed: '" + str.reverse() + "'");
 # Escapes are good.
 print("We also allow escaping quotes, like so: \"");
 
-let multiLine = "
-foo
-bar
-";
+# Multiline strings
+let multiLine = "foo
+bar";
 print(multiLine);
+
+# Indexing
+let indexed = "asdf";
+print(indexed[1]);
+
+# Appending
+let root = "a";
+root += "s";
+print(root + "d", "f");

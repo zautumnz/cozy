@@ -5,12 +5,17 @@
 # However you can open a file for writing by using "w" as the
 # second argument:
 
-let name = "/tmp/moi";
+let name = "/tmp/cozy-file-write-test";
 let fh = open(name, "w");
 
 # Now we have a handle we can write (strings) to it:
 fh.write("This is a test");
-fh.write(string({"Steve": "Kemp", "Age": 128}));
+fh.write(string({"foo": "bar", "baz": 8}));
 
 # And close it.
 fh.close();
+
+# Appending
+let fh2 = open(name, "wa");
+fh2.write("\nanother line");
+fh2.close();

@@ -15,4 +15,7 @@ clean:
 test:
 	go test ./...
 
-.PHONY: cozy test clean install
+count:
+	cloc --exclude-dir=x --force-lang=Ruby,cz . | sed 's/Ruby/cozy/g'
+
+.PHONY: cozy test clean install count

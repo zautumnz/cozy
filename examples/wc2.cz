@@ -2,5 +2,5 @@
 
 # Open the file
 let fh = open("/etc/passwd", "r");
-lines = fh.lines();
+let lines = fh.lines();
 print("Read ", len(lines), " lines");

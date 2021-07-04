@@ -1,7 +1,7 @@
 #!/usr/bin/env cozy
 
+# if/else if/else
 let x = "x";
-
 if (x == "y") {
     print("x is somehow y");
 } else if (x == "z") {
@@ -9,3 +9,9 @@ if (x == "y") {
 } else {
     print("x == x");
 }
+
+# ternary
+let max = fn(a, b) {
+    return a > b ? a : b;
+};
+print(max(1, 2));

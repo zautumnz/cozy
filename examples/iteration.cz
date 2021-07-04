@@ -1,6 +1,6 @@
 # Iterating over the contents of an array
 print("Array: value")
-a = [ "My", "name", "is", "Steve" ]
+let a = [ "My", "name", "is", "Zac" ];
 foreach item in a {
      print("\t",  item);
 }
@@ -11,18 +11,18 @@ foreach index, item in a {
 
 # Iterating over the contents of a string.
 print("String: value")
-foreach char in "Steve Kemp" {
+foreach char in "Zac Anger" {
      print("\t", char);
 }
 
 # character + index
 print("String: index/value")
-foreach idx, char in "Steve Kemp" {
+foreach idx, char in "Zac Anger" {
      print("\t", idx, "\t", char);
 }
 
 # Iterating over a hash
-h = {"Foo": "Bar", "Steve": "Kemp"}
+let h = {"Foo": "Bar", "Zac": "Anger"};
 print("Hash: key")
 foreach key in h {
      print("\t", key);
