@@ -1,0 +1,9 @@
+function example (...args) {
+    print(string(args));
+}
+
+function withOtherArgs(foo, bar, ...rest) {
+    print("foo", foo);
+    print("bar", bar);
+    print("rest", rest.join(", "));
+}

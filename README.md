@@ -26,7 +26,8 @@ Interpreters Book](https://interpreterbook.com).
     * Cryptography builtins
 * Minor things:
     * Variadic arguments
-    * Improve assertion library
+    * Improve core assertion library
+    * Add a TAP-compatible testing library on top of `assert`
     * Remove parens in `if` conditions
     * Remove `self`
     * Remove function keyword (only let foo = fn () {})

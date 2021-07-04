@@ -1,0 +1,5 @@
+import github.com/zacanger/cozy/examples/failing/modules/third
+import github.com/zacanger/cozy/examples/failing/modules/first as f
+
+print(f.foo);
+print(third.bar);
