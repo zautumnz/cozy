@@ -31,6 +31,7 @@ the [Go Interpreters Book](https://interpreterbook.com).
 
 ## TODO
 
+* Remove `self`
 * Garbage collection
 * Generally make it look like the cozy example
 * Remove function keyword (only let foo = fn () {})
@@ -66,6 +67,7 @@ the [Go Interpreters Book](https://interpreterbook.com).
 * No switch statements
 * No pragma, strict mode is always on
 * `print` adds an ending newline; use stdout.write for raw text
+* Removed some object methods that have equivalent generic global functions
 
 ---
 
@@ -609,19 +611,6 @@ There is now support for "object-methods".  Object methods are methods
 which are defined against a _type_.  For example all of our primitive
 types allow a `methods()` method, which returns the methods which are
 available against them.
-
-Similarly each of them implement a `type()` function which returns the
-type involved:
-
-    let i = 1;
-    print( i.type() );
-
-    let s = "Steve";
-    print( s.type() );
-
-Or even:
-
-    print( "Steve".type() );
 
 Seeing methods available works as you would expect:
 

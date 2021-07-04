@@ -3,7 +3,7 @@
 #
 
 
-let input = "  Steve Kemp  ";
+let input = "  Zac Anger  ";
 
 print("Input: '", input, "'");
 
@@ -23,3 +23,9 @@ print("Reversed: '" + str.reverse() + "'");
 
 # Escapes are good.
 print("We also allow escaping quotes, like so: \"");
+
+let multiLine = "
+foo
+bar
+";
+print(multiLine);
