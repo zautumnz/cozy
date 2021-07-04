@@ -156,7 +156,7 @@ func (l *Lexer) NextToken() token.Token {
 
 			// We exclude:
 			//   a[b] / c       -> RBRACKET
-			//   ( a + b ) / c   -> RPAREN
+			//   (a + b) / c    -> RPAREN
 			//   a / c           -> IDENT
 			//   3.2 / c         -> FLOAT
 			//   1 / c           -> IDENT
@@ -285,8 +285,8 @@ func newToken(tokenType token.Type, ch rune) token.Token {
 //
 // However we also have to cover the case of:
 //
-//    string.toupper( "blah" );
-//    os.getenv( "PATH" );
+//    string.toupper("blah");
+//    os.getenv("PATH");
 //    ..
 //
 // So we have a horrid implementation..

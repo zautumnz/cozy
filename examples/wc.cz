@@ -1,14 +1,4 @@
 # A simple script to read a file and count the characters.
-#
-#   $ ./cozy wc.cz
-#
-#   Read 2572 characters
-#
-# That matches :)
-#
-#   $ wc -c /etc/passwd
-#   2572
-#
 
 # Open the file
 let path = "/etc/passwd";

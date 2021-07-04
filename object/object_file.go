@@ -60,7 +60,7 @@ func (f *File) Open(mode string) error {
 	md := os.O_RDONLY
 
 	//
-	// Allow writing though ("w"), and write+append ( "wa"| "aw" )
+	// Allow writing though ("w"), and write+append ("wa"| "aw")
 	//
 	if mode == "w" {
 		md = os.O_WRONLY

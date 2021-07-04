@@ -1,31 +1,19 @@
-#
-# Simple test of regular expressions
-#
-
-#
 # Substring match
-#
 if (match("eve", "Steve Kemp")) {
    print("'Steve Kemp' contains the substring 'eve'");
 }
 
-#
 # Suffix Match
-#
 if (match("emp$", "Steve Kemp")) {
    print("Suffix-match OK");
 }
 
-#
 # Prefix-match
-#
 if (match("^[A-Z]", "Steve Kemp")) {
    print("Prefix-match OK");
 }
 
-#
 # IP-address regexp
-#
 let reg =  "([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$";
 let out = match(reg, "12.23.21.224");
 if (out) {
@@ -35,10 +23,7 @@ if (out) {
    print("Not true!");
 }
 
-
-#
 # The same thing using literal a regular expression
-#
 
 ip = "192.168.1.1";
 
@@ -46,5 +31,3 @@ if (ip ~= /([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/) {
    printf("We matched an IP address succesfully.");
    printf("Captures: %s.%s.%s.%s\n", $1, $2, $3, $4);
 }
-
-

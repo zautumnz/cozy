@@ -1,6 +1,4 @@
-#
 # This example shows reading from STDIN.
-#
 
 print("Please enter your name: ");
 let name = STDIN.read();

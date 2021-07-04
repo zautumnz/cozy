@@ -32,7 +32,7 @@ let assert = fn(val, msg = "Result was not 'true'!") {
 };
 
 assert("true");
-assert(true );
+assert(true);
 assert("! false;");
 assert(!false);
 assert("type(STDIN) == \"file\"");
@@ -49,7 +49,7 @@ let first = fn(array) {
     }
 };
 
-assert("first( [0,1] ) == 0");
+assert("first([0,1]) == 0");
 assert("first([\"zac\",1]) == \"zac\"");
 
 # The rest of an array - i.e. all elements EXCEPT the first
@@ -102,7 +102,7 @@ let array.filter = fn(predicate) {
 # Filter an array and keep only values which are "2".
 assert("
 let a = [ 1, 2, 3 , -1, \"steve\", 44 ];
-let a = a.filter( fn(n) { return n == 2 ; } );
+let a = a.filter(fn(n) { return n == 2 ; });
 if (string(a) == \"[2]\") {
     return true;
 } else {
@@ -173,10 +173,10 @@ let array.min = fn() {
     return min;
 };
 
-assert("( [1,2,3].min() == 1 )");
-assert("( 1..10.min() == 1 )");
-assert("( [-1,-2,-3].min() == -3 )");
-assert("( [].min() == 0 )", "minimum of an empty array is zero");
+assert("([1,2,3].min() == 1)");
+assert("(1..10.min() == 1)");
+assert("([-1,-2,-3].min() == -3)");
+assert("([].min() == 0)", "minimum of an empty array is zero");
 
 # Find maximum value in array
 let array.max = fn() {
@@ -200,7 +200,7 @@ let array.max = fn() {
     for (i < l) {
         # type checking.
         if (type(self[i]) != "integer" && type(self[i]) != "float") {
-            print( "array.max only works on numbers - not " , type(self[i]), "\n");
+            print("array.max only works on numbers - not " , type(self[i]), "\n");
             exit(1);
         }
 
@@ -214,10 +214,10 @@ let array.max = fn() {
     return max;
 };
 
-assert("( 1..15.max() == 15 )");
-assert("( [1,2,3].max() == 3 )");
-assert("( [-1,-2,-3].max() == -1 )");
-assert("( [].max() == 0 )", "maximum of an empty array is zero");
+assert("(1..15.max() == 15)");
+assert("([1,2,3].max() == 3)");
+assert("([-1,-2,-3].max() == -1)");
+assert("([].max() == 0)", "maximum of an empty array is zero");
 
 # Join the elements of an array by the given string.
 let array.join = fn(char) {
@@ -239,8 +239,8 @@ let array.join = fn(char) {
     return r;
 };
 
-assert("[1,2,3].join( \".\" ) == \"1.2.3\"");
-assert("[1,2,3].join( \"\" ) == \"123\"");
+assert("[1,2,3].join(\".\") == \"1.2.3\"");
+assert("[1,2,3].join(\"\") == \"123\"");
 
 # Reverse an array.
 let array.reverse = fn() {
@@ -331,8 +331,8 @@ let array.swap = fn(a, b) {
     return r;
 };
 
-assert("let a = [10,20]; a = a.swap(0,1); if ( a[0] == 20 ) { true; } else { false ; }");
-assert("let a = [10,20]; a = a.swap(0,1); if ( a[1] == 10 ) { true; } else { false ; }");
+assert("let a = [10,20]; a = a.swap(0,1); if (a[0] == 20) { true; } else { false ; }");
+assert("let a = [10,20]; a = a.swap(0,1); if (a[1] == 10) { true; } else { false ; }");
 
 
 # Sort the given array.
@@ -344,7 +344,7 @@ let array.sort = fn() {
 
     # Record the types.
     for (i < len(self)) {
-        tmp = set(tmp, type(self[i]), true );
+        tmp = set(tmp, type(self[i]), true);
         i++;
     }
 
@@ -465,7 +465,7 @@ let integer.to_f = fn() {
     return(self + 0.0);
 };
 
-assert("type( 3.to_f() ) == \"float\"");
+assert("type(3.to_f()) == \"float\"");
 assert("3.to_f() == 3.0");
 
 # Count occurences of the given character in the string.
@@ -509,7 +509,7 @@ let string.repeat = fn(count) {
         return self;
     }
 
-    for(count > 0) {
+    for (count > 0) {
         r += self;
         count--;
     }
@@ -621,11 +621,11 @@ let string.find = fn(needle) {
     return -1;
 };
 
-assert("\"steve\".find(\"e\" ) == 2");
-assert("\"steve\".find(\"v\" ) == 3");
-assert("\"steve\".find(\"PIE\" ) == -1");
-assert("\"狐犬\".find(\"狐犬\" ) == 0");
-assert("\"st狐eve犬es\".find(\"犬\" ) == 6");
+assert("\"steve\".find(\"e\") == 2");
+assert("\"steve\".find(\"v\") == 3");
+assert("\"steve\".find(\"PIE\") == -1");
+assert("\"狐犬\".find(\"狐犬\") == 0");
+assert("\"st狐eve犬es\".find(\"犬\") == 6");
 
 # string.interpolate replaces ${blah} with the value of "blah" from
 # the specified hash.
@@ -647,7 +647,7 @@ let string.interpolate = fn(hsh) {
 # string.split returns an array splitting on any characters included
 # in the separator string.
 # By default the split is on whitespace: " ", "TAB", & "RETURN".
-let string.split = fn(sep = " \r\t\n" ) {
+let string.split = fn(sep = " \r\t\n") {
     let i = 0;
     let l = len(self);
     let r = [];
@@ -663,7 +663,7 @@ let string.split = fn(sep = " \r\t\n" ) {
 
             # push any previously-accumulated token into our array.
             if (len(tmp) > 0) {
-                r = push( r, tmp );
+                r = push(r, tmp);
             }
             tmp = "";
 
@@ -743,9 +743,9 @@ let string.to_number = fn() {
     let out = match(reg, self);
 
     if (out) {
-        return( self.to_f() );
+        return(self.to_f());
     } else {
-        return( self.to_i() );
+        return(self.to_i());
     }
 };
 

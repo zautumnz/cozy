@@ -298,8 +298,8 @@ x */ 3;
 let t = true;
 let f = false;
 
-if ( t && f ) { print( "What?" ); }
-if ( t || f ) { print( "What?" ); }
+if (t && f) { print("What?"); }
+if (t || f) { print("What?"); }
 
 let a = 1;
 a++;
@@ -308,14 +308,14 @@ let b = a % 1;
 b--;
 b -= 2;
 
-if ( a<3 ) { print( "Blah!"); }
-if ( a>3 ) { print( "Blah!"); }
+if (a<3) { print("Blah!"); }
+if (a>3) { print("Blah!"); }
 
 let b = 3;
 b**b;
 b *= 3;
-if ( b <= 3  ) { print "blah\n" }
-if ( b >= 3  ) { print "blah\n" }
+if (b <= 3) { print "blah\n" }
+if (b >= 3) { print "blah\n" }
 
 let a = "steve";
 let a = "steve\n";
@@ -472,11 +472,11 @@ func TestIntDotMethod(t *testing.T) {
 
 // TestRegexp ensures a simple regexp can be parsed.
 func TestRegexp(t *testing.T) {
-	input := `if ( f ~= /steve/i )
-if ( f ~= /steve/m )
-if ( f ~= /steve/mi )
-if ( f !~ /steve/mi )
-if ( f ~= /steve/miiiiiiiiiiiiiiiiimmmmmmmmmmmmmiiiii )`
+	input := `if (f ~= /steve/i)
+if (f ~= /steve/m)
+if (f ~= /steve/mi)
+if (f !~ /steve/mi)
+if (f ~= /steve/miiiiiiiiiiiiiiiiimmmmmmmmmmmmmiiiii)`
 
 	tests := []struct {
 		expectedType    token.Type
@@ -528,7 +528,7 @@ if ( f ~= /steve/miiiiiiiiiiiiiiiiimmmmmmmmmmmmmiiiii )`
 
 // TestIllegalRegexp is designed to look for an unterminated/illegal regexp
 func TestIllegalRegexp(t *testing.T) {
-	input := `if ( f ~= /steve )`
+	input := `if (f ~= /steve)`
 
 	tests := []struct {
 		expectedType    token.Type

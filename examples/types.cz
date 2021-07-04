@@ -1,14 +1,10 @@
-#
 # The `string` function allow something to be converted to a string.
-#
 # The `type` function returns the type of an item.
-#
 
 let show = fn(input) {
    print("Type of input was ", type(input));
    print("\tAfter converting to string we found: ", string(input));
 };
-
 
 show("String input");
 show(3.14);

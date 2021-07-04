@@ -514,7 +514,7 @@ func TestIfExpression(t *testing.T) {
 }
 
 func TestForLoopExpression(t *testing.T) {
-	input := `for(x<y) { let x=x+1; }`
+	input := `for (x<y) { let x=x+1; }`
 	l := lexer.New(input)
 	p := New(l)
 	program := p.ParseProgram()
@@ -849,12 +849,12 @@ func TestObjectMethodCall(t *testing.T) {
 // Test that incomplete blocks / statements are handled.
 func TestIncompleThings(t *testing.T) {
 	input := []string{
-		`if ( true ) { `,
-		`if ( true ) { print( "OK" ) ; } else { `,
+		`if (true) { `,
+		`if (true) { print("OK") ; } else { `,
 		`return 3`,
 		`let x = `,
 		`const x =`,
-		`let foo = fn( a, b ="steve", `,
+		`let foo = fn(a, b ="steve", `,
 	}
 
 	for _, str := range input {

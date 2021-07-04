@@ -1,10 +1,5 @@
 #!/usr/bin/env cozy
 
-#
-# This program demonstrates the use of array-sorting.
-#
-
-
 # Dump the array.
 let dump = fn(in) {
     if (in.sorted?()) {
@@ -23,7 +18,6 @@ dump(a);
 a = a.sort();
 print("The sorted array : ", a);
 dump(a);
-
 
 # Now sort some ints
 let a = [ "Zebra", "zebra", "x-ray", "Zac", "Anger", "Yan" ];

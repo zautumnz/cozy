@@ -6,7 +6,7 @@ import (
 	"github.com/zacanger/cozy/object"
 )
 
-// array = directory.glob( "/etc/*.conf" )
+// array = directory.glob("/etc/*.conf")
 func dirGlob(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return newError("wrong number of arguments. got=%d, want=1",

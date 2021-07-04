@@ -1,8 +1,6 @@
 #!/usr/bin/env cozy
 
-#
 # This program dumps the command-line arguments the script received.
-#
 
 let a = args();
 

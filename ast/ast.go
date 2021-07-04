@@ -224,7 +224,7 @@ type PrefixExpression struct {
 	// Token holds the token.  e.g. "!"
 	Token token.Token
 
-	// Operator holds the operator being invoked (e.g. "!" ).
+	// Operator holds the operator being invoked (e.g. "!").
 	Operator string
 
 	// Right holds the thing to be operated upon
@@ -254,7 +254,7 @@ type InfixExpression struct {
 	// Left holds the left-most argument
 	Left Expression
 
-	// Operator holds the operation to be carried out (e.g. "+", "-" )
+	// Operator holds the operation to be carried out (e.g. "+", "-")
 	Operator string
 
 	// Right holds the right-most argument

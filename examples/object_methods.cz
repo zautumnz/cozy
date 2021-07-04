@@ -1,37 +1,25 @@
 #!/usr/bin/env cozy
-#
+
 # Object-methods are defined against types in cozy.
-#
 # For example if you defined the function string.blah():
-#
 #  let string.blah = fn() { print("OK"); };
-#
 # You could then invoke it via:
-#
 #   "input".blah();
-#
 # (The value it was invoked against would be available via the
-# variable "this", if you wished to use it.)
-#
+# variable "self", if you wished to use it.)
 # This script dumps all available object-methods which are available
 # for each type.
-#
 
-
-#
 # Create an array holding various types
-#
-let t = [ [], 3.13, fn(){} , {} , 3, "steve" ];
+let t = [ [], 3.13, fn(){} , {} , 3, "zac" ];
 
-#
 # Walk over the types
-#
 let i = 0;
 for (i < len(t)) {
     # Show the type + methods.
     let item  = t[i];
     let metod = item.methods();
-    print("Object type ", type(item));
+    print(type(item), ":");
 
     # Show the methods.
     let j = 0;

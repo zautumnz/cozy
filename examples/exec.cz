@@ -1,8 +1,6 @@
 #!/usr/bin/env cozy
 
-#
 # Run a simple command
-#
 let uptime = `/usr/bin/uptime`;
 
 if (uptime) {
@@ -12,9 +10,7 @@ if (uptime) {
    print("Failed to run command");
 }
 
-#
 # Now something more complex
-#
 let ls = `/bin/sh -c "/bin/ls /etc /missing-path"`;
 if (ls) {
    print("STDOUT: ", ls["stdout"].trim());

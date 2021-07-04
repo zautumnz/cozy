@@ -6,7 +6,7 @@ import (
 	"github.com/zacanger/cozy/object"
 )
 
-// os.getenv() -> ( Hash )
+// os.getenv() -> (Hash)
 func envFun(args ...object.Object) object.Object {
 
 	env := os.Environ()
@@ -30,7 +30,7 @@ func envFun(args ...object.Object) object.Object {
 	return &object.Hash{Pairs: newHash}
 }
 
-// os.getenv( "PATH" ) -> string
+// os.getenv("PATH") -> string
 func getEnvFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return newError("wrong number of arguments. got=%d, want=1",
@@ -45,7 +45,7 @@ func getEnvFun(args ...object.Object) object.Object {
 
 }
 
-// os.setenv( "PATH", "/home/z/bin:/usr/bin" );
+// os.setenv("PATH", "/home/z/bin:/usr/bin");
 func setEnvFun(args ...object.Object) object.Object {
 	if len(args) != 2 {
 		return newError("wrong number of arguments. got=%d, want=1",

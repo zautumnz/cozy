@@ -3,8 +3,6 @@
 # If you were reading a file completely you might prefer to use
 # file.lines("/etc/passwd"), which would return an array of the
 # line-contents.
-#
-
 
 let fh = open("/etc/passwd");
 

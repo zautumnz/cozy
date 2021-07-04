@@ -6,17 +6,13 @@ print("maths.abs(3.13)  -> " ,math.abs(3.13),);
 print("maths.abs(-3.13) -> " ,math.abs(-3.13),);
 
 # The random function returns a floating-point number between 0 & 1
-#
 # To show a number from 0-10 we need to multiply and convert to an
 # integer.
-#
 let rand = math.random();
 let val = int(rand * 11) ;
 print("math.random() -> ", val);
 
-#
 # We can convert numbers to strings easily enough too
-#
 let str = string(3.14 * 22 + math.random());
 let str = "The result was : " + str;
 print(str);

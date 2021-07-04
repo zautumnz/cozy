@@ -1131,7 +1131,7 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 		// For this case we'll be looking for `array.foo()`.
 		//
 		//   let a = [ 1, 2, 3 ];
-		//   print( a.foo() );
+		//   print(a.foo());
 		//
 		// As a final fall-back we'll look for "object.foo()"
 		// if "array.foo()" isn't defined.

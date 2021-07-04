@@ -1,34 +1,16 @@
-#
-# This script contains some functional programming examples.
-#
-# Launch this like so:
-#
-#  ~$ cozy examples/functional.cz
-#
+# This script contains some functional-ish programming examples.
 
-
-
-#
 # Return true if the given number is even
-#
 let even? = fn(n) {
     return(n % 2 == 0);
 };
 
-
-#
 # Return true if the given number is odd.
-#
 let odd? = fn(n) {
     return(n % 2 == 1);
 };
 
-
-#
 # Return true if the given number is prime
-#
-# Remember we can use multi-line comments too!
-#
 let prime? = fn(n) {
     # negative numbers are not prime
     if (n < 0) {
@@ -52,15 +34,10 @@ let prime? = fn(n) {
     return true;
 };
 
-
-#
 # Square the given number.
-#
 let square = fn(n) { return n * n; };
 
-#
 # The list of numbers we'll operate upon.
-#
 let ints = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
              11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ];
 
@@ -68,24 +45,18 @@ let ints = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 print("\nIntegers:");
 print("\t", ints);
 
-#
-# Show their squares ..
-#
+# Show their squares
 print("\nSquares:");
 print("\t", ints.map(square));
 
-#
 # Show their cubes, using an anonymous function
-#
 print("\nCubes:");
 print("\t", ints.map(fn(n) { return n * n * n; }));
 print("\nCubes via POW:");
 print("\t", ints.map(fn(n) { return n ** 3; }));
 
-#
 # Now use our functional-methods to show odd/even/prime
 # numbers contained in our list.
-#
 print("\nOdd numbers:");
 print("\t", ints.filter(odd?));
 print("\nEven numbers:");

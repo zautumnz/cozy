@@ -5,10 +5,13 @@
 Simple, medium-level programming language that sits somewhere between scripting
 and general-purpose programming. Dynamically and strongly typed, with some with
 semantics that work well with pseudo-functional programming but syntax similar
-to Python, Go, and Shell. No OOP constructs like classes. Originally designed by
-writing a bunch of examples and a small stdlib; implementation started as a fork
-from [skx's version](https://github.com/skx/monkey) of the language from the [Go
-Interpreters Book](https://interpreterbook.com).
+to Python, Go, and Shell. No OOP constructs like classes.
+
+Originally designed by writing a bunch of examples and a small stdlib;
+implementation started as a fork from [skx's
+version](https://github.com/skx/monkey) of the language from the [Go
+Interpreters Book](https://interpreterbook.com). Written in pure Go with no
+third-party dependencies.
 
 ## TODO
 
@@ -230,8 +233,8 @@ Adding to an array is done via the `push` function:
 You can iterate over the contents of an array like so:
 
      let i = 0;
-     for( i < len(a) ) {
-        print( "Array index ", i, " contains ", a[i], "\n");
+     for (i < len(a)) {
+        print("Array index ", i, " contains ", a[i], "\n");
         i++
      }
 

@@ -594,23 +594,23 @@ func TestTypeBuiltin(t *testing.T) {
 		expected interface{}
 	}{
 		{
-			"type( \"Steve\" );",
+			"type(\"Steve\");",
 			"string",
 		},
 		{
-			"type( 1 );",
+			"type(1);",
 			"integer",
 		},
 		{
-			"type( 3.14159 );",
+			"type(3.14159);",
 			"float",
 		},
 		{
-			"type( [1,2,3] );",
+			"type([1,2,3]);",
 			"array",
 		},
 		{
-			"type( { \"name\":\"cozy\", true:1, 7:\"sevent\"} );",
+			"type({\"name\":\"cozy\", true:1, 7:\"sevent\"});",
 			"hash",
 		},
 	}
@@ -629,7 +629,7 @@ func TestTypeBuiltin(t *testing.T) {
 func TestTimeout(t *testing.T) {
 	input := `
 i = 1;
-for ( true ) {
+for (true) {
   i++;
 }
 `

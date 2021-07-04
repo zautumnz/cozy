@@ -1,18 +1,11 @@
-#
 # This example shows how to find files in a directory matching a particular
 # pattern.
-#
 
-
-#
 # Find all the files matching the glob-pattern "/etc/*.conf".
-#
 let pattern = "/etc/*.conf";
 let files = directory.glob(pattern);
 
-#
 # If that worked
-#
 if (len(files) > 0) {
     print("Pattern ", pattern, " matched " , len(files), " files");
 

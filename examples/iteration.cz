@@ -21,7 +21,6 @@ foreach idx, char in "Steve Kemp" {
      print("\t", idx, "\t", char);
 }
 
-
 # Iterating over a hash
 h = {"Foo": "Bar", "Steve": "Kemp"}
 print("Hash: key")
