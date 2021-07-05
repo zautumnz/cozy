@@ -16,7 +16,7 @@ let dump = fn(hash) {
 
 
 # Here is a sample hash
-let h = {"Steve": "Kemp" , "Moi": 7, 3.14:"pi?"};
+let h = {"Zac": "Anger" , "seven": 7, 3.14: "pi-ish"};
 
 # Show it.
 print("The original hash:");
@@ -30,7 +30,7 @@ print("After adding a new key:");
 dump(h);
 
 # Delete two keys
-let h = delete(h, "Moi");
+let h = delete(h, "seven");
 let h = delete(h, 3.14);
 print("After deleting two keys:");
 dump(h);

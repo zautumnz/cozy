@@ -317,12 +317,12 @@ b *= 3;
 if (b <= 3) { print "blah\n" }
 if (b >= 3) { print "blah\n" }
 
-let a = "steve";
-let a = "steve\n";
-let a = "steve\t";
-let a = "steve\r";
-let a = "steve\\";
-let a = "steve\"";
+let a = "zac";
+let a = "zac\n";
+let a = "zac\t";
+let a = "zac\r";
+let a = "zac\\";
+let a = "zac\"";
 let c = 3.113;
 .;`
 
@@ -526,7 +526,7 @@ if (f ~= /zac/miiiiiiiiiiiiiiiiimmmmmmmmmmmmmiiiii)`
 
 // TestIllegalRegexp is designed to look for an unterminated/illegal regexp
 func TestIllegalRegexp(t *testing.T) {
-	input := `if (f ~= /steve)`
+	input := `if (f ~= /zac)`
 
 	tests := []struct {
 		expectedType    token.Type

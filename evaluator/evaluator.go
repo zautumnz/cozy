@@ -1126,7 +1126,7 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 		// `string.len()` - because the type of the object we're
 		// invoking-against is string:
 		//
-		//  "steve".len();
+		//  "zac".len();
 		//
 		// For this case we'll be looking for `array.foo()`.
 		//
@@ -1183,7 +1183,7 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 	// If we hit this point we have had a method invoked which
 	// was neither defined in go nor cozy.
 	//
-	// e.g. "steve".md5sum()
+	// e.g. "zac".md5sum()
 	//
 	// So we've got no choice but to return an error.
 	//

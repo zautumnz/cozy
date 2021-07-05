@@ -122,9 +122,9 @@ func TestEvalBooleanExpression(t *testing.T) {
 		{"1==1", true},
 		{"\"a\">=\"A\"", true},
 		{"\"a\"<=\"A\"", false},
-		{"\"steve\"==\"steve\"", true},
-		{"\"steve\"!=\"Steve\"", true},
-		{"\"steve\"==\"kemp\"", false},
+		{"\"zac\"==\"zac\"", true},
+		{"\"zac\"!=\"Zac\"", true},
+		{"\"zac\"==\"anger\"", false},
 		{"\"abc123\"==\"abc\" + \"123\"", true},
 		{"1!=1", false},
 		{"1==2", false},
@@ -357,7 +357,7 @@ func TestBuiltinFunction(t *testing.T) {
 	}{
 		{`len("")`, 0},
 		{`len("four")`, 4},
-		{`len("狐犬")`, 2},
+		{`len("天研")`, 2},
 		{`len("hello world")`, 11},
 		{`len(1)`, "argument to `len` not supported, got=INTEGER"},
 		{`len("one", "two")`, "wrong number of arguments. got=2, want=1"},
@@ -462,28 +462,28 @@ func TestStringIndexExpression(t *testing.T) {
 		expected interface{}
 	}{
 		{
-			"\"Steve\"[0]",
-			"S",
+			"\"Zac\"[0]",
+			"Z",
 		},
 		{
-			"\"Steve\"[1]",
-			"t",
+			"\"Zac\"[1]",
+			"a",
 		},
 		{
-			"\"Steve\"[101]",
+			"\"Zac\"[101]",
 			nil,
 		},
 		{
-			"\"Steve\"[-1]",
+			"\"Zac\"[-1]",
 			nil,
 		},
 		{
-			"\"狐犬\"[0]",
-			"狐",
+			"\"天研\"[0]",
+			"天",
 		},
 		{
-			"\"狐犬\"[1]",
-			"犬",
+			"\"天研\"[1]",
+			"研",
 		},
 	}
 	for _, tt := range tests {
@@ -601,7 +601,7 @@ func TestTypeBuiltin(t *testing.T) {
 		expected interface{}
 	}{
 		{
-			"type(\"Steve\");",
+			"type(\"Zac\");",
 			"string",
 		},
 		{
@@ -617,7 +617,7 @@ func TestTypeBuiltin(t *testing.T) {
 			"array",
 		},
 		{
-			"type({\"name\":\"cozy\", true:1, 7:\"sevent\"});",
+			"type({\"name\":\"cozy\", true: 1, 7: \"seven\"});",
 			"hash",
 		},
 	}

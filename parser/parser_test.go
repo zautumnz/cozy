@@ -834,7 +834,7 @@ func TestMutators(t *testing.T) {
 
 // Test method-call operation.
 func TestObjectMethodCall(t *testing.T) {
-	input := []string{"\"steve\".len()",
+	input := []string{"\"zac\".len()",
 		"mutable x = 15; x.string();",
 		"`ls`"}
 
@@ -854,7 +854,7 @@ func TestIncompleThings(t *testing.T) {
 		`return 3`,
 		`mutable x = `,
 		`let x =`,
-		`mutable foo = fn(a, b ="steve", `,
+		`mutable foo = fn(a, b ="zac", `,
 	}
 
 	for _, str := range input {
