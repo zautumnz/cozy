@@ -3,7 +3,7 @@ let dump = fn(hash) {
     let k = keys(hash);
     print("\tHash has ", len(k) , " keys.");
 
-    let i = 0;
+    mutable i = 0;
     for (i < len(k)) {
 
        # Show the name / type / value

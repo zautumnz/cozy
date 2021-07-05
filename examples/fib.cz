@@ -1,4 +1,4 @@
-let fib = fn (n) {
+let fib = fn(n) {
     if (n <= 1) {
         return 1;
     } else {

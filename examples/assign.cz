@@ -1,6 +1,6 @@
 #!/usr/bin/env cozy
 
-let i = 3;
+mutable i = 3;
 i = 2 * PI ;
 print("2xPI ", i);
 
@@ -11,5 +11,5 @@ print("X:", x);
 let 天 = "tian";
 print(天);
 
-const FOO = 123;
+let FOO = 123;
 print(FOO);

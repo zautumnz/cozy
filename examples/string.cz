@@ -29,6 +29,6 @@ let indexed = "asdf";
 print(indexed[1]);
 
 # Appending
-let root = "a";
+mutable root = "a";
 root += "s";
 print(root + "d", "f");

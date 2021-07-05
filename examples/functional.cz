@@ -23,7 +23,7 @@ let prime? = fn(n) {
     }
 
     # Now the rest - we're testing all factors between 2 & SQRT(n).
-    let i = int(math.sqrt(n)) + 1;
+    mutable i = int(math.sqrt(n)) + 1;
 
     for (i > 2) {
         i--;
@@ -38,8 +38,12 @@ let prime? = fn(n) {
 let square = fn(n) { return n * n; };
 
 # The list of numbers we'll operate upon.
-let ints = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-             11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ];
+let ints = [
+    0, 1, 2, 3, 4,
+    5, 6, 7, 8, 9,
+    10, 11, 12, 13, 14,
+    15, 16, 17, 18, 19, 20
+];
 
 # Show them ..
 print("\nIntegers:");

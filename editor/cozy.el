@@ -35,6 +35,7 @@
     "if"
     "in"
     "let"
+    "mutable"
     "return"
     ))
 

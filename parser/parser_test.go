@@ -9,6 +9,58 @@ import (
 	"github.com/zacanger/cozy/lexer"
 )
 
+func TestMutableStatements(t *testing.T) {
+	tests := []struct {
+		input              string
+		expectedIdentifier string
+		expectedValue      interface{}
+	}{
+		{"mutable x =5;", "x", 5},
+		{"mutable z =1.3;", "z", 1.3},
+		{"mutable y = true;", "y", true},
+		{"mutable foobar=y;", "foobar", "y"},
+	}
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+		if len(program.Statements) != 1 {
+			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
+				len(program.Statements))
+		}
+		stmt := program.Statements[0]
+		if !testMutableStatement(t, stmt, tt.expectedIdentifier) {
+			return
+		}
+		val := stmt.(*ast.MutableStatement).Value
+		if !testLiteralExpression(t, val, tt.expectedValue) {
+			return
+		}
+	}
+}
+
+// Test that errors are returned when incomplete mutable/let expressions are seen
+func TestBadMutableLetStatement(t *testing.T) {
+	input := []string{"mutable", "let", "mutable x;", "let x;"}
+
+	for _, str := range input {
+		l := lexer.New(str)
+		p := New(l)
+		_ = p.ParseProgram()
+
+		errors := p.errors
+		if len(errors) < 1 {
+			t.Errorf("UNexpected error-count!")
+		}
+
+		if len(p.Errors()) != len(errors) {
+			t.Errorf("Mismatch of errors + error-messages!")
+		}
+	}
+}
+
+//TestLetStatements tests the "let" token.
 func TestLetStatements(t *testing.T) {
 	tests := []struct {
 		input              string
@@ -40,56 +92,25 @@ func TestLetStatements(t *testing.T) {
 	}
 }
 
-// Test that errors are returned when incomplete let/const expressions are seen
-func TestBadLetConstStatement(t *testing.T) {
-	input := []string{"let", "const", "let x;", "const x;"}
-
-	for _, str := range input {
-		l := lexer.New(str)
-		p := New(l)
-		_ = p.ParseProgram()
-
-		errors := p.errors
-		if len(errors) < 1 {
-			t.Errorf("UNexpected error-count!")
-		}
-
-		if len(p.Errors()) != len(errors) {
-			t.Errorf("Mismatch of errors + error-messages!")
-		}
+func testMutableStatement(t *testing.T, s ast.Statement, name string) bool {
+	if s.TokenLiteral() != "mutable" {
+		t.Errorf("s.TokenLiteral not 'mutable'. got %q", s.TokenLiteral())
+		return false
 	}
-}
-
-//TestConstStatements tests the "const" token.
-func TestConstStatements(t *testing.T) {
-	tests := []struct {
-		input              string
-		expectedIdentifier string
-		expectedValue      interface{}
-	}{
-		{"const x =5;", "x", 5},
-		{"const z =1.3;", "z", 1.3},
-		{"const y = true;", "y", true},
-		{"const foobar=y;", "foobar", "y"},
+	mutableStmt, ok := s.(*ast.MutableStatement)
+	if !ok {
+		t.Errorf("s not *ast.MutableStatement. got=%T", s)
+		return false
 	}
-	for _, tt := range tests {
-		l := lexer.New(tt.input)
-		p := New(l)
-		program := p.ParseProgram()
-		checkParserErrors(t, p)
-		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain 1 statements. got=%d",
-				len(program.Statements))
-		}
-		stmt := program.Statements[0]
-		if !testConstStatement(t, stmt, tt.expectedIdentifier) {
-			return
-		}
-		val := stmt.(*ast.ConstStatement).Value
-		if !testLiteralExpression(t, val, tt.expectedValue) {
-			return
-		}
+	if mutableStmt.Name.Value != name {
+		t.Errorf("s.Name not '%s'. got=%s", name, mutableStmt.Name.Value)
+		return false
 	}
+	if mutableStmt.Name.TokenLiteral() != name {
+		t.Errorf("s.Name not '%s'. got=%s", name, mutableStmt.Name.Value)
+		return false
+	}
+	return true
 }
 
 func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
@@ -99,28 +120,7 @@ func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 	}
 	letStmt, ok := s.(*ast.LetStatement)
 	if !ok {
-		t.Errorf("s not *ast.LetStatement. got=%T", s)
-		return false
-	}
-	if letStmt.Name.Value != name {
-		t.Errorf("s.Name not '%s'. got=%s", name, letStmt.Name.Value)
-		return false
-	}
-	if letStmt.Name.TokenLiteral() != name {
-		t.Errorf("s.Name not '%s'. got=%s", name, letStmt.Name.Value)
-		return false
-	}
-	return true
-}
-
-func testConstStatement(t *testing.T, s ast.Statement, name string) bool {
-	if s.TokenLiteral() != "const" {
-		t.Errorf("s.TokenLiteral not 'const'. got %q", s.TokenLiteral())
-		return false
-	}
-	letStmt, ok := s.(*ast.ConstStatement)
-	if !ok {
-		t.Errorf("s not *ast.LetStatement. got=%T", s)
+		t.Errorf("s not *ast.MutableStatement. got=%T", s)
 		return false
 	}
 	if letStmt.Name.Value != name {
@@ -514,7 +514,7 @@ func TestIfExpression(t *testing.T) {
 }
 
 func TestForLoopExpression(t *testing.T) {
-	input := `for (x<y) { let x=x+1; }`
+	input := `for (x<y) { mutable x=x+1; }`
 	l := lexer.New(input)
 	p := New(l)
 	program := p.ParseProgram()
@@ -540,13 +540,13 @@ func TestForLoopExpression(t *testing.T) {
 		t.Errorf("consequence is not 1 statements. got=%d\n",
 			len(exp.Consequence.Statements))
 	}
-	consequence, ok := exp.Consequence.Statements[0].(*ast.LetStatement)
+	consequence, ok := exp.Consequence.Statements[0].(*ast.MutableStatement)
 	if !ok {
 		t.Fatalf("exp.Consequence.Statement[0] is not ast.ExpressionStatement. got=%T",
 			exp.Consequence.Statements[0])
 	}
-	if !testLetStatement(t, consequence, "x") {
-		t.Fatalf("exp.Consequence is not LetStatement")
+	if !testMutableStatement(t, consequence, "x") {
+		t.Fatalf("exp.Consequence is not MutableStatement")
 	}
 
 }
@@ -591,7 +591,7 @@ func TestFunctionLiteralParsing(t *testing.T) {
 
 // TODO: complete this
 func TestFunctionParsing(t *testing.T) {
-	input := `let f = fn(x,y){x+y;};`
+	input := `mutable f = fn(x,y){x+y;};`
 	l := lexer.New(input)
 	p := New(l)
 	program := p.ParseProgram()
@@ -816,13 +816,13 @@ func TestParsingHashLiteralWithExpression(t *testing.T) {
 
 // Test operators: +=, -=, /=, and *=.
 func TestMutators(t *testing.T) {
-	input := []string{"let w = 5; w *= 3;",
-		"let x = 15; x += 3;",
-		"let y = 10; y /= 2;",
-		"let z = 10; y -= 2;",
-		"let z = 1; z++;",
-		"let z = 1; z--;",
-		"let z = 10; let a = 3; y = a;"}
+	input := []string{"mutable w = 5; w *= 3;",
+		"mutable x = 15; x += 3;",
+		"mutable y = 10; y /= 2;",
+		"mutable z = 10; y -= 2;",
+		"mutable z = 1; z++;",
+		"mutable z = 1; z--;",
+		"mutable z = 10; mutable a = 3; y = a;"}
 
 	for _, txt := range input {
 		l := lexer.New(txt)
@@ -835,7 +835,7 @@ func TestMutators(t *testing.T) {
 // Test method-call operation.
 func TestObjectMethodCall(t *testing.T) {
 	input := []string{"\"steve\".len()",
-		"let x = 15; x.string();",
+		"mutable x = 15; x.string();",
 		"`ls`"}
 
 	for _, txt := range input {
@@ -852,9 +852,9 @@ func TestIncompleThings(t *testing.T) {
 		`if (true) { `,
 		`if (true) { print("OK") ; } else { `,
 		`return 3`,
-		`let x = `,
-		`const x =`,
-		`let foo = fn(a, b ="steve", `,
+		`mutable x = `,
+		`let x =`,
+		`mutable foo = fn(a, b ="steve", `,
 	}
 
 	for _, str := range input {

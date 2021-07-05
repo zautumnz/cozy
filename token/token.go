@@ -21,7 +21,6 @@ const (
 	BANG            = "!"
 	COLON           = ":"
 	COMMA           = ","
-	CONST           = "CONST"
 	CONTAINS        = "~="
 	DEFAULT         = "DEFAULT"
 	DOTDOT          = ".."
@@ -50,6 +49,7 @@ const (
 	MINUS_EQUALS    = "-="
 	MINUS_MINUS     = "--"
 	MOD             = "%"
+	MUTABLE         = "MUTABLE"
 	NOT_CONTAINS    = "!~"
 	NOT_EQ          = "!="
 	OR              = "||"
@@ -73,7 +73,6 @@ const (
 
 // reversed keywords
 var keywords = map[string]Type{
-	"const":    CONST,
 	"default":  DEFAULT,
 	"else":     ELSE,
 	"false":    FALSE,
@@ -83,6 +82,7 @@ var keywords = map[string]Type{
 	"if":       IF,
 	"in":       IN,
 	"let":      LET,
+	"mutable":  MUTABLE,
 	"return":   RETURN,
 	"true":     TRUE,
 }

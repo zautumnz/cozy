@@ -4,10 +4,10 @@
 
 ---
 
-Example from the ./stdlib.cz:
+Example:
 
 ```
-let array.reduce = fn(fun, init) {
+let reduce = fn(fun, xs, init) {
     let acc = init;
     foreach _, x in self {
         acc = fun(x, acc);
@@ -16,11 +16,20 @@ let array.reduce = fn(fun, init) {
     return acc;
 };
 
+let ints? = fn(xs) {
+foreach x in xs {
+    if (type(x) != "integer" && type(x) != "float")
+        return false;
+    }
+    return true;
+}
+
 let sum = fn(xs) {
-    return xs.reduce(
+    assert(ints?(xs), "expected only numbers!")
+    return reduce(
         fn(x, acc) {
             return x + acc;
-        }, 0);
+        }, xs, 0);
 };
 ```
 
@@ -55,6 +64,9 @@ entered code will be evaluated when you exit with `ctrl+d`.
 * No switch statements
 * `let` and `const` are for declarations (see TODOs about this)
 * Using `set` and `delete` on hashes returns a new hash
+* `let` is for immutable variables; `mutable` is for mutable ones; this is
+    because setting mutable variables should be more annoying to do than
+    setting mutable ones.
 
 ### Builtin Functions
 
@@ -97,8 +109,7 @@ it's always growing.
     * Improve core assertion library
     * Add a TAP-compatible testing library on top of `assert`
     * Remove parens in `if` conditions
-    * Remove `self`
-    * Change declaration keywords to make mutable variables explicit
+    * Remove `self`?
     * Curry, memo, and other FP utils
     * Docstrings
     * Improve Vim and Emacs files

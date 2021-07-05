@@ -58,8 +58,8 @@ func (p *Program) String() string {
 	return out.String()
 }
 
-// LetStatement holds a let-statemnt
-type LetStatement struct {
+// MutableStatement holds a mutable-statemnt
+type MutableStatement struct {
 	// Token holds the token
 	Token token.Token
 
@@ -70,13 +70,13 @@ type LetStatement struct {
 	Value Expression
 }
 
-func (ls *LetStatement) statementNode() {}
+func (ls *MutableStatement) statementNode() {}
 
 // TokenLiteral returns the literal token.
-func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
+func (ls *MutableStatement) TokenLiteral() string { return ls.Token.Literal }
 
 // String returns this object as a string.
-func (ls *LetStatement) String() string {
+func (ls *MutableStatement) String() string {
 	var out bytes.Buffer
 	out.WriteString(ls.TokenLiteral() + " ")
 	out.WriteString(ls.Name.TokenLiteral())
@@ -88,9 +88,9 @@ func (ls *LetStatement) String() string {
 	return out.String()
 }
 
-// ConstStatement is the same as let-statement, but the value
+// LetStatement is the same as mutable-statement, but the value
 // can't be changed later.
-type ConstStatement struct {
+type LetStatement struct {
 	// Token is the token
 	Token token.Token
 
@@ -101,13 +101,13 @@ type ConstStatement struct {
 	Value Expression
 }
 
-func (ls *ConstStatement) statementNode() {}
+func (ls *LetStatement) statementNode() {}
 
 // TokenLiteral returns the literal token.
-func (ls *ConstStatement) TokenLiteral() string { return ls.Token.Literal }
+func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 
 // String returns this object as a string.
-func (ls *ConstStatement) String() string {
+func (ls *LetStatement) String() string {
 	var out bytes.Buffer
 	out.WriteString(ls.TokenLiteral() + " ")
 	out.WriteString(ls.Name.TokenLiteral())

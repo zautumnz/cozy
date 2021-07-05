@@ -269,17 +269,17 @@ func TestErrorHandling(t *testing.T) {
 }
 */
 
-func TestLetStatements(t *testing.T) {
+func TestMutableStatements(t *testing.T) {
 	tests := []struct {
 		input  string
 		expect int64
 	}{
-		{"let a=5;a;", 5},
-		{"let a=5*5; a;", 25},
-		{"let a=5; let b=a; b;", 5},
-		{"let a=5; a--; a;", 4},
-		{"let a=5; a++; a;", 6},
-		{"let a=5; let b=a; let c=a+b+5; c;", 15},
+		{"mutable a=5;a;", 5},
+		{"mutable a=5*5; a;", 25},
+		{"mutable a=5; mutable b=a; b;", 5},
+		{"mutable a=5; a--; a;", 4},
+		{"mutable a=5; a++; a;", 6},
+		{"mutable a=5; mutable b=a; mutable c=a+b+5; c;", 15},
 	}
 	for _, tt := range tests {
 		testDecimalObject(t, testEval(tt.input), tt.expect)
@@ -312,11 +312,11 @@ func TestFunctionApplication(t *testing.T) {
 		input    string
 		expected int64
 	}{
-		{"let identity=fn(x){x;}; identity(5);", 5},
-		{"let identity=fn(x){return x;}; identity(5);", 5},
-		{"let double=fn(x){x*2;}; double(5);", 10},
-		{"let add = fn(x, y) { x+y;}; add(5,5);", 10},
-		{"let add=fn(x,y){x+y;}; add(5+5, add(5,5));", 20},
+		{"mutable identity=fn(x){x;}; identity(5);", 5},
+		{"mutable identity=fn(x){return x;}; identity(5);", 5},
+		{"mutable double=fn(x){x*2;}; double(5);", 10},
+		{"mutable add = fn(x, y) { x+y;}; add(5,5);", 10},
+		{"mutable add=fn(x,y){x+y;}; add(5+5, add(5,5));", 20},
 		{"fn(x){x;}(5)", 5},
 	}
 	for _, tt := range tests {
@@ -326,10 +326,10 @@ func TestFunctionApplication(t *testing.T) {
 
 func TestClosures(t *testing.T) {
 	input := `
-let newAdder = fn(x) {
+mutable newAdder = fn(x) {
 	fn(y) { x+y };
 };
-let addTwo = newAdder(2);
+mutable addTwo = newAdder(2);
 addTwo(2);
 `
 	testDecimalObject(t, testEval(input), 4)
@@ -421,19 +421,19 @@ func TestArrayIndexExpression(t *testing.T) {
 			3,
 		},
 		{
-			"let i =0; [1][i]",
+			"mutable i =0; [1][i]",
 			1,
 		},
 		{
-			"let myArray=[1,2,3];myArray[2];",
+			"mutable myArray=[1,2,3];myArray[2];",
 			3,
 		},
 		{
-			"let myArray=[1,2,3];myArray[0]+myArray[1]+myArray[2]",
+			"mutable myArray=[1,2,3];myArray[0]+myArray[1]+myArray[2]",
 			6,
 		},
 		{
-			"let myArray=[1,2,3];let i = myArray[0]; myArray[i]",
+			"mutable myArray=[1,2,3];mutable i = myArray[0]; myArray[i]",
 			2,
 		},
 		{
@@ -499,7 +499,7 @@ func TestStringIndexExpression(t *testing.T) {
 }
 
 func TestHashLiterals(t *testing.T) {
-	input := `let two="two";
+	input := `mutable two="two";
 	{
 		"one":10-9,
 		two:1+1,
@@ -549,7 +549,7 @@ func TestHashIndexExpression(t *testing.T) {
 			nil,
 		},
 		{
-			`let key = "foo"; {"foo":5}[key]`,
+			`mutable key = "foo"; {"foo":5}[key]`,
 			5,
 		},
 		{
@@ -582,12 +582,12 @@ func TestHashIndexExpression(t *testing.T) {
 
 func TestForLoopExpression(t *testing.T) {
 	input := `
-let x = 1;
-let sum = 0;
-let up = 100;
+mutable x = 1;
+mutable sum = 0;
+mutable up = 100;
 for (x < up){
-	let sum = sum + x;
-	let x = x + 1;
+	mutable sum = sum + x;
+	mutable x = x + 1;
 }
 sum
 `
@@ -637,7 +637,7 @@ func TestTypeBuiltin(t *testing.T) {
 // TODO: Disabled, this takes forever
 func TestTimeout(t *testing.T) {
 	input := `
-let i = 1;
+mutable i = 1;
 for (true) {
   i++;
 }

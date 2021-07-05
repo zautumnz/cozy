@@ -228,10 +228,10 @@ func (p *Parser) ParseProgram() *ast.Program {
 // parseStatement parses a single statement.
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
+	case token.MUTABLE:
+		return p.parseMutableStatement()
 	case token.LET:
 		return p.parseLetStatement()
-	case token.CONST:
-		return p.parseConstStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
 	default:
@@ -239,7 +239,31 @@ func (p *Parser) parseStatement() ast.Statement {
 	}
 }
 
-// parseLetStatement parses a let-statement.
+// parseMutableStatement parses a mutable-statement.
+func (p *Parser) parseMutableStatement() *ast.MutableStatement {
+	stmt := &ast.MutableStatement{Token: p.curToken}
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	if !p.expectPeek(token.ASSIGN) {
+		return nil
+	}
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+	for !p.curTokenIs(token.SEMICOLON) {
+
+		if p.curTokenIs(token.EOF) {
+			p.errors = append(p.errors, "unterminated mutable statement")
+			return nil
+		}
+
+		p.nextToken()
+	}
+	return stmt
+}
+
+// parseLetStatement parses a let (constant) declaration.
 func (p *Parser) parseLetStatement() *ast.LetStatement {
 	stmt := &ast.LetStatement{Token: p.curToken}
 	if !p.expectPeek(token.IDENT) {
@@ -255,30 +279,6 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 
 		if p.curTokenIs(token.EOF) {
 			p.errors = append(p.errors, "unterminated let statement")
-			return nil
-		}
-
-		p.nextToken()
-	}
-	return stmt
-}
-
-// parseConstStatement parses a constant declaration.
-func (p *Parser) parseConstStatement() *ast.ConstStatement {
-	stmt := &ast.ConstStatement{Token: p.curToken}
-	if !p.expectPeek(token.IDENT) {
-		return nil
-	}
-	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
-	if !p.expectPeek(token.ASSIGN) {
-		return nil
-	}
-	p.nextToken()
-	stmt.Value = p.parseExpression(LOWEST)
-	for !p.curTokenIs(token.SEMICOLON) {
-
-		if p.curTokenIs(token.EOF) {
-			p.errors = append(p.errors, "unterminated const statement")
 			return nil
 		}
 
@@ -796,7 +796,7 @@ func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression {
 	return exp
 }
 
-// parseAssignExpression parses a bare assignment, without a `let`.
+// parseAssignExpression parses a bare assignment, without a `mutable`.
 func (p *Parser) parseAssignExpression(name ast.Expression) ast.Expression {
 	stmt := &ast.AssignStatement{Token: p.curToken}
 	if n, ok := name.(*ast.Identifier); ok {

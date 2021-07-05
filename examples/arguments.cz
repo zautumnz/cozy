@@ -6,7 +6,7 @@ let a = args();
 
 print("We received ", len(a), " arguments to our script.");
 
-let i = 0;
+mutable i = 0;
 for (i < len(a)) {
    print("\t", i, " " , a[i]);
    i++

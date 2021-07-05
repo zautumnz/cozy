@@ -7,7 +7,7 @@
 let fh = open("/etc/passwd");
 
 # Count of lines
-let lines = 0;
+mutable lines = 0;
 
 # Read a line
 let r = fh.read();

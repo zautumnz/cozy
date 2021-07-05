@@ -14,7 +14,7 @@
 let t = [ [], 3.13, fn(){} , {} , 3, "zac" ];
 
 # Walk over the types
-let i = 0;
+mutable i = 0;
 for (i < len(t)) {
     # Show the type + methods.
     let item  = t[i];
@@ -22,7 +22,7 @@ for (i < len(t)) {
     print(type(item), ":");
 
     # Show the methods.
-    let j = 0;
+    mutable j = 0;
     for (j < len(metod)) {
         print("\t", metod[j]);
         j++;

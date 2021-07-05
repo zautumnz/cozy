@@ -101,19 +101,19 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 			return val
 		}
 		return &object.ReturnValue{Value: val}
-	case *ast.LetStatement:
+	case *ast.MutableStatement:
 		val := Eval(node.Value, env)
 		if isError(val) {
 			return val
 		}
 		env.Set(node.Name.Value, val)
 		return val
-	case *ast.ConstStatement:
+	case *ast.LetStatement:
 		val := Eval(node.Value, env)
 		if isError(val) {
 			return val
 		}
-		env.SetConst(node.Name.Value, val)
+		env.SetLet(node.Name.Value, val)
 		return val
 	case *ast.Identifier:
 		return evalIdentifier(node, env)

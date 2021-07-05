@@ -128,8 +128,8 @@ func (e *Environment) Set(name string, val Object) Object {
 	return val
 }
 
-// SetConst sets the value of a constant by name.
-func (e *Environment) SetConst(name string, val Object) Object {
+// SetLet sets the value of a constant by name.
+func (e *Environment) SetLet(name string, val Object) Object {
 
 	// store the value
 	e.store[name] = val
