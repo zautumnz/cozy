@@ -1,10 +1,3 @@
-# Usually you'd open a file for reading via:
-#    let handle = file.open("/tmp/blah")
-# Or
-#    let handle = file.open("/tmp/blah", "r")
-# However you can open a file for writing by using "w" as the
-# second argument:
-
 let name = "/tmp/cozy-file-write-test";
 let fh = open(name, "w");
 

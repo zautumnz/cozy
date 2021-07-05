@@ -2,6 +2,8 @@
 
 [![Support with PayPal](https://img.shields.io/badge/paypal-donate-yellow.png)](https://paypal.me/zacanger) [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/zacanger) [![ko-fi](https://img.shields.io/badge/donate-KoFi-yellow.svg)](https://ko-fi.com/U7U2110VB)
 
+WIP, see ./TODO.md
+
 ---
 
 Example:
@@ -90,28 +92,3 @@ The core primitives are:
 
 Many more functions are defined in the stdlib. See that file for details because
 it's always growing.
-
-## TODO
-
-* Major things missing:
-    * Async/futures/generators
-    * Timers
-    * Concurrency
-    * Modules
-    * Garbage collection
-    * Generally make it look more like the initial example code
-    * Automatic semicolon insertion
-    * JSON, YAML, and TOML built-in support
-    * Networking builtins
-    * OS/sys/process builtins
-    * Cryptography builtins
-    * Time and date
-* Minor things:
-    * Variadic arguments
-    * Improve core assertion library
-    * Add a TAP-compatible testing library on top of `assert`
-    * Remove parens in `if` conditions
-    * Remove `self`?
-    * Curry, memo, and other FP utils
-    * Docstrings
-    * Improve Vim and Emacs files

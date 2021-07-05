@@ -1,0 +1,24 @@
+# TODO
+
+* Major things missing:
+    * Async/futures/generators
+    * Timers
+    * Concurrency
+    * Modules
+    * Garbage collection
+    * Generally make it look more like the initial example code
+    * Automatic semicolon insertion
+    * JSON, YAML, and TOML built-in support
+    * Networking builtins
+    * Cryptography builtins
+    * Time and date
+    * Variadic arguments
+* Minor things:
+    * More OS/sys/process builtins
+    * Improve core assertion library
+    * Add a TAP-compatible testing library on top of `assert`
+    * Remove parens in `if` conditions
+    * Remove `self`?
+    * Curry, memo, and other FP utils
+    * Docstrings
+    * Improve Vim and Emacs files

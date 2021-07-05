@@ -5,7 +5,7 @@ chmod("/tmp/executable.sh", "755")
 chmod("/tmp/normal", "644")
 
 # remove file
-unlink( "/tmp/trash.txt");
+unlink("/tmp/trash.txt");
 
 mkdir("/tmp/blah");
 

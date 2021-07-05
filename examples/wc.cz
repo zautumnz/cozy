@@ -1,4 +1,4 @@
-# A simple script to read a file and count the characters.
+# A simple script to read a file and count the characters
 
 # Open the file
 let path = "/etc/passwd";
