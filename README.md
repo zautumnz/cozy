@@ -6,10 +6,10 @@
 
 Example:
 
-```
+```cozy
 let reduce = fn(fun, xs, init) {
-    let acc = init;
-    foreach _, x in self {
+    mutable acc = init;
+    foreach _, x in xs {
         acc = fun(x, acc);
     }
 
@@ -17,12 +17,13 @@ let reduce = fn(fun, xs, init) {
 };
 
 let ints? = fn(xs) {
-foreach x in xs {
-    if (type(x) != "integer" && type(x) != "float")
-        return false;
+    foreach x in xs {
+        if (type(x) != "integer" && type(x) != "float") {
+            return false;
+        }
     }
     return true;
-}
+};
 
 let sum = fn(xs) {
     assert(ints?(xs), "expected only numbers!")
@@ -31,6 +32,8 @@ let sum = fn(xs) {
             return x + acc;
         }, xs, 0);
 };
+
+print(sum([1, 2, 3, 4]) == 10); # true
 ```
 
 ## About
@@ -102,7 +105,6 @@ it's always growing.
     * Networking builtins
     * OS/sys/process builtins
     * Cryptography builtins
-    * Rework the whole REPL to make it usable
     * Time and date
 * Minor things:
     * Variadic arguments

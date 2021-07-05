@@ -20,9 +20,9 @@ import (
 	"github.com/zacanger/cozy/lexer"
 	"github.com/zacanger/cozy/object"
 	"github.com/zacanger/cozy/parser"
+	"github.com/zacanger/cozy/repl"
 )
 
-// This version-string will be updated via CI system for generated binaries.
 var version = "0.0.1"
 
 //go:embed stdlib.cz
@@ -136,7 +136,9 @@ func main() {
 	if len(flag.Args()) > 0 {
 		input, err = ioutil.ReadFile(os.Args[1])
 	} else {
-		input, err = ioutil.ReadAll(os.Stdin)
+		fmt.Printf("cozy version %s\n", version)
+		fmt.Println("Use ctrl+c or exit() to quit")
+		repl.Start(os.Stdin, os.Stdout)
 	}
 
 	if err != nil {
