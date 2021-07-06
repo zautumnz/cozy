@@ -1,0 +1,9 @@
+# run this, then run the client
+let fd = net.socket("tcp4");
+net.bind(fd, "0.0.0.0:9000");
+net.listen(fd, 1);
+let nfd = net.accept(fd);
+let msg = net.read(nfd);
+net.write(nfd, msg);
+net.close(nfd);
+net.close(fd);

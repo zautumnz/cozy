@@ -84,6 +84,7 @@ The core primitives are:
 * `keys` Return the keys of the specified array.
 * `len` Yield the length of builtin containers.
 * `match` Regular-expression matching.
+* `net.*`, see lexer.go and examples/net for the full list.
 * `print` Write values to STDOUT with newlines.
 * `printf` Write values to STDOUT, via a format-string.
 * `push` push an elements into the array.

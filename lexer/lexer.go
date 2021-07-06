@@ -301,14 +301,21 @@ func (l *Lexer) readIdentifier() string {
 	// Functions which are permitted to have dots in their name.
 	//
 	valid := map[string]bool{
-		"directory.glob":     true,
-		"math.abs":           true,
-		"math.random":        true,
-		"math.sqrt":          true,
-		"os.environment":     true,
-		"os.getenv":          true,
-		"os.setenv":          true,
-		"string.interpolate": true,
+		"directory.glob": true,
+		"math.abs":       true,
+		"math.random":    true,
+		"math.sqrt":      true,
+		"os.environment": true,
+		"os.getenv":      true,
+		"os.setenv":      true,
+		"net.accept":     true,
+		"net.bind":       true,
+		"net.write":      true,
+		"net.close":      true,
+		"net.connect":    true,
+		"net.read":       true,
+		"net.listen":     true,
+		"net.socket":     true,
 	}
 
 	//
