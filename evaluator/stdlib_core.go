@@ -534,6 +534,8 @@ func typeFun(args ...object.Object) object.Object {
 		return &object.String{Value: "float"}
 	case *object.Hash:
 		return &object.String{Value: "hash"}
+	case *object.Module:
+		return &object.String{Value: "module"}
 	default:
 		return newError("argument to `type` not supported, got=%s",
 			args[0].Type())

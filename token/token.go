@@ -37,6 +37,7 @@ const (
 	IDENT           = "IDENT"
 	IF              = "IF"
 	ILLEGAL         = "ILLEGAL"
+	IMPORT          = "IMPORT"
 	IN              = "IN"
 	INT             = "INT"
 	LBRACE          = "{"
@@ -80,6 +81,7 @@ var keywords = map[string]Type{
 	"for":      FOR,
 	"foreach":  FOREACH,
 	"if":       IF,
+	"import":   IMPORT,
 	"in":       IN,
 	"let":      LET,
 	"mutable":  MUTABLE,

@@ -1,12 +1,18 @@
 # cozy
 
+WIP, see ./TODO.md
+
 [![Support with PayPal](https://img.shields.io/badge/paypal-donate-yellow.png)](https://paypal.me/zacanger) [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/zacanger) [![ko-fi](https://img.shields.io/badge/donate-KoFi-yellow.svg)](https://ko-fi.com/U7U2110VB)
 
-WIP, see ./TODO.md
+Simple, high-ish-level interpreted programming language that sits somewhere
+between scripting and general-purpose programming. Dynamically and strongly
+typed, with some with semantics that work well with pseudo-functional
+programming but syntax similar to Python, Go, and Shell. No OOP constructs like
+classes.
 
 ---
 
-Example:
+## Example
 
 ```cozy
 let reduce = fn(fun, xs, init) {
@@ -40,11 +46,6 @@ print(sum([1, 2, 3, 4]) == 10); # true
 
 ## About
 
-Simple, high-ish-level programming language that sits somewhere between
-scripting and general-purpose programming. Dynamically and strongly typed, with
-some with semantics that work well with pseudo-functional programming but syntax
-similar to Python, Go, and Shell. No OOP constructs like classes.
-
 Originally designed by writing a bunch of examples and a small stdlib;
 implementation started as a fork from [skx's
 version](https://github.com/skx/monkey) of the language from the [Go
@@ -64,10 +65,10 @@ entered code will be evaluated when you exit with `ctrl+d`.
 ## Important Notes
 
 * `print` adds an ending newline, use `printf` or `STDOUT`/`STDERR` for raw text
-* No null/nil, no undefined
+* No null/nil, no undefined (null exists as a core construct for practical
+    reasons, but is not usable in cozy code)
 * Comments are Python/Shell style
 * No switch statements
-* `let` and `const` are for declarations (see TODOs about this)
 * Using `set` and `delete` on hashes returns a new hash
 * `let` is for immutable variables; `mutable` is for mutable ones; this is
     because setting mutable variables should be more annoying to do than
@@ -78,17 +79,18 @@ entered code will be evaluated when you exit with `ctrl+d`.
 The core primitives are:
 
 * `delete` Deletes a hash-key.
+* `import` imports another cozy file as a module.
 * `int` convert the given float/string to an integer.
 * `keys` Return the keys of the specified array.
 * `len` Yield the length of builtin containers.
 * `match` Regular-expression matching.
-* `push` push an elements into the array.
-* `print` Write literal value of objects to STDOUT.
+* `print` Write values to STDOUT with newlines.
 * `printf` Write values to STDOUT, via a format-string.
+* `push` push an elements into the array.
 * `set` insert key value pair into the map.
 * `sprintf` Create strings, via a format-string.
 * `string` convert the given item to a string.
 * `type` returns the type of a variable.
 
-Many more functions are defined in the stdlib. See that file for details because
-it's always growing.
+Many more functions are defined in the stdlib. See that directory for details
+because it's always growing.

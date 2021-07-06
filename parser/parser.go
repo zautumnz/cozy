@@ -126,6 +126,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.FLOAT, p.parseFloatLiteral)
 	p.registerPrefix(token.FOR, p.parseForLoopExpression)
 	p.registerPrefix(token.FOREACH, p.parseForEach)
+	p.registerPrefix(token.IMPORT, p.parseImportExpression)
 	p.registerPrefix(token.FUNCTION, p.parseFunctionLiteral)
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
 	p.registerPrefix(token.IF, p.parseIfExpression)
@@ -637,6 +638,25 @@ func (p *Parser) parseForEach() ast.Expression {
 
 	return expression
 }
+
+// Parse import statements for modules
+func (p *Parser) parseImportExpression() ast.Expression {
+	expression := &ast.ImportExpression{Token: p.curToken}
+
+	if !p.expectPeek(token.LPAREN) {
+		return nil
+	}
+
+	p.nextToken()
+	expression.Name = p.parseExpression(LOWEST)
+
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	return expression
+}
+
 
 // parseBlockStatement parses a block.
 func (p *Parser) parseBlockStatement() *ast.BlockStatement {

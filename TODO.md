@@ -4,7 +4,6 @@
     * Async/futures/generators
     * Timers
     * Concurrency
-    * Modules
     * Garbage collection
     * Generally make it look more like the initial example code
     * Automatic semicolon insertion

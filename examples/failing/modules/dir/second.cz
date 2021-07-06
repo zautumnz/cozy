@@ -1,3 +1,0 @@
-import ../third as t
-
-print(t.bar);

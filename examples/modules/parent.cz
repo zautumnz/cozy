@@ -1,0 +1,9 @@
+let foo = import("examples/modules/first-child");
+
+print(type(foo));
+print(foo);
+print(foo["foo"]);
+print(foo["y"]);
+
+# Not top level, so not imported
+print(foo["u"]);

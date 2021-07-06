@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io/ioutil"
 	"math"
 	"os"
 	"os/exec"
@@ -13,15 +14,17 @@ import (
 	"strings"
 
 	"github.com/zacanger/cozy/ast"
+	"github.com/zacanger/cozy/lexer"
 	"github.com/zacanger/cozy/object"
+	"github.com/zacanger/cozy/parser"
 )
 
 // pre-defined object including Null, True and False
 var (
-	NULL    = &object.Null{}
-	TRUE    = &object.Boolean{Value: true}
-	FALSE   = &object.Boolean{Value: false}
-	CTX     = context.Background()
+	NULL  = &object.Null{}
+	TRUE  = &object.Boolean{Value: true}
+	FALSE = &object.Boolean{Value: false}
+	CTX   = context.Background()
 )
 
 // The built-in functions / standard-library methods are stored here.
@@ -91,6 +94,8 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		return evalIfExpression(node, env)
 	case *ast.TernaryExpression:
 		return evalTernaryExpression(node, env)
+	case *ast.ImportExpression:
+		return evalImportExpression(node, env)
 	case *ast.ForLoopExpression:
 		return evalForLoopExpression(node, env)
 	case *ast.ForeachStatement:
@@ -195,6 +200,48 @@ func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) obje
 		}
 	}
 	return result
+}
+
+// EvalModule evaluates the named module and returns a *object.Module object
+func EvalModule(name string) object.Object {
+	filename := FindModule(name)
+	if filename == "" {
+		return newError("ImportError: no module named '%s'", name)
+	}
+
+	b, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return newError("IOError: error reading module '%s': %s", name, err)
+	}
+
+	l := lexer.New(string(b))
+	p := parser.New(l)
+
+	module := p.ParseProgram()
+	if len(p.Errors()) != 0 {
+		return newError("ParseError: %s", p.Errors())
+	}
+
+	env := object.NewEnvironment()
+	Eval(module, env)
+
+	return env.ExportedHash()
+}
+
+func evalImportExpression(ie *ast.ImportExpression, env *object.Environment) object.Object {
+	name := Eval(ie.Name, env)
+	if isError(name) {
+		return name
+	}
+
+	if s, ok := name.(*object.String); ok {
+		attrs := EvalModule(s.Value)
+		if isError(attrs) {
+			return attrs
+		}
+		return &object.Module{Name: s.Value, Attrs: attrs}
+	}
+	return newError("ImportError: invalid import path '%s'", name)
 }
 
 // for performance, using single instance of boolean
@@ -969,10 +1016,17 @@ func evalIndexExpression(left, index object.Object) object.Object {
 		return evalHashIndexExpression(left, index)
 	case left.Type() == object.STRING_OBJ:
 		return evalStringIndexExpression(left, index)
+	case left.Type() == object.MODULE_OBJ:
+		return evalModuleIndexExpression(left, index)
 	default:
 		return newError("index operator not support:%s", left.Type())
 
 	}
+}
+
+func evalModuleIndexExpression(module, index object.Object) object.Object {
+	moduleObject := module.(*object.Module)
+	return evalHashIndexExpression(moduleObject.Attrs, index)
 }
 
 func evalArrayIndexExpression(array, index object.Object) object.Object {

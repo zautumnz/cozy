@@ -1,3 +1,0 @@
-import ./first
-
-print(first.foo);

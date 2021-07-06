@@ -1,1 +1,0 @@
-No exports or imports except at the top level (not within blocks or functions).

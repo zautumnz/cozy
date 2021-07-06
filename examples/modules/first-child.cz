@@ -1,0 +1,8 @@
+let x = import("examples/modules/dir/x");
+let foo = "bar";
+let y = x["y"];
+
+let q = fn () {
+    # Not top level, so not exported
+    let u = "u";
+};

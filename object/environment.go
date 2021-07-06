@@ -139,3 +139,16 @@ func (e *Environment) SetLet(name string, val Object) Object {
 
 	return val
 }
+
+// ExportedHash returns a new Hash with the names and values of every publically
+// exported binding in the environment. That is every binding that starts with a
+// capital letter. This is used by the module import system to wrap up the
+// evaulated module into an object.
+func (e *Environment) ExportedHash() *Hash {
+	pairs := make(map[HashKey]HashPair)
+	for k, v := range e.store {
+		s := &String{Value: k}
+		pairs[s.HashKey()] = HashPair{Key: s, Value: v}
+	}
+	return &Hash{Pairs: pairs}
+}
