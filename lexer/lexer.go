@@ -29,7 +29,12 @@ type Lexer struct {
 }
 
 // New a Lexer instance from string input.
-func New(input string) *Lexer {
+func New(inputs ...string) *Lexer {
+	input := ""
+	for _, inp := range inputs {
+		input += inp
+		input += "\n\n"
+	}
 	l := &Lexer{characters: []rune(input)}
 	l.readChar()
 	return l

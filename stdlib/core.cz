@@ -674,7 +674,7 @@ let string.split = fn(sep = " \r\t\n") {
         i++;
     }
 
-    # Do we have a dangling-string?  If so append it.
+    # Do we have a dangling-string? If so append it.
     if (len(tmp) > 0) {
         r = push(r,tmp);
     }
@@ -797,4 +797,4 @@ let sum = fn(xs) {
         }, 0);
 };
 
-assert(sum([1, 2, 3, 4]) == 10, "reduce failed!")
+assert(sum([1, 2, 3, 4]) == 10, "reduce failed!");

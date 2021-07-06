@@ -14,6 +14,8 @@
     * Time and date
     * Variadic arguments
 * Minor things:
+    * Add tab completion to the REPL
+    * Flesh out the testing library with functions to test failure and errors
     * More OS/sys/process builtins
     * Improve core assertion library
     * Add a TAP-compatible testing library on top of `assert`

@@ -2,7 +2,7 @@ let example = fn(...args) {
     print(string(args));
 };
 
-let withOtherArgs = fn(foo, bar, ...rest) {
+let with_other_args = fn(foo, bar, ...rest) {
     print("foo", foo);
     print("bar", bar);
     print("rest", rest.join(", "));

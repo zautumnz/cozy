@@ -25,8 +25,12 @@ import (
 
 var version = "0.0.1"
 
-//go:embed stdlib.cz
-var stdlib string
+//go:embed stdlib/core.cz
+var stdlibCore string
+
+//go:embed stdlib/test.cz
+var stdlibTest string
+
 
 //
 // Implemention of "version()" function.
@@ -80,7 +84,7 @@ func Execute(input string) int {
 	//
 	//  Parse and evaluate our standard-library.
 	//
-	initL := lexer.New(stdlib)
+	initL := lexer.New(stdlibCore, stdlibTest)
 	initP := parser.New(initL)
 	initProg := initP.ParseProgram()
 	evaluator.Eval(initProg, env)

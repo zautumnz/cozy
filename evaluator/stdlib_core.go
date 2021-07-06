@@ -291,7 +291,7 @@ func pushFun(args ...object.Object) object.Object {
 // output a string to stdout
 func printFun(args ...object.Object) object.Object {
 	for _, arg := range args {
-		fmt.Print(arg.Inspect())
+		fmt.Print(arg.Inspect() + " ")
 	}
 	fmt.Print("\n")
 	return NULL

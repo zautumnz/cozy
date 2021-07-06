@@ -63,7 +63,7 @@ entered code will be evaluated when you exit with `ctrl+d`.
 
 ## Important Notes
 
-* `print` adds an ending newline
+* `print` adds an ending newline, use `printf` or `STDOUT`/`STDERR` for raw text
 * No null/nil, no undefined
 * Comments are Python/Shell style
 * No switch statements

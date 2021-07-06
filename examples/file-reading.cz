@@ -8,7 +8,6 @@ let r = fh.read();
 
 # Loop while that is non-empty
 for (len(r) > 0) {
-
      # Bump the line-count
      lines++;
 
