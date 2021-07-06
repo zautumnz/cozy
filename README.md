@@ -8,7 +8,8 @@ Simple, high-ish-level interpreted programming language that sits somewhere
 between scripting and general-purpose programming. Dynamically and strongly
 typed, with some with semantics that work well with pseudo-functional
 programming but syntax similar to Python, Go, and Shell. No OOP constructs like
-classes.
+classes. One goal is to have as much of cozy implemented in itself as possible,
+to make it easily portable to a new language or change it to a compiled version.
 
 ---
 

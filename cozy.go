@@ -25,8 +25,14 @@ import (
 
 var version = "0.0.1"
 
-//go:embed stdlib/core.cz
-var stdlib string
+//go:embed stdlib/misc.cz
+var misc string
+
+//go:embed stdlib/array.cz
+var array string
+
+//go:embed stdlib/string.cz
+var strings string
 
 //go:embed stdlib/test.cz
 var tests string
@@ -89,7 +95,14 @@ func Execute(input string) int {
 	//
 	//  Parse and evaluate our standard-library.
 	//
-	initL := lexer.New(stdlib, tests, eventEmitter, stateManagement)
+	initL := lexer.New(
+		misc,
+		array,
+		strings,
+		tests,
+		eventEmitter,
+		stateManagement,
+	)
 	initP := parser.New(initL)
 	initProg := initP.ParseProgram()
 	evaluator.Eval(initProg, env)

@@ -1,0 +1,35 @@
+# Mathematical constants
+let PI = 3.141592653589793;
+let E = 2.718281828459045;
+
+# File-objects for STDIN, STDOUT, and STDERR.
+# Rather than opening these by name/path we have magic-strings which
+# are recognized by our "open" primitive.
+let STDIN = open("!STDIN!");
+let STDOUT = open("!STDOUT!");
+let STDERR = open("!STDERR!");
+
+# The `assert` method allows the code in our standard-library to be
+# tested every time it is loaded.
+let assert = fn(val, msg = "Result was not 'true'!") {
+    if (type(val) == "string") {
+        mutable result = eval(val);
+        if (!result) {
+            print("assert(\"" , val, "\") failed - ", msg);
+            exit(1);
+        }
+    } else {
+        if (!val) {
+            print(msg);
+            exit(1);
+        }
+    }
+};
+
+assert("true");
+assert(true);
+assert("! false;");
+assert(!false);
+assert("type(STDIN) == \"file\"");
+assert("type(STDOUT) == \"file\"");
+assert("type(STDERR) == \"file\"");
