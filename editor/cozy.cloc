@@ -1,0 +1,9 @@
+cozy
+    filter remove_matches ^\s*#
+    filter docstring_to_C
+    filter call_regexp_common C
+    filter remove_inline #.*$
+    extension cz
+    script_exe cozy
+    3rd_gen_scale 4.20
+    end_of_line_continuation \\$

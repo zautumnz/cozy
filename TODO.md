@@ -3,23 +3,22 @@
 * Bugs:
     * Mutation of parent-scope variables doesn't work; see failing examples.
 * Major things missing:
+    * HTTP server and client built on top of core net (implement in cozy?)
     * Async/futures/generators
     * Timers
     * Concurrency
     * Garbage collection
-    * Generally make it look more like the initial example code
     * Automatic semicolon insertion
     * JSON, YAML, and TOML built-in support
     * Cryptography builtins
     * Time and date
     * Variadic arguments
-    * While
 * Minor things:
     * Add tab completion to the REPL
     * Flesh out the testing library with functions to test failure and errors
     * More OS/sys/process builtins
-    * Remove parens in `if` conditions and `while` expressions
+    * Remove parens in `if`, `while`, and `for`
     * Remove `self`?
-    * Curry, memo, and other FP utils
+    * Cozy, memo, and other FP utils (depends on other work, esp. varargs)
     * Docstrings
     * Improve Vim and Emacs files
