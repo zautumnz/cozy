@@ -34,6 +34,9 @@ var tests string
 //go:embed stdlib/event-emitter.cz
 var eventEmitter string
 
+//go:embed stdlib/state-management.cz
+var stateManagement string
+
 //
 // Implemention of "version()" function.
 //
@@ -86,7 +89,7 @@ func Execute(input string) int {
 	//
 	//  Parse and evaluate our standard-library.
 	//
-	initL := lexer.New(stdlib, tests, eventEmitter)
+	initL := lexer.New(stdlib, tests, eventEmitter, stateManagement)
 	initP := parser.New(initL)
 	initProg := initP.ParseProgram()
 	evaluator.Eval(initProg, env)
