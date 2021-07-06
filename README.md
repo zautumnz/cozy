@@ -8,8 +8,7 @@ Simple, high-ish-level interpreted programming language that sits somewhere
 between scripting and general-purpose programming. Dynamically and strongly
 typed, with some with semantics that work well with pseudo-functional
 programming but syntax similar to Python, Go, and Shell. No OOP constructs like
-classes. One goal is to have as much of cozy implemented in itself as possible,
-to make it easily portable to a new language or change it to a compiled version.
+classes.
 
 ---
 
@@ -45,16 +44,18 @@ let sum = fn(xs) {
 print(sum([1, 2, 3, 4]) == 10); # true
 ```
 
-For more examples, see ./examples and ./stdlib. The examples serve in place of
-in-depth documentation while the language is a WIP.
+For more examples and documentation, see the ./examples/ and ./stdlib/
+directories.
 
 ## About
 
-Originally designed by writing a bunch of examples and a small stdlib;
-implementation started as a fork from [skx's
+Originally designed by writing a bunch of examples and a small stdlib.
+Implementation started as a fork from [skx's
 version](https://github.com/skx/monkey) of the language from the [Go
-Interpreters Book](https://interpreterbook.com). Written in pure Go with no
-third-party dependencies.
+Interpreters Book](https://interpreterbook.com), and also includes some pieces
+of [prologic's](https://github.com/prologic/monkey-lang) upstream version.
+Written in pure Go with no third-party dependencies, with a large amount of the
+standard library implemented in cozy itself.
 
 See the ./examples directory for how it all looks. There are also syntax files
 for Emacs (untested) and Vim (WIP) in the ./editor directory.
