@@ -1,1 +1,1 @@
-export bar = "bar";
+let bar = "bar";

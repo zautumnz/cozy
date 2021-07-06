@@ -638,7 +638,7 @@ func (p *Parser) parseForEach() ast.Expression {
 	return expression
 }
 
-// parseBlockStatement parsea a block.
+// parseBlockStatement parses a block.
 func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 	block := &ast.BlockStatement{Token: p.curToken}
 	block.Statements = []ast.Statement{}
