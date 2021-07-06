@@ -1,0 +1,3 @@
+let e = event_emitter();
+e["subscribe"]("foo", fn (x) { print("foo", x); });
+e["emit"]("foo", "bar");

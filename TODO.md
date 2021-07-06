@@ -18,7 +18,6 @@
     * Flesh out the testing library with functions to test failure and errors
     * More OS/sys/process builtins
     * Improve core assertion library
-    * Add a TAP-compatible testing library on top of `assert`
     * Remove parens in `if` conditions
     * Remove `self`?
     * Curry, memo, and other FP utils

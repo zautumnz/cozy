@@ -93,9 +93,9 @@ func (e *Environment) Set(name string, val Object) Object {
 	// i.e. The parent-scope might have a constant-value, but
 	// we just don't care.  Consider the following code:
 	//
-	//    const a = 3.13;
+	//    let a = 3.13;
 	//    function foo() {
-	//       let a = 1976;
+	//       mutable a = 1976;
 	//    };
 	//
 	// The variable inside the function _should_ not be constant.
