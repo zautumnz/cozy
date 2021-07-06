@@ -8,7 +8,7 @@ if exists('b:current_syntax')
   finish
 endif
 
-syn keyword cozyKeyword return fn let true false mutable for foreach in
+syn keyword cozyKeyword return fn let true false mutable for foreach in while
 syn keyword cozyConditional if else then
 syn keyword cozyImport import export
 syn match cozyFrom  '\<from\>'

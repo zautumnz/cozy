@@ -18,7 +18,7 @@
     * Add tab completion to the REPL
     * Flesh out the testing library with functions to test failure and errors
     * More OS/sys/process builtins
-    * Remove parens in `if` conditions
+    * Remove parens in `if` conditions and `while` expressions
     * Remove `self`?
     * Curry, memo, and other FP utils
     * Docstrings

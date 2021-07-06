@@ -44,6 +44,9 @@ let sum = fn(xs) {
 print(sum([1, 2, 3, 4]) == 10); # true
 ```
 
+For more examples, see ./examples and ./stdlib. The examples serve in place of
+in-depth documentation while the language is a WIP.
+
 ## About
 
 Originally designed by writing a bunch of examples and a small stdlib;

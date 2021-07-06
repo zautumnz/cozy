@@ -37,6 +37,7 @@
     "let"
     "mutable"
     "return"
+    "while"
     ))
 
 ;; The language-core and functions from the standard-library.

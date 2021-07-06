@@ -70,23 +70,25 @@ const (
 	SLASH_EQUALS    = "/="
 	STRING          = "STRING"
 	TRUE            = "TRUE"
+	WHILE           = "WHILE"
 )
 
 // reversed keywords
 var keywords = map[string]Type{
-	"default":  DEFAULT,
-	"else":     ELSE,
-	"false":    FALSE,
-	"fn":       FUNCTION,
-	"for":      FOR,
-	"foreach":  FOREACH,
-	"if":       IF,
-	"import":   IMPORT,
-	"in":       IN,
-	"let":      LET,
-	"mutable":  MUTABLE,
-	"return":   RETURN,
-	"true":     TRUE,
+	"default": DEFAULT,
+	"else":    ELSE,
+	"false":   FALSE,
+	"fn":      FUNCTION,
+	"for":     FOR,
+	"foreach": FOREACH,
+	"if":      IF,
+	"import":  IMPORT,
+	"in":      IN,
+	"let":     LET,
+	"mutable": MUTABLE,
+	"return":  RETURN,
+	"true":    TRUE,
+	"while":   WHILE,
 }
 
 // LookupIdentifier used to determinate whether identifier is keyword nor not
