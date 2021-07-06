@@ -23,7 +23,7 @@ import (
 	"github.com/zacanger/cozy/repl"
 )
 
-var version = "0.0.1"
+var version = "0.0.2"
 
 //go:embed stdlib/misc.cz
 var misc string
