@@ -18,4 +18,9 @@ test:
 count:
 	cloc --exclude-dir=x --read-lang-def=editor/cozy.cloc .
 
-.PHONY: cozy test clean install count
+lint:
+	go fmt ./...
+	go vet ./...
+	staticcheck ./...
+
+.PHONY: cozy clean install count lint test

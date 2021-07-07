@@ -1,9 +1,9 @@
 let foo = import("examples/modules/first-child");
 
-print(type(foo));
-print(foo);
-print(foo["foo"]);
-print(foo["y"]);
+print("should be type module:", type(foo));
+print("should be module identifier:", foo);
+print("should be bar:", foo["foo"]);
+print("should be y:", foo["y"]);
 
 # Not top level, so not imported
-print(foo["u"]);
+print("should be be null:", foo["u"]);

@@ -14,6 +14,7 @@
     * Time and date
     * Variadic arguments
 * Minor things:
+    * Remove null
     * Add tab completion to the REPL
     * Flesh out the testing library with functions to test failure and errors
     * More OS/sys/process builtins

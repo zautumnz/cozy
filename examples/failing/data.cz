@@ -1,0 +1,14 @@
+# Example of how data serialization/parsing might work
+# All of this should work with complex objects as well
+
+# JSON
+let some_array = data.json.parse("[1, 2, 3]");
+let some_json_array = data.json.serialize([1, 2, 3]);
+let some_hash = data.json.parse("{\"foo\": 2}") ;
+let some_json_hash = data.json.serialize(some_hash);
+
+# TOML
+# TODO, but basically the same as above.
+
+# YAML
+# TODO, but basically the same as above.

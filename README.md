@@ -1,6 +1,6 @@
 # cozy
 
-WIP, see ./TODO.md
+This is a WIP. See [TODO](./TODO.md).
 
 [![Support with PayPal](https://img.shields.io/badge/paypal-donate-yellow.png)](https://paypal.me/zacanger) [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/zacanger) [![ko-fi](https://img.shields.io/badge/donate-KoFi-yellow.svg)](https://ko-fi.com/U7U2110VB)
 
@@ -44,8 +44,9 @@ let sum = fn(xs) {
 print(sum([1, 2, 3, 4]) == 10); # true
 ```
 
-For more examples and documentation, see the ./examples/ and ./stdlib/
-directories.
+For more examples and documentation, see the [examples](./examples) and
+[stdlib](./stdlib) directories. There are syntax files for Emacs (untested) and
+Vim (WIP) in the [editor](./editor) directory, along with a langdef for CLOC.
 
 ## About
 
@@ -57,8 +58,9 @@ of [prologic's](https://github.com/prologic/monkey-lang) upstream version.
 Written in pure Go with no third-party dependencies, with a large amount of the
 standard library implemented in cozy itself.
 
-See the ./examples directory for how it all looks. There are also syntax files
-for Emacs (untested) and Vim (WIP) in the ./editor directory.
+This is the first large Go program I've worked on, so contributions, especially
+in areas where I didn't write idiomatic Go, are definitely welcome. See
+[CONTRIBUTING](.github/CONTRIBUTING.md) for contribution guidelines.
 
 ## Usage
 
@@ -70,8 +72,7 @@ entered code will be evaluated when you exit with `ctrl+d`.
 ## Important Notes
 
 * `print` adds an ending newline, use `printf` or `STDOUT`/`STDERR` for raw text
-* No null/nil, no undefined (null exists as a core construct for practical
-    reasons, but is not usable in cozy code)
+* No null/nil, undefined, uninitialized variables
 * Comments are Python/Shell style
 * No switch statements
 * Using `set` and `delete` on hashes returns a new hash
