@@ -79,6 +79,7 @@ entered code will be evaluated when you exit with `ctrl+d`.
 * `let` is for immutable variables; `mutable` is for mutable ones; this is
     because setting mutable variables should be more annoying to do than
     setting mutable ones.
+* Uses Go's GC; porting to a different language might require writing a new GC.
 
 ### Builtin Functions
 

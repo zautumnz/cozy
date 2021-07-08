@@ -7,13 +7,13 @@
     * Async/futures/generators
     * Timers
     * Concurrency
-    * Garbage collection
     * Automatic semicolon insertion
     * JSON, YAML, and TOML built-in support
     * Cryptography builtins
     * Time and date
     * Variadic arguments
 * Minor things:
+    * Remove implicit return (`fn (x) { x; };`)
     * Remove null
     * Add tab completion to the REPL
     * Flesh out the testing library with functions to test failure and errors
