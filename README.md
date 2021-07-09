@@ -7,8 +7,8 @@ This is a WIP. See [TODO](./TODO.md).
 Simple, high-ish-level interpreted programming language that sits somewhere
 between scripting and general-purpose programming. Dynamically and strongly
 typed, with some with semantics that work well with pseudo-functional
-programming but syntax similar to Python, Go, and Shell. No OOP constructs like
-classes.
+programming but syntax similar to Python, Go, and Shell; no OOP constructs like
+classes; instead we have first-class functions, closures, and macros.
 
 ---
 
