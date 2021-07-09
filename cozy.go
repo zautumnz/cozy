@@ -23,7 +23,8 @@ import (
 	"github.com/zacanger/cozy/repl"
 )
 
-var version = "0.0.2"
+// COZY_VERSION is replaced by go build in makefile
+var COZY_VERSION = "cozy-version"
 
 //go:embed stdlib/misc.cz
 var misc string
@@ -47,7 +48,7 @@ var stateManagement string
 // Implemention of "version()" function.
 //
 func versionFun(args ...object.Object) object.Object {
-	return &object.String{Value: version}
+	return &object.String{Value: COZY_VERSION}
 }
 
 //
@@ -141,7 +142,7 @@ func main() {
 	// Showing the version?
 	//
 	if *vers {
-		fmt.Printf("cozy %s\n", version)
+		fmt.Printf("cozy %s\n", COZY_VERSION)
 		os.Exit(1)
 	}
 
@@ -163,7 +164,7 @@ func main() {
 	if len(flag.Args()) > 0 {
 		input, err = ioutil.ReadFile(os.Args[1])
 	} else {
-		fmt.Printf("cozy version %s\n", version)
+		fmt.Printf("cozy version %s\n", COZY_VERSION)
 		fmt.Println("Use ctrl+c or exit() to quit")
 		repl.Start(os.Stdin, os.Stdout)
 	}

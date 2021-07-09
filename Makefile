@@ -2,7 +2,7 @@ PREFIX ?= /usr/local
 CONFIG_PREFIX ?= /usr/share
 
 cozy:
-	go build
+	go build -ldflags "-X main.version=$(git describe --tags 2>/dev/null || echo 'master')"
 
 install:
 	mkdir -p $(PREFIX)/bin
