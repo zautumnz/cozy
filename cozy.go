@@ -26,6 +26,10 @@ import (
 // COZY_VERSION is replaced by go build in makefile
 var COZY_VERSION = "cozy-version"
 
+// TODO: embed the dir with stdlib/* as an embed.FS, read each file,
+// and create a single string; is this possible without caring about the file
+// names?
+
 //go:embed stdlib/misc.cz
 var misc string
 
