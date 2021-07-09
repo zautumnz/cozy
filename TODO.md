@@ -3,7 +3,7 @@
 * Bugs:
     * Mutation of parent-scope variables doesn't work; see failing examples.
 * Major things missing:
-    * HTTP server and client built on top of core net (implement in cozy?)
+    * HTTP server and client
     * Async/futures/generators
     * Timers
     * Concurrency

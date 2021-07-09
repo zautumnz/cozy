@@ -22,7 +22,6 @@ const (
 	COLON           = ":"
 	COMMA           = ","
 	CONTAINS        = "~="
-	DEFAULT         = "DEFAULT"
 	DOTDOT          = ".."
 	ELSE            = "ELSE"
 	EOF             = "EOF"
@@ -76,7 +75,6 @@ const (
 
 // reversed keywords
 var keywords = map[string]Type{
-	"default": DEFAULT,
 	"macro":   MACRO,
 	"else":    ELSE,
 	"false":   FALSE,

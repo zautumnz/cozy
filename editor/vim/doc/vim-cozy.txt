@@ -1,0 +1,13 @@
+*vim-cozy.txt* cozy language support plugin
+*vim-cozy*
+
+CONTENTS                                                         *cozy-contents*
+
+  1. cozy-vim.....................................|cozy-vim|
+
+==============================================================================
+COZY-VIM                                                             *cozy-vim*
+
+Language support for cozy. This is an extremely basic plugin, just providing
+syntax and indent, more or less. Portions of the plugin are based on vim-go
+(https://github.com/fatih/vim-go), which is under the BSD 3-Clause license.

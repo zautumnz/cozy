@@ -1,22 +1,22 @@
 # TODO: similar issues as the tap library with modifying variables in parent
 # scope; events aren't getting out of the function.
 
-let event_emitter = fn() {
-    mutable events = {};
-    let data = {
-        "subscribe": fn(name, f) {
-            if (!keys(events).includes?(name)) {
-                events = set(events, name, f);
-            } else {
-                print("Event already registered for", name);
-            }
-        },
-        "emit": fn(name, x) {
-            let f = events[name];
-            f(x);
-        },
-        "events": events
-    };
-
-    return data;
-};
+# let event_emitter = fn() {
+#     mutable events = {};
+#     let data = {
+#         "subscribe": fn(name, f) {
+#             if (!keys(events).includes?(name)) {
+#                 events = set(events, name, f);
+#             } else {
+#                 print("Event already registered for", name);
+#             }
+#         },
+#         "emit": fn(name, x) {
+#             let f = events[name];
+#             f(x);
+#         },
+#         "events": events
+#     };
+#
+#     return data;
+# };

@@ -1,34 +1,34 @@
-let tap = fn(suite, cb) {
-    mutable id = 0;
-    mutable failed = 0;
-
-    printf("# %s\n", suite);
-
-    let handle_assertion = fn(val, msg = "Result was not 'true'!") {
-        id++;
-        mutable result = false;
-        if (type(val) == "string") {
-            result = eval(val);
-        }
-        if (!result && !val) {
-            printf("not ok %d - %s\n", id, msg);
-            failed++;
-        } else {
-            printf("ok %d - %s\n", id, msg);
-        }
-    };
-
-    cb(handle_assertion);
-
-    # TODO:
-    # This line should be at the top of the suite
-    # Failing because we don't know how many tests there will be, and
-    # mutating ID doesn't seem to be working. It can also be at the
-    # end of the tests, but that's unconventional.
-    # printf("1..%d\n", id);
-
-
-    # TODO: not incrementing correctly;
-    # exit the process with the error code of how many tests failed
-    # exit(failed);
-};
+# let tap = fn(suite, cb) {
+#     mutable id = 0;
+#     mutable failed = 0;
+#
+#     printf("# %s\n", suite);
+#
+#     let handle_assertion = fn(val, msg = "Result was not 'true'!") {
+#         id++;
+#         mutable result = false;
+#         if (type(val) == "string") {
+#             result = eval(val);
+#         }
+#         if (!result && !val) {
+#             printf("not ok %d - %s\n", id, msg);
+#             failed++;
+#         } else {
+#             printf("ok %d - %s\n", id, msg);
+#         }
+#     };
+#
+#     cb(handle_assertion);
+#
+#     # TODO:
+#     # This line should be at the top of the suite
+#     # Failing because we don't know how many tests there will be, and
+#     # mutating ID doesn't seem to be working. It can also be at the
+#     # end of the tests, but that's unconventional.
+#     # printf("1..%d\n", id);
+#
+#
+#     # TODO: not incrementing correctly;
+#     # exit the process with the error code of how many tests failed
+#     # exit(failed);
+# };

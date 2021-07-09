@@ -14,7 +14,7 @@ type Environment struct {
 	// readonly marks names as read-only.
 	readonly map[string]bool
 
-	// outer holds any parent environment.  Our env. allows
+	// outer holds any parent environment. Our env. allows
 	// nesting to implement scope.
 	outer *Environment
 

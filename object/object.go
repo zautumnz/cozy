@@ -6,22 +6,22 @@ type Type string
 
 // pre-defined constant Type
 const (
-	INTEGER_OBJ      = "INTEGER"
-	FLOAT_OBJ        = "FLOAT"
-	BOOLEAN_OBJ      = "BOOLEAN"
-	NULL_OBJ         = "NULL"
-	RETURN_VALUE_OBJ = "RETURN_VALUE"
-	ERROR_OBJ        = "ERROR"
-	FUNCTION_OBJ     = "FUNCTION"
-	STRING_OBJ       = "STRING"
-	BUILTIN_OBJ      = "BUILTIN"
 	ARRAY_OBJ        = "ARRAY"
-	HASH_OBJ         = "HASH"
+	BOOLEAN_OBJ      = "BOOLEAN"
+	BUILTIN_OBJ      = "BUILTIN"
+	ERROR_OBJ        = "ERROR"
 	FILE_OBJ         = "FILE"
-	REGEXP_OBJ       = "REGEXP"
-	MODULE_OBJ       = "MODULE"
-	QUOTE_OBJ        = "QUOTE"
+	FLOAT_OBJ        = "FLOAT"
+	FUNCTION_OBJ     = "FUNCTION"
+	HASH_OBJ         = "HASH"
+	INTEGER_OBJ      = "INTEGER"
 	MACRO_OBJ        = "MACRO"
+	MODULE_OBJ       = "MODULE"
+	NULL_OBJ         = "NULL"
+	QUOTE_OBJ        = "QUOTE"
+	REGEXP_OBJ       = "REGEXP"
+	RETURN_VALUE_OBJ = "RETURN_VALUE"
+	STRING_OBJ       = "STRING"
 )
 
 // Object is the interface that all of our various object-types must implmenet.
