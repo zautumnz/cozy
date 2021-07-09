@@ -30,6 +30,8 @@
   '(
     "else"
     "fn"
+    "macro"
+    "quote"
     "for"
     "foreach"
     "if"

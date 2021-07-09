@@ -8,7 +8,7 @@ if exists('b:current_syntax')
   finish
 endif
 
-syn keyword cozyKeyword return fn let true false mutable for foreach in while
+syn keyword cozyKeyword return fn let true false mutable for foreach in while macro quote
 syn keyword cozyConditional if else then
 syn keyword cozyImport import export
 syn match cozyFrom  '\<from\>'
@@ -33,7 +33,7 @@ syn keyword cozyOperator '-'
 syn keyword cozyOperator '*'
 syn match cozyComment '#.*$' display contains=cozyTodo,@Spell
 syn keyword cozyTodo  TODO contained
-syn match cozyNumber '\<\d\>'
+syn match cozyNumber "\<\d\+\>"
 
 hi def link cozyTodo Todo
 hi def link cozyNumber Number

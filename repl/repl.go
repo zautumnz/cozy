@@ -15,6 +15,7 @@ import (
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 	env := object.NewEnvironment()
+	macroEnv := object.NewEnvironment()
 	for {
 		fmt.Print("> ")
 		scanned := scanner.Scan()
@@ -30,7 +31,9 @@ func Start(in io.Reader, out io.Writer) {
 			printParserError(out, p.Errors())
 			continue
 		}
-		evaluated := evaluator.Eval(program, env)
+		evaluator.DefineMacros(program, macroEnv)
+		expanded := evaluator.ExpandMacros(program, macroEnv)
+		evaluated := evaluator.Eval(expanded, env)
 		if evaluated != nil {
 			io.WriteString(out, evaluated.Inspect())
 			io.WriteString(out, "\n")

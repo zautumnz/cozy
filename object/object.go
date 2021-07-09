@@ -20,6 +20,8 @@ const (
 	FILE_OBJ         = "FILE"
 	REGEXP_OBJ       = "REGEXP"
 	MODULE_OBJ       = "MODULE"
+	QUOTE_OBJ        = "QUOTE"
+	MACRO_OBJ        = "MACRO"
 )
 
 // Object is the interface that all of our various object-types must implmenet.

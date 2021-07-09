@@ -68,6 +68,7 @@ func argsFun(args ...object.Object) object.Object {
 func Execute(input string) int {
 
 	env := object.NewEnvironment()
+	macroEnv := object.NewEnvironment()
 	l := lexer.New(input)
 	p := parser.New(l)
 
@@ -105,7 +106,9 @@ func Execute(input string) int {
 	)
 	initP := parser.New(initL)
 	initProg := initP.ParseProgram()
-	evaluator.Eval(initProg, env)
+	evaluator.DefineMacros(initProg, macroEnv)
+	expanded := evaluator.ExpandMacros(initProg, macroEnv)
+	evaluator.Eval(expanded, env)
 
 	//
 	//  Now evaluate the code the user wanted to load.
@@ -115,7 +118,9 @@ func Execute(input string) int {
 	//
 	//  (i.e. Our cozy-based standard library.)
 	//
-	evaluator.Eval(program, env)
+	evaluator.DefineMacros(program, macroEnv)
+	expandedProg := evaluator.ExpandMacros(program, macroEnv)
+	evaluator.Eval(expandedProg, env)
 	return 0
 }
 
