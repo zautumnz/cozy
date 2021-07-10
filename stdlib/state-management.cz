@@ -1,20 +1,20 @@
 # TODO: subscribing doesn't work
 # Also the same bug with mutations above the current scope.
 
-# let create_state = fn(reducer, initial_state) {
-#     mutable current_reducer = reducer;
-#     mutable current_state = initial_state;
-#     mutable listener = fn() { return 0; };
-#
-#     return {
-#         "state": current_state,
-#         "subscribe": fn(new_listener) {
-#             listener = new_listener;
-#         },
-#         "dispatch": fn(action) {
-#             current_state = current_reducer(current_state, action);
-#             listener();
-#             return action;
-#         },
-#     };
-# };
+let create_state = fn(reducer, initial_state) {
+    mutable current_reducer = reducer;
+    mutable current_state = initial_state;
+    mutable listener = fn() { return 0; };
+
+    return {
+        "state": current_state,
+        "subscribe": fn(new_listener) {
+            listener = new_listener;
+        },
+        "dispatch": fn(action) {
+            current_state = current_reducer(current_state, action);
+            listener();
+            return action;
+        },
+    };
+};

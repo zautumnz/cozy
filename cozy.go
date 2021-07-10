@@ -134,8 +134,12 @@ func main() {
 	//
 	// Setup some flags.
 	//
-	eval := flag.String("eval", "", "Code to execute.")
-	vers := flag.Bool("version", false, "Show our version and exit.")
+	evalDesc := "Code to execute."
+	eval := flag.String("eval", "", evalDesc)
+	flag.StringVar(eval, "e", "", evalDesc)
+	versDesc := "Show our version and exit."
+	vers := flag.Bool("version", false, versDesc)
+	flag.BoolVar(vers, "v", false, versDesc)
 
 	//
 	// Parse the flags
