@@ -14,11 +14,8 @@ type Macro struct {
 	Env        *Environment
 }
 
-// InvokeMethod invokes a method against the object.
-func (m *Macro) InvokeMethod(
-	method string,
-	env Environment, args ...Object,
-) Object {
+// GetMethod invokes a method against the object.
+func (m *Macro) GetMethod(method string) BuiltinFunction {
 	return nil
 }
 

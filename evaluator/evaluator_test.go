@@ -582,6 +582,14 @@ func TestHashIndexExpression(t *testing.T) {
 			`{false:5}[false]`,
 			5,
 		},
+		{
+			`{"foo":5}.foo`,
+			5,
+		},
+		{
+			`{"foo":{"bar":5}}.foo["bar"]`,
+			5,
+		},
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)

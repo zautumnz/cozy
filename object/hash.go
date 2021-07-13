@@ -53,47 +53,51 @@ func (h *Hash) Inspect() string {
 	return out.String()
 }
 
-// InvokeMethod invokes a method against the object.
-// (Built-in methods only.)
-func (h *Hash) InvokeMethod(method string, env Environment, args ...Object) Object {
-	if method == "keys" {
-		ents := len(h.Pairs)
-		array := make([]Object, ents)
-
-		// Now copy the keys into it.
-		i := 0
-		for _, ent := range h.Pairs {
-			array[i] = ent.Key
-			i++
-		}
-
-		return &Array{Elements: array}
-	}
-	if method == "methods" {
-		static := []string{"keys", "methods"}
-		dynamic := env.Names("hash.")
-
-		var names []string
-		names = append(names, static...)
-		for _, e := range dynamic {
-			bits := strings.Split(e, ".")
-			names = append(names, bits[1])
-		}
-		sort.Strings(names)
-
-		result := make([]Object, len(names))
-		for i, txt := range names {
-			result[i] = &String{Value: txt}
-		}
-		return &Array{Elements: result}
-	}
-	return nil
-}
-
 // Reset implements the Iterable interface, and allows the contents
 // of the array to be reset to allow re-iteration.
 func (h *Hash) Reset() {
 	h.offset = 0
+}
+
+// GetMethod returns a method against the object.
+// (Built-in methods only.)
+func (h *Hash) GetMethod(method string) BuiltinFunction {
+	switch method {
+	case "keys":
+		return func(env *Environment, args ...Object) Object {
+			ents := len(h.Pairs)
+			array := make([]Object, ents)
+
+			// Now copy the keys into it.
+			i := 0
+			for _, ent := range h.Pairs {
+				array[i] = ent.Key
+				i++
+			}
+
+			return &Array{Elements: array}
+		}
+	case "methods":
+		return func(env *Environment, args ...Object) Object {
+			static := []string{"keys", "methods"}
+			dynamic := env.Names("hash.")
+
+			var names []string
+			names = append(names, static...)
+			for _, e := range dynamic {
+				bits := strings.Split(e, ".")
+				names = append(names, bits[1])
+			}
+			sort.Strings(names)
+
+			result := make([]Object, len(names))
+			for i, txt := range names {
+				result[i] = &String{Value: txt}
+			}
+			return &Array{Elements: result}
+		}
+	}
+	return nil
 }
 
 // Next implements the Iterable interface, and allows the contents

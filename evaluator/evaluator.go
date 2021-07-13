@@ -87,7 +87,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 			fmt.Printf("Error: %s\n", res.Inspect())
 			os.Exit(1)
 		}
-		return (res)
+		return res
 
 	case *ast.BlockStatement:
 		return evalBlockStatement(node, env)
@@ -136,13 +136,6 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		defaults := node.Defaults
 		env.Set(node.TokenLiteral(), &object.Function{Parameters: params, Env: env, Body: body, Defaults: defaults})
 		return NULL
-	case *ast.ObjectCallExpression:
-		res := evalObjectCallExpression(node, env)
-		if isError(res) {
-			fmt.Fprintf(os.Stderr, "Error calling object-method %s\n", res.Inspect())
-			os.Exit(1)
-		}
-		return res
 	case *ast.CallExpression:
 		if node.Function.TokenLiteral() == "quote" {
 			return quote(node.Arguments[0], env)
@@ -190,7 +183,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		if isError(index) {
 			return index
 		}
-		return evalIndexExpression(left, index)
+		return evalIndexExpression(left, index, env)
 	case *ast.AssignStatement:
 		return evalAssignStatement(node, env)
 	case *ast.HashLiteral:
@@ -986,7 +979,7 @@ func splitCommand(input string) []string {
 	for _, e := range res {
 		result = append(result, trimQuotes(e, '"'))
 	}
-	return (result)
+	return result
 }
 
 // Remove balanced characters around a string.
@@ -1042,37 +1035,48 @@ func backTickOperation(command string) object.Object {
 	return &object.Hash{Pairs: newHash}
 }
 
-func evalIndexExpression(left, index object.Object) object.Object {
+func evalIndexExpression(left, index object.Object, env *object.Environment) object.Object {
 	switch {
-	case left.Type() == object.ARRAY_OBJ && index.Type() == object.INTEGER_OBJ:
-		return evalArrayIndexExpression(left, index)
+	case left.Type() == object.ARRAY_OBJ:
+		return evalArrayIndexExpression(left, index, env)
 	case left.Type() == object.HASH_OBJ:
-		return evalHashIndexExpression(left, index)
+		return evalHashIndexExpression(left, index, env)
 	case left.Type() == object.STRING_OBJ:
-		return evalStringIndexExpression(left, index)
+		return evalStringIndexExpression(left, index, env)
 	case left.Type() == object.MODULE_OBJ:
-		return evalModuleIndexExpression(left, index)
+		return evalModuleIndexExpression(left, index, env)
 	default:
+		if fn, ok := objectGetMethod(left, index, env); ok {
+			return fn
+		}
 		return newError("index operator not support:%s", left.Type())
 
 	}
 }
 
-func evalModuleIndexExpression(module, index object.Object) object.Object {
+func evalModuleIndexExpression(module, index object.Object, env *object.Environment) object.Object {
 	moduleObject := module.(*object.Module)
-	return evalHashIndexExpression(moduleObject.Attrs, index)
+	return evalHashIndexExpression(moduleObject.Attrs, index, env)
 }
 
-func evalArrayIndexExpression(array, index object.Object) object.Object {
+func evalArrayIndexExpression(array, index object.Object, env *object.Environment) object.Object {
 	arrayObject := array.(*object.Array)
-	idx := index.(*object.Integer).Value
-	max := int64(len(arrayObject.Elements) - 1)
-	if idx < 0 || idx > max {
+	switch t := index.(type) {
+	case *object.Integer:
+		idx := t.Value
+		max := int64(len(arrayObject.Elements) - 1)
+		if idx < 0 || idx > max {
+			return NULL
+		}
+		return arrayObject.Elements[idx]
+	default:
+		if fn, ok := objectGetMethod(array, index, env); ok {
+			return fn
+		}
 		return NULL
 	}
-	return arrayObject.Elements[idx]
 }
-func evalHashIndexExpression(hash, index object.Object) object.Object {
+func evalHashIndexExpression(hash, index object.Object, env *object.Environment) object.Object {
 	hashObject := hash.(*object.Hash)
 	key, ok := index.(object.Hashable)
 	if !ok {
@@ -1080,27 +1084,40 @@ func evalHashIndexExpression(hash, index object.Object) object.Object {
 	}
 	pair, ok := hashObject.Pairs[key.HashKey()]
 	if !ok {
+		var fn object.Object
+		if fn, ok = objectGetMethod(hash, index, env); ok {
+			return fn
+		}
 		return NULL
 	}
 	return pair.Value
 }
 
-func evalStringIndexExpression(input, index object.Object) object.Object {
+func evalStringIndexExpression(input, index object.Object, env *object.Environment) object.Object {
 	str := input.(*object.String).Value
-	idx := index.(*object.Integer).Value
-	max := int64(len(str))
-	if idx < 0 || idx > max {
+	switch t := index.(type) {
+	case *object.Integer:
+		idx := t.Value
+		max := int64(len(str))
+		if idx < 0 || idx > max {
+			return NULL
+		}
+
+		// Get the characters as an array of runes
+		chars := []rune(str)
+
+		// Now index
+		ret := chars[idx]
+
+		// And return as a string.
+		return &object.String{Value: string(ret)}
+	default:
+		if fn, ok := objectGetMethod(input, index, env); ok {
+			return fn
+		}
+
 		return NULL
 	}
-
-	// Get the characters as an array of runes
-	chars := []rune(str)
-
-	// Now index
-	ret := chars[idx]
-
-	// And return as a string.
-	return &object.String{Value: string(ret)}
 }
 
 func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Object {
@@ -1173,23 +1190,12 @@ func SetContext(ctx context.Context) {
 	CTX = ctx
 }
 
-// evalObjectCallExpression invokes methods against objects.
-func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Environment) object.Object {
-
-	obj := Eval(call.Object, env)
-	if method, ok := call.Call.(*ast.CallExpression); ok {
-
-		//
-		// Here we try to invoke the object.method() call which has
-		// been implemented in go.
-		//
-		// We do this by forwarding the call to the appropriate
-		// `invokeMethod` interface on the object.
-		//
-		args := evalExpression(call.Call.(*ast.CallExpression).Arguments, env)
-		ret := obj.InvokeMethod(method.Function.String(), *env, args...)
-		if ret != nil {
-			return ret
+func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.Object, ok bool) {
+	switch k := key.(type) {
+	case *object.String:
+		var fn object.BuiltinFunction
+		if fn = o.GetMethod(k.Value); fn != nil {
+			return &object.Builtin{fn}, true
 		}
 
 		//
@@ -1197,7 +1203,7 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 		// succeed, that probably means that the function wasn't
 		// implemented in go.
 		//
-		// So now we want to look for it in cozy, and we have
+		// So now we want to look for it in monkey, and we have
 		// enough details to find the appropriate function.
 		//
 		//  * We have the object involved.
@@ -1213,12 +1219,12 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 		// `string.len()` - because the type of the object we're
 		// invoking-against is string:
 		//
-		//  "zac".len();
+		//  "steve".len();
 		//
 		// For this case we'll be looking for `array.foo()`.
 		//
 		//   let a = [ 1, 2, 3 ];
-		//   print(a.foo());
+		//   puts( a.foo() );
 		//
 		// As a final fall-back we'll look for "object.foo()"
 		// if "array.foo()" isn't defined.
@@ -1226,7 +1232,11 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 		//
 		//
 		attempts := []string{}
-		attempts = append(attempts, strings.ToLower(string(obj.Type())))
+		if _, ok = object.SystemTypesMap[o.Type()]; ok {
+			attempts = append(attempts, strings.ToLower(string(o.Type())))
+		} else {
+			attempts = append(attempts, string(o.Type()))
+		}
 		attempts = append(attempts, "object")
 
 		//
@@ -1237,44 +1247,23 @@ func evalObjectCallExpression(call *ast.ObjectCallExpression, env *object.Enviro
 			//
 			// What we're attempting to execute.
 			//
-			name := prefix + "." + method.Function.String()
+			name := prefix + "." + k.Value
 
 			//
 			// Try to find that function in our environment.
 			//
-			if fn, ok := env.Get(name); ok {
-
-				//
-				// Extend our environment with the functional-args.
-				//
-				extendEnv := extendFunctionEnv(fn.(*object.Function), args)
-
-				//
-				// Now set "self" to be the implicit object, against
-				// which the function-call will be operating.
-				//
-				extendEnv.Set("self", obj)
-
-				//
-				// Finally invoke & return.
-				//
-				evaluated := Eval(fn.(*object.Function).Body, extendEnv)
-				obj = upwrapReturnValue(evaluated)
-				return obj
+			if val, ok := env.Get(name); ok {
+				if fn, ok := val.(*object.Function); ok {
+					copy := *fn
+					copy.Env = object.NewEnclosedEnvironment(fn.Env)
+					copy.Env.SetLet("self", o)
+					return &copy, true
+				}
+				return val, true
 			}
 		}
-
 	}
-
-	//
-	// If we hit this point we have had a method invoked which
-	// was neither defined in go nor cozy.
-	//
-	// e.g. "zac".md5sum()
-	//
-	// So we've got no choice but to return an error.
-	//
-	return newError("Failed to invoke method: %s", call.Call.(*ast.CallExpression).Function.String())
+	return nil, false
 }
 
 func objectToNativeBoolean(o object.Object) bool {

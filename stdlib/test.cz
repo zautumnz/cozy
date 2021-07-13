@@ -1,3 +1,12 @@
+# Output example once it works:
+# 1..4
+# ok 1 - Input file opened
+# not ok 2 - First line of the input valid.
+#    More output from test 2. There can be
+# ok 3 - Read the rest of the file
+#TAP meta information
+# not ok 4 - Summarized correctly # TODO: not written yet
+
 let tap = fn(suite, cb) {
     mutable id = 0;
     mutable failed = 0;

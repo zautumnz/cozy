@@ -42,3 +42,11 @@ dump(h);
 print("Running via bash:");
 let h = `/bin/sh -c "/bin/ls /etc"`;
 dump(h);
+
+# Using dot access
+let a = {"name": "foo", "point": { "x": 1, "y": 2 }};
+print(a.name);
+print(a["point"].x);
+print(a.point["y"]);
+print(a["point"]["x"]);
+print(a.point.y);

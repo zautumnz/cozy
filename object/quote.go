@@ -9,11 +9,8 @@ type Quote struct {
 	Node ast.Node
 }
 
-// InvokeMethod invokes a method against the object.
-func (q *Quote) InvokeMethod(
-	method string,
-	env Environment, args ...Object,
-) Object {
+// GetMethod invokes a method against the object.
+func (q *Quote) GetMethod(method string) BuiltinFunction {
 	return nil
 }
 

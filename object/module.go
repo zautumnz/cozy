@@ -30,26 +30,28 @@ func (m *Module) Type() Type { return MODULE_OBJ }
 // Inspect returns a stringified version of the object for debugging
 func (m *Module) Inspect() string { return fmt.Sprintf("<MODULE '%s'>", m.Name) }
 
-// InvokeMethod invokes a method against the object.
+// GetMethod invokes a method against the object.
 // (Built-in methods only.)
-func (f *Module) InvokeMethod(method string, env Environment, args ...Object) Object {
+func (m *Module) GetMethod(method string) BuiltinFunction {
 	if method == "methods" {
-		static := []string{"methods"}
-		dynamic := env.Names("module.")
+		return func(env *Environment, args ...Object) Object {
+			static := []string{"methods", "methods"}
+			dynamic := env.Names("module.")
 
-		var names []string
-		names = append(names, static...)
-		for _, e := range dynamic {
-			bits := strings.Split(e, ".")
-			names = append(names, bits[1])
-		}
-		sort.Strings(names)
+			var names []string
+			names = append(names, static...)
+			for _, e := range dynamic {
+				bits := strings.Split(e, ".")
+				names = append(names, bits[1])
+			}
+			sort.Strings(names)
 
-		result := make([]Object, len(names))
-		for i, txt := range names {
-			result[i] = &String{Value: txt}
+			result := make([]Object, len(names))
+			for i, txt := range names {
+				result[i] = &String{Value: txt}
+			}
+			return &Array{Elements: result}
 		}
-		return &Array{Elements: result}
 	}
 	return nil
 }
@@ -58,6 +60,6 @@ func (f *Module) InvokeMethod(method string, env Environment, args ...Object) Ob
 // it to be used naturally in our sprintf/printf primitives.
 //
 // It might also be helpful for embedded users.
-func (f *Module) ToInterface() interface{} {
+func (m *Module) ToInterface() interface{} {
 	return "<MODULE>"
 }

@@ -25,6 +25,27 @@ const (
 	STRING_OBJ       = "STRING"
 )
 
+// SystemTypesMap map system types by type name
+var SystemTypesMap = map[Type]Object{
+	ARRAY_OBJ:        &Array{},
+	BOOLEAN_OBJ:      &Boolean{},
+	BUILTIN_OBJ:      &Builtin{},
+	DOCSTRING_OBJ:    &DocString{},
+	ERROR_OBJ:        &Error{},
+	FILE_OBJ:         &File{},
+	FLOAT_OBJ:        &Float{},
+	FUNCTION_OBJ:     &Function{},
+	HASH_OBJ:         &Hash{},
+	INTEGER_OBJ:      &Integer{},
+	MACRO_OBJ:        &Macro{},
+	MODULE_OBJ:       &Module{},
+	NULL_OBJ:         &Null{},
+	QUOTE_OBJ:        &Quote{},
+	REGEXP_OBJ:       &Regexp{},
+	RETURN_VALUE_OBJ: &ReturnValue{},
+	STRING_OBJ:       &String{},
+}
+
 // Object is the interface that all of our various object-types must implmenet.
 type Object interface {
 
@@ -34,9 +55,9 @@ type Object interface {
 	// Inspect returns a string-representation of the given object.
 	Inspect() string
 
-	// InvokeMethod invokes a method against the object.
+	// GetMethod invokes a method against the object.
 	// (Built-in methods only.)
-	InvokeMethod(method string, env Environment, args ...Object) Object
+	GetMethod(method string) BuiltinFunction
 
 	// ToInterface converts the given object to a "native" golang value,
 	// which is required to ensure that we can use the object in our

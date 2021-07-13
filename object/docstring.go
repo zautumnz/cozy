@@ -36,30 +36,34 @@ func (s *DocString) HashKey() HashKey {
 	return HashKey{Type: s.Type(), Value: h.Sum64()}
 }
 
-// InvokeMethod invokes a method against the object.
+// GetMethod invokes a method against the object.
 // (Built-in methods only.)
-func (s *DocString) InvokeMethod(method string, env Environment, args ...Object) Object {
-	if method == "len" {
-		return &Integer{Value: int64(utf8.RuneCountInString(s.Value))}
-	}
-	if method == "methods" {
-		static := []string{"len", "methods"}
-		dynamic := env.Names("docstring.")
-
-		var names []string
-		names = append(names, static...)
-
-		for _, e := range dynamic {
-			bits := strings.Split(e, ".")
-			names = append(names, bits[1])
+func (s *DocString) GetMethod(method string) BuiltinFunction {
+	switch method {
+	case "len":
+		return func(env *Environment, args ...Object) Object {
+			return &Integer{Value: int64(utf8.RuneCountInString(s.Value))}
 		}
-		sort.Strings(names)
+	case "methods":
+		return func(env *Environment, args ...Object) Object {
+			static := []string{"len", "methods"}
+			dynamic := env.Names("string.")
 
-		result := make([]Object, len(names))
-		for i, txt := range names {
-			result[i] = &DocString{Value: txt}
+			var names []string
+			names = append(names, static...)
+
+			for _, e := range dynamic {
+				bits := strings.Split(e, ".")
+				names = append(names, bits[1])
+			}
+			sort.Strings(names)
+
+			result := make([]Object, len(names))
+			for i, txt := range names {
+				result[i] = &String{Value: txt}
+			}
+			return &Array{Elements: result}
 		}
-		return &Array{Elements: result}
 	}
 	return nil
 }
