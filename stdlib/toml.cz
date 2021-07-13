@@ -1,0 +1,307 @@
+# TODO: this is a WIP
+let toml = fn () {
+    let parseGroup = fn (context, str) {
+        let result = context.result;
+        let group = parseGroupName(str);
+
+        if (group.includes?(".")) {
+            let groups = parseSubGroups(group);
+            addGroups(result, groups);
+        } else {
+            addGroup(result, group);
+        }
+
+        let parseGroupName = fn (str) {
+            let start = str.find("[");
+            let end = str.find("]");
+            return str.substr(start + 1, end);
+        };
+
+        let parseSubGroups = fn (str) {
+            return str.split(".");
+        };
+
+        let addGroup = fn (result, group) {
+            if (result[group]) {
+                print(group, "is overriding existing value");
+                exit(1)
+            }
+
+            let current = {};
+            result = set(result, group, current);
+            context = set(context, "currentGroup", current);
+        };
+
+        let addGroups = fn(result, groups) {
+            return groups.reduce(fn (current, prev) {
+                if (!result[prev]) {
+                    addGroup(result, prev);
+                }
+                addGroup(result[prev], current);
+                return current;
+            });
+        };
+    };
+
+    let parseExpression = fn (context, line) {
+        let pair = parseNameValue(line);
+        let value = parseValue(pair.value);
+        let currentGroup = context.currentGroup || context.result;
+
+        currentGroup = set(currentGroup, pair.name, value);
+
+        let parseNameValue = fn(line) {
+            let equal = line.find("=");
+            return {
+                "name": line.substr(0, equal),
+                "value": line.substr(equal + 1)
+            };
+        };
+
+        let parseValue = fn (value) {
+            let is_array = fn (v) {
+                return v[0] == "[" && v[len(v) -1] == "]";
+            }
+
+            if (is_array(value)) {
+                return parseArray(value);
+            }
+
+            return parsePrimitive(value);
+        };
+
+        let parseArray = fn (value) {
+            let parseArrayValues = fn (value) {
+                mutable parsed = [];
+                mutable array = value.substr(1, len(value) - 1);
+                let map = commasMap(array);
+                map.reduce(fn(next, prev) {
+                    parsed = push(parsed, array.substr(prev + 1, next));
+                    return next;
+                }, -1);
+
+                return parsed;
+
+                let commasMap = fn(value) {
+                    mutable map = [];
+                    mutable inArray = false
+                    mutable depth = 0;
+
+                    foreach index, element in value {
+                        if (element == "[") {
+                            depth++;
+                        } else if (element == "]") {
+                            depth--;
+                        }
+
+                        if (element == "," && depth == 0) {
+                            map = push(map, index);
+                        }
+                    };
+
+                    map = push(map, len(value));
+                    return map;
+                }
+            }
+
+            let values = parseArrayValues(value);
+
+            return values.map(parseValue);
+        };
+
+        let parsePrimitive = fn(value) {
+            if ( value ~= /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/ ) {
+                # TODO: there is no date object in cozy yet
+                return ""; # new Date(value);
+            }
+
+            return eval(value);
+        };
+    };
+
+    let parseLine = fn (context, line) {
+        if (group(line)) {
+            parseGroup(context, line);
+        } else if (expression(line)) {
+            parseExpression(context, line);
+        } else if (empty(line)) {
+            resetContext();
+        }
+
+        let group = fn(line) {
+            return line[0] == "[";
+        };
+
+        let expression = fn (line) {
+            return line.includes?("=");
+        };
+
+        let empty = fn(line) {
+            return line == "";
+        };
+
+        let resetContext = fn () {
+            context = delete(context, currentGroup);
+        };
+    };
+
+    let parse = fn (context, lines) {
+        let multilineArrayStart = fn (line) {
+            return line.includes?("[") && line.includes?("]");
+        };
+
+        let multilineArrayEnd = fn(line) {
+            return line.includes?("]");
+        };
+
+        let mergeMultilines = fn(lines) {
+            mutable merged = [];
+            mutable acc = [];
+            mutable capture = false;
+            mutable merge = false;
+
+            foreach line in lines {
+                if (multilineArrayStart(line)) {
+                    capture = true;
+                }
+                if (capture && multilineArrayEnd(line)) {
+                    merge = true;
+                }
+
+                if (capture) {
+                    acc = push(acc, line);
+                } else {
+                    merged = push(merged, line);
+                }
+
+                if (merge) {
+                    capture = false;
+                    merge = false;
+                    merged = push(merged, acc.join(""));
+                    acc = [];
+                }
+            };
+
+            return merged;
+
+        };
+
+        let merged = mergeMultilines(lines);
+
+
+        foreach line in merged {
+            line = stripComments(replaceWhitespaces(line));
+            parseLine(context, line);
+        }
+
+        let replaceWhitespaces = fn(line) {
+            return line.replace("\s", "");
+        };
+
+        let stripComments = fn(line) {
+            return line.split("#")[0];
+        };
+
+    };
+
+    let startParser = fn (str) {
+        mutable context = {"result": {}};
+        mutable lines = string(str).split("\n");
+
+        parse(context, lines);
+
+        return context.result;
+    };
+
+    let escapeString = fn(str) {
+        return str
+            .replace("\b", "\\b")
+            .replace("\t", "\\t")
+            .replace("\n", "\\n")
+            .replace("\f", "\\f")
+            .replace("\r", "\\r")
+            .replace("\"", "\\\"");
+    };
+
+    let isSimpleType = fn(value){
+        let t = type(value);
+        let okayTypes = [
+            "string",
+            "float",
+            "integer",
+            "boolean",
+            "array",
+            # TODO: no date yet
+            "date"
+        ];
+        return okayTypes.includes?(t);
+    };
+
+    let dumpObject = fn(value, context) {
+        context = context || [];
+
+        let t = type(value);
+
+        if (t == "date") {
+            return string(date);
+        } else if (t == "array") {
+            if (len(value) == 0) {
+                # TODO: this was null in the JS
+                return "";
+            }
+
+            mutable bracket = "[";
+            foreach x in value {
+                bracked += dump(x) + ", ";
+            }
+            return bracket.substr(0, len(bracket) - 2) + "]";
+        }
+
+        mutable result = "";
+        mutable simpleProps = "";
+
+        foreach propertyName in value {
+            if (isSimpleType(value[propertyName])) {
+                simpleProps += propertyName + " = " + dump(value[propertyName]) + "\n";
+            }
+        }
+
+        if (len(simpleProps)) {
+            if (len(context) > 0) {
+               mutable contextName = context.join(".");
+               result += "[" + contextName + "]\n";
+            }
+
+            result += simleProps + "\n";
+        }
+
+        foreach propertyName in value {
+            if (!isSimpleType(value[propertyName])) {
+                result += dump(value[propertyName], push(context, propertyName));
+            }
+        }
+
+        return result;
+    };
+
+    let dump = fn(value, context) {
+        let t = type(value);
+        if (t == "string") {
+            return "\"" + escapeString(value) + "\"";
+        }
+        if (t == "float" || t == "integer") {
+            return string(value);
+        }
+        if (t == "boolean") {
+            return string(boolean);
+        }
+        if (t == "hash") {
+            return dumpObject(value, context);
+        }
+    };
+
+    return {
+        "parse": startParser,
+        "dump": dump
+    };
+};

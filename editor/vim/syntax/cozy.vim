@@ -56,13 +56,7 @@ syn region        cozyBlock             start="{" end="}" transparent
 " import
 syn region    cozyImport            start='import (' end=')' transparent contains=cozyImport,cozyString,cozyComment
 
-" mutable, let
-syn region    cozyMutable         start='mutable ('   end='^\s*)$' transparent
-                    \ contains=ALLBUT,cozyParen,cozyBlock,cozyFunction,cozyReceiverVar,cozyParamName,cozySimpleParams
-syn region    cozyLet             start='let (' end='^\s*)$' transparent
-                    \ contains=ALLBUT,cozyParen,cozyBlock,cozyFunction,cozyReceiverVar,cozyParamName,cozySimpleParams
-
-" Single-line mutable, let, and import.
+" mutable, let, and import.
 syn match       cozySingleDecl        /\%(import\|mutable\|let\) [^(]\@=/ contains=cozyImport,cozyMutable,cozyLet
 
 " Integers

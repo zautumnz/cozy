@@ -384,16 +384,6 @@ let array.uniq = fn() {
 };
 
 assert("string([1,1,1,1,2].uniq()) == \"[1, 2]\"");
-
-# Convert a float to an integer.
-# Like Go we discard the value after the period, so 4.9 will become 4.
-let float.to_i = fn() {
-    return(int(self));
-};
-
-assert("type(3.1.to_i()) == \"integer\"");
-assert("let a = 3.1; if (a.to_i() == 3) { return true; } else { return false; }");
-
 # Is the given array empty?
 let array.empty? = fn() {
     if (len(self) == 0) {
@@ -406,155 +396,6 @@ assert("[].empty?()");
 assert("![1,2].empty?()");
 assert("![\"zacanger\",3].empty?()");
 
-# Is the given hash empty?
-let hash.empty? = fn() {
-    if (len(self.keys()) == 0) {
-        return true;
-    }
-    return false;
-};
-
-assert("{}.empty?()");
-assert("! {\"name\":\"zac\"}.empty?()");
-
-
-# Convert an integer to a float.
-let integer.to_f = fn() {
-    return(self + 0.0);
-};
-
-assert("type(3.to_f()) == \"float\"");
-assert("3.to_f() == 3.0");
-
-# Count occurences of the given character in the string.
-let string.count = fn(char) {
-    mutable c = 0;
-
-    foreach chr in self {
-        if (chr == char) {
-            c += 1;
-        }
-    }
-
-    return c;
-};
-
-assert("\"zac\".count(\"a\") == 1");
-assert("\"zac\".count(\"E\") == 0");
-assert("\"研天\".count(\"天\") == 1");
-assert("\"研研研研研研天\".count(\"研\") == 6");
-
-# Remove leading whitespace from the string.
-let string.ltrim = fn() {
-    let reg = "^(\\s+)(.*)$";
-    let out = match(reg, self);
-
-    if (out) {
-        return(out[1]);
-    } else {
-        return self;
-    }
-};
-
-assert(("  天研  ".ltrim() == "天研  "), "string.ltrim failed");
-assert(("  zac  ".ltrim() == "zac  "), "string.ltrim failed");
-
-# Repeat a string N times.
-let string.repeat = fn(count) {
-    mutable r = "";
-
-    if (count < 1) {
-        return self;
-    }
-
-    for (count > 0) {
-        r += self;
-        count--;
-    }
-
-    return r;
-};
-
-assert(("天研".repeat(3) == "天研天研天研"), "string.repeat failed");
-assert(("*".repeat(1) == "*"), "string.repeat failed");
-assert(("*".repeat(0) == "*"), "string.repeat failed");
-assert(("*".repeat(-1) == "*"), "string.repeat failed");
-
-# Reverse a string,
-let string.reverse = fn() {
-    mutable r = "";
-    mutable l = len(self);
-
-    for (l > 0) {
-        r += self[l-1];
-        l--;
-    }
-
-    return r;
-};
-
-assert(("天研".reverse() == "研天"), "string.reverse failed");
-assert(("322".reverse() == "223"), "string.reverse failed");
-
-# Remove trailing whitespace from the string.
-let string.rtrim = fn() {
-    let reg = "^(.*?)(\\s*)$";
-    let out = match(reg, self);
-
-    if (out) {
-        return(out[0]);
-    } else {
-        return self;
-    }
-};
-
-assert(("  天研  ".rtrim() == "  天研"), "string.rtrim failed");
-
-# string.substr returns the given substring from our input. The length of
-# the string to return is optional, and will default to the length available.
-let string.substr = fn(start, length = -1) {
-    # if there is no length then default to the rest of the string.
-    if (length == -1) {
-        length = len(self) - start;
-    }
-
-    # start must be positive
-    if (start < 0) {
-        start = 0;
-    }
-
-    # if the length of the string is too big then we'll cap it too.
-    if (start + length > self.len()) {
-        length = len(self) - start ;
-    }
-
-    # catch bounding-errors.
-    if (start >= len(self)) {
-        return "";
-    }
-
-    mutable res = "";
-    mutable copied = 0;
-
-    for ((start < len(self)) && (copied < length)) {
-        res += self[start];
-        start++;
-        copied++;
-    }
-
-    return res;
-};
-
-assert("Hello world".substr(1, 4) == "ello" , "string.substr() failed");
-assert("Hello world".substr(6) == "world" , "string.substr() failed");
-assert("天研".substr(0) == "天研" , "string.substr() failed");
-assert("研天".substr(1) == "天" , "string.substr() failed");
-assert("天研".substr(2) == "" , "string.substr() failed");
-assert("天研".substr(0, 2) == "天研" , "string.substr() failed");
-assert("天研".substr(1, 2) == "研" , "string.substr() failed");
-assert("天研".substr(1, 100) == "研" , "string.substr() failed");
-assert("天研".substr(-1, 100) == "天研" , "string.substr() failed");
-
 # Reduce. The fun should take an item and the accumulator.
 let array.reduce = fn(fun, init) {
     mutable acc = init;
@@ -564,7 +405,6 @@ let array.reduce = fn(fun, init) {
 
     return acc;
 };
-
 let array.sum = fn() {
     foreach x in self {
         if (type(x) != "integer" && type(x) != "float") {

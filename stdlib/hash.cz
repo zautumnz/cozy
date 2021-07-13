@@ -1,0 +1,10 @@
+# Is the given hash empty?
+let hash.empty? = fn() {
+    if (len(self.keys()) == 0) {
+        return true;
+    }
+    return false;
+};
+
+assert("{}.empty?()");
+assert("! {\"name\":\"zac\"}.empty?()");

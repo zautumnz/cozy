@@ -36,8 +36,14 @@ var misc string
 //go:embed stdlib/array.cz
 var array string
 
+//go:embed stdlib/hash.cz
+var hash string
+
 //go:embed stdlib/string.cz
 var strings string
+
+//go:embed stdlib/number.cz
+var number string
 
 //go:embed stdlib/test.cz
 var tests string
@@ -104,7 +110,9 @@ func Execute(input string) int {
 	initL := lexer.New(
 		misc,
 		array,
+		hash,
 		strings,
+		number,
 		tests,
 		eventEmitter,
 		stateManagement,
