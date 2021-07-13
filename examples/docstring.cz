@@ -1,0 +1,11 @@
+# Docstrings use single quotes
+# Comments don't show up in a print(fn), but
+# docstrings do!
+let id = fn (a) {
+    # see?
+    'id is the identity function';
+    a;
+};
+print(id);
+print(type('asdf')); // docstring
+print('asdf'); // empty

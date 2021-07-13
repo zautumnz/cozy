@@ -13,7 +13,6 @@
     * Time and date
     * Variadic arguments
 * Minor things:
-    * Remove implicit return (`fn (x) { x; };`)
     * Remove null
     * Add tab completion to the REPL
     * Flesh out the testing library with functions to test failure and errors
@@ -21,5 +20,4 @@
     * Remove parens in `if`, `while`, and `for`
     * Remove `self`?
     * Cozy, memo, and other FP utils (depends on other work, esp. varargs)
-    * Docstrings
     * Improve Vim and Emacs files

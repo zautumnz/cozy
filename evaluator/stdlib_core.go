@@ -536,6 +536,8 @@ func typeFun(args ...object.Object) object.Object {
 		return &object.String{Value: "hash"}
 	case *object.Module:
 		return &object.String{Value: "module"}
+	case *object.DocString:
+		return &object.String{Value: "docstring"}
 	default:
 		return newError("argument to `type` not supported, got=%s",
 			args[0].Type())

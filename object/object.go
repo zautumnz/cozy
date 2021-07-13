@@ -9,6 +9,7 @@ const (
 	ARRAY_OBJ        = "ARRAY"
 	BOOLEAN_OBJ      = "BOOLEAN"
 	BUILTIN_OBJ      = "BUILTIN"
+	DOCSTRING_OBJ    = "DOCSTRING"
 	ERROR_OBJ        = "ERROR"
 	FILE_OBJ         = "FILE"
 	FLOAT_OBJ        = "FLOAT"

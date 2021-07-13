@@ -15,3 +15,7 @@ let max = fn(a, b) {
     return a > b ? a : b;
 };
 print(max(1, 2));
+
+# these are expressions, not statements
+let asdf = if (1 > 2) { true } else { false };
+print(asdf);

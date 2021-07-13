@@ -238,6 +238,9 @@ func (l *Lexer) NextToken() token.Token {
 	case rune('"'):
 		tok.Type = token.STRING
 		tok.Literal = l.readString()
+	case rune('\''):
+		tok.Type = token.DOCSTRING
+		tok.Literal = l.readDocString()
 	case rune('`'):
 		tok.Type = token.BACKTICK
 		tok.Literal = l.readBacktick()
@@ -475,6 +478,44 @@ func (l *Lexer) readString() string {
 	for {
 		l.readChar()
 		if l.ch == '"' {
+			break
+		}
+
+		//
+		// Handle \n, \r, \t, \", etc.
+		//
+		if l.ch == '\\' {
+			l.readChar()
+
+			if l.ch == rune('n') {
+				l.ch = '\n'
+			}
+			if l.ch == rune('r') {
+				l.ch = '\r'
+			}
+			if l.ch == rune('t') {
+				l.ch = '\t'
+			}
+			if l.ch == rune('"') {
+				l.ch = '"'
+			}
+			if l.ch == rune('\\') {
+				l.ch = '\\'
+			}
+		}
+		out = out + string(l.ch)
+	}
+
+	return out
+}
+
+// read docstrings
+func (l *Lexer) readDocString() string {
+	out := ""
+
+	for {
+		l.readChar()
+		if l.ch == '\'' {
 			break
 		}
 

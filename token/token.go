@@ -22,6 +22,7 @@ const (
 	COLON           = ":"
 	COMMA           = ","
 	CONTAINS        = "~="
+	DOCSTRING       = "DOCSTRING"
 	DOTDOT          = ".."
 	ELSE            = "ELSE"
 	EOF             = "EOF"
@@ -45,6 +46,7 @@ const (
 	LPAREN          = "("
 	LT              = "<"
 	LT_EQUALS       = "<="
+	MACRO           = "MACRO"
 	MINUS           = "-"
 	MINUS_EQUALS    = "-="
 	MINUS_MINUS     = "--"
@@ -70,12 +72,10 @@ const (
 	STRING          = "STRING"
 	TRUE            = "TRUE"
 	WHILE           = "WHILE"
-	MACRO           = "MACRO"
 )
 
 // reversed keywords
 var keywords = map[string]Type{
-	"macro":   MACRO,
 	"else":    ELSE,
 	"false":   FALSE,
 	"fn":      FUNCTION,
@@ -85,6 +85,7 @@ var keywords = map[string]Type{
 	"import":  IMPORT,
 	"in":      IN,
 	"let":     LET,
+	"macro":   MACRO,
 	"mutable": MUTABLE,
 	"return":  RETURN,
 	"true":    TRUE,

@@ -175,6 +175,8 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		return &object.Array{Elements: elements}
 	case *ast.StringLiteral:
 		return &object.String{Value: node.Value}
+	case *ast.DocStringLiteral:
+		return &object.DocString{Value: node.Value}
 	case *ast.RegexpLiteral:
 		return &object.Regexp{Value: node.Value, Flags: node.Flags}
 	case *ast.BacktickLiteral:

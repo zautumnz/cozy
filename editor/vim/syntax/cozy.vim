@@ -35,8 +35,10 @@ hi def link     cozyTodo              Todo
 
 " Strings and their contents
 syn region      cozyString            start=+"+ skip=+\\\\\|\\"+ end=+"+ contains=@Spell
+syn region      cozyDocString         start=+'+ skip=+\\\\\|\\'+ end=+'+ contains=@Spell
 syn region      cozyExecString        start=+`+ end=+`+ contains=@Spell
 hi def link cozyString String
+hi def link cozyDocString String
 hi def link cozyExecString String
 
 " TODO: this section copied from ruby.vim, needs work

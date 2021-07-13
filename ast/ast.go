@@ -685,6 +685,23 @@ func (sl *StringLiteral) TokenLiteral() string { return sl.Token.Literal }
 // String returns this object as a string.
 func (sl *StringLiteral) String() string { return sl.Token.Literal }
 
+// DocStringLiteral holds a string
+type DocStringLiteral struct {
+	// Token is the token
+	Token token.Token
+
+	// Value is the value of the string.
+	Value string
+}
+
+func (sl *DocStringLiteral) expressionNode() {}
+
+// TokenLiteral returns the literal token.
+func (sl *DocStringLiteral) TokenLiteral() string { return sl.Token.Literal }
+
+// String returns this object as a string.
+func (sl *DocStringLiteral) String() string { return sl.Token.Literal }
+
 // RegexpLiteral holds a regular-expression.
 type RegexpLiteral struct {
 	// Token is the token

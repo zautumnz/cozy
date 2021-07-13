@@ -140,6 +140,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
 	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
 	p.registerPrefix(token.STRING, p.parseStringLiteral)
+	p.registerPrefix(token.DOCSTRING, p.parseDocStringLiteral)
 	p.registerPrefix(token.TRUE, p.parseBoolean)
 	p.registerPrefix(token.MACRO, p.parseMacroLiteral)
 
@@ -765,6 +766,11 @@ func (p *Parser) parseFunctionParameters() (map[string]ast.Expression, []*ast.Id
 // parseStringLiteral parses a string-literal.
 func (p *Parser) parseStringLiteral() ast.Expression {
 	return &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
+}
+
+// parseDocStringLiteral parses a string-literal.
+func (p *Parser) parseDocStringLiteral() ast.Expression {
+	return &ast.DocStringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 }
 
 // parseRegexpLiteral parses a regular-expression.
