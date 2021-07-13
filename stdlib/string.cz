@@ -1,3 +1,76 @@
+# string.substr returns the given substring from our input. The length of
+# the string to return is optional, and will default to the length available.
+let string.substr = fn(start, length = -1) {
+    # if there is no length then default to the rest of the string.
+    if (length == -1) {
+        length = len(self) - start;
+    }
+
+    # start must be positive
+    if (start < 0) {
+        start = 0;
+    }
+
+    # if the length of the string is too big then we'll cap it too.
+    if (start + length > len(self)) {
+        length = len(self) - start ;
+    }
+
+    # catch bounding-errors.
+    if (start >= len(self)) {
+        return "";
+    }
+
+    mutable res = "";
+    mutable copied = 0;
+
+    for ((start < len(self)) && (copied < length)) {
+        res += self[start];
+        start++;
+        copied++;
+    }
+
+    return res;
+};
+
+assert("Hello world".substr(1, 4) == "ello" , "string.substr() failed");
+assert("Hello world".substr(6) == "world" , "string.substr() failed");
+assert("天研".substr(0) == "天研" , "string.substr() failed");
+assert("研天".substr(1) == "天" , "string.substr() failed");
+assert("天研".substr(2) == "" , "string.substr() failed");
+assert("天研".substr(0, 2) == "天研" , "string.substr() failed");
+assert("天研".substr(1, 2) == "研" , "string.substr() failed");
+assert("天研".substr(1, 100) == "研" , "string.substr() failed");
+assert("天研".substr(-1, 100) == "天研" , "string.substr() failed");
+
+# Remove leading whitespace from the string.
+let string.ltrim = fn() {
+    let reg = "^(\\s+)(.*)$";
+    let out = match(reg, self);
+
+    if (out) {
+        return(out[1]);
+    } else {
+        return self;
+    }
+};
+
+assert(("  天研  ".ltrim() == "天研  "), "string.ltrim failed");
+assert(("  zac  ".ltrim() == "zac  "), "string.ltrim failed");
+
+# Remove trailing whitespace from the string.
+let string.rtrim = fn() {
+    let reg = "^(.*?)(\\s*)$";
+    let out = match(reg, self);
+
+    if (out) {
+        return(out[0]);
+    } else {
+        return self;
+    }
+};
+assert(("  天研  ".rtrim() == "  天研"), "string.rtrim failed");
+
 # string.find returns the offset of the given substring
 # or -1 if it isn't found.
 let string.find = fn(needle) {
@@ -193,21 +266,6 @@ assert("\"zac\".count(\"E\") == 0");
 assert("\"研天\".count(\"天\") == 1");
 assert("\"研研研研研研天\".count(\"研\") == 6");
 
-# Remove leading whitespace from the string.
-let string.ltrim = fn() {
-    let reg = "^(\\s+)(.*)$";
-    let out = match(reg, self);
-
-    if (out) {
-        return(out[1]);
-    } else {
-        return self;
-    }
-};
-
-assert(("  天研  ".ltrim() == "天研  "), "string.ltrim failed");
-assert(("  zac  ".ltrim() == "zac  "), "string.ltrim failed");
-
 # Repeat a string N times.
 let string.repeat = fn(count) {
     mutable r = "";
@@ -245,67 +303,8 @@ let string.reverse = fn() {
 assert(("天研".reverse() == "研天"), "string.reverse failed");
 assert(("322".reverse() == "223"), "string.reverse failed");
 
-# Remove trailing whitespace from the string.
-let string.rtrim = fn() {
-    let reg = "^(.*?)(\\s*)$";
-    let out = match(reg, self);
-
-    if (out) {
-        return(out[0]);
-    } else {
-        return self;
-    }
-};
-
-assert(("  天研  ".rtrim() == "  天研"), "string.rtrim failed");
-
-# string.substr returns the given substring from our input. The length of
-# the string to return is optional, and will default to the length available.
-let string.substr = fn(start, length = -1) {
-    # if there is no length then default to the rest of the string.
-    if (length == -1) {
-        length = len(self) - start;
-    }
-
-    # start must be positive
-    if (start < 0) {
-        start = 0;
-    }
-
-    # if the length of the string is too big then we'll cap it too.
-    if (start + length > self.len()) {
-        length = len(self) - start ;
-    }
-
-    # catch bounding-errors.
-    if (start >= len(self)) {
-        return "";
-    }
-
-    mutable res = "";
-    mutable copied = 0;
-
-    for ((start < len(self)) && (copied < length)) {
-        res += self[start];
-        start++;
-        copied++;
-    }
-
-    return res;
-};
-
-assert("Hello world".substr(1, 4) == "ello" , "string.substr() failed");
-assert("Hello world".substr(6) == "world" , "string.substr() failed");
-assert("天研".substr(0) == "天研" , "string.substr() failed");
-assert("研天".substr(1) == "天" , "string.substr() failed");
-assert("天研".substr(2) == "" , "string.substr() failed");
-assert("天研".substr(0, 2) == "天研" , "string.substr() failed");
-assert("天研".substr(1, 2) == "研" , "string.substr() failed");
-assert("天研".substr(1, 100) == "研" , "string.substr() failed");
-assert("天研".substr(-1, 100) == "天研" , "string.substr() failed");
-
 let string.includes? = fn(s) {
     return(self.find(s) != -1);
 };
 
-assert("123".includes?(2));
+assert("123".includes?("1"));

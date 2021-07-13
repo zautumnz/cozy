@@ -33,7 +33,7 @@ func (f *Function) Inspect() string {
 	out.WriteString(strings.Join(parameters, ", "))
 	out.WriteString(") {\n")
 	for _, s := range f.Body.Statements {
-		out.WriteString(s.String() + ";\n")
+		out.WriteString(s.String() + "\n")
 	}
 	out.WriteString("}")
 	return out.String()

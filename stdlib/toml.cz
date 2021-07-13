@@ -2,14 +2,6 @@
 let toml = fn () {
     let parseGroup = fn (context, str) {
         let result = context.result;
-        let group = parseGroupName(str);
-
-        if (group.includes?(".")) {
-            let groups = parseSubGroups(group);
-            addGroups(result, groups);
-        } else {
-            addGroup(result, group);
-        }
 
         let parseGroupName = fn (str) {
             let start = str.find("[");
@@ -41,15 +33,18 @@ let toml = fn () {
                 return current;
             });
         };
+
+        let group = parseGroupName(str);
+
+        if (group.includes?(".")) {
+            let groups = parseSubGroups(group);
+            addGroups(result, groups);
+        } else {
+            addGroup(result, group);
+        }
     };
 
     let parseExpression = fn (context, line) {
-        let pair = parseNameValue(line);
-        let value = parseValue(pair.value);
-        let currentGroup = context.currentGroup || context.result;
-
-        currentGroup = set(currentGroup, pair.name, value);
-
         let parseNameValue = fn(line) {
             let equal = line.find("=");
             return {
@@ -117,17 +112,15 @@ let toml = fn () {
 
             return eval(value);
         };
+
+        let pair = parseNameValue(line);
+        let value = parseValue(pair.value);
+        let currentGroup = context.currentGroup || context.result;
+
+        currentGroup = set(currentGroup, pair.name, value);
     };
 
     let parseLine = fn (context, line) {
-        if (group(line)) {
-            parseGroup(context, line);
-        } else if (expression(line)) {
-            parseExpression(context, line);
-        } else if (empty(line)) {
-            resetContext();
-        }
-
         let group = fn(line) {
             return line[0] == "[";
         };
@@ -143,6 +136,14 @@ let toml = fn () {
         let resetContext = fn () {
             context = delete(context, currentGroup);
         };
+
+        if (group(line)) {
+            parseGroup(context, line);
+        } else if (expression(line)) {
+            parseExpression(context, line);
+        } else if (empty(line)) {
+            resetContext();
+        }
     };
 
     let parse = fn (context, lines) {
@@ -188,12 +189,6 @@ let toml = fn () {
 
         let merged = mergeMultilines(lines);
 
-
-        foreach line in merged {
-            line = stripComments(replaceWhitespaces(line));
-            parseLine(context, line);
-        }
-
         let replaceWhitespaces = fn(line) {
             return line.replace("\s", "");
         };
@@ -202,15 +197,18 @@ let toml = fn () {
             return line.split("#")[0];
         };
 
+        # TODO: need to return here I think
+        foreach line in merged {
+            line = stripComments(replaceWhitespaces(line));
+            parseLine(context, line);
+        }
     };
 
     let startParser = fn (str) {
         mutable context = {"result": {}};
         mutable lines = string(str).split("\n");
-
-        parse(context, lines);
-
-        return context.result;
+        let newResult = parse(context, lines);
+        return newResult;
     };
 
     let escapeString = fn(str) {
@@ -237,26 +235,7 @@ let toml = fn () {
         return okayTypes.includes?(t);
     };
 
-    let dumpObject = fn(value, context) {
-        context = context || [];
-
-        let t = type(value);
-
-        if (t == "date") {
-            return string(date);
-        } else if (t == "array") {
-            if (len(value) == 0) {
-                # TODO: this was null in the JS
-                return "";
-            }
-
-            mutable bracket = "[";
-            foreach x in value {
-                bracked += dump(x) + ", ";
-            }
-            return bracket.substr(0, len(bracket) - 2) + "]";
-        }
-
+    let dumpObject = fn(value, context = []) {
         mutable result = "";
         mutable simpleProps = "";
 
@@ -272,7 +251,7 @@ let toml = fn () {
                result += "[" + contextName + "]\n";
             }
 
-            result += simleProps + "\n";
+            result += simpleProps + "\n";
         }
 
         foreach propertyName in value {
@@ -284,7 +263,7 @@ let toml = fn () {
         return result;
     };
 
-    let dump = fn(value, context) {
+    let dump = fn(value, context = []) {
         let t = type(value);
         if (t == "string") {
             return "\"" + escapeString(value) + "\"";
@@ -292,8 +271,14 @@ let toml = fn () {
         if (t == "float" || t == "integer") {
             return string(value);
         }
-        if (t == "boolean") {
-            return string(boolean);
+        if (t == "bool") {
+            return string(value);
+        }
+        if (t == "date") {
+            return string(value);
+        }
+        if (t == "array") {
+            return string(value);
         }
         if (t == "hash") {
             return dumpObject(value, context);
@@ -305,3 +290,9 @@ let toml = fn () {
         "dump": dump
     };
 };
+
+let t = toml();
+
+print(t.dump({"foo": {"bar": 2, "baz": ["a", "b", "c"]}}));
+# print(t.parse(" [foo]\n bar = \"baz\"\n bool_test = true\n f = 1.2\n i = 3.4\n a = [1, 2, \"three\"]\n \n [g]\n [g.a]\n x = 1\n "));
+print(t.parse("[foo]\nbar=\"baz\""));
