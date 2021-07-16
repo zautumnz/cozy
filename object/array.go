@@ -4,15 +4,22 @@ import (
 	"bytes"
 	"sort"
 	"strings"
+
+	"github.com/zacanger/cozy/token"
 )
 
 // Array wraps Object array and implements Object interface.
 type Array struct {
+	Token token.Token
+
 	// Elements holds the individual members of the array we're wrapping.
 	Elements []Object
 
 	// offset holds our iteration-offset.
 	offset int
+
+	// special arr when used for ... args
+	IsCurrentArgs bool
 }
 
 // Type returns the type of this object.

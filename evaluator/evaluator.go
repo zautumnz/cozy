@@ -147,6 +147,16 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		}
 
 		args := evalExpression(node.Arguments, env)
+
+		// check for current args (...)
+		if len(args) > 0 {
+			firstArg, ok := args[0].(*object.Array)
+			if ok && firstArg.IsCurrentArgs {
+				newArgs := env.CurrentArgs
+				args = append(newArgs, args[1:]...)
+			}
+		}
+
 		if len(args) == 1 && isError(args[0]) {
 			return args[0]
 		}
@@ -168,6 +178,8 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		return &object.Array{Elements: elements}
 	case *ast.StringLiteral:
 		return &object.String{Value: node.Value}
+	case *ast.CurrentArgsLiteral:
+		return &object.Array{Token: node.Token, Elements: env.CurrentArgs, IsCurrentArgs: true}
 	case *ast.DocStringLiteral:
 		return &object.DocString{Value: node.Value}
 	case *ast.RegexpLiteral:
@@ -1157,7 +1169,7 @@ func applyFunction(env *object.Environment, fn object.Object, args []object.Obje
 }
 
 func extendFunctionEnv(fn *object.Function, args []object.Object) *object.Environment {
-	env := object.NewEnclosedEnvironment(fn.Env)
+	env := object.NewEnclosedEnvironment(fn.Env, args)
 
 	// Set the defaults
 	for key, val := range fn.Defaults {
@@ -1255,7 +1267,8 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 			if val, ok := env.Get(name); ok {
 				if fn, ok := val.(*object.Function); ok {
 					copy := *fn
-					copy.Env = object.NewEnclosedEnvironment(fn.Env)
+					emptyArgs := make([]object.Object, 0)
+					copy.Env = object.NewEnclosedEnvironment(fn.Env, emptyArgs)
 					copy.Env.SetLet("self", o)
 					return &copy, true
 				}
@@ -1411,7 +1424,8 @@ func extendMacroEnv(
 	macro *object.Macro,
 	args []*object.Quote,
 ) *object.Environment {
-	extended := object.NewEnclosedEnvironment(macro.Env)
+	emptyArgs := make([]object.Object, 0)
+	extended := object.NewEnclosedEnvironment(macro.Env, emptyArgs)
 
 	for paramIdx, param := range macro.Parameters {
 		extended.Set(param.Value, args[paramIdx])

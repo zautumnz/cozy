@@ -37,7 +37,7 @@ const (
 	MOD          // %
 	PREFIX       // -X or !X
 	CALL         // myFunction(X)
-	DOTDOT       // ..
+	RANGE        // ..
 	INDEX        // array[index], map[key], map.key
 	HIGHEST
 )
@@ -46,7 +46,7 @@ const (
 var precedences = map[token.Type]int{
 	token.QUESTION:     TERNARY,
 	token.ASSIGN:       ASSIGN,
-	token.DOTDOT:       DOTDOT,
+	token.RANGE:        RANGE,
 	token.EQ:           EQUALS,
 	token.NOT_EQ:       EQUALS,
 	token.LT:           LESSGREATER,
@@ -135,6 +135,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.INT, p.parseIntegerLiteral)
 	p.registerPrefix(token.LBRACE, p.parseHashLiteral)
 	p.registerPrefix(token.LBRACKET, p.parseArrayLiteral)
+	p.registerPrefix(token.CURRENT_ARGS, p.parseCurrentArgsLiteral)
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
@@ -151,7 +152,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.ASTERISK, p.parseInfixExpression)
 	p.registerInfix(token.ASTERISK_EQUALS, p.parseAssignExpression)
 	p.registerInfix(token.CONTAINS, p.parseInfixExpression)
-	p.registerInfix(token.DOTDOT, p.parseInfixExpression)
+	p.registerInfix(token.RANGE, p.parseInfixExpression)
 	p.registerInfix(token.EQ, p.parseInfixExpression)
 	p.registerInfix(token.GT, p.parseInfixExpression)
 	p.registerInfix(token.GT_EQUALS, p.parseInfixExpression)
@@ -205,6 +206,7 @@ func (p *Parser) Errors() []string {
 // peekError raises an error if the next token is not the expected type.
 func (p *Parser) peekError(t token.Type) {
 	msg := fmt.Sprintf("expected next token to be %s, got %s instead around line %d", t, p.curToken.Type, p.l.GetLine())
+
 	p.errors = append(p.errors, msg)
 }
 
@@ -286,6 +288,7 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 
 		p.nextToken()
 	}
+
 	return stmt
 }
 
@@ -471,6 +474,7 @@ func (p *Parser) parseGroupedExpression() ast.Expression {
 	if !p.expectPeek(token.RPAREN) {
 		return nil
 	}
+
 	return exp
 }
 
@@ -716,6 +720,11 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 	return lit
 }
 
+// ...
+func (p *Parser) parseCurrentArgsLiteral() ast.Expression {
+	return &ast.CurrentArgsLiteral{Token: p.curToken}
+}
+
 // parseFunctionParameters parses the parameters used for a function.
 func (p *Parser) parseFunctionParameters() (map[string]ast.Expression, []*ast.Identifier) {
 
@@ -813,6 +822,9 @@ func (p *Parser) parseArrayLiteral() ast.Expression {
 
 // parsearray elements literal
 func (p *Parser) parseExpressionList(end token.Type) []ast.Expression {
+	// _, file, no, ok := runtime.Caller(1)
+	// fmt.Println("called from", no, ok, file)
+
 	list := make([]ast.Expression, 0)
 	if p.peekTokenIs(end) {
 		p.nextToken()

@@ -608,6 +608,16 @@ func (fl *FunctionDefineLiteral) String() string {
 
 }
 
+type CurrentArgsLiteral struct {
+	Token token.Token // ...
+}
+
+func (cal *CurrentArgsLiteral) expressionNode()      {}
+func (cal *CurrentArgsLiteral) TokenLiteral() string { return cal.Token.Literal }
+func (cal *CurrentArgsLiteral) String() string {
+	return "..."
+}
+
 // CallExpression holds the invokation of a method-call.
 type CallExpression struct {
 	// Token stores the literal token

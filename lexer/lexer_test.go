@@ -30,7 +30,7 @@ func TestNextToken1(t *testing.T) {
 		{token.MINUS_MINUS, "--"},
 		{token.POW, "**"},
 		{token.ASTERISK_EQUALS, "*="},
-		{token.DOTDOT, ".."},
+		{token.RANGE, ".."},
 		{token.EOF, ""},
 	}
 	l := New(input)
@@ -76,6 +76,8 @@ if(5<10){
 for
 2 >= 1
 1 <= 3
+...
+foo
 `
 	tests := []struct {
 		expectedType    token.Type
@@ -193,6 +195,8 @@ for
 		{token.INT, "1"},
 		{token.LT_EQUALS, "<="},
 		{token.INT, "3"},
+		{token.CURRENT_ARGS, "..."},
+		{token.IDENT, "foo"},
 		{token.EOF, ""},
 	}
 	l := New(input)
@@ -607,8 +611,8 @@ a = 3/4;
 	}
 }
 
-// TestDotDot is designed to ensure we get a ".." not an integer value.
-func TestDotDot(t *testing.T) {
+// TestRangeDots is designed to ensure we get a ".." not an integer value.
+func TestRangeDots(t *testing.T) {
 	input := `a = 1..10;`
 
 	tests := []struct {
@@ -618,7 +622,7 @@ func TestDotDot(t *testing.T) {
 		{token.IDENT, "a"},
 		{token.ASSIGN, "="},
 		{token.INT, "1"},
-		{token.DOTDOT, ".."},
+		{token.RANGE, ".."},
 		{token.INT, "10"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},

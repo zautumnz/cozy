@@ -21,6 +21,9 @@ type Environment struct {
 	// permit stores the names of variables we can set in this
 	// environment, if any
 	permit []string
+
+	// Args used when creating this env. Used in ...
+	CurrentArgs []Object
 }
 
 // NewEnvironment creates new environment
@@ -31,9 +34,10 @@ func NewEnvironment() *Environment {
 }
 
 // NewEnclosedEnvironment create new environment by outer parameter
-func NewEnclosedEnvironment(outer *Environment) *Environment {
+func NewEnclosedEnvironment(outer *Environment, args []Object) *Environment {
 	env := NewEnvironment()
 	env.outer = outer
+	env.CurrentArgs = args
 	return env
 }
 
