@@ -929,7 +929,9 @@ func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 }
 
 func newError(format string, a ...interface{}) *object.Error {
-	return &object.Error{Message: fmt.Sprintf(format, a...)}
+	message := fmt.Sprintf(format, a...)
+	fmt.Fprintf(os.Stderr, message+"\n")
+	return &object.Error{Message: message}
 }
 
 func isError(obj object.Object) bool {
