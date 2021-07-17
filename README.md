@@ -62,6 +62,9 @@ This is the first large Go program I've worked on, so contributions, especially
 in areas where I didn't write idiomatic Go, are definitely welcome. See
 [CONTRIBUTING](.github/CONTRIBUTING.md) for contribution guidelines.
 
+The majority of the upstream versions of this code are MIT licensed. This code
+is LGPL-3.0 licensed (see [LICENSE.md](./LICENSE.md)).
+
 ## Usage
 
 Clone the repo and run `make`, and either copy the binary to somewhere in your
