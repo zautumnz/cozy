@@ -13,6 +13,3 @@ let x = {
     "bar": { "baz": y },
 };
 print(json.serialize(x), "complex example");
-
-# TOML
-# TODO, but basically the same as above.

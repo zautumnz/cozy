@@ -63,9 +63,6 @@ func jsonSerialize(args ...object.Object) object.Object {
 	return &object.String{Value: args[0].Json()}
 }
 
-// TODO:
-// toml.deserialize
-// toml.serialize
 func init() {
 	RegisterBuiltin("json.deserialize",
 		func(env *object.Environment, args ...object.Object) object.Object {

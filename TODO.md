@@ -10,7 +10,6 @@
     * Cryptography builtins
 * Minor things:
     * Finish time module
-    * TOML serialize and deserialize
     * Remove null
     * Add tab completion and arrow support to the REPL
     * Flesh out the testing library with functions to test failure and errors
