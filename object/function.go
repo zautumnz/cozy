@@ -14,6 +14,7 @@ type Function struct {
 	Body       *ast.BlockStatement
 	Defaults   map[string]ast.Expression
 	Env        *Environment
+	DocString  *ast.DocStringLiteral
 }
 
 // Type returns the type of this object.
@@ -67,8 +68,6 @@ func (f *Function) GetMethod(method string) BuiltinFunction {
 
 // ToInterface converts this object to a go-interface, which will allow
 // it to be used naturally in our sprintf/printf primitives.
-//
-// It might also be helpful for embedded users.
 func (f *Function) ToInterface() interface{} {
 	return "<FUNCTION>"
 }

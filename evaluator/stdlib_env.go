@@ -12,11 +12,9 @@ func envFun(args ...object.Object) object.Object {
 	env := os.Environ()
 	newHash := make(map[object.HashKey]object.HashPair)
 
-	//
 	// If we get a match then the output is an array
 	// First entry is the match, any additional parts
 	// are the capture-groups.
-	//
 	for i := 1; i < len(env); i++ {
 
 		// Capture groups start at index 0.

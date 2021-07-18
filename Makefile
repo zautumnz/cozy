@@ -29,4 +29,7 @@ lint:
 tags:
 	@ctags --exclude=x -R .
 
-.PHONY: clean install tags
+todo:
+	@grep TODO --exclude-dir=x -R .
+
+.PHONY: clean install tags todo

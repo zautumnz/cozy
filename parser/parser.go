@@ -103,9 +103,9 @@ type Parser struct {
 	// postfix-based syntax.
 	postfixParseFns map[token.Type]postfixParseFn
 
-	// are we inside a ternary expression?
-	//
+	// Are we inside a ternary expression?
 	// Nested ternary expressions are illegal :)
+	// TODO: maybe change that?
 	tern bool
 }
 
@@ -542,7 +542,6 @@ func (p *Parser) parseIfExpression() ast.Expression {
 }
 
 // parseBracketExpression looks for an expression surrounded by "(" + ")".
-//
 // Used by parseIfExpression.
 func (p *Parser) parseBracketExpression() ast.Expression {
 
@@ -599,14 +598,10 @@ func (p *Parser) parseForEach() ast.Expression {
 	// If we find a "," we then get a second identifier too.
 	if p.peekTokenIs(token.COMMA) {
 
-		//
 		// Generally we have:
-		//
 		//    foreach IDENT in THING { .. }
-		//
 		// If we have two arguments the first becomes
 		// the index, and the second becomes the IDENT.
-		//
 
 		// skip the comma
 		p.nextToken()
@@ -617,9 +612,7 @@ func (p *Parser) parseForEach() ast.Expression {
 		}
 		p.nextToken()
 
-		//
 		// Record the updated values.
-		//
 		expression.Index = expression.Ident
 		expression.Ident = p.curToken.Literal
 
@@ -867,17 +860,11 @@ func (p *Parser) parseAssignExpression(name ast.Expression) ast.Expression {
 	oper := p.curToken
 	p.nextToken()
 
-	//
 	// An assignment is generally:
-	//
 	//    variable = value
-	//
 	// But we cheat and reuse the implementation for:
-	//
 	//    i += 4
-	//
 	// In this case we record the "operator" as "+="
-	//
 	switch oper.Type {
 	case token.PLUS_EQUALS:
 		stmt.Operator = "+="

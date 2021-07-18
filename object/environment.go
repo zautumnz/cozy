@@ -43,7 +43,6 @@ func NewEnclosedEnvironment(outer *Environment, args []Object) *Environment {
 
 // NewTemporaryScope creates a temporary scope where some values
 // are ignored.
-//
 // This is used as a sneaky hack to allow `foreach` to access all
 // global values as if they were local, but prevent the index/value
 // keys from persisting.
@@ -56,7 +55,6 @@ func NewTemporaryScope(outer *Environment, keys []string) *Environment {
 
 // Names returns the names of every known-value with the
 // given prefix.
-//
 // This function is used by `invokeMethod` to get the methods
 // associated with a particular class-type.
 func (e *Environment) Names(prefix string) []string {
@@ -88,31 +86,23 @@ func (e *Environment) Get(name string) (Object, bool) {
 // Set stores the value of a variable, by name.
 func (e *Environment) Set(name string, val Object) Object {
 
-	//
 	// If a variable is constant then we don't allow it to be changed.
-	//
 	// But constants are scoped, they are not global, so we only need
 	// to look in the current scope - not any parent.
-	//
 	// i.e. The parent-scope might have a constant-value, but
 	// we just don't care.  Consider the following code:
-	//
 	//    let a = 3.13;
 	//    function foo() {
 	//       mutable a = 1976;
 	//    };
-	//
 	// The variable inside the function _should_ not be constant.
-	//
 	cur := e.store[name]
 	if cur != nil && e.readonly[name] {
 		fmt.Printf("Attempting to modify '%s' denied; it was defined as a constant.\n", name)
 		os.Exit(3)
 	}
 
-	//
 	// Store the (updated) value.
-	//
 	if len(e.permit) > 0 {
 		for _, v := range e.permit {
 			// we're permitted to store this variable

@@ -59,9 +59,7 @@ func mathSqrt(args ...object.Object) object.Object {
 }
 
 func init() {
-	//
 	// Setup our random seed.
-	//
 	rand.Seed(time.Now().UnixNano())
 	RegisterBuiltin("math.abs",
 		func(env *object.Environment, args ...object.Object) object.Object {

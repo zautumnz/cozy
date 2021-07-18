@@ -145,9 +145,7 @@ func statFun(args ...object.Object) object.Object {
 		return &object.Hash{Pairs: res}
 	}
 
-	//
-	// OK populate the hash
-	//
+	// Populate the hash
 
 	// size -> int
 	sizeData := &object.Integer{Value: info.Size()}

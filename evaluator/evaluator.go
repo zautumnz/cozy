@@ -40,9 +40,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 // The context.Context provided can be used to cancel a running script instance.
 func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) object.Object {
 
-	//
 	// We test our context at every iteration of our main-loop.
-	//
 	select {
 	case <-ctx.Done():
 		return &object.Error{Message: ctx.Err().Error()}
@@ -689,9 +687,7 @@ func evalStringInfixExpression(operator string, left, right object.Object) objec
 // if the condition matches, and running any optional else block
 // otherwise.
 func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Object {
-	//
 	// Create an environment for handling regexps
-	//
 	var permit []string
 	i := 1
 	for i < 32 {
@@ -735,17 +731,11 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 		return evaluated
 	}
 
-	//
 	// An assignment is generally:
-	//
 	//    variable = value
-	//
 	// But we cheat and reuse the implementation for:
-	//
 	//    i += 4
-	//
 	// In this case we record the "operator" as "+="
-	//
 	switch a.Operator {
 	case "+=":
 		// Get the current value
@@ -863,7 +853,6 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) o
 	}
 
 	// Create a new environment for the block
-	//
 	// This will allow writing EVERYTHING to the parent scope,
 	// except the two variables named in the permit-array
 	child := object.NewTemporaryScope(env, permit)
@@ -887,9 +876,7 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) o
 		// Eval the block
 		rt := Eval(fle.Body, child)
 
-		//
 		// If we got an error/return then we handle it.
-		//
 		if !isError(rt) && (rt.Type() == object.RETURN_VALUE_OBJ || rt.Type() == object.ERROR_OBJ) {
 			return rt
 		}
@@ -967,28 +954,20 @@ func evalExpression(exps []ast.Expression, env *object.Environment) []object.Obj
 
 // Split a line of text into tokens, but keep anything "quoted"
 // together..
-//
 // So this input:
-//
 //   /bin/sh -c "ls /etc"
-//
 // Would give output of the form:
 //   /bin/sh
 //   -c
 //   ls /etc
-//
 func splitCommand(input string) []string {
 
-	//
 	// This does the split into an array
-	//
 	r := regexp.MustCompile(`[^\s"']+|"([^"]*)"|'([^']*)`)
 	res := r.FindAllString(input, -1)
 
-	//
 	// However the resulting pieces might be quoted.
 	// So we have to remove them, if present.
-	//
 	var result []string
 	for _, e := range res {
 		result = append(result, trimQuotes(e, '"'))
@@ -1028,9 +1007,7 @@ func backTickOperation(command string) object.Object {
 		return NULL
 	}
 
-	//
 	// The result-objects to store in our hash.
-	//
 	stdout := &object.String{Value: outb.String()}
 	stderr := &object.String{Value: errb.String()}
 
@@ -1212,39 +1189,26 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 			return &object.Builtin{Fn: fn}, true
 		}
 
-		//
 		// If we reach this point then the invokation didn't
 		// succeed, that probably means that the function wasn't
 		// implemented in go.
-		//
-		// So now we want to look for it in monkey, and we have
+		// So now we want to look for it in cozy, and we have
 		// enough details to find the appropriate function.
-		//
 		//  * We have the object involved.
-		//
 		//  * We have the type of that object.
-		//
 		//  * We have the name of the function.
-		//
 		//  * We have the arguments.
 		//
 		// We'll use the type + name to lookup the (global) function
 		// to invoke.  For example in this case we'll invoke
 		// `string.len()` - because the type of the object we're
 		// invoking-against is string:
-		//
-		//  "steve".len();
-		//
+		//  "zac".len();
 		// For this case we'll be looking for `array.foo()`.
-		//
 		//   let a = [ 1, 2, 3 ];
-		//   puts( a.foo() );
-		//
+		//   print(a.foo());
 		// As a final fall-back we'll look for "object.foo()"
 		// if "array.foo()" isn't defined.
-		//
-		//
-		//
 		attempts := []string{}
 		if _, ok = object.SystemTypesMap[o.Type()]; ok {
 			attempts = append(attempts, strings.ToLower(string(o.Type())))
@@ -1253,19 +1217,13 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 		}
 		attempts = append(attempts, "object")
 
-		//
 		// Look for "$type.name", or "object.name"
-		//
 		for _, prefix := range attempts {
 
-			//
 			// What we're attempting to execute.
-			//
 			name := prefix + "." + k.Value
 
-			//
 			// Try to find that function in our environment.
-			//
 			if val, ok := env.Get(name); ok {
 				if fn, ok := val.(*object.Function); ok {
 					copy := *fn
@@ -1319,9 +1277,7 @@ func objectToNativeBoolean(o object.Object) bool {
 	}
 }
 
-//
 // Macro-related code
-//
 func DefineMacros(program *ast.Program, env *object.Environment) {
 	definitions := []int{}
 

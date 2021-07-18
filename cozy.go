@@ -1,12 +1,10 @@
-// Cozy is a scripting language implemented in golang, based upon
-// the book "Write an Interpreter in Go", written by Thorsten Ball.
-//
-// This implementation adds a number of tweaks, improvements, and new
-// features.  For example we support file-based I/O, regular expressions,
-// the ternary operator, and more.
-//
-// For full details please consult the project homepage
-// https://github.com/zacanger/cozy/
+// Simple, high-ish-level interpreted programming language that sits somewhere
+// between scripting and general-purpose programming. Dynamically and strongly
+// typed, with some with semantics that work well with pseudo-functional
+// programming but syntax similar to Python, Go, and Shell; no OOP constructs
+// like classes; instead we have first-class functions, closures, and macros.
+// For more details, see github.com/zacanger/cozy.
+
 package main
 
 import (
@@ -54,16 +52,12 @@ var eventEmitter string
 //go:embed stdlib/state-management.cz
 var stateManagement string
 
-//
 // Implemention of "version()" function.
-//
 func versionFun(args ...object.Object) object.Object {
 	return &object.String{Value: COZY_VERSION}
 }
 
-//
 // Implemention of "args()" function.
-//
 func argsFun(args ...object.Object) object.Object {
 	l := len(os.Args[1:])
 	result := make([]object.Object, l)
@@ -73,9 +67,7 @@ func argsFun(args ...object.Object) object.Object {
 	return &object.Array{Elements: result}
 }
 
-//
 // Execute the supplied string as a program.
-//
 func Execute(input string) int {
 
 	env := object.NewEnvironment()
@@ -104,9 +96,7 @@ func Execute(input string) int {
 			return (argsFun(args...))
 		})
 
-	//
 	//  Parse and evaluate our standard-library.
-	//
 	initL := lexer.New(
 		misc,
 		array,
@@ -123,14 +113,10 @@ func Execute(input string) int {
 	expanded := evaluator.ExpandMacros(initProg, macroEnv)
 	evaluator.Eval(expanded, env)
 
-	//
 	//  Now evaluate the code the user wanted to load.
-	//
 	//  Note that here our environment will still contain
 	// the code we just loaded from our data-resource
-	//
 	//  (i.e. Our cozy-based standard library.)
-	//
 	evaluator.DefineMacros(program, macroEnv)
 	expandedProg := evaluator.ExpandMacros(program, macroEnv)
 	evaluator.Eval(expandedProg, env)
@@ -139,9 +125,7 @@ func Execute(input string) int {
 
 func main() {
 
-	//
 	// Setup some flags.
-	//
 	evalDesc := "Code to execute."
 	eval := flag.String("eval", "", evalDesc)
 	flag.StringVar(eval, "e", "", evalDesc)
@@ -149,31 +133,23 @@ func main() {
 	vers := flag.Bool("version", false, versDesc)
 	flag.BoolVar(vers, "v", false, versDesc)
 
-	//
 	// Parse the flags
-	//
 	flag.Parse()
 
-	//
 	// Showing the version?
-	//
 	if *vers {
 		fmt.Printf("cozy %s\n", COZY_VERSION)
 		os.Exit(1)
 	}
 
-	//
 	// Executing code?
-	//
 	if *eval != "" {
 		Execute(*eval)
 		os.Exit(1)
 	}
 
-	//
 	// Otherwise we're either reading from STDIN, or the
 	// named file containing source-code.
-	//
 	var input []byte
 	var err error
 

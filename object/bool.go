@@ -61,8 +61,6 @@ func (b *Boolean) GetMethod(method string) BuiltinFunction {
 
 // ToInterface converts this object to a go-interface, which will allow
 // it to be used naturally in our sprintf/printf primitives.
-//
-// It might also be helpful for embedded users.
 func (b *Boolean) ToInterface() interface{} {
 	return b.Value
 }

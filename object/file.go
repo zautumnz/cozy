@@ -37,10 +37,8 @@ func (f *File) Inspect() string {
 // Filename will have been filled in for us.
 func (f *File) Open(mode string) error {
 
-	//
 	// Special case STDIN, STDOUT, STDERR.
 	// We only need to setup readers/writers for these.
-	//
 	if f.Filename == "!STDIN!" {
 		f.Reader = bufio.NewReader(os.Stdin)
 		return nil
@@ -54,14 +52,10 @@ func (f *File) Open(mode string) error {
 		return nil
 	}
 
-	//
 	// Default mode is to read.
-	//
 	md := os.O_RDONLY
 
-	//
 	// Allow writing though ("w"), and write+append ("wa"| "aw")
-	//
 	if mode == "w" {
 		md = os.O_WRONLY
 
@@ -78,22 +72,16 @@ func (f *File) Open(mode string) error {
 		}
 	}
 
-	//
 	// Open the file.
-	//
 	file, err := os.OpenFile(f.Filename, os.O_CREATE|md, 0644)
 	if err != nil {
 		return err
 	}
 
-	//
 	// Save the handle away
-	//
 	f.Handle = file
 
-	//
 	// Setup the reader/writer handles, as appropriate.
-	//
 	if md == os.O_RDONLY {
 		f.Reader = bufio.NewReader(file)
 	} else {
@@ -205,8 +193,6 @@ func (f *File) GetMethod(method string) BuiltinFunction {
 
 // ToInterface converts this object to a go-interface, which will allow
 // it to be used naturally in our sprintf/printf primitives.
-//
-// It might also be helpful for embedded users.
 func (f *File) ToInterface() interface{} {
 	return "<FILE>"
 }

@@ -20,18 +20,12 @@ func (e *Error) Inspect() string {
 // (Built-in methods only.)
 func (e *Error) GetMethod(string) BuiltinFunction {
 
-	//
 	// There are no methods available upon a return-object.
-	//
-	// (The error-object is an implementation-detail.)
-	//
 	return nil
 }
 
 // ToInterface converts this object to a go-interface, which will allow
 // it to be used naturally in our sprintf/printf primitives.
-//
-// It might also be helpful for embedded users.
 func (e *Error) ToInterface() interface{} {
 	return "<ERROR>"
 }

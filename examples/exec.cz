@@ -1,7 +1,7 @@
 #!/usr/bin/env cozy
 
 # Run a simple command
-let uptime = `/usr/bin/uptime`;
+let uptime = `uptime`;
 
 if (uptime) {
    print("STDOUT: ", uptime["stdout"].trim());
@@ -11,7 +11,7 @@ if (uptime) {
 }
 
 # Now something more complex
-let ls = `/bin/sh -c "/bin/ls /etc /missing-path"`;
+let ls = `sh -c "/bin/ls /etc /missing-path"`;
 if (ls) {
    print("STDOUT: ", ls["stdout"].trim());
    print("STDERR: ", ls["stderr"].trim());

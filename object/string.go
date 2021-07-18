@@ -115,8 +115,6 @@ func (s *String) Next() (Object, Object, bool) {
 
 // ToInterface converts this object to a go-interface, which will allow
 // it to be used naturally in our sprintf/printf primitives.
-//
-// It might also be helpful for embedded users.
 func (s *String) ToInterface() interface{} {
 	return s.Value
 }

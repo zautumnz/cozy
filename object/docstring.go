@@ -13,9 +13,6 @@ import (
 type DocString struct {
 	// Value holds the string value this object wraps.
 	Value string
-
-	// Offset holds our iteration-offset
-	offset int
 }
 
 // Type returns the type of this object.
@@ -68,35 +65,8 @@ func (s *DocString) GetMethod(method string) BuiltinFunction {
 	return nil
 }
 
-// Reset implements the Iterable interface, and allows the contents
-// of the string to be reset to allow re-iteration.
-func (s *DocString) Reset() {
-	s.offset = 0
-}
-
-// Next implements the Iterable interface, and allows the contents
-// of our string to be iterated over.
-func (s *DocString) Next() (Object, Object, bool) {
-
-	if s.offset < utf8.RuneCountInString(s.Value) {
-		s.offset++
-
-		// Get the characters as an array of runes
-		chars := []rune(s.Value)
-
-		// Now index
-		val := &DocString{Value: string(chars[s.offset-1])}
-
-		return val, &Integer{Value: int64(s.offset - 1)}, true
-	}
-
-	return nil, &Integer{Value: 0}, false
-}
-
 // ToInterface converts this object to a go-interface, which will allow
 // it to be used naturally in our sprintf/printf primitives.
-//
-// It might also be helpful for embedded users.
 func (s *DocString) ToInterface() interface{} {
 	return s.Value
 }

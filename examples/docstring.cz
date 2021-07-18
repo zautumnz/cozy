@@ -7,5 +7,9 @@ let id = fn (a) {
     a;
 };
 print(id);
-print(type('asdf')); // docstring
-print('asdf'); // empty
+print(type('asdf')); # docstring
+print('asdf'); # empty
+
+print("hi");
+# global function prints docstring
+print(doc(id));

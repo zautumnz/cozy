@@ -58,8 +58,6 @@ func (m *Module) GetMethod(method string) BuiltinFunction {
 
 // ToInterface converts this object to a go-interface, which will allow
 // it to be used naturally in our sprintf/printf primitives.
-//
-// It might also be helpful for embedded users.
 func (m *Module) ToInterface() interface{} {
 	return "<MODULE>"
 }

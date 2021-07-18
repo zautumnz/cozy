@@ -425,7 +425,6 @@ type ForeachStatement struct {
 	Token token.Token
 
 	// Index is the variable we'll set with the index, for the blocks' scope
-	//
 	// This is optional.
 	Index string
 
@@ -530,7 +529,6 @@ func (ie *ImportExpression) String() string {
 }
 
 // FunctionLiteral holds a function-definition
-//
 // See-also FunctionDefineLiteral.
 type FunctionLiteral struct {
 	// Token is the actual token
@@ -545,6 +543,9 @@ type FunctionLiteral struct {
 
 	// Body contains the set of statements within the function.
 	Body *BlockStatement
+
+	// DocString
+	DocString *DocStringLiteral
 }
 
 func (fl *FunctionLiteral) expressionNode() {}
@@ -569,7 +570,6 @@ func (fl *FunctionLiteral) String() string {
 }
 
 // FunctionDefineLiteral holds a function-definition.
-//
 // See-also FunctionLiteral.
 type FunctionDefineLiteral struct {
 	// Token holds the token
@@ -583,6 +583,9 @@ type FunctionDefineLiteral struct {
 
 	// Body holds the set of statements in the functions' body.
 	Body *BlockStatement
+
+	// DocString
+	DocString *DocStringLiteral
 }
 
 func (fl *FunctionDefineLiteral) expressionNode() {}

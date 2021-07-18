@@ -135,9 +135,7 @@ func matchFun(args ...object.Object) object.Object {
 			args[1].Type())
 	}
 
-	//
 	// Compile and match
-	//
 	reg := regexp.MustCompile(args[0].(*object.String).Value)
 	res := reg.FindStringSubmatch(args[1].(*object.String).Value)
 
@@ -145,11 +143,9 @@ func matchFun(args ...object.Object) object.Object {
 
 		newHash := make(map[object.HashKey]object.HashPair)
 
-		//
 		// If we get a match then the output is an array
 		// First entry is the match, any additional parts
 		// are the capture-groups.
-		//
 		if len(res) > 1 {
 			for i := 1; i < len(res); i++ {
 
@@ -342,6 +338,25 @@ func strFun(args ...object.Object) object.Object {
 	return &object.String{Value: out}
 }
 
+// docstring of a function
+func docFun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1",
+			len(args))
+	}
+	// switch a := args[0].(type) {
+	switch args[0].(type) {
+	case *object.Function:
+		return &object.String{Value: "this is a docstring"}
+		// TODO: working on it
+		// return &object.String{Value: a.DocString.Value}
+
+	default:
+		return newError("argument to `doc` not supported, got=%s",
+			args[0].Type())
+	}
+}
+
 // type of an item
 func typeFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
@@ -380,6 +395,7 @@ func typeFun(args ...object.Object) object.Object {
 }
 
 func init() {
+	// TODO: move this to be a method on hash objects
 	RegisterBuiltin("delete",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (hashDelete(args...))
@@ -396,6 +412,7 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (intFun(args...))
 		})
+	// TODO: move this to be a method on hash objects
 	RegisterBuiltin("keys",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (hashKeys(args...))
@@ -408,6 +425,7 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (matchFun(args...))
 		})
+	// TODO: move this to be a method on array objects
 	RegisterBuiltin("push",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (pushFun(args...))
@@ -420,6 +438,7 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (printfFun(args...))
 		})
+	// TODO: move this to be a method on hash objects
 	RegisterBuiltin("set",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (setFun(args...))
@@ -436,4 +455,9 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (typeFun(args...))
 		})
+	RegisterBuiltin("doc",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (docFun(args...))
+		})
+
 }

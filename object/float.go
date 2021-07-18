@@ -58,8 +58,6 @@ func (f *Float) GetMethod(method string) BuiltinFunction {
 
 // ToInterface converts this object to a go-interface, which will allow
 // it to be used naturally in our sprintf/printf primitives.
-//
-// It might also be helpful for embedded users.
 func (f *Float) ToInterface() interface{} {
 	return f.Value
 }

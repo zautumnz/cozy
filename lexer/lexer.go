@@ -170,7 +170,7 @@ func (l *Lexer) NextToken() token.Token {
 			//   a / c           -> IDENT
 			//   3.2 / c         -> FLOAT
 			//   1 / c           -> IDENT
-			//
+
 			if l.prevToken.Type == token.RBRACKET ||
 				l.prevToken.Type == token.RPAREN ||
 				l.prevToken.Type == token.IDENT ||
@@ -286,23 +286,18 @@ func newToken(tokenType token.Type, ch rune) token.Token {
 // function, etc).
 //
 // However there is a complication due to our historical implementation
-// of the standard library.  We really want to stop identifiers if we hit
+// of the standard library. We really want to stop identifiers if we hit
 // a period, to allow method-calls to work on objects.
 //
 // So with input like this:
-//
 //   a.blah();
-//
 // Our identifier should be "a" (then we have a period, then a second
 // identifier "blah", followed by opening & closing parenthesis).
 //
 // However we also have to cover the case of:
-//
 //    string.toupper("blah");
 //    os.getenv("PATH");
-//    ..
-//
-// So we have a horrid implementation..
+//    etc.
 func (l *Lexer) readIdentifier() string {
 	// Types and objects which will have valid methods.
 	types := []string{
@@ -322,27 +317,20 @@ func (l *Lexer) readIdentifier() string {
 
 	id := ""
 
-	//
 	// Save our position, in case we need to jump backwards in
-	// our scanning.  Yeah.
-	//
+	// our scanning.
 	position := l.position
 	rposition := l.readPosition
 
-	//
 	// Build up our identifier, handling only valid characters.
-	//
 	// NOTE: This WILL consider the period valid, allowing the
 	// parsing of "foo.bar", "os.getenv", "blah.blah.blah", etc.
-	//
 	for isIdentifier(l.ch) {
 		id += string(l.ch)
 		l.readChar()
 	}
 
-	//
 	// Now we to see if our identifier had a period inside it.
-	//
 	if strings.Contains(id, ".") {
 
 		ok := false
@@ -352,26 +340,18 @@ func (l *Lexer) readIdentifier() string {
 			}
 		}
 
-		// Not permitted?  Then we abort.
-		//
+		// Not permitted? Then we abort.
 		// We reset our lexer-state to the position just ahead
-		// of the period.  This will then lead to a syntax
+		// of the period. This will then lead to a syntax
 		// error.
-		//
 		// Which probably means our lexer should abort instead.
-		//
 		// For the moment we'll leave as-is.
-		//
 		if !ok {
-
-			//
 			// OK first of all we truncate our identifier
 			// at the position before the "."
-			//
 			offset := strings.Index(id, ".")
 			id = id[:offset]
 
-			//
 			// Now we have to move backwards - as a quickie
 			// We'll reset our position and move forwards
 			// the length of the bits we went too-far.
@@ -430,22 +410,14 @@ func (l *Lexer) readNumber() string {
 // read decimal
 func (l *Lexer) readDecimal() token.Token {
 
-	//
 	// Read an integer-number.
-	//
 	integer := l.readNumber()
 
-	//
 	// Now we either expect:
-	//
 	//   .[digits]  -> Which converts us from an int to a float.
-	//
 	//   .blah      -> Which is a method-call on a raw number.
-	//
 	if l.ch == rune('.') && isDigit(l.peekChar()) {
-		//
 		// OK here we think we've got a float.
-		//
 		l.readChar()
 		fraction := l.readNumber()
 		return token.Token{Type: token.FLOAT, Literal: integer + "." + fraction}
@@ -463,9 +435,7 @@ func (l *Lexer) readString() string {
 			break
 		}
 
-		//
 		// Handle \n, \r, \t, \", etc.
-		//
 		if l.ch == '\\' {
 			l.readChar()
 
@@ -501,9 +471,7 @@ func (l *Lexer) readDocString() string {
 			break
 		}
 
-		//
 		// Handle \n, \r, \t, \", etc.
-		//
 		if l.ch == '\\' {
 			l.readChar()
 
@@ -550,7 +518,6 @@ func (l *Lexer) readRegexp() (string, error) {
 			// two flags are supported:
 			//   i -> Ignore-case
 			//   m -> Multiline
-			//
 			for l.ch == rune('i') || l.ch == rune('m') {
 
 				// save the char - unless it is a repeat
