@@ -1,0 +1,15 @@
+time.sleep(1000);
+print("slept 1000 ms");
+
+# TODO: not implemented yet
+# let intervalId = time.interval(100, fn () {
+#     print("printing hi on a 100 ms interval");
+# });
+#
+# time.clearId(intervalId);
+#
+# let timeoutId = time.timeout(1000, fn () {
+#     print("printing after a 1000 ms timeout");
+# });
+#
+# time.clearId(timeoutId);

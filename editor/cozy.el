@@ -57,6 +57,8 @@
     "math.abs"
     "math.random"
     "math.sqrt"
+    "time.sleep"
+    "time.interval"
     "push"
     "print"
     "read"

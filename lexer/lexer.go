@@ -324,6 +324,8 @@ func (l *Lexer) readIdentifier() string {
 		"net.read":       true,
 		"net.listen":     true,
 		"net.socket":     true,
+		"time.sleep":     true,
+		"time.interval":  true,
 	}
 
 	//
