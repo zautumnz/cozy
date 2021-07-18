@@ -710,7 +710,6 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 	if p.peekTokenIs(token.DOCSTRING) {
 		lit.DocString = p.parseDocStringLiteral()
 	}
-	p.nextToken()
 	lit.Body = p.parseBlockStatement()
 	return lit
 }
@@ -775,7 +774,9 @@ func (p *Parser) ParseStringLiteral() ast.Expression {
 // parseDocStringLiteral parses a docstring-literal.
 func (p *Parser) parseDocStringLiteral() *ast.DocStringLiteral {
 	p.nextToken()
-	return &ast.DocStringLiteral{Token: p.curToken, Value: p.curToken.Literal}
+	x := &ast.DocStringLiteral{Token: p.curToken, Value: p.curToken.Literal}
+	p.nextToken()
+	return x
 }
 
 // parseRegexpLiteral parses a regular-expression.
