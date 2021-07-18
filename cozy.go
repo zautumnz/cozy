@@ -8,11 +8,13 @@
 package main
 
 import (
-	_ "embed"
+	"embed"
 	"flag"
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/zacanger/cozy/evaluator"
 	"github.com/zacanger/cozy/lexer"
@@ -24,33 +26,33 @@ import (
 // COZY_VERSION is replaced by go build in makefile
 var COZY_VERSION = "cozy-version"
 
-// TODO: embed the dir with stdlib/* as an embed.FS, read each file,
-// and create a single string; is this possible without caring about the file
-// names?
+//go:embed stdlib
+var stdlibFs embed.FS
 
-//go:embed stdlib/misc.cz
-var misc string
+// turn the embed fs into a string we can use
+func getStdlibString() string {
+	s := ""
+	fs.WalkDir(
+		stdlibFs,
+		".",
+		func(path string, d fs.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			if strings.HasSuffix(path, ".cz") {
+				c, err := ioutil.ReadFile(path)
+				if err != nil {
+					return err
+				}
+				s += string(c)
+				s += "\n"
+			}
 
-//go:embed stdlib/array.cz
-var array string
+			return nil
+		})
 
-//go:embed stdlib/hash.cz
-var hash string
-
-//go:embed stdlib/string.cz
-var strings string
-
-//go:embed stdlib/number.cz
-var number string
-
-//go:embed stdlib/test.cz
-var tests string
-
-//go:embed stdlib/event-emitter.cz
-var eventEmitter string
-
-//go:embed stdlib/state-management.cz
-var stateManagement string
+	return s
+}
 
 // Implemention of "version()" function.
 func versionFun(args ...object.Object) object.Object {
@@ -69,7 +71,6 @@ func argsFun(args ...object.Object) object.Object {
 
 // Execute the supplied string as a program.
 func Execute(input string) int {
-
 	env := object.NewEnvironment()
 	macroEnv := object.NewEnvironment()
 	l := lexer.New(input)
@@ -97,16 +98,7 @@ func Execute(input string) int {
 		})
 
 	//  Parse and evaluate our standard-library.
-	initL := lexer.New(
-		misc,
-		array,
-		hash,
-		strings,
-		number,
-		tests,
-		eventEmitter,
-		stateManagement,
-	)
+	initL := lexer.New(getStdlibString())
 	initP := parser.New(initL)
 	initProg := initP.ParseProgram()
 	evaluator.DefineMacros(initProg, macroEnv)
@@ -124,12 +116,11 @@ func Execute(input string) int {
 }
 
 func main() {
-
 	// Setup some flags.
-	evalDesc := "Code to execute."
+	evalDesc := "Code to execute"
 	eval := flag.String("eval", "", evalDesc)
 	flag.StringVar(eval, "e", "", evalDesc)
-	versDesc := "Show our version and exit."
+	versDesc := "Show our version and exit"
 	vers := flag.Bool("version", false, versDesc)
 	flag.BoolVar(vers, "v", false, versDesc)
 
