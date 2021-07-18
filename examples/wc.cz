@@ -2,7 +2,7 @@
 
 # Open the file
 let path = "/etc/passwd";
-let fh = open(path);
+let fh = fs.open(path);
 if (!fh) {
    print("Failed to open file")
    exit(0);

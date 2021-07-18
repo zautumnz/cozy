@@ -364,7 +364,7 @@ func TestStdLib(t *testing.T) {
 os.getenv
 os.setenv
 os.environment
-directory.glob
+fs.glob
 math.abs
 math.random
 math.sqrt
@@ -384,7 +384,7 @@ foo.bar
 		{token.IDENT, "os.getenv"},
 		{token.IDENT, "os.setenv"},
 		{token.IDENT, "os.environment"},
-		{token.IDENT, "directory.glob"},
+		{token.IDENT, "fs.glob"},
 		{token.IDENT, "math.abs"},
 		{token.IDENT, "math.random"},
 		{token.IDENT, "math.sqrt"},

@@ -304,39 +304,20 @@ func newToken(tokenType token.Type, ch rune) token.Token {
 //
 // So we have a horrid implementation..
 func (l *Lexer) readIdentifier() string {
-
-	//
-	// Functions which are permitted to have dots in their name.
-	//
-	valid := map[string]bool{
-		"directory.glob": true,
-		"math.abs":       true,
-		"math.random":    true,
-		"math.sqrt":      true,
-		"os.environment": true,
-		"os.getenv":      true,
-		"os.setenv":      true,
-		"net.accept":     true,
-		"net.bind":       true,
-		"net.write":      true,
-		"net.close":      true,
-		"net.connect":    true,
-		"net.read":       true,
-		"net.listen":     true,
-		"net.socket":     true,
-		"time.sleep":     true,
-		"time.interval":  true,
-	}
-
-	//
-	// Types which will have valid methods.
-	//
-	types := []string{"string.",
+	// Types and objects which will have valid methods.
+	types := []string{
 		"array.",
-		"integer.",
 		"float.",
+		"fs.",
 		"hash.",
-		"object."}
+		"integer.",
+		"math.",
+		"net.",
+		"object.",
+		"os.",
+		"string.",
+		"time.",
+	}
 
 	id := ""
 
@@ -363,20 +344,13 @@ func (l *Lexer) readIdentifier() string {
 	//
 	if strings.Contains(id, ".") {
 
-		// Is it a known-good function?
-		ok := valid[id]
-
-		// If not see if it has a type-prefix, which will
-		// let the definition succeed.
-		if !ok {
-			for _, i := range types {
-				if strings.HasPrefix(id, i) {
-					ok = true
-				}
+		ok := false
+		for _, i := range types {
+			if strings.HasPrefix(id, i) {
+				ok = true
 			}
 		}
 
-		//
 		// Not permitted?  Then we abort.
 		//
 		// We reset our lexer-state to the position just ahead

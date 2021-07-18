@@ -934,8 +934,8 @@ func (p *Parser) parseIndexDotExpression(obj ast.Expression) ast.Expression {
 		Left:  obj,
 		Index: &ast.StringLiteral{
 			Token: token.Token{
-				token.IDENT,
-				name.TokenLiteral(),
+				Type:    token.IDENT,
+				Literal: name.TokenLiteral(),
 			},
 			Value: name.String(),
 		},

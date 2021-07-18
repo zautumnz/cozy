@@ -1,22 +1,27 @@
 # Example of how an http server might look
 let app = net.http.server();
+let port = 8000;
+
 app.static("./public");
-app.get("/foo", fn (req) {
+
+app.route("/foo", ["GET"], fn (req) {
     return { "status": 200, "body": "foo" };
 });
-app.get("/foo/:bar", fn (req) {
+
+app.route("/foo/:bar", ["GET"], fn (req) {
     return { "status": 200, "body": req["params"]["bar"] };
 });
-app.post("/baz", fn (req) {
-    mutable res = "";
-    mutable status = 201;
-    if (!req["body"]) {
-        status = 400;
-        res = "Body required";
+
+app.route("/baz", ["POST", "GET"], fn (req) {
+    if (req.method == "GET") {
+        return { "status": 200, "body": "GOT!" }
     }
 
-    return { "status": status, "body": res };
+    if (!req["body"]) {
+        return { "status": 400, "body": "Body required" };
+    }
 });
-app.listen(8000, fn () {
-    print("App listening on", 8000);
+
+app.listen(port, fn () {
+    print("App listening on", port);
 });

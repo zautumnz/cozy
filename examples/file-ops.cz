@@ -1,12 +1,12 @@
 exit(0)
 # Exiting early so you don't actually run this
 
-chmod("/tmp/executable.sh", "755")
-chmod("/tmp/normal", "644")
+fs.chmod("/tmp/executable.sh", "755")
+fs.chmod("/tmp/normal", "644")
 
 # remove file
-unlink("/tmp/trash.txt");
+fs.unlink("/tmp/trash.txt");
 
-mkdir("/tmp/blah");
+fs.mkdir("/tmp/blah");
 
-stat("./README.md")
+fs.stat("./README.md")

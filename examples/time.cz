@@ -1,5 +1,16 @@
+# these all take values in ints representing ms
+
+# sleep
+print("going to sleep 1000 ms");
 time.sleep(1000);
 print("slept 1000 ms");
+
+# unix timestamp
+print("unix time", time.unix());
+
+# RFC3339 format (basically ISO 8601)
+# no other date formats or timezones are supported
+print("utc time", time.utc());
 
 # TODO: not implemented yet
 # let intervalId = time.interval(100, fn () {

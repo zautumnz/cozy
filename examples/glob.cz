@@ -3,7 +3,7 @@
 
 # Find all the files matching the glob-pattern "/etc/*.conf".
 let pattern = "/etc/*.conf";
-let files = directory.glob(pattern);
+let files = fs.glob(pattern);
 
 # If that worked
 if (len(files) > 0) {

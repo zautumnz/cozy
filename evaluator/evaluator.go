@@ -1209,7 +1209,7 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 	case *object.String:
 		var fn object.BuiltinFunction
 		if fn = o.GetMethod(k.Value); fn != nil {
-			return &object.Builtin{fn}, true
+			return &object.Builtin{Fn: fn}, true
 		}
 
 		//

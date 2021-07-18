@@ -16,10 +16,28 @@ func timeSleep(args ...object.Object) object.Object {
 	return &object.Null{}
 }
 
-// TODO: time.timeout, time.interval
+func timeUnix(args ...object.Object) object.Object {
+	return &object.Float{Value: float64(time.Now().UnixNano() / 1000000)}
+}
+
+func timeUtc(args ...object.Object) object.Object {
+	return &object.String{Value: time.Now().Format(time.RFC3339)}
+}
+
+// TODO:
+// time.timeout
+// time.interval
 func init() {
 	RegisterBuiltin("time.sleep",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (timeSleep(args...))
+		})
+	RegisterBuiltin("time.unix",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (timeUnix(args...))
+		})
+	RegisterBuiltin("time.utc",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (timeUtc(args...))
 		})
 }

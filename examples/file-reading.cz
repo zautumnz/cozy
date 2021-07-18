@@ -1,4 +1,4 @@
-let fh = open("/etc/passwd");
+let fh = fs.open("/etc/passwd");
 
 # Count of lines
 mutable lines = 0;

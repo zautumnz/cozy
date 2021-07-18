@@ -5,9 +5,9 @@ let E = 2.718281828459045;
 # File-objects for STDIN, STDOUT, and STDERR.
 # Rather than opening these by name/path we have magic-strings which
 # are recognized by our "open" primitive.
-let STDIN = open("!STDIN!");
-let STDOUT = open("!STDOUT!");
-let STDERR = open("!STDERR!");
+let STDIN = fs.open("!STDIN!");
+let STDOUT = fs.open("!STDOUT!");
+let STDERR = fs.open("!STDERR!");
 
 # The `assert` method allows the code in our standard-library to be
 # tested every time it is loaded.
