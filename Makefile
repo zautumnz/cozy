@@ -9,6 +9,9 @@ install:
 	@cp -f cozy $(PREFIX)/bin/cozy
 	@chmod 755 $(PREFIX)/bin/cozy
 
+fmt:
+	go fmt ./...
+
 clean:
 	@rm -f cozy
 
@@ -16,11 +19,14 @@ test:
 	@go test ./...
 
 count:
-	@cloc --exclude-dir=x --read-lang-def=editor/cozy.cloc .
+	@cloc --exclude-dir=x,.git,.github --read-lang-def=editor/cozy.cloc .
 
 lint:
 	@go fmt ./...
 	@go vet ./...
 	@staticcheck ./...
 
-.PHONY: build clean install count lint test
+tags:
+	@ctags --exclude=x -R .
+
+.PHONY: clean install tags
