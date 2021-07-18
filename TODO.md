@@ -10,7 +10,6 @@
     * Cryptography builtins
 * Minor things:
     * Finish time module
-    * JSON serialize
     * TOML serialize and deserialize
     * Remove null
     * Add tab completion and arrow support to the REPL

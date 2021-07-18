@@ -7,6 +7,12 @@ let some_json_array = json.serialize([1, 2, 3]);
 let some_json_hash = json.serialize(some_hash);
 print(some_json_array, type(some_json_array), "serialized json");
 print(some_json_hash, type(some_json_hash), "serialized json");
+let y = fn () { return true; };
+let x = {
+    "foo": [1,2,"3"],
+    "bar": { "baz": y },
+};
+print(json.serialize(x), "complex example");
 
 # TOML
 # TODO, but basically the same as above.

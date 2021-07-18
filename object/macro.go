@@ -58,12 +58,17 @@ func (m *Macro) Json() string {
 		params = append(params, p.String())
 	}
 
+	out.WriteString("\"")
 	out.WriteString("macro")
 	out.WriteString("(")
-	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(
+		strings.ReplaceAll(
+			strings.Join(params, ", "), `"`, `\"`))
 	out.WriteString(") {")
-	out.WriteString(m.Body.String())
+	out.WriteString(
+		strings.ReplaceAll(m.Body.String(), `"`, `\"`))
 	out.WriteString("}")
+	out.WriteString("\"")
 
 	return out.String()
 }

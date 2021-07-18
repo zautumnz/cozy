@@ -81,12 +81,17 @@ func (f *Function) Json() string {
 		params = append(params, p.String())
 	}
 
+	out.WriteString("\"")
 	out.WriteString("fn")
 	out.WriteString("(")
-	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(
+		strings.ReplaceAll(
+			strings.Join(params, ", "), `"`, `\"`))
 	out.WriteString(") {")
-	out.WriteString(f.Body.String())
+	out.WriteString(
+		strings.ReplaceAll(f.Body.String(), `"`, `\"`))
 	out.WriteString("}")
+	out.WriteString("\"")
 
 	return out.String()
 }
