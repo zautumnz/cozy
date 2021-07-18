@@ -196,3 +196,8 @@ func (f *File) GetMethod(method string) BuiltinFunction {
 func (f *File) ToInterface() interface{} {
 	return "<FILE>"
 }
+
+// Json returns a json-friendly string
+func (f *File) Json() string {
+	return f.Inspect()
+}

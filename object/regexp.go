@@ -32,3 +32,9 @@ func (r *Regexp) GetMethod(string) BuiltinFunction {
 func (r *Regexp) ToInterface() interface{} {
 	return "<REGEXP>"
 }
+
+// Json returns a json-friendly string
+func (r *Regexp) Json() string {
+	// TODO: this might not work, might need to escape the string
+	return r.Inspect()
+}

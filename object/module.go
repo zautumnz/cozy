@@ -61,3 +61,8 @@ func (m *Module) GetMethod(method string) BuiltinFunction {
 func (m *Module) ToInterface() interface{} {
 	return "<MODULE>"
 }
+
+// Json returns a json-friendly string
+func (m *Module) Json() string {
+	return m.Inspect()
+}

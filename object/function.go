@@ -71,3 +71,22 @@ func (f *Function) GetMethod(method string) BuiltinFunction {
 func (f *Function) ToInterface() interface{} {
 	return "<FUNCTION>"
 }
+
+// Json returns a json-friendly string
+func (f *Function) Json() string {
+	var out bytes.Buffer
+
+	params := []string{}
+	for _, p := range f.Parameters {
+		params = append(params, p.String())
+	}
+
+	out.WriteString("fn")
+	out.WriteString("(")
+	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(") {")
+	out.WriteString(f.Body.String())
+	out.WriteString("}")
+
+	return out.String()
+}

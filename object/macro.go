@@ -48,3 +48,22 @@ func (m *Macro) Inspect() string {
 
 	return out.String()
 }
+
+// Json returns a string representing the object
+func (m *Macro) Json() string {
+	var out bytes.Buffer
+
+	params := make([]string, 0)
+	for _, p := range m.Parameters {
+		params = append(params, p.String())
+	}
+
+	out.WriteString("macro")
+	out.WriteString("(")
+	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(") {")
+	out.WriteString(m.Body.String())
+	out.WriteString("}")
+
+	return out.String()
+}

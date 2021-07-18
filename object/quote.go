@@ -29,3 +29,8 @@ func (q *Quote) Type() Type {
 func (q *Quote) Inspect() string {
 	return "QUOTE(" + q.Node.String() + ")"
 }
+
+// Json returns a json-friendly string
+func (q *Quote) Json() string {
+	return q.Inspect()
+}

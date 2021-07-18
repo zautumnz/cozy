@@ -61,3 +61,8 @@ func (f *Float) GetMethod(method string) BuiltinFunction {
 func (f *Float) ToInterface() interface{} {
 	return f.Value
 }
+
+// Json returns a json-friendly string
+func (f *Float) Json() string {
+	return f.Inspect()
+}

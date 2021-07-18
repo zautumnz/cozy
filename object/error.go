@@ -29,3 +29,8 @@ func (e *Error) GetMethod(string) BuiltinFunction {
 func (e *Error) ToInterface() interface{} {
 	return "<ERROR>"
 }
+
+// Json returns a json-friendly string
+func (e *Error) Json() string {
+	return e.Inspect()
+}

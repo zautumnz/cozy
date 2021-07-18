@@ -64,3 +64,8 @@ func (i *Integer) GetMethod(method string) BuiltinFunction {
 func (i *Integer) ToInterface() interface{} {
 	return i.Value
 }
+
+// Json returns a json-friendly string
+func (i *Integer) Json() string {
+	return i.Inspect()
+}

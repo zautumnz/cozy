@@ -123,3 +123,24 @@ func (h *Hash) Next() (Object, Object, bool) {
 func (h *Hash) ToInterface() interface{} {
 	return "<HASH>"
 }
+
+// Json returns a json-friendly string
+func (h *Hash) Json() string {
+	var out bytes.Buffer
+
+	pairs := []string{}
+	for _, pair := range h.Pairs {
+		pairs = append(pairs, fmt.Sprintf(
+			`%s: %s`,
+			pair.Key.Json(),
+			pair.Value.Json()))
+	}
+	// create stable key ordered output
+	sort.Strings(pairs)
+
+	out.WriteString("{")
+	out.WriteString(strings.Join(pairs, ", "))
+	out.WriteString("}")
+
+	return out.String()
+}

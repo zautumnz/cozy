@@ -70,3 +70,8 @@ func (s *DocString) GetMethod(method string) BuiltinFunction {
 func (s *DocString) ToInterface() interface{} {
 	return s.Value
 }
+
+// Json returns a json-friendly string
+func (s *DocString) Json() string {
+	return s.Inspect()
+}

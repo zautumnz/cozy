@@ -95,3 +95,19 @@ func (ao *Array) Next() (Object, Object, bool) {
 func (ao *Array) ToInterface() interface{} {
 	return "<ARRAY>"
 }
+
+// Json returns a json-friendly string
+func (ao *Array) Json() string {
+	var out bytes.Buffer
+
+	elements := []string{}
+	for _, e := range ao.Elements {
+		elements = append(elements, e.Json())
+	}
+
+	out.WriteString("[")
+	out.WriteString(strings.Join(elements, ", "))
+	out.WriteString("]")
+
+	return out.String()
+}

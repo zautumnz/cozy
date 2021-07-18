@@ -64,3 +64,8 @@ func (b *Boolean) GetMethod(method string) BuiltinFunction {
 func (b *Boolean) ToInterface() interface{} {
 	return b.Value
 }
+
+// Json returns a json-friendly string
+func (b *Boolean) Json() string {
+	return b.Inspect()
+}

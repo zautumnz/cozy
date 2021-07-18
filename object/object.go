@@ -63,6 +63,9 @@ type Object interface {
 	// which is required to ensure that we can use the object in our
 	// `sprintf` or `printf` primitives.
 	ToInterface() interface{}
+
+	// Return a JSON-friendly string
+	Json() string
 }
 
 // Hashable type can be hashed

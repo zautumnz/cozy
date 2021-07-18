@@ -24,3 +24,8 @@ func (n *Null) GetMethod(string) BuiltinFunction {
 func (n *Null) ToInterface() interface{} {
 	return "<NULL>"
 }
+
+// Json returns a json-friendly string
+func (n *Null) Json() string {
+	return n.Inspect()
+}

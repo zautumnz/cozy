@@ -57,13 +57,22 @@ func jsonDeserialize(args ...object.Object) object.Object {
 	return newError("argument to `json` must be a valid JSON object, got '%s'", s.Value)
 }
 
+// Converts a cozy value to a JSON string
+// Every cozy object (type) has a Json method, so this is easy
+func jsonSerialize(args ...object.Object) object.Object {
+	return &object.String{Value: args[0].Json()}
+}
+
 // TODO:
-// json.serialize
 // toml.deserialize
 // toml.serialize
 func init() {
 	RegisterBuiltin("json.deserialize",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (jsonDeserialize(args...))
+		})
+	RegisterBuiltin("json.serialize",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (jsonSerialize(args...))
 		})
 }

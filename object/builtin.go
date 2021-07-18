@@ -41,3 +41,8 @@ func (b *Builtin) GetMethod(method string) BuiltinFunction {
 func (b *Builtin) ToInterface() interface{} {
 	return "<BUILTIN>"
 }
+
+// Json returns a json-friendly string
+func (b *Builtin) Json() string {
+	return b.Inspect()
+}

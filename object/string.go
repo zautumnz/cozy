@@ -118,3 +118,8 @@ func (s *String) Next() (Object, Object, bool) {
 func (s *String) ToInterface() interface{} {
 	return s.Value
 }
+
+// Json returns a json-friendly string
+func (s *String) Json() string {
+	return `"` + strings.ReplaceAll(s.Inspect(), `"`, `\"`) + `"`
+}
