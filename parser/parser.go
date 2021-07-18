@@ -111,7 +111,6 @@ type Parser struct {
 
 // New returns our new parser-object.
 func New(l *lexer.Lexer) *Parser {
-
 	// Create the parser, and prime the pump
 	p := &Parser{l: l, errors: []string{}}
 	p.nextToken()
@@ -141,7 +140,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
 	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
 	p.registerPrefix(token.STRING, p.ParseStringLiteral)
-	p.registerPrefix(token.DOCSTRING, p.parseDocStringLiteral)
 	p.registerPrefix(token.TRUE, p.ParseBoolean)
 	p.registerPrefix(token.MACRO, p.parseMacroLiteral)
 
@@ -709,6 +707,10 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 	if !p.expectPeek(token.LBRACE) {
 		return nil
 	}
+	if p.peekTokenIs(token.DOCSTRING) {
+		lit.DocString = p.parseDocStringLiteral()
+	}
+	p.nextToken()
 	lit.Body = p.parseBlockStatement()
 	return lit
 }
@@ -770,8 +772,9 @@ func (p *Parser) ParseStringLiteral() ast.Expression {
 	return &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 }
 
-// parseDocStringLiteral parses a string-literal.
-func (p *Parser) parseDocStringLiteral() ast.Expression {
+// parseDocStringLiteral parses a docstring-literal.
+func (p *Parser) parseDocStringLiteral() *ast.DocStringLiteral {
+	p.nextToken()
 	return &ast.DocStringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 }
 
@@ -815,9 +818,6 @@ func (p *Parser) ParseArrayLiteral() ast.Expression {
 
 // parsearray elements literal
 func (p *Parser) parseExpressionList(end token.Type) []ast.Expression {
-	// _, file, no, ok := runtime.Caller(1)
-	// fmt.Println("called from", no, ok, file)
-
 	list := make([]ast.Expression, 0)
 	if p.peekTokenIs(end) {
 		p.nextToken()

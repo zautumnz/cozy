@@ -89,7 +89,7 @@ func intFun(args ...object.Object) object.Object {
 		}
 		return &object.Integer{Value: 0}
 	case *object.Integer:
-		// nop
+		// noop
 		return args[0]
 	case *object.Float:
 		input := args[0].(*object.Float).Value
@@ -344,12 +344,9 @@ func docFun(args ...object.Object) object.Object {
 		return newError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
-	// switch a := args[0].(type) {
-	switch args[0].(type) {
+	switch a := args[0].(type) {
 	case *object.Function:
-		return &object.String{Value: "this is a docstring"}
-		// TODO: working on it
-		// return &object.String{Value: a.DocString.Value}
+		return &object.String{Value: a.DocString.Value}
 
 	default:
 		return newError("argument to `doc` not supported, got=%s",

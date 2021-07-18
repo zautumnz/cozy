@@ -259,7 +259,6 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = ""
 		tok.Type = token.EOF
 	default:
-
 		if isDigit(l.ch) {
 			tok = l.readDecimal()
 			l.prevToken = tok
@@ -272,6 +271,7 @@ func (l *Lexer) NextToken() token.Token {
 
 		return tok
 	}
+
 	l.readChar()
 	l.prevToken = tok
 	return tok

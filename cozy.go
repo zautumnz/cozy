@@ -28,6 +28,7 @@ var COZY_VERSION = "cozy-version"
 // and create a single string; is this possible without caring about the file
 // names?
 
+/*
 //go:embed stdlib/misc.cz
 var misc string
 
@@ -51,6 +52,7 @@ var eventEmitter string
 
 //go:embed stdlib/state-management.cz
 var stateManagement string
+*/
 
 // Implemention of "version()" function.
 func versionFun(args ...object.Object) object.Object {
@@ -98,6 +100,7 @@ func Execute(input string) int {
 
 	//  Parse and evaluate our standard-library.
 	initL := lexer.New(
+	/*
 		misc,
 		array,
 		hash,
@@ -106,6 +109,7 @@ func Execute(input string) int {
 		tests,
 		eventEmitter,
 		stateManagement,
+	*/
 	)
 	initP := parser.New(initL)
 	initProg := initP.ParseProgram()

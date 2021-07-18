@@ -1,15 +1,16 @@
 # Docstrings use single quotes
-# Comments don't show up in a print(fn), but
-# docstrings do!
+# They don't show up when you print functions, but do
+# show up using the global `doc()` function.
 let id = fn (a) {
-    # see?
     'id is the identity function';
     a;
 };
-print(id);
-print(type('asdf')); # docstring
-print('asdf'); # empty
 
-print("hi");
 # global function prints docstring
+print(id);
 print(doc(id));
+
+# these would be a syntax error; docstrings can _only_
+# appear as the first statement in functions
+# print(type('asdf'));
+# print('asdf');
