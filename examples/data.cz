@@ -1,0 +1,12 @@
+# JSON
+let some_array = json.deserialize("[1, 2, 3]");
+let some_hash = json.deserialize("{\"foo\": 2}") ;
+print(some_hash, type(some_hash));
+print(some_array, type(some_array));
+# let some_json_array = json.serialize([1, 2, 3]);
+# let some_json_hash = json.serialize(some_hash);
+# print(some_json_array, type(some_json_array));
+# print(some_json_hash, type(some_json_hash));
+
+# TOML
+# TODO, but basically the same as above.

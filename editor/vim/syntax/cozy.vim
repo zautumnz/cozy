@@ -21,7 +21,19 @@ hi def link     cozyConditional       Conditional
 hi def link     cozyRepeat            Repeat
 
 " Predefined functions and values
-syn keyword     cozyBuiltins net fs os math time macro http quote unquote print exit
+syn keyword     cozyBuiltins
+            \ exit
+            \ fs
+            \ http
+            \ json
+            \ macro
+            \ math
+            \ net
+            \ os
+            \ print
+            \ quote
+            \ time
+            \ unquote
 syn keyword     cozyBoolean             true false
 hi def link     cozyBuiltins            Identifier
 hi def link     cozyBoolean             Boolean

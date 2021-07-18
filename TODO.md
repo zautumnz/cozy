@@ -5,13 +5,13 @@
 * Major things missing:
     * HTTP server and client
     * Async/futures/generators
-    * Timers
     * Concurrency
     * Automatic semicolon insertion
-    * JSON, YAML, and TOML built-in support
     * Cryptography builtins
-    * Time and date
 * Minor things:
+    * Finish time module
+    * JSON serialize
+    * TOML serialize and deserialize
     * Remove null
     * Add tab completion and arrow support to the REPL
     * Flesh out the testing library with functions to test failure and errors
@@ -19,4 +19,3 @@
     * Remove parens in `if`, `while`, and `for`
     * Remove `self`?
     * Cozy, memo, and other FP utils
-    * Improve Vim and Emacs files

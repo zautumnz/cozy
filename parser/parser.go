@@ -122,8 +122,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.BACKTICK, p.parseBacktickLiteral)
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
 	p.registerPrefix(token.EOF, p.parsingBroken)
-	p.registerPrefix(token.FALSE, p.parseBoolean)
-	p.registerPrefix(token.FLOAT, p.parseFloatLiteral)
+	p.registerPrefix(token.FALSE, p.ParseBoolean)
+	p.registerPrefix(token.FLOAT, p.ParseFloatLiteral)
 	p.registerPrefix(token.FOR, p.parseForLoopExpression)
 	p.registerPrefix(token.FOREACH, p.parseForEach)
 	p.registerPrefix(token.IMPORT, p.parseImportExpression)
@@ -132,17 +132,17 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.IF, p.parseIfExpression)
 	p.registerPrefix(token.WHILE, p.parseWhileExpression)
 	p.registerPrefix(token.ILLEGAL, p.parsingBroken)
-	p.registerPrefix(token.INT, p.parseIntegerLiteral)
-	p.registerPrefix(token.LBRACE, p.parseHashLiteral)
-	p.registerPrefix(token.LBRACKET, p.parseArrayLiteral)
+	p.registerPrefix(token.INT, p.ParseIntegerLiteral)
+	p.registerPrefix(token.LBRACE, p.ParseHashLiteral)
+	p.registerPrefix(token.LBRACKET, p.ParseArrayLiteral)
 	p.registerPrefix(token.CURRENT_ARGS, p.parseCurrentArgsLiteral)
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
 	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
-	p.registerPrefix(token.STRING, p.parseStringLiteral)
+	p.registerPrefix(token.STRING, p.ParseStringLiteral)
 	p.registerPrefix(token.DOCSTRING, p.parseDocStringLiteral)
-	p.registerPrefix(token.TRUE, p.parseBoolean)
+	p.registerPrefix(token.TRUE, p.ParseBoolean)
 	p.registerPrefix(token.MACRO, p.parseMacroLiteral)
 
 	// Register infix functions
@@ -358,8 +358,8 @@ func (p *Parser) parseIdentifier() ast.Expression {
 	return &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 }
 
-// parseIntegerLiteral parses an integer literal.
-func (p *Parser) parseIntegerLiteral() ast.Expression {
+// ParseIntegerLiteral parses an integer literal.
+func (p *Parser) ParseIntegerLiteral() ast.Expression {
 	lit := &ast.IntegerLiteral{Token: p.curToken}
 
 	var value int64
@@ -382,8 +382,8 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 	return lit
 }
 
-// parseFloatLiteral parses a float-literal
-func (p *Parser) parseFloatLiteral() ast.Expression {
+// ParseFloatLiteral parses a float-literal
+func (p *Parser) ParseFloatLiteral() ast.Expression {
 	flo := &ast.FloatLiteral{Token: p.curToken}
 	value, err := strconv.ParseFloat(p.curToken.Literal, 64)
 	if err != nil {
@@ -395,8 +395,8 @@ func (p *Parser) parseFloatLiteral() ast.Expression {
 	return flo
 }
 
-// parseBoolean parses a boolean token.
-func (p *Parser) parseBoolean() ast.Expression {
+// ParseBoolean parses a boolean token.
+func (p *Parser) ParseBoolean() ast.Expression {
 	return &ast.Boolean{Token: p.curToken, Value: p.curTokenIs(token.TRUE)}
 }
 
@@ -420,7 +420,7 @@ func (p *Parser) parsePostfixExpression() ast.Expression {
 	return expression
 }
 
-// parseInfixExpression parses an infix-based expression.
+// /arseInfixExpression parses an infix-based expression.
 func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 	expression := &ast.InfixExpression{
 		Token:    p.curToken,
@@ -772,8 +772,8 @@ func (p *Parser) parseFunctionParameters() (map[string]ast.Expression, []*ast.Id
 	return m, identifiers
 }
 
-// parseStringLiteral parses a string-literal.
-func (p *Parser) parseStringLiteral() ast.Expression {
+// ParseStringLiteral parses a string-literal.
+func (p *Parser) ParseStringLiteral() ast.Expression {
 	return &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 }
 
@@ -813,8 +813,8 @@ func (p *Parser) parseBacktickLiteral() ast.Expression {
 	return &ast.BacktickLiteral{Token: p.curToken, Value: p.curToken.Literal}
 }
 
-// parseArrayLiteral parses an array literal.
-func (p *Parser) parseArrayLiteral() ast.Expression {
+// ParseArrayLiteral parses an array literal.
+func (p *Parser) ParseArrayLiteral() ast.Expression {
 	array := &ast.ArrayLiteral{Token: p.curToken}
 	array.Elements = p.parseExpressionList(token.RBRACKET)
 	return array
@@ -901,8 +901,8 @@ func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {
 	return exp
 }
 
-// parseHashLiteral parses a hash literal.
-func (p *Parser) parseHashLiteral() ast.Expression {
+// ParseHashLiteral parses a hash literal.
+func (p *Parser) ParseHashLiteral() ast.Expression {
 	hash := &ast.HashLiteral{Token: p.curToken}
 	hash.Pairs = make(map[ast.Expression]ast.Expression)
 	for !p.peekTokenIs(token.RBRACE) {

@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -51,4 +52,11 @@ func FindModule(name string) string {
 		}
 	}
 	return ""
+}
+
+// Check to see if a value is a number
+func IsNumber(s string) bool {
+	_, err := strconv.ParseFloat(s, 64)
+
+	return err == nil
 }

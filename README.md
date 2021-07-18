@@ -45,8 +45,9 @@ print(sum([1, 2, 3, 4]) == 10); # true
 ```
 
 For more examples and documentation, see the [examples](./examples) and
-[stdlib](./stdlib) directories. There are syntax files for Emacs (untested) and
-Vim (WIP) in the [editor](./editor) directory, along with a langdef for CLOC.
+[stdlib](./stdlib) directories. There's a Vim plugin (WIP) and a langdef for
+CLOC in the [editor](./editor) directory. Upstream has an Emacs mode, but I
+don't know Emacs, so couldn't maintain it, so it's deleted.
 
 ## About
 
