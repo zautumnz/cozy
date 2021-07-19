@@ -5,6 +5,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/zacanger/cozy/lexer"
@@ -423,6 +424,53 @@ func typeFun(args ...object.Object) object.Object {
 	}
 }
 
+// flag("my-flag")
+func flagFun(args ...object.Object) object.Object {
+	// flag we're trying to retrieve
+	name := args[0].(*object.String)
+	found := false
+
+	// Loop through all the arguments passed to the script
+	// This is O(n), but performance is not a big deal
+	for _, v := range os.Args {
+		// If the flag was found in the previous argument...
+		if found {
+			// ...and the next one is another flag
+			// means we're done parsing eg. --flag1 --flag2
+			if strings.HasPrefix(v, "-") {
+				break
+			}
+
+			// else return the next argument eg --flag1 something --flag2
+			return &object.String{Value: v}
+		}
+
+		// try to parse the flag as key=value
+		parts := strings.SplitN(v, "=", 2)
+		// let's just take the left-side of the flag
+		left := parts[0]
+
+		// if the left side of the current argument corresponds
+		// to the flag we're looking for (both in the form of "--flag" and "-flag")...
+		if (len(left) > 1 && left[1:] == name.Value) ||
+			(len(left) > 2 && left[2:] == name.Value) {
+			if len(parts) > 1 {
+				return &object.String{Value: parts[1]}
+			}
+			found = true
+		}
+	}
+
+	// If the flag was found but we got here it means no value
+	// was assigned to it, so default to true
+	if found {
+		return TRUE
+	}
+
+	// else a flag that's not found is false
+	return FALSE
+}
+
 func init() {
 	// TODO: move this to be a method on hash objects
 	RegisterBuiltin("delete",
@@ -492,5 +540,8 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (docFun(args...))
 		})
-
+	RegisterBuiltin("flag",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (flagFun(args...))
+		})
 }

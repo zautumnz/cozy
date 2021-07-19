@@ -1,13 +1,19 @@
 #!/usr/bin/env cozy
 
-# This program dumps the command-line arguments the script received.
+# all args
+# let a = args();
+# print("We received ", len(a), " arguments to our script.");
+# mutable i = 0;
+# for (i < len(a)) {
+   # print("\t", i, " " , a[i]);
+   # i++
+# }
 
-let a = args();
-
-print("We received ", len(a), " arguments to our script.");
-
-mutable i = 0;
-for (i < len(a)) {
-   print("\t", i, " " , a[i]);
-   i++
-}
+# flags by name
+# try with:
+# ./cozy ./examples/arguments.cz --foo=bar --asdf ghjkl --qwerty -x
+print(flag("foo"));
+print(flag("asdf"));
+print(flag("qwerty"));
+print(flag("x"));
+print(flag("absent-flag"));
