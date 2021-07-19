@@ -199,24 +199,6 @@ func matchFun(args ...object.Object) object.Object {
 	return &object.Boolean{Value: false}
 }
 
-// push something onto an array
-func pushFun(args ...object.Object) object.Object {
-	if len(args) != 2 {
-		return newError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-	if args[0].Type() != object.ARRAY_OBJ {
-		return newError("argument to `push` must be ARRAY, got=%s",
-			args[0].Type())
-	}
-	arr := args[0].(*object.Array)
-	length := len(arr.Elements)
-	newElements := make([]object.Object, length+1)
-	copy(newElements, arr.Elements)
-	newElements[length] = args[1]
-	return &object.Array{Elements: newElements}
-}
-
 // output a string to stdout
 func printFun(args ...object.Object) object.Object {
 	for _, arg := range args {
@@ -271,94 +253,6 @@ func sprintfFun(args ...object.Object) object.Object {
 
 	// And now return the value.
 	return &object.String{Value: out}
-}
-
-// Get hash keys
-func hashKeys(args ...object.Object) object.Object {
-	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-	if args[0].Type() != object.HASH_OBJ {
-		return newError("argument to `keys` must be HASH, got=%s",
-			args[0].Type())
-	}
-
-	// The object we're working with
-	hash := args[0].(*object.Hash)
-	ents := len(hash.Pairs)
-
-	// Create a new array for the results.
-	array := make([]object.Object, ents)
-
-	// Now copy the keys into it.
-	i := 0
-	for _, ent := range hash.Pairs {
-		array[i] = ent.Key
-		i++
-	}
-
-	// Return the array.
-	return &object.Array{Elements: array}
-}
-
-// Delete a given hash-key
-func hashDelete(args ...object.Object) object.Object {
-	if len(args) != 2 {
-		return newError("wrong number of arguments. got=%d, want=2",
-			len(args))
-	}
-	if args[0].Type() != object.HASH_OBJ {
-		return newError("argument to `delete` must be HASH, got=%s",
-			args[0].Type())
-	}
-
-	// The object we're working with
-	hash := args[0].(*object.Hash)
-
-	// The key we're going to delete
-	key, ok := args[1].(object.Hashable)
-	if !ok {
-		return newError("key `delete` into HASH must be Hashable, got=%s",
-			args[1].Type())
-	}
-
-	// Make a new hash
-	newHash := make(map[object.HashKey]object.HashPair)
-
-	// Copy the values EXCEPT the one we have.
-	for k, v := range hash.Pairs {
-		if k != key.HashKey() {
-			newHash[k] = v
-		}
-	}
-	return &object.Hash{Pairs: newHash}
-}
-
-// set a hash-field
-func setFun(args ...object.Object) object.Object {
-	if len(args) != 3 {
-		return newError("wrong number of arguments. got=%d, want=2",
-			len(args))
-	}
-	if args[0].Type() != object.HASH_OBJ {
-		return newError("argument to `set` must be HASH, got=%s",
-			args[0].Type())
-	}
-	key, ok := args[1].(object.Hashable)
-	if !ok {
-		return newError("key `set` into HASH must be Hashable, got=%s",
-			args[1].Type())
-	}
-	newHash := make(map[object.HashKey]object.HashPair)
-	hash := args[0].(*object.Hash)
-	for k, v := range hash.Pairs {
-		newHash[k] = v
-	}
-	newHashKey := key.HashKey()
-	newHashPair := object.HashPair{Key: args[1], Value: args[2]}
-	newHash[newHashKey] = newHashPair
-	return &object.Hash{Pairs: newHash}
 }
 
 func strFun(args ...object.Object) object.Object {
@@ -472,11 +366,6 @@ func flagFun(args ...object.Object) object.Object {
 }
 
 func init() {
-	// TODO: move this to be a method on hash objects
-	RegisterBuiltin("delete",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return (hashDelete(args...))
-		})
 	RegisterBuiltin("eval",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (EvalFun(env, args...))
@@ -493,11 +382,6 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (floatFun(args...))
 		})
-	// TODO: move this to be a method on hash objects
-	RegisterBuiltin("keys",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return (hashKeys(args...))
-		})
 	RegisterBuiltin("len",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (lenFun(args...))
@@ -506,11 +390,6 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (matchFun(args...))
 		})
-	// TODO: move this to be a method on array objects
-	RegisterBuiltin("push",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return (pushFun(args...))
-		})
 	RegisterBuiltin("print",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (printFun(args...))
@@ -518,11 +397,6 @@ func init() {
 	RegisterBuiltin("printf",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (printfFun(args...))
-		})
-	// TODO: move this to be a method on hash objects
-	RegisterBuiltin("set",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return (setFun(args...))
 		})
 	RegisterBuiltin("sprintf",
 		func(env *object.Environment, args ...object.Object) object.Object {

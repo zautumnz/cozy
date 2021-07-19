@@ -5,8 +5,8 @@ let event_emitter = fn() {
     mutable events = {};
     let data = {
         "subscribe": fn(name, f) {
-            if (!keys(events).includes?(name)) {
-                events = set(events, name, f);
+            if (!events.keys().includes?(name)) {
+                events = events.set(name, f);
             } else {
                 print("Event already registered for", name);
             }

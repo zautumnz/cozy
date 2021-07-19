@@ -128,7 +128,14 @@ func (f *File) GetMethod(method string) BuiltinFunction {
 		}
 	case "methods":
 		return func(env *Environment, args ...Object) Object {
-			static := []string{"methods"}
+			static := []string{
+				"methods",
+				"close",
+				"lines",
+				"read",
+				"rewind",
+				"write",
+			}
 			dynamic := env.Names("file.")
 
 			var names []string

@@ -77,9 +77,43 @@ func (h *Hash) GetMethod(method string) BuiltinFunction {
 
 			return &Array{Elements: array}
 		}
+	case "set":
+		return func(env *Environment, args ...Object) Object {
+			key, _ := args[0].(Hashable)
+			newHash := make(map[HashKey]HashPair)
+			hash := h
+			for k, v := range hash.Pairs {
+				newHash[k] = v
+			}
+			newHashKey := key.HashKey()
+			newHashPair := HashPair{Key: args[0], Value: args[1]}
+			newHash[newHashKey] = newHashPair
+			return &Hash{Pairs: newHash}
+		}
+
+	case "delete":
+		return func(env *Environment, args ...Object) Object {
+			// The object we're working with
+			hash := h
+
+			// The key we're going to delete
+			key, _ := args[0].(Hashable)
+
+			// Make a new hash
+			newHash := make(map[HashKey]HashPair)
+
+			// Copy the values EXCEPT the one we have.
+			for k, v := range hash.Pairs {
+				if k != key.HashKey() {
+					newHash[k] = v
+				}
+			}
+			return &Hash{Pairs: newHash}
+		}
+
 	case "methods":
 		return func(env *Environment, args ...Object) Object {
-			static := []string{"keys", "methods"}
+			static := []string{"keys", "methods", "delete", "set"}
 			dynamic := env.Names("hash.")
 
 			var names []string
@@ -94,6 +128,7 @@ func (h *Hash) GetMethod(method string) BuiltinFunction {
 			for i, txt := range names {
 				result[i] = &String{Value: txt}
 			}
+			fmt.Println(result)
 			return &Array{Elements: result}
 		}
 	}

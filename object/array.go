@@ -48,9 +48,18 @@ func (ao *Array) GetMethod(method string) BuiltinFunction {
 		return func(env *Environment, args ...Object) Object {
 			return &Integer{Value: int64(len(ao.Elements))}
 		}
+	case "push":
+		return func(env *Environment, args ...Object) Object {
+			arr := ao
+			length := len(arr.Elements)
+			newElements := make([]Object, length+1)
+			copy(newElements, arr.Elements)
+			newElements[length] = args[0]
+			return &Array{Elements: newElements}
+		}
 	case "methods":
 		return func(env *Environment, args ...Object) Object {
-			static := []string{"len", "methods"}
+			static := []string{"len", "methods", "push"}
 			dynamic := env.Names("array.")
 
 			var names []string

@@ -137,7 +137,7 @@ let string.split = fn(sep = " \r\t\n") {
 
             # push any previously-accumulated token into our array.
             if (len(tmp) > 0) {
-                r = push(r, tmp);
+                r = r.push(tmp);
             }
             tmp = "";
 
@@ -151,7 +151,7 @@ let string.split = fn(sep = " \r\t\n") {
 
     # Do we have a dangling-string? If so append it.
     if (len(tmp) > 0) {
-        r = push(r,tmp);
+        r = r.push(tmp);
     }
 
     return r;

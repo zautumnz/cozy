@@ -1,6 +1,6 @@
 # Dump the hash specified
-let dump = fn(hash) {
-    let k = keys(hash);
+let dump = fn(hsh) {
+    let k = hsh.keys();
     print("\tHash has ", len(k) , " keys.");
 
     mutable i = 0;
@@ -23,15 +23,15 @@ print("The original hash:");
 dump(h);
 
 # Add a new key
-let h = set(h, "Updated", "Value");
+let h = h.set("Updated", "Value");
 
 # Show it
 print("After adding a new key:");
 dump(h);
 
 # Delete two keys
-let h = delete(h, "seven");
-let h = delete(h, 3.14);
+let h = h.delete("seven");
+let h = h.delete(3.14);
 print("After deleting two keys:");
 dump(h);
 

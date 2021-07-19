@@ -17,7 +17,7 @@ let array.rest = fn() {
     if (len(self) >= 1) {
         mutable i = 1;
         for (i < len(self)) {
-            result = push(result, self[i]);
+            result = result.push(self[i]);
             i++;
         }
     }
@@ -48,7 +48,7 @@ let array.filter = fn(predicate) {
     for (i < l) {
         let entry = self[i];
         if (predicate(entry)) {
-            result = push(result, entry);
+            result = result.push(entry);
         }
 
         i++;
@@ -206,7 +206,7 @@ let array.reverse = fn() {
     mutable l = len(self);
 
     for (l > 0) {
-        let r = push(r, self[l-1]);
+        r = r.push(self[l-1]);
         l--;
     }
     return r;
@@ -222,12 +222,12 @@ let array.sorted? = fn() {
 
     # Record the types.
     for (i < len(self)) {
-        tmp = set(tmp, type(self[i]), true);
+        tmp = tmp.set(type(self[i]), true);
         i++;
     }
 
     # There can be only one!
-    if (len(keys(tmp)) > 1) {
+    if (len(tmp.keys()) > 1) {
         print("Attempting to check an array with mixed-type values!\n");
         print(string(self));
         exit(1);
@@ -276,11 +276,11 @@ let array.swap = fn(a, b) {
 
     for (i < l) {
         if (i == a) {
-            r = push(r, aVal);
+            r = r.push(aVal);
         } else if (i == b) {
-            r = push(r, bVal);
+            r = r.push(bVal);
         } else {
-            r = push(r, self[i]);
+            r = r.push(self[i]);
         }
 
         i++;
@@ -302,12 +302,12 @@ let array.sort = fn() {
 
     # Record the types.
     for (i < len(self)) {
-        tmp = set(tmp, type(self[i]), true);
+        tmp = tmp.set(type(self[i]), true);
         i++;
     }
 
     # There can be only one!
-    if (len(keys(tmp)) > 1) {
+    if (len(tmp.keys()) > 1) {
         print("Attempting to sort an array with mixed-type values!\n");
         print(string(self));
         exit(1);
@@ -343,7 +343,7 @@ let array.map = fn(fnc) {
     mutable result = [];
 
     foreach item in self {
-        result = push(result, fnc(item));
+        result = result.push(fnc(item));
     }
 
     return result;
@@ -376,7 +376,7 @@ let array.uniq = fn() {
     mutable tmp = {};
 
     foreach item in self {
-        tmp = set(tmp, item, true);
+        tmp = tmp.set(item, true);
     }
 
     # return the sorted keys
