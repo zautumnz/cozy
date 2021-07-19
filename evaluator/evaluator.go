@@ -132,7 +132,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		params := node.Parameters
 		body := node.Body
 		defaults := node.Defaults
-		env.Set(node.TokenLiteral(), &object.Function{Parameters: params, Env: env, Body: body, Defaults: defaults})
+		env.SetLet(node.TokenLiteral(), &object.Function{Parameters: params, Env: env, Body: body, Defaults: defaults})
 		return &object.Boolean{Value: false}
 	case *ast.CallExpression:
 		if node.Function.TokenLiteral() == "quote" {
@@ -1308,7 +1308,7 @@ func addMacro(stmt ast.Statement, env *object.Environment) {
 		Body:       macroLiteral.Body,
 	}
 
-	env.Set(letStatement.Name.Value, macro)
+	env.SetLet(letStatement.Name.Value, macro)
 }
 
 func ExpandMacros(program ast.Node, env *object.Environment) ast.Node {

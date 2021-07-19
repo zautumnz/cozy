@@ -8,6 +8,7 @@
     * Concurrency
     * Automatic semicolon insertion
     * Cryptography builtins
+    * Proper errors/exceptions
 * Minor things:
     * Finish time module
     * Add tab completion and arrow support to the REPL

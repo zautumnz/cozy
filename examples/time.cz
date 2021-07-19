@@ -17,10 +17,10 @@ print("utc time", time.utc());
 #     print("printing hi on a 100 ms interval");
 # });
 #
-# time.clearId(intervalId);
+# time.clear_timer(intervalId);
 #
 # let timeoutId = time.timeout(1000, fn () {
 #     print("printing after a 1000 ms timeout");
 # });
 #
-# time.clearId(timeoutId);
+# time.clear_timer(timeoutId);
