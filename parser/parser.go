@@ -102,11 +102,6 @@ type Parser struct {
 	// postfixParseFns holds a map of parsing methods for
 	// postfix-based syntax.
 	postfixParseFns map[token.Type]postfixParseFn
-
-	// Are we inside a ternary expression?
-	// Nested ternary expressions are illegal :)
-	// TODO: maybe change that?
-	tern bool
 }
 
 // New returns our new parser-object.
@@ -434,16 +429,6 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 
 // parseTernaryExpression parses a ternary expression
 func (p *Parser) parseTernaryExpression(condition ast.Expression) ast.Expression {
-
-	if p.tern {
-		msg := fmt.Sprintf("nested ternary expressions are illegal, around line %d", p.l.GetLine())
-		p.errors = append(p.errors, msg)
-		return nil
-	}
-
-	p.tern = true
-	defer func() { p.tern = false }()
-
 	expression := &ast.TernaryExpression{
 		Token:     p.curToken,
 		Condition: condition,
@@ -460,7 +445,6 @@ func (p *Parser) parseTernaryExpression(condition ast.Expression) ast.Expression
 	p.nextToken()
 	expression.IfFalse = p.parseExpression(precedence)
 
-	p.tern = false
 	return expression
 }
 
