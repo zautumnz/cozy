@@ -132,7 +132,8 @@ func Listen(args ...object.Object) object.Object {
 		return newError("SocketError: %s", err)
 	}
 
-	return &object.Null{}
+	// fd
+	return args[0]
 }
 
 // Connect is used by the client, example: connect(fd, "0.0.0.0:8080")
@@ -167,7 +168,8 @@ func Connect(args ...object.Object) object.Object {
 		return newError("SocketError: %s", err)
 	}
 
-	return &object.Null{}
+	// address
+	return args[1]
 }
 
 // Close is for closing a connection
@@ -179,7 +181,8 @@ func Close(args ...object.Object) object.Object {
 		return newError("IOError: %s", err)
 	}
 
-	return &object.Null{}
+	// file descriptor
+	return args[0]
 }
 
 // Bind is used like bind(fd, "0.0.0.0:8080") server-side
@@ -218,7 +221,8 @@ func Bind(args ...object.Object) object.Object {
 		return newError("SocketError: %s", err)
 	}
 
-	return &object.Null{}
+	// address
+	return args[1]
 }
 
 // Accept takes requests

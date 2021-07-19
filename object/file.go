@@ -105,7 +105,7 @@ func (f *File) GetMethod(method string) BuiltinFunction {
 		return func(env *Environment, args ...Object) Object {
 			// Do we not have a reader?
 			if f.Reader == nil {
-				return (&Null{})
+				return &Error{Message: "Failed to get reader!"}
 			}
 
 			// Result.
@@ -174,7 +174,7 @@ func (f *File) GetMethod(method string) BuiltinFunction {
 
 			// Ensure we have a writer.
 			if f.Writer == nil {
-				return (&Null{})
+				return &Error{Message: "Failed to get writer!"}
 			}
 
 			// Write the text - coorcing to a string first.

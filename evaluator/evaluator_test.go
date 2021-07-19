@@ -1,11 +1,8 @@
 package evaluator
 
 import (
-	// "context"
 	"math"
-	// "strings"
 	"testing"
-	// "time"
 
 	"github.com/zacanger/cozy/ast"
 	"github.com/zacanger/cozy/lexer"
@@ -201,17 +198,9 @@ func TestIfElseExpression(t *testing.T) {
 		if ok {
 			testDecimalObject(t, evaluated, int64(integer))
 		} else {
-			testNullObject(t, evaluated)
+			testBooleanObject(t, evaluated, false)
 		}
 	}
-}
-
-func testNullObject(t *testing.T, obj object.Object) bool {
-	if obj != NULL {
-		t.Errorf("object is not NULL. got=%T(%+v)", obj, obj)
-		return false
-	}
-	return true
 }
 
 func TestReturnStatements(t *testing.T) {
@@ -382,18 +371,14 @@ func TestBuiltinFunction(t *testing.T) {
 		case int:
 			testDecimalObject(t, evaluated, int64(expected))
 		case string:
-			if evaluated == NULL {
-				t.Errorf("Got NULL output on input of '%s'\n", tt.input)
-			} else {
-				errObj, ok := evaluated.(*object.Error)
-				if !ok {
-					t.Errorf("object is not Error, got=%T(%+v)",
-						evaluated, evaluated)
-				}
-				if errObj.Message != expected {
-					t.Errorf("wrong err messsage. expected=%q, got=%q",
-						expected, errObj.Message)
-				}
+			errObj, ok := evaluated.(*object.Error)
+			if !ok {
+				t.Errorf("object is not Error, got=%T(%+v)",
+					evaluated, evaluated)
+			}
+			if errObj.Message != expected {
+				t.Errorf("wrong err messsage. expected=%q, got=%q",
+					expected, errObj.Message)
 			}
 		}
 	}
@@ -465,7 +450,7 @@ func TestArrayIndexExpression(t *testing.T) {
 		if ok {
 			testDecimalObject(t, evaluated, int64(integer))
 		} else {
-			testNullObject(t, evaluated)
+			testBooleanObject(t, evaluated, false)
 		}
 	}
 }
@@ -507,7 +492,7 @@ func TestStringIndexExpression(t *testing.T) {
 		if ok {
 			testStringObject(t, evaluated, str)
 		} else {
-			testNullObject(t, evaluated)
+			testBooleanObject(t, evaluated, false)
 		}
 	}
 }
@@ -597,7 +582,7 @@ func TestHashIndexExpression(t *testing.T) {
 		if ok {
 			testDecimalObject(t, evaluated, int64(integer))
 		} else {
-			testNullObject(t, evaluated)
+			testBooleanObject(t, evaluated, false)
 		}
 	}
 }
@@ -650,7 +635,7 @@ func TestTypeBuiltin(t *testing.T) {
 		if ok {
 			testStringObject(t, evaluated, str)
 		} else {
-			testNullObject(t, evaluated)
+			testBooleanObject(t, evaluated, false)
 		}
 	}
 }

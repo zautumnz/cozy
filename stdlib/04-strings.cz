@@ -211,23 +211,6 @@ let string.tolower = fn() {
 assert("Zac".tolower() == "zac", "string.tolower() failed");
 assert("天研".tolower() == "天研", "string.tolower() failed");
 
-# Convert a string to a number (Possibly an int, possibly a float)
-let string.to_number = fn() {
-    let reg = "\\.";
-    let out = match(reg, self);
-
-    if (out) {
-        return(self.to_f());
-    } else {
-        return(self.to_i());
-    }
-};
-
-assert("3.13".to_number() == 3.13, "string.tonumber() failed");
-assert(type("3.13".to_number()) == "float", "string.tonumber() failed");
-assert("313".to_number() == 313, "string.tonumber() failed");
-assert(type("313".to_number()) == "integer", "string.tonumber() failed");
-
 # Convert the given string to upper-case.
 let string.toupper = fn() {
     mutable r = "";

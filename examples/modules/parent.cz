@@ -6,4 +6,4 @@ print("should be bar:", foo["foo"]);
 print("should be y:", foo.y);
 
 # Not top level, so not imported
-print("should be be null:", foo["u"]);
+print("should be be error:", foo["u"]);

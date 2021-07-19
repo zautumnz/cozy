@@ -63,7 +63,41 @@ func exitFun(args ...object.Object) object.Object {
 	}
 
 	os.Exit(code)
-	return NULL
+	return &object.Integer{Value: int64(code)}
+}
+
+// convert a string to a float
+func floatFun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1",
+			len(args))
+	}
+	switch args[0].(type) {
+	case *object.String:
+		input := args[0].(*object.String).Value
+		i, err := strconv.Atoi(input)
+		if err == nil {
+			return &object.Float{Value: float64(i)}
+		}
+		return newError("Converting string '%s' to float failed %s", input, err.Error())
+
+	case *object.Boolean:
+		input := args[0].(*object.Boolean).Value
+		if input {
+			return &object.Float{Value: float64(1)}
+
+		}
+		return &object.Float{Value: float64(0)}
+	case *object.Float:
+		// noop
+		return args[0]
+	case *object.Integer:
+		input := args[0].(*object.Integer).Value
+		return &object.Float{Value: float64(input)}
+	default:
+		return newError("argument to `float` not supported, got=%s",
+			args[0].Type())
+	}
 }
 
 // convert a double/string to an int
@@ -109,8 +143,6 @@ func lenFun(args ...object.Object) object.Object {
 	switch arg := args[0].(type) {
 	case *object.String:
 		return &object.Integer{Value: int64(utf8.RuneCountInString(arg.Value))}
-	case *object.Null:
-		return &object.Integer{Value: 0}
 	case *object.Array:
 		return &object.Integer{Value: int64(len(arg.Elements))}
 	default:
@@ -163,7 +195,7 @@ func matchFun(args ...object.Object) object.Object {
 	}
 
 	// No match
-	return NULL
+	return &object.Boolean{Value: false}
 }
 
 // push something onto an array
@@ -190,7 +222,7 @@ func printFun(args ...object.Object) object.Object {
 		fmt.Print(arg.Inspect() + " ")
 	}
 	fmt.Print("\n")
-	return NULL
+	return &object.Boolean{Value: true}
 }
 
 // printfFun is the implementation of our `printf` function.
@@ -205,19 +237,19 @@ func printfFun(args ...object.Object) object.Object {
 
 	}
 
-	return NULL
+	return &object.Boolean{Value: true}
 }
 
 // sprintfFun is the implementation of our `sprintf` function.
 func sprintfFun(args ...object.Object) object.Object {
 	// We expect 1+ arguments
 	if len(args) < 1 {
-		return &object.Null{}
+		return &object.String{Value: ""}
 	}
 
 	// Type-check
 	if args[0].Type() != object.STRING_OBJ {
-		return &object.Null{}
+		return &object.String{Value: ""}
 	}
 
 	// Get the format-string.
@@ -408,6 +440,10 @@ func init() {
 	RegisterBuiltin("int",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (intFun(args...))
+		})
+	RegisterBuiltin("float",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (floatFun(args...))
 		})
 	// TODO: move this to be a method on hash objects
 	RegisterBuiltin("keys",

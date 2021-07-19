@@ -1,6 +1,7 @@
 package evaluator
 
 import (
+	"math/rand"
 	"time"
 
 	"github.com/zacanger/cozy/object"
@@ -13,7 +14,9 @@ func timeSleep(args ...object.Object) object.Object {
 	default:
 		return newError("argument to `time.sleep` not supported, got=%s", arg.Type())
 	}
-	return &object.Null{}
+
+	// TODO: use this return value to clear the sleep if need be
+	return &object.Integer{Value: rand.Int63()}
 }
 
 func timeUnix(args ...object.Object) object.Object {

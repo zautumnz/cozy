@@ -19,7 +19,7 @@ func fsGlob(args ...object.Object) object.Object {
 
 	entries, err := filepath.Glob(pattern)
 	if err != nil {
-		return NULL
+		return &object.Error{Message: err.Error()}
 	}
 
 	// Create an array to hold the results and populate it
