@@ -16,32 +16,34 @@ classes; instead we have first-class functions, closures, and macros.
 
 ```cozy
 let reduce = fn(fun, xs, init) {
-    mutable acc = init;
+    mutable acc = init
+
     foreach _, x in xs {
-        acc = fun(x, acc);
+        acc = fun(x, acc)
     }
 
-    return acc;
-};
+    return acc
+}
 
 let ints? = fn(xs) {
     foreach x in xs {
         if (type(x) != "integer" && type(x) != "float") {
-            return false;
+            return false
         }
     }
-    return true;
-};
+
+    return true
+}
 
 let sum = fn(xs) {
     assert(ints?(xs), "expected only numbers!")
     return reduce(
         fn(x, acc) {
-            return x + acc;
-        }, xs, 0);
-};
+            return x + acc
+        }, xs, 0)
+}
 
-print(sum([1, 2, 3, 4]) == 10); # true
+print(sum([1, 2, 3, 4]) == 10) # true
 ```
 
 For more examples and documentation, see the [examples](./examples) and
@@ -83,25 +85,28 @@ entered code will be evaluated when you exit with `ctrl+d`.
     because setting mutable variables should be more annoying to do than
     setting mutable ones.
 * Uses Go's GC; porting to a different language might require writing a new GC.
+* Semicolons are optional
 
-### Builtin Functions
+### Builtins
 
-The core primitives are:
+Global functions:
 
-* `delete` Deletes a hash-key.
 * `import` imports another cozy file as a module.
 * `int` convert the given float/string to an integer.
-* `keys` Return the keys of the specified array.
 * `len` Yield the length of builtin containers.
 * `match` Regular-expression matching.
-* `net.*`, see lexer.go and examples/net for the full list.
 * `print` Write values to STDOUT with newlines.
 * `printf` Write values to STDOUT, via a format-string.
-* `push` push an elements into the array.
-* `set` insert key value pair into the map.
 * `sprintf` Create strings, via a format-string.
 * `string` convert the given item to a string.
 * `type` returns the type of a variable.
 
-Many more functions are defined in the stdlib. See that directory for details
-because it's always growing.
+Core modules (see examples for docs):
+
+* `fs`
+* `json`
+* `math`
+* `net`
+* `time`
+
+See also the standard library (written mostly in cozy itself).

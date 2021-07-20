@@ -248,15 +248,11 @@ func (p *Parser) parseMutableStatement() *ast.MutableStatement {
 	}
 	p.nextToken()
 	stmt.Value = p.parseExpression(LOWEST)
-	for !p.curTokenIs(token.SEMICOLON) {
 
-		if p.curTokenIs(token.EOF) {
-			p.errors = append(p.errors, "unterminated mutable statement")
-			return nil
-		}
-
+	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
+
 	return stmt
 }
 
@@ -272,13 +268,8 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	}
 	p.nextToken()
 	stmt.Value = p.parseExpression(LOWEST)
-	for !p.curTokenIs(token.SEMICOLON) {
 
-		if p.curTokenIs(token.EOF) {
-			p.errors = append(p.errors, "unterminated let statement")
-			return nil
-		}
-
+	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
 
@@ -290,15 +281,11 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
 	p.nextToken()
 	stmt.ReturnValue = p.parseExpression(LOWEST)
-	for !p.curTokenIs(token.SEMICOLON) {
 
-		if p.curTokenIs(token.EOF) {
-			p.errors = append(p.errors, "unterminated return statement")
-			return nil
-		}
-
+	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
+
 	return stmt
 }
 
@@ -312,9 +299,11 @@ func (p *Parser) noPrefixParseFnError(t token.Type) {
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	stmt := &ast.ExpressionStatement{Token: p.curToken}
 	stmt.Expression = p.parseExpression(LOWEST)
+
 	for p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
+
 	return stmt
 }
 

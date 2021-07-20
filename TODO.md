@@ -6,7 +6,6 @@
     * HTTP server and client
     * Async/futures/generators
     * Concurrency
-    * Automatic semicolon insertion
     * Cryptography builtins
     * Proper errors/exceptions
 * Minor things:

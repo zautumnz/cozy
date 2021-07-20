@@ -1,41 +1,42 @@
 # This script contains some functional-ish programming examples.
+# Note: semicolons are optional, most of the time!
 
 # Return true if the given number is even
 let even? = fn(n) {
-    return(n % 2 == 0);
-};
+    return(n % 2 == 0)
+}
 
 # Return true if the given number is odd.
 let odd? = fn(n) {
-    return(n % 2 == 1);
-};
+    return(n % 2 == 1)
+}
 
 # Return true if the given number is prime
 let prime? = fn(n) {
     # negative numbers are not prime
     if (n < 0) {
-        return false;
+        return false
     }
 
     # 0, 1, 2 are prime
     if (n < 3) {
-        return true;
+        return true
     }
 
     # Now the rest - we're testing all factors between 2 & SQRT(n).
-    mutable i = int(math.sqrt(n)) + 1;
+    mutable i = int(math.sqrt(n)) + 1
 
     for (i > 2) {
-        i--;
+        i--
         if (n % i == 0) {
-            return false;
+            return false
         }
     }
-    return true;
-};
+    return true
+}
 
 # Square the given number.
-let square = fn(n) { return n * n; };
+let square = fn(n) { return n * n }
 
 # The list of numbers we'll operate upon.
 let ints = [
@@ -43,27 +44,27 @@ let ints = [
     5, 6, 7, 8, 9,
     10, 11, 12, 13, 14,
     15, 16, 17, 18, 19, 20
-];
+]
 
 # Show them ..
-print("\nIntegers:");
-print("\t", ints);
+print("\nIntegers:")
+print("\t", ints)
 
 # Show their squares
-print("\nSquares:");
-print("\t", ints.map(square));
+print("\nSquares:")
+print("\t", ints.map(square))
 
 # Show their cubes, using an anonymous function
-print("\nCubes:");
-print("\t", ints.map(fn(n) { return n * n * n; }));
-print("\nCubes via POW:");
-print("\t", ints.map(fn(n) { return n ** 3; }));
+print("\nCubes:")
+print("\t", ints.map(fn(n) { return n * n * n }))
+print("\nCubes via POW:")
+print("\t", ints.map(fn(n) { return n ** 3 }))
 
 # Now use our functional-methods to show odd/even/prime
 # numbers contained in our list.
-print("\nOdd numbers:");
-print("\t", ints.filter(odd?));
-print("\nEven numbers:");
-print("\t", ints.filter(even?));
-print("\nPrime numbers:");
-print("\t", ints.filter(prime?));
+print("\nOdd numbers:")
+print("\t", ints.filter(odd?))
+print("\nEven numbers:")
+print("\t", ints.filter(even?))
+print("\nPrime numbers:")
+print("\t", ints.filter(prime?))
