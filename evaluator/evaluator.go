@@ -1219,11 +1219,11 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 			// Try to find that function in our environment.
 			if val, ok := env.Get(name); ok {
 				if fn, ok := val.(*object.Function); ok {
-					copy := *fn
+					copyFn := *fn
 					emptyArgs := make([]object.Object, 0)
-					copy.Env = object.NewEnclosedEnvironment(fn.Env, emptyArgs)
-					copy.Env.SetLet("self", o)
-					return &copy, true
+					copyFn.Env = object.NewEnclosedEnvironment(fn.Env, emptyArgs)
+					copyFn.Env.SetLet("self", o)
+					return &copyFn, true
 				}
 				return val, true
 			}
