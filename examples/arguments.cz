@@ -1,13 +1,13 @@
 #!/usr/bin/env cozy
 
 # all args
-# let a = args();
-# print("We received ", len(a), " arguments to our script.");
-# mutable i = 0;
-# for (i < len(a)) {
-   # print("\t", i, " " , a[i]);
-   # i++
-# }
+let a = args();
+print("We received ", len(a), " arguments to our script.");
+mutable i = 0;
+for (i < len(a)) {
+   print("\t", i, " " , a[i]);
+   i++
+}
 
 # flags by name
 # try with:

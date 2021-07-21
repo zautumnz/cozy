@@ -70,6 +70,7 @@ func TestLetStatements(t *testing.T) {
 		{"let z =1.3;", "z", 1.3},
 		{"let y = true;", "y", true},
 		{"let foobar=y;", "foobar", "y"},
+		{"let baz = quux", "baz", "quux"},
 	}
 	for _, tt := range tests {
 		l := lexer.New(tt.input)
@@ -551,7 +552,7 @@ func TestForLoopExpression(t *testing.T) {
 }
 
 func TestFunctionLiteralParsing(t *testing.T) {
-	input := `fn(x,y=3){x+y;}`
+	input := `fn(x,y=3){x+y}`
 	l := lexer.New(input)
 	p := New(l)
 	program := p.ParseProgram()

@@ -91,6 +91,12 @@ entered code will be evaluated when you exit with `ctrl+d`.
 
 Global functions:
 
+* `args` returns command-line args
+* `doc` prints the docstring of a function
+* `eval` evals a cozy string
+* `exit` exits with a code
+* `flag` selects a flag from the command-line
+* `float` converts to a float
 * `import` imports another cozy file as a module.
 * `int` convert the given float/string to an integer.
 * `len` Yield the length of builtin containers.

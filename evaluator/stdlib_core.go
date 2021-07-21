@@ -321,6 +321,16 @@ func typeFun(args ...object.Object) object.Object {
 	}
 }
 
+// Implemention of "args()" function.
+func argsFun(args ...object.Object) object.Object {
+	l := len(os.Args[1:])
+	result := make([]object.Object, l)
+	for i, txt := range os.Args[1:] {
+		result[i] = &object.String{Value: txt}
+	}
+	return &object.Array{Elements: result}
+}
+
 // flag("my-flag")
 func flagFun(args ...object.Object) object.Object {
 	// flag we're trying to retrieve
@@ -413,12 +423,19 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (typeFun(args...))
 		})
+	// TODO: move this to the function object?
 	RegisterBuiltin("doc",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (docFun(args...))
 		})
+	// TODO: move this to a cmd module?
 	RegisterBuiltin("flag",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (flagFun(args...))
+		})
+	// TODO: move this to a cmd module?
+	RegisterBuiltin("args",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (argsFun(args...))
 		})
 }
