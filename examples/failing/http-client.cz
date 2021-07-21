@@ -1,12 +1,14 @@
 # Example of how an http client might look
 let r = net.http.client;
-let res = r("https://example.com", "GET");
+let res = r("https://example.com");
 let resp = r(
     "https://some.api",
-    "POST", {
+    {
+        "method": "POST",
         "body": "[1,2,3]",
         "headers": {
             "x-foo": "bar"
         }
     }
 );
+print(json.deserialize(resp))

@@ -1,5 +1,4 @@
 PREFIX ?= /usr/local
-CONFIG_PREFIX ?= /usr/share
 
 build:
 	@go build -ldflags "-X main.version=$(git describe --tags 2>/dev/null)"

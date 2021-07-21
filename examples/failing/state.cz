@@ -1,24 +1,24 @@
 # cozy includes a miniature version of Redux built in.
-let inc = "INCREMENT";
-let dec = "DECREMENT";
+let inc = "INCREMENT"
+let dec = "DECREMENT"
 
 let counter = fn(state = 0, action) {
-    let t = action.type;
+    let t = action.type
     if (t == inc) {
-        return state + 1;
+        return state + 1
     } else if (t == dec) {
-        return state - 1;
+        return state - 1
     } else {
-        return state;
+        return state
     }
 };
 
-let store = create_state(counter, 0);
+let store = create_state(counter, 0)
 
 store.subscribe(fn () {
-    print(store.state);
-});
+    print(store.state)
+})
 
-store.dispatch({ "type": inc });
-store.dispatch({ "type": inc });
-store.dispatch({ "type": dec });
+store.dispatch({ "type": inc })
+store.dispatch({ "type": inc })
+store.dispatch({ "type": dec })

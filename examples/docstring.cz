@@ -14,3 +14,8 @@ print(doc(id));
 # appear as the first statement in functions
 # print(type('asdf'));
 # print('asdf');
+
+let without_ds = fn () {
+    return true;
+};
+print("no docstring:", doc(without_ds));

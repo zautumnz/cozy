@@ -273,7 +273,10 @@ func docFun(args ...object.Object) object.Object {
 	}
 	switch a := args[0].(type) {
 	case *object.Function:
-		return &object.String{Value: a.DocString.Value}
+		if a.DocString != nil {
+			return &object.String{Value: a.DocString.Value}
+		}
+		return &object.String{Value: ""}
 
 	default:
 		return newError("argument to `doc` not supported, got=%s",

@@ -1,19 +1,20 @@
 # Testing
+# Currently broken due to scope mutation bug;
+# tests work, but because there's no parent-scope counter,
+# no test reporter will know what tests failed
 
 # Simple assert
-assert(1 + 1 == 2, "math doesn't work");
+assert(1 + 1 == 2, "math doesn't work")
 
 # TAP-producting test suites
-let x = fn (a) {
-    return a;
-};
+let x = fn (a) { a }
 
 tap("test suite", fn(t) {
-    t(1 + 1 == 2, "one plus one is two");
-});
+    t(1 + 1 == 2, "one plus one is two")
+})
 
 tap("second suite", fn(t) {
-    t("x(2) == 2", "example using a string");
-    t(x(3) == 2, "three does not equal two");
-    t("a" + "b" == "ab", "a + b == ab");
-});
+    t("x(2) == 2", "example using a string")
+    t(x(3) == 2, "three does not equal two")
+    t("a" + "b" == "ab", "a + b == ab")
+})
