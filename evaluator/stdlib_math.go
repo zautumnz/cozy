@@ -13,6 +13,7 @@ func mathAbs(args ...object.Object) object.Object {
 		return newError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
+
 	switch arg := args[0].(type) {
 	case *object.Integer:
 		v := arg.Value
@@ -30,7 +31,6 @@ func mathAbs(args ...object.Object) object.Object {
 		return newError("argument to `math.abs` not supported, got=%s",
 			args[0].Type())
 	}
-
 }
 
 // val = math.random()
@@ -44,6 +44,7 @@ func mathSqrt(args ...object.Object) object.Object {
 		return newError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
+
 	switch arg := args[0].(type) {
 	case *object.Integer:
 		v := arg.Value
@@ -55,7 +56,6 @@ func mathSqrt(args ...object.Object) object.Object {
 		return newError("argument to `math.sqrt` not supported, got=%s",
 			args[0].Type())
 	}
-
 }
 
 func init() {

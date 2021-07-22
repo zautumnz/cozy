@@ -2,7 +2,6 @@
 
 * Major things missing:
     * HTTP server and client
-    * Async/futures/generators
     * Concurrency
     * Cryptography builtins
     * Proper errors/exceptions
