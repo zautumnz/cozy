@@ -238,25 +238,6 @@ func strFun(args ...object.Object) object.Object {
 	return &object.String{Value: out}
 }
 
-// docstring of a function
-func docFun(args ...object.Object) object.Object {
-	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-	switch a := args[0].(type) {
-	case *object.Function:
-		if a.DocString != nil {
-			return &object.String{Value: a.DocString.Value}
-		}
-		return &object.String{Value: ""}
-
-	default:
-		return newError("argument to `doc` not supported, got=%s",
-			args[0].Type())
-	}
-}
-
 // type of an item
 func typeFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
@@ -334,10 +315,5 @@ func init() {
 	RegisterBuiltin("type",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (typeFun(args...))
-		})
-	// TODO: move this to the function object?
-	RegisterBuiltin("doc",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return (docFun(args...))
 		})
 }

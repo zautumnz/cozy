@@ -45,7 +45,7 @@ func (f *Function) Inspect() string {
 func (f *Function) GetMethod(method string) BuiltinFunction {
 	if method == "methods" {
 		return func(env *Environment, args ...Object) Object {
-			static := []string{"methods"}
+			static := []string{"methods", "doc"}
 			dynamic := env.Names("function.")
 
 			var names []string
@@ -62,7 +62,15 @@ func (f *Function) GetMethod(method string) BuiltinFunction {
 			}
 			return &Array{Elements: result}
 		}
+	} else if method == "doc" {
+		return func(env *Environment, args ...Object) Object {
+			if f.DocString != nil {
+				return &String{Value: f.DocString.Value}
+			}
+			return &String{Value: ""}
+		}
 	}
+
 	return nil
 }
 

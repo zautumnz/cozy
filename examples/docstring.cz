@@ -8,7 +8,7 @@ let id = fn (a) {
 
 # global function prints docstring
 print(id);
-print(doc(id));
+print(id.doc());
 
 # these would be a syntax error; docstrings can _only_
 # appear as the first statement in functions
@@ -18,4 +18,4 @@ print(doc(id));
 let without_ds = fn () {
     return true;
 };
-print("no docstring:", doc(without_ds));
+print("no docstring:", without_ds.doc());
