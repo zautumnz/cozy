@@ -97,7 +97,7 @@ func (e *Environment) Set(name string, val Object) Object {
 	//    };
 	// The variable inside the function _should_ not be constant.
 	cur := e.store[name]
-	if cur != nil && e.readonly[name] {
+	if (cur != nil && e.readonly[name]) || (e.outer != nil && e.outer.store[name] != nil && e.outer.readonly[name]) {
 		fmt.Printf("Attempting to modify '%s' denied; it was defined as a constant.\n", name)
 		os.Exit(3)
 	}
@@ -118,6 +118,11 @@ func (e *Environment) Set(name string, val Object) Object {
 		fmt.Printf("scoping weirdness; please report a bug\n")
 		os.Exit(5)
 	}
+
+	if e.outer != nil && e.outer.store[name] != nil {
+		return e.outer.Set(name, val)
+	}
+
 	e.store[name] = val
 	return val
 }

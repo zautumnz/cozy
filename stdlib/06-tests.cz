@@ -1,13 +1,4 @@
-# Output example once it works:
-# 1..4
-# ok 1 - Input file opened
-# not ok 2 - First line of the input valid.
-#    More output from test 2. There can be
-# ok 3 - Read the rest of the file
-#TAP meta information
-# not ok 4 - Summarized correctly # TODO: not written yet
-
-let tap = fn(suite, cb) {
+let test = fn(suite, cb) {
     mutable id = 0;
     mutable failed = 0;
 
@@ -29,15 +20,6 @@ let tap = fn(suite, cb) {
 
     cb(handle_assertion);
 
-    # TODO:
-    # This line should be at the top of the suite
-    # Failing because we don't know how many tests there will be, and
-    # mutating ID doesn't seem to be working. It can also be at the
-    # end of the tests, but that's unconventional.
-    # printf("1..%d\n", id);
-
-
-    # TODO: not incrementing correctly;
-    # exit the process with the error code of how many tests failed
-    # sys.exit(failed);
+    # Print total amount of tests
+    printf("1..%d\n", id);
 };

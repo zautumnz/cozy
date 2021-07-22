@@ -2,7 +2,7 @@
 let inc = "INCREMENT"
 let dec = "DECREMENT"
 
-let counter = fn(state = 0, action) {
+let counter = fn(state, action) {
     let t = action.type
     if (t == inc) {
         return state + 1
@@ -16,7 +16,11 @@ let counter = fn(state = 0, action) {
 let store = create_state(counter, 0)
 
 store.subscribe(fn () {
-    print(store.state)
+    print("state is", store.get_state())
+})
+
+store.subscribe(fn (current_state) {
+    print("another listener", current_state)
 })
 
 store.dispatch({ "type": inc })

@@ -1,6 +1,3 @@
-# TODO: similar issues as the tap library with modifying variables in parent
-# scope; events aren't getting out of the function.
-
 let event_emitter = fn() {
     mutable events = {};
     let data = {

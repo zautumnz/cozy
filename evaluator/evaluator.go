@@ -311,7 +311,6 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 			return arg
 		default:
 			return newError("%s is not an int", node.Token.Literal)
-
 		}
 	case "--":
 		val, ok := env.Get(node.Token.Literal)
@@ -327,6 +326,7 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 		default:
 			return newError("%s is not an int", node.Token.Literal)
 		}
+
 	default:
 		return newError("unknown operator: %s", operator)
 	}
@@ -1179,7 +1179,7 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 					copyFn := *fn
 					emptyArgs := make([]object.Object, 0)
 					copyFn.Env = object.NewEnclosedEnvironment(fn.Env, emptyArgs)
-					copyFn.Env.SetLet("self", o)
+					copyFn.Env.Set("self", o)
 					return &copyFn, true
 				}
 				return val, true

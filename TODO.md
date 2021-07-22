@@ -1,7 +1,5 @@
 # TODO
 
-* Bugs:
-    * Mutation of parent-scope variables doesn't work; see failing examples.
 * Major things missing:
     * HTTP server and client
     * Async/futures/generators
