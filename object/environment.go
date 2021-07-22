@@ -74,6 +74,28 @@ func (e *Environment) Names(prefix string) []string {
 	return ret
 }
 
+// TODO: this isn't quite right, but when it is,
+// use it to ensure we're walking all the way up the chain rather than
+// just one level up
+func (e *Environment) lookupInEnvs(name string) (Object, Environment) {
+	currentEnv := e
+
+	for currentEnv != nil {
+		if currentEnv.store[name] != nil {
+			return currentEnv.store[name], *currentEnv
+		}
+
+		if currentEnv.outer == nil {
+			break
+		} else {
+			currentEnv = currentEnv.outer
+			continue
+		}
+	}
+
+	return nil, *currentEnv
+}
+
 // Get returns the value of a given variable, by name.
 func (e *Environment) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]
@@ -85,24 +107,16 @@ func (e *Environment) Get(name string) (Object, bool) {
 
 // Set stores the value of a variable, by name.
 func (e *Environment) Set(name string, val Object) Object {
-
-	// If a variable is constant then we don't allow it to be changed.
-	// But constants are scoped, they are not global, so we only need
-	// to look in the current scope - not any parent.
-	// i.e. The parent-scope might have a constant-value, but
-	// we just don't care.  Consider the following code:
-	//    let a = 3.13;
-	//    function foo() {
-	//       mutable a = 1976;
-	//    };
-	// The variable inside the function _should_ not be constant.
 	cur := e.store[name]
+
 	if (cur != nil && e.readonly[name]) || (e.outer != nil && e.outer.store[name] != nil && e.outer.readonly[name]) {
 		fmt.Printf("Attempting to modify '%s' denied; it was defined as a constant.\n", name)
 		os.Exit(3)
 	}
 
 	// Store the (updated) value.
+
+	// This chunk is used for temporary environments (regex and loops)
 	if len(e.permit) > 0 {
 		for _, v := range e.permit {
 			// we're permitted to store this variable
@@ -115,19 +129,26 @@ func (e *Environment) Set(name string, val Object) Object {
 		if e.outer != nil {
 			return e.outer.Set(name, val)
 		}
-		fmt.Printf("scoping weirdness; please report a bug\n")
+
+		// Otherwise something is very broken!
+		fmt.Printf("Something is broken with scope!\n")
 		os.Exit(5)
 	}
 
+	// Otherwise we're just in a regular block
+	// First check to see if this is a shadowed var
 	if e.outer != nil && e.outer.store[name] != nil {
 		return e.outer.Set(name, val)
 	}
 
+	// ...and otherwise, just store it in the current scope
 	e.store[name] = val
 	return val
 }
 
 // SetLet sets the value of a constant by name.
+// TODO: change this to just use Set, and store Constant as an optional
+// bool on all values
 func (e *Environment) SetLet(name string, val Object) Object {
 
 	// store the value
