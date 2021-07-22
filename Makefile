@@ -1,7 +1,8 @@
 PREFIX ?= /usr/local
+VERSION := $(shell git describe --tags 2>/dev/null)
 
 build:
-	@go build -ldflags "-X main.version=$(git describe --tags 2>/dev/null)"
+	@go build -ldflags "-X main.COZY_VERSION=$(VERSION)"
 
 install:
 	@mkdir -p $(PREFIX)/bin
