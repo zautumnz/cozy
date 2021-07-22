@@ -1,15 +1,19 @@
-# JSON
-let some_array = json.deserialize("[1, 2, 3]");
-let some_hash = json.deserialize("{\"foo\": 2}");
-print(some_hash, type(some_hash), "deserialized json");
-print(some_array, type(some_array), "deserialized json");
-let some_json_array = json.serialize([1, 2, 3]);
-let some_json_hash = json.serialize(some_hash);
-print(some_json_array, type(some_json_array), "serialized json");
-print(some_json_hash, type(some_json_hash), "serialized json");
-let y = fn () { return true; };
+let some_array = json.deserialize("[1, 2, 3]")
+print(some_array, type(some_array), "deserialized json")
+
+let some_hash = json.deserialize("{\"foo\": 2}")
+print(some_hash, type(some_hash), "deserialized json")
+
+let some_json_array = json.serialize([1, 2, 3])
+print(some_json_array, type(some_json_array), "serialized json")
+
+let some_json_hash = json.serialize(some_hash)
+print(some_json_hash, type(some_json_hash), "serialized json")
+
+let y = fn () { return true }
 let x = {
     "foo": [1,2,"3"],
     "bar": { "baz": y },
-};
-print(json.serialize(x), "complex example");
+    "re": /[a-z]/,
+}
+print(json.serialize(x), "complex example")

@@ -488,15 +488,13 @@ func TestIntDotMethod(t *testing.T) {
 }
 
 // TestRegexp ensures a simple regexp can be parsed.
-// TODO: regexes don't work without spaces in the parens, which is
-// bad and broken.
-/*
+// TODO: regexes don't work without spaces after the regex in the parens
 func TestRegexp(t *testing.T) {
-	input := `if (f ~= /zac/i)
-if (f ~= /zac/m)
-if (f ~= /zac/mi)
-if (f !~ /zac/mi)
-if (f ~= /zac/miiiiiiiiiiiiiiiiimmmmmmmmmmmmmiiiii)`
+	input := `if (f ~= /zac/i )
+if (f ~= /zac/m )
+if (f ~= /zac/mi )
+if (f !~ /zac/mi )
+if (f ~= /zac/miiiiiiiiiiiiiiiiimmmmmmmmmmmmmiiiii )`
 
 	tests := []struct {
 		expectedType    token.Type
@@ -545,11 +543,10 @@ if (f ~= /zac/miiiiiiiiiiiiiiiiimmmmmmmmmmmmmiiiii)`
 		}
 	}
 }
-*/
 
 // TestIllegalRegexp is designed to look for an unterminated/illegal regexp
 func TestIllegalRegexp(t *testing.T) {
-	input := `if (f ~= /zac)`
+	input := `if ( f ~= /zac )`
 
 	tests := []struct {
 		expectedType    token.Type

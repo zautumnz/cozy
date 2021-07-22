@@ -25,9 +25,12 @@ if (out) {
 
 # The same thing using literal a regular expression
 
-ip = "192.168.1.1";
+let ip = "192.168.1.1";
 
-if (ip ~= /([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/) {
+if ( ip ~= /([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/ ) {
    printf("We matched an IP address succesfully.");
    printf("Captures: %s.%s.%s.%s\n", $1, $2, $3, $4);
 }
+# Also works storing a regex in a variable
+let re = /([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/;
+print(type(re));

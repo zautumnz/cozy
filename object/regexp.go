@@ -2,6 +2,8 @@
 
 package object
 
+import "strings"
+
 // Regexp wraps regular-expressions and implements the Object interface.
 type Regexp struct {
 	// Value holds the string value this object wraps.
@@ -36,5 +38,5 @@ func (r *Regexp) ToInterface() interface{} {
 // Json returns a json-friendly string
 func (r *Regexp) Json() string {
 	// TODO: this might not work, might need to escape the string
-	return r.Inspect()
+	return `"` + strings.ReplaceAll(r.Inspect(), `"`, `\"`) + `"`
 }
