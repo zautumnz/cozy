@@ -36,11 +36,11 @@ print("After deleting two keys:");
 dump(h);
 
 print("Running command: /bin/ls");
-let h = `/bin/ls / /fdsf`;
+let h = os.exec("/bin/ls / /fdsf");
 dump(h);
 
 print("Running via bash:");
-let h = `/bin/sh -c "/bin/ls /etc"`;
+let h = os.exec()"/bin/sh -c \"/bin/ls /etc\"";
 dump(h);
 
 # Using dot access

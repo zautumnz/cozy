@@ -7,7 +7,7 @@ import (
 )
 
 func TestNextToken1(t *testing.T) {
-	input := "%=+(){},;?|| &&`/bin/ls`++--***=.."
+	input := "%=+(){},;?|| &&++--***=.."
 
 	tests := []struct {
 		expectedType    token.Type
@@ -25,7 +25,6 @@ func TestNextToken1(t *testing.T) {
 		{token.QUESTION, "?"},
 		{token.OR, "||"},
 		{token.AND, "&&"},
-		{token.BACKTICK, "/bin/ls"},
 		{token.PLUS_PLUS, "++"},
 		{token.MINUS_MINUS, "--"},
 		{token.POW, "**"},

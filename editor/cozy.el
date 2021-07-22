@@ -42,7 +42,6 @@
 ;; The language-core and functions from the standard-library.
 (defvar cozy-functions
   '(
-    "args"
     "doc"
     "error"
     "exit"

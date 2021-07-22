@@ -5,7 +5,6 @@ import (
 	"os"
 	"regexp"
 	"strconv"
-	"strings"
 	"unicode/utf8"
 
 	"github.com/zacanger/cozy/lexer"
@@ -47,24 +46,6 @@ func EvalFun(env *object.Environment, args ...object.Object) object.Object {
 	}
 	return newError("argument to `eval` not supported, got=%s",
 		args[0].Type())
-}
-
-// exit a program.
-func exitFun(args ...object.Object) object.Object {
-	code := 0
-
-	// Optionally an exit-code might be supplied as an argument
-	if len(args) > 0 {
-		switch arg := args[0].(type) {
-		case *object.Integer:
-			code = int(arg.Value)
-		case *object.Float:
-			code = int(arg.Value)
-		}
-	}
-
-	os.Exit(code)
-	return &object.Integer{Value: int64(code)}
 }
 
 // convert a string to a float
@@ -188,7 +169,7 @@ func matchFun(args ...object.Object) object.Object {
 	}
 
 	// No match
-	return &object.Boolean{Value: false}
+	return &object.Array{Elements: make([]object.Object, 0)}
 }
 
 // output a string to stdout
@@ -313,71 +294,10 @@ func typeFun(args ...object.Object) object.Object {
 	}
 }
 
-// Implemention of "args()" function.
-func argsFun(args ...object.Object) object.Object {
-	l := len(os.Args[1:])
-	result := make([]object.Object, l)
-	for i, txt := range os.Args[1:] {
-		result[i] = &object.String{Value: txt}
-	}
-	return &object.Array{Elements: result}
-}
-
-// flag("my-flag")
-func flagFun(args ...object.Object) object.Object {
-	// flag we're trying to retrieve
-	name := args[0].(*object.String)
-	found := false
-
-	// Loop through all the arguments passed to the script
-	// This is O(n), but performance is not a big deal
-	for _, v := range os.Args {
-		// If the flag was found in the previous argument...
-		if found {
-			// ...and the next one is another flag
-			// means we're done parsing eg. --flag1 --flag2
-			if strings.HasPrefix(v, "-") {
-				break
-			}
-
-			// else return the next argument eg --flag1 something --flag2
-			return &object.String{Value: v}
-		}
-
-		// try to parse the flag as key=value
-		parts := strings.SplitN(v, "=", 2)
-		// let's just take the left-side of the flag
-		left := parts[0]
-
-		// if the left side of the current argument corresponds
-		// to the flag we're looking for (both in the form of "--flag" and "-flag")...
-		if (len(left) > 1 && left[1:] == name.Value) ||
-			(len(left) > 2 && left[2:] == name.Value) {
-			if len(parts) > 1 {
-				return &object.String{Value: parts[1]}
-			}
-			found = true
-		}
-	}
-
-	// If the flag was found but we got here it means no value
-	// was assigned to it, so default to true
-	if found {
-		return TRUE
-	}
-
-	// else a flag that's not found is false
-	return FALSE
-}
-
 func init() {
 	RegisterBuiltin("eval",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (EvalFun(env, args...))
-		})
-	RegisterBuiltin("exit",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return (exitFun(args...))
 		})
 	RegisterBuiltin("int",
 		func(env *object.Environment, args ...object.Object) object.Object {
@@ -419,15 +339,5 @@ func init() {
 	RegisterBuiltin("doc",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (docFun(args...))
-		})
-	// TODO: move this to a cmd module?
-	RegisterBuiltin("flag",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return (flagFun(args...))
-		})
-	// TODO: move this to a cmd module?
-	RegisterBuiltin("args",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return (argsFun(args...))
 		})
 }

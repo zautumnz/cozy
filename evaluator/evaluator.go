@@ -3,13 +3,11 @@
 package evaluator
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"io/ioutil"
 	"math"
 	"os"
-	"os/exec"
 	"regexp"
 	"strings"
 
@@ -180,8 +178,6 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		return &object.Array{Token: node.Token, Elements: env.CurrentArgs, IsCurrentArgs: true}
 	case *ast.RegexpLiteral:
 		return &object.Regexp{Value: node.Value, Flags: node.Flags}
-	case *ast.BacktickLiteral:
-		return backTickOperation(node.Value)
 	case *ast.IndexExpression:
 		left := Eval(node.Left, env)
 		if isError(left) {
@@ -979,46 +975,6 @@ func trimQuotes(in string, c byte) string {
 	return in
 }
 
-// Run a command and return a hash containing the result.
-// `stderr`, `stdout`, and `error` will be the fields
-func backTickOperation(command string) object.Object {
-	// split the command
-	toExec := splitCommand(command)
-	cmd := exec.Command(toExec[0], toExec[1:]...)
-
-	// get the result
-	var outb, errb bytes.Buffer
-	cmd.Stdout = &outb
-	cmd.Stderr = &errb
-	err := cmd.Run()
-
-	// If the command exits with a non-zero exit-code it
-	// is regarded as a failure.  Here we test for ExitError
-	// to regard that as a non-failure.
-	if err != nil && err != err.(*exec.ExitError) {
-		fmt.Printf("Failed to run '%s' -> %s\n", command, err.Error())
-		return &object.Error{Message: "Failed to run command!"}
-	}
-
-	// The result-objects to store in our hash.
-	stdout := &object.String{Value: outb.String()}
-	stderr := &object.String{Value: errb.String()}
-
-	// Create keys
-	stdoutKey := &object.String{Value: "stdout"}
-	stdoutHash := object.HashPair{Key: stdoutKey, Value: stdout}
-
-	stderrKey := &object.String{Value: "stderr"}
-	stderrHash := object.HashPair{Key: stderrKey, Value: stderr}
-
-	// Make a new hash, and populate it
-	newHash := make(map[object.HashKey]object.HashPair)
-	newHash[stdoutKey.HashKey()] = stdoutHash
-	newHash[stderrKey.HashKey()] = stderrHash
-
-	return &object.Hash{Pairs: newHash}
-}
-
 func evalIndexExpression(left, index object.Object, env *object.Environment) object.Object {
 	switch {
 	case left.Type() == object.ARRAY_OBJ:
@@ -1050,16 +1006,17 @@ func evalArrayIndexExpression(array, index object.Object, env *object.Environmen
 		idx := t.Value
 		max := int64(len(arrayObject.Elements) - 1)
 		if idx < 0 || idx > max {
-			return &object.Error{Message: "Indexing not possible on this object"}
+			return &object.Error{Message: "Indexing failed on array, out of bounds"}
 		}
 		return arrayObject.Elements[idx]
 	default:
 		if fn, ok := objectGetMethod(array, index, env); ok {
 			return fn
 		}
-		return &object.Error{Message: "Indexing not possible on this object"}
+		return &object.Error{Message: "Indexing on array failed"}
 	}
 }
+
 func evalHashIndexExpression(hash, index object.Object, env *object.Environment) object.Object {
 	hashObject := hash.(*object.Hash)
 	key, ok := index.(object.Hashable)

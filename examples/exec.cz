@@ -1,10 +1,7 @@
 #!/usr/bin/env cozy
 
-# TODO: use a global exec() function that takes a string rather
-# than another type of string syntax
-
 # Run a simple command
-let uptime = `uptime`;
+let uptime = os.exec("uptime");
 
 if (uptime) {
    print("STDOUT: ", uptime["stdout"].trim());
@@ -14,7 +11,7 @@ if (uptime) {
 }
 
 # Now something more complex
-let ls = `sh -c "/bin/ls /etc /missing-path"`;
+let ls = os.exec("sh -c \"/bin/ls /etc /missing-path\"");
 if (ls) {
    print("STDOUT: ", ls["stdout"].trim());
    print("STDERR: ", ls["stderr"].trim());

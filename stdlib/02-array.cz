@@ -110,7 +110,7 @@ let array.min = fn() {
     # type checking.
     if (type(min) != "integer" && type(min) != "float") {
         print("array.min only works on numbers - not " , type(min));
-        exit(1);
+        os.exit(1);
     }
 
     # If we find a smaller one, set it.
@@ -118,7 +118,7 @@ let array.min = fn() {
         # type checking.
         if (type(self[i]) != "integer" && type(self[i]) != "float") {
             print("array.min only works on numbers - not " , type(self[i]));
-            exit(1);
+            os.exit(1);
         }
 
         if (self[i] < min) {
@@ -151,7 +151,7 @@ let array.max = fn() {
     # ensure we're dealing with types
     if (type(max) != "integer" && type(max) != "float") {
         print("array.max only works on numbers - not " , type(max));
-        exit(1);
+        os.exit(1);
     }
 
     # If we find a greater one, set it.
@@ -159,7 +159,7 @@ let array.max = fn() {
         # type checking.
         if (type(self[i]) != "integer" && type(self[i]) != "float") {
             print("array.max only works on numbers - not " , type(self[i]), "\n");
-            exit(1);
+            os.exit(1);
         }
 
         if (self[i] > max) {
@@ -230,7 +230,7 @@ let array.sorted? = fn() {
     if (len(tmp.keys()) > 1) {
         print("Attempting to check an array with mixed-type values!\n");
         print(string(self));
-        exit(1);
+        os.exit(1);
     }
 
     mutable i = 1;
@@ -310,7 +310,7 @@ let array.sort = fn() {
     if (len(tmp.keys()) > 1) {
         print("Attempting to sort an array with mixed-type values!\n");
         print(string(self));
-        exit(1);
+        os.exit(1);
     }
 
     # While the given array isn't sorted.
@@ -409,7 +409,7 @@ let array.sum = fn() {
     foreach x in self {
         if (type(x) != "integer" && type(x) != "float") {
             print("Sum expected only integers, got", type(x));
-            exit(0);
+            os.exit(0);
         }
     }
 

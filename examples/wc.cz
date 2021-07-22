@@ -5,7 +5,7 @@ let path = "/etc/passwd";
 let fh = fs.open(path);
 if (!fh) {
    print("Failed to open file")
-   exit(0);
+   os.exit(0);
 }
 
 # Count of characters

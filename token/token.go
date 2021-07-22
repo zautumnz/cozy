@@ -17,7 +17,6 @@ const (
 	ASSIGN          = "="
 	ASTERISK        = "*"
 	ASTERISK_EQUALS = "*="
-	BACKTICK        = "`"
 	BANG            = "!"
 	COLON           = ":"
 	COMMA           = ","

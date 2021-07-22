@@ -39,5 +39,5 @@ let tap = fn(suite, cb) {
 
     # TODO: not incrementing correctly;
     # exit the process with the error code of how many tests failed
-    # exit(failed);
+    # os.exit(failed);
 };

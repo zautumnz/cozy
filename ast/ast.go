@@ -709,23 +709,6 @@ func (rl *RegexpLiteral) String() string {
 	return (fmt.Sprintf("/%s/%s", rl.Value, rl.Flags))
 }
 
-// BacktickLiteral holds details of a command to be executed
-type BacktickLiteral struct {
-	// Token is the actual token
-	Token token.Token
-
-	// Value is the name of the command to execute.
-	Value string
-}
-
-func (bl *BacktickLiteral) expressionNode() {}
-
-// TokenLiteral returns the literal token.
-func (bl *BacktickLiteral) TokenLiteral() string { return bl.Token.Literal }
-
-// String returns this object as a string.
-func (bl *BacktickLiteral) String() string { return bl.Token.Literal }
-
 // ArrayLiteral holds an inline array
 type ArrayLiteral struct {
 	// Token is the token
