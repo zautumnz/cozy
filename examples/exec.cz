@@ -1,5 +1,8 @@
 #!/usr/bin/env cozy
 
+# TODO: use a global exec() function that takes a string rather
+# than another type of string syntax
+
 # Run a simple command
 let uptime = `uptime`;
 

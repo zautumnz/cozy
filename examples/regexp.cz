@@ -1,3 +1,6 @@
+# TODO: allow match to take a regex literal
+# Get rid of !~ and ~= operators?
+
 # Substring match
 if (match("nge", "Zac Anger")) {
    print("Match found");
