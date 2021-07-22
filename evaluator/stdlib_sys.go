@@ -10,7 +10,7 @@ import (
 	"github.com/zacanger/cozy/object"
 )
 
-// os.getenv() -> (Hash)
+// getenv() -> (Hash)
 func envFun(args ...object.Object) object.Object {
 
 	env := os.Environ()
@@ -32,7 +32,7 @@ func envFun(args ...object.Object) object.Object {
 	return &object.Hash{Pairs: newHash}
 }
 
-// os.getenv("PATH") -> string
+// getenv("PATH") -> string
 func getEnvFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return newError("wrong number of arguments. got=%d, want=1",
@@ -44,10 +44,9 @@ func getEnvFun(args ...object.Object) object.Object {
 	}
 	input := args[0].(*object.String).Value
 	return &object.String{Value: os.Getenv(input)}
-
 }
 
-// os.setenv("PATH", "/home/z/bin:/usr/bin");
+// setenv("PATH", "/home/z/bin:/usr/bin");
 func setEnvFun(args ...object.Object) object.Object {
 	if len(args) != 2 {
 		return newError("wrong number of arguments. got=%d, want=1",
@@ -67,7 +66,7 @@ func setEnvFun(args ...object.Object) object.Object {
 	return &object.Boolean{Value: true}
 }
 
-func osExit(args ...object.Object) object.Object {
+func sysExit(args ...object.Object) object.Object {
 	code := 0
 
 	// Optionally an exit-code might be supplied as an argument
@@ -86,13 +85,13 @@ func osExit(args ...object.Object) object.Object {
 
 // Run a command and return a hash containing the result.
 // `stderr`, `stdout`, and `error` will be the fields
-func osExec(args ...object.Object) object.Object {
+func sysExec(args ...object.Object) object.Object {
 	var command string
 	switch c := args[0].(type) {
 	case *object.String:
 		command = c.Value
 	default:
-		return newError("`os.exec` wanted string, got invalid argument")
+		return newError("`sys.exec` wanted string, got invalid argument")
 	}
 
 	// split the command
@@ -142,7 +141,7 @@ func argsFun(args ...object.Object) object.Object {
 	return &object.Array{Elements: result}
 }
 
-// os.flag("my-flag")
+// flag("my-flag")
 func flagFun(args ...object.Object) object.Object {
 	// flag we're trying to retrieve
 	name := args[0].(*object.String)
@@ -190,31 +189,31 @@ func flagFun(args ...object.Object) object.Object {
 }
 
 func init() {
-	RegisterBuiltin("os.getenv",
+	RegisterBuiltin("sys.getenv",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (getEnvFun(args...))
 		})
-	RegisterBuiltin("os.setenv",
+	RegisterBuiltin("sys.setenv",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (setEnvFun(args...))
 		})
-	RegisterBuiltin("os.environment",
+	RegisterBuiltin("sys.environment",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (envFun(args...))
 		})
-	RegisterBuiltin("os.exit",
+	RegisterBuiltin("sys.exit",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (osExit(args...))
+			return (sysExit(args...))
 		})
-	RegisterBuiltin("os.exec",
+	RegisterBuiltin("sys.exec",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (osExec(args...))
+			return (sysExec(args...))
 		})
-	RegisterBuiltin("os.flag",
+	RegisterBuiltin("sys.flag",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (flagFun(args...))
 		})
-	RegisterBuiltin("os.args",
+	RegisterBuiltin("sys.args",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (argsFun(args...))
 		})

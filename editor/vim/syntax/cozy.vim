@@ -30,9 +30,9 @@ syn keyword     cozyBuiltins
             \ macro
             \ math
             \ net
-            \ os
             \ print
             \ quote
+            \ sys
             \ time
             \ unquote
 syn keyword     cozyBoolean             true false

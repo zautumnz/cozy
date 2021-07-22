@@ -307,8 +307,8 @@ func (l *Lexer) readIdentifier() string {
 		"math.",
 		"net.",
 		"object.",
-		"os.",
 		"string.",
+		"sys.",
 		"time.",
 	}
 

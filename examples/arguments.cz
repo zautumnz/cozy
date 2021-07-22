@@ -1,7 +1,7 @@
 #!/usr/bin/env cozy
 
 # all args
-let a = os.args();
+let a = sys.args();
 print("We received ", len(a), " arguments to our script.");
 mutable i = 0;
 for (i < len(a)) {
@@ -12,8 +12,8 @@ for (i < len(a)) {
 # flags by name
 # try with:
 # ./cozy ./examples/arguments.cz --foo=bar --asdf ghjkl --qwerty -x
-print(os.flag("foo"));
-print(os.flag("asdf"));
-print(os.flag("qwerty"));
-print(os.flag("x"));
-print(os.flag("absent-flag"));
+print(sys.flag("foo"));
+print(sys.flag("asdf"));
+print(sys.flag("qwerty"));
+print(sys.flag("x"));
+print(sys.flag("absent-flag"));
