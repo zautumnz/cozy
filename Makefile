@@ -18,6 +18,12 @@ clean:
 test:
 	@go test ./...
 
+cover:
+	@go test -coverprofile=coverage.out ./...
+
+coverage:
+	@go tool cover -html=coverage.out
+
 count:
 	@cloc --exclude-dir=x,.git,.github --read-lang-def=editor/cozy.cloc .
 
