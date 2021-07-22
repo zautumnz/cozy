@@ -133,7 +133,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
-	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
 	p.registerPrefix(token.STRING, p.ParseStringLiteral)
 	p.registerPrefix(token.TRUE, p.ParseBoolean)
 	p.registerPrefix(token.MACRO, p.parseMacroLiteral)
@@ -754,7 +753,6 @@ func (p *Parser) parseDocStringLiteral() *ast.DocStringLiteral {
 
 // parseRegexpLiteral parses a regular-expression.
 func (p *Parser) parseRegexpLiteral() ast.Expression {
-
 	flags := ""
 
 	val := p.curToken.Literal
@@ -763,9 +761,7 @@ func (p *Parser) parseRegexpLiteral() ast.Expression {
 
 		i := 0
 		for i < len(val) {
-
 			if val[i] == ')' {
-
 				val = val[i+1:]
 				break
 			} else {
@@ -775,6 +771,7 @@ func (p *Parser) parseRegexpLiteral() ast.Expression {
 			i++
 		}
 	}
+
 	return &ast.RegexpLiteral{Token: p.curToken, Value: val, Flags: flags}
 }
 

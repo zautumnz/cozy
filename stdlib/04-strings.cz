@@ -49,7 +49,7 @@ let string.ltrim = fn() {
     let out = match(reg, self);
 
     if (out) {
-        return(out[1]);
+        return(out[2]);
     } else {
         return self;
     }
@@ -64,7 +64,7 @@ let string.rtrim = fn() {
     let out = match(reg, self);
 
     if (out) {
-        return(out[0]);
+        return(out[1]);
     } else {
         return self;
     }
@@ -103,6 +103,7 @@ assert("\"st天eve研es\".find(\"研\") == 6");
 
 # string.interpolate replaces ${blah} with the value of "blah" from
 # the specified hash.
+# TODO: this is broken, maybe due to the match change to return an array?
 let string.interpolate = fn(hsh) {
     let reg = "(?s)^(.*?)\\$\\{([^\\}]+)\\}(.*)";
     let out = match(reg, self);

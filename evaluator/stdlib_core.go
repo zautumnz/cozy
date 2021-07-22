@@ -173,26 +173,18 @@ func matchFun(args ...object.Object) object.Object {
 	res := reg.FindStringSubmatch(args[1].(*object.String).Value)
 
 	if len(res) > 0 {
-
-		newHash := make(map[object.HashKey]object.HashPair)
+		newArray := make([]object.Object, len(res))
 
 		// If we get a match then the output is an array
 		// First entry is the match, any additional parts
 		// are the capture-groups.
 		if len(res) > 1 {
-			for i := 1; i < len(res); i++ {
-
-				// Capture groups start at index 0.
-				k := &object.Integer{Value: int64(i - 1)}
-				v := &object.String{Value: res[i]}
-
-				newHashPair := object.HashPair{Key: k, Value: v}
-				newHash[k.HashKey()] = newHashPair
-
+			for i, v := range res {
+				newArray[i] = &object.String{Value: v}
 			}
 		}
 
-		return &object.Hash{Pairs: newHash}
+		return &object.Array{Elements: newArray}
 	}
 
 	// No match

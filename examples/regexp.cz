@@ -14,21 +14,23 @@ if (match("^[A-Z]", "Zac Anger")) {
 }
 
 # IP-address regexp
-let reg =  "([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$";
+let reg = "([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$";
 let out = match(reg, "12.23.21.224");
 if (out) {
    print("We matched an IP address succesfully.");
-   print("Captures: ", out[0], ".", out[1], ".",  out[2], ".", out[3]);
+   print("Captures: ", out.rest().join(" . "))
 } else {
    print("Not true!");
 }
 
 # The same thing using literal a regular expression
-
 let ip = "192.168.1.1";
 
-if ( ip ~= /([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/ ) {
+# TODO: need a space before the closing paren,
+# otherwise it breaks.
+if (ip ~= /([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/ ) {
    printf("We matched an IP address succesfully.");
+   # Matches are available only within this scope
    printf("Captures: %s.%s.%s.%s\n", $1, $2, $3, $4);
 }
 # Also works storing a regex in a variable
