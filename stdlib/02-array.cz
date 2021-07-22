@@ -108,7 +108,7 @@ let array.min = fn() {
     mutable min = self[0];
 
     # type checking.
-    if (type(min) != "integer" && type(min) != "float") {
+    if (type(min) != "int" && type(min) != "float") {
         print("array.min only works on numbers - not " , type(min));
         sys.exit(1);
     }
@@ -116,7 +116,7 @@ let array.min = fn() {
     # If we find a smaller one, set it.
     for (i < l) {
         # type checking.
-        if (type(self[i]) != "integer" && type(self[i]) != "float") {
+        if (type(self[i]) != "int" && type(self[i]) != "float") {
             print("array.min only works on numbers - not " , type(self[i]));
             sys.exit(1);
         }
@@ -149,7 +149,7 @@ let array.max = fn() {
     mutable max = self[0];
 
     # ensure we're dealing with types
-    if (type(max) != "integer" && type(max) != "float") {
+    if (type(max) != "int" && type(max) != "float") {
         print("array.max only works on numbers - not " , type(max));
         sys.exit(1);
     }
@@ -157,7 +157,7 @@ let array.max = fn() {
     # If we find a greater one, set it.
     for (i < l) {
         # type checking.
-        if (type(self[i]) != "integer" && type(self[i]) != "float") {
+        if (type(self[i]) != "int" && type(self[i]) != "float") {
             print("array.max only works on numbers - not " , type(self[i]), "\n");
             sys.exit(1);
         }
@@ -396,18 +396,18 @@ assert("[].empty?()");
 assert("![1,2].empty?()");
 assert("![\"zacanger\",3].empty?()");
 
-# Reduce. The fun should take an item and the accumulator.
+# Reduce. The cb takes current item, accumulator, and index
 let array.reduce = fn(fun, init) {
     mutable acc = init;
-    foreach _, x in self {
-        acc = fun(x, acc);
+    foreach i, x in self {
+        acc = fun(x, acc, i);
     }
 
     return acc;
 };
 let array.sum = fn() {
     foreach x in self {
-        if (type(x) != "integer" && type(x) != "float") {
+        if (type(x) != "int" && type(x) != "float") {
             print("Sum expected only integers, got", type(x));
             sys.exit(0);
         }

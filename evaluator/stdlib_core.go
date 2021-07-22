@@ -260,7 +260,7 @@ func typeFun(args ...object.Object) object.Object {
 	case *object.Function:
 		return &object.String{Value: "function"}
 	case *object.Integer:
-		return &object.String{Value: "integer"}
+		return &object.String{Value: "int"}
 	case *object.Float:
 		return &object.String{Value: "float"}
 	case *object.Hash:

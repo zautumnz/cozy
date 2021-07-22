@@ -7,8 +7,9 @@ This is a WIP. See [TODO](./TODO.md).
 Simple, high-ish-level interpreted programming language that sits somewhere
 between scripting and general-purpose programming. Dynamically and strongly
 typed, with some with semantics that work well with pseudo-functional
-programming but syntax similar to Python, Go, and Shell; no OOP constructs like
-classes; instead we have first-class functions, closures, and macros.
+programming but syntax similar to Python, Go, JavaScript, and Shell; no OOP
+constructs like classes; instead we have first-class functions, closures, and
+macros.
 
 ---
 
@@ -18,8 +19,8 @@ classes; instead we have first-class functions, closures, and macros.
 let reduce = fn(fun, xs, init) {
     mutable acc = init
 
-    foreach _, x in xs {
-        acc = fun(x, acc)
+    foreach i, x in xs {
+        acc = fun(x, acc, i)
     }
 
     return acc
@@ -27,7 +28,7 @@ let reduce = fn(fun, xs, init) {
 
 let ints? = fn(xs) {
     foreach x in xs {
-        if (type(x) != "integer" && type(x) != "float") {
+        if (type(x) != "int" && type(x) != "float") {
             return false
         }
     }
@@ -86,6 +87,8 @@ entered code will be evaluated when you exit with `ctrl+d`.
     setting mutable ones.
 * Uses Go's GC; porting to a different language might require writing a new GC.
 * Semicolons are optional
+* Most statements are expressions, including if/else; this also means implicit
+    returns (without the `return` keyword) are possible
 
 ### Builtins
 
@@ -97,14 +100,15 @@ Global functions:
 * `exit` exits with a code
 * `flag` selects a flag from the command-line
 * `float` converts to a float
-* `import` imports another cozy file as a module.
-* `int` convert the given float/string to an integer.
-* `len` Yield the length of builtin containers.
-* `match` Regular-expression matching.
-* `print` Write values to STDOUT with newlines.
-* `printf` Write values to STDOUT, via a format-string.
-* `sprintf` Create strings, via a format-string.
-* `string` convert the given item to a string.
+* `import` imports another cozy file as a module
+* `int` convert the given float/string to an integer
+* `len` Yield the length of builtin containers
+* `macro`/`quote`/`unquote` for building macros
+* `match` Regular-expression matching
+* `print` Write values to STDOUT with newlines
+* `printf` Write values to STDOUT, via a format-string
+* `sprintf` Create strings, via a format-string
+* `string` convert the given item to a string
 * `type` returns the type of a variable.
 
 Core modules (see examples for docs):

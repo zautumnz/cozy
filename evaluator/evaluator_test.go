@@ -608,7 +608,7 @@ func TestTypeBuiltin(t *testing.T) {
 		},
 		{
 			"type(1);",
-			"integer",
+			"int",
 		},
 		{
 			"type(3.14159);",

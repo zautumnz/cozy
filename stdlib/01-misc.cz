@@ -41,3 +41,17 @@ let unless = macro(condition, consequence, alternative) {
         unquote(alternative);
     });
 };
+
+let array?     = fn (x) { return type(x) == "array" };
+let bool?      = fn (x) { return type(x) == "bool" };
+let builtin?   = fn (x) { return type(x) == "builtin" };
+let docstring? = fn (x) { return type(x) == "docstring" };
+let file?      = fn (x) { return type(x) == "file" };
+let float?     = fn (x) { return type(x) == "float" };
+let function?  = fn (x) { return type(x) == "function" };
+let hash?      = fn (x) { return type(x) == "hash" };
+let int?       = fn (x) { return type(x) == "int" };
+let module?    = fn (x) { return type(x) == "module" };
+let number?    = fn (x) { return int?(x) || float?(x) };
+let regexp?    = fn (x) { return type(x) == "regexp" };
+let string?    = fn (x) { return type(x) == "string" };
