@@ -1,7 +1,6 @@
 package evaluator
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -9,15 +8,16 @@ import (
 )
 
 func timeSleep(args ...object.Object) object.Object {
+	var ms int64
 	switch arg := args[0].(type) {
 	case *object.Integer:
-		time.Sleep(time.Duration(arg.Value) * time.Millisecond)
+		ms = arg.Value
 	default:
 		return newError("argument to `time.sleep` not supported, got=%s", arg.Type())
 	}
 
-	// TODO: use this return value to clear the sleep if need be
-	return &object.Integer{Value: rand.Int63()}
+	time.Sleep(time.Duration(ms) * time.Millisecond)
+	return &object.Integer{Value: ms}
 }
 
 func timeUnix(args ...object.Object) object.Object {
@@ -28,7 +28,9 @@ func timeUtc(args ...object.Object) object.Object {
 	return &object.String{Value: time.Now().Format(time.RFC3339)}
 }
 
-func timeTimeout(args ...object.Object) object.Object {
+var timerIds = make(map[int64]chan bool)
+
+func timeTimeout(env *object.Environment, args ...object.Object) object.Object {
 	var ms int64
 	var f *object.Function
 	switch t := args[0].(type) {
@@ -45,16 +47,19 @@ func timeTimeout(args ...object.Object) object.Object {
 		return newError("Second argument to `time.timeout should be function!`")
 	}
 
+	clear := make(chan bool)
+
+	// TODO: cancel if clear has been set to true somehow
 	time.AfterFunc(time.Duration(ms)*time.Millisecond, func() {
-		// TODO: eval the function here
-		fmt.Println("here", f)
+		ApplyFunction(env, f, make([]object.Object, 0))
 	})
 
-	// TODO: use this return value to clear the timeout if need be
-	return &object.Integer{Value: rand.Int63()}
+	timeoutID := rand.Int63()
+	timerIds[timeoutID] = clear
+	return &object.Integer{Value: timeoutID}
 }
 
-func timeInterval(args ...object.Object) object.Object {
+func timeInterval(env *object.Environment, args ...object.Object) object.Object {
 	var ms int64
 	var f *object.Function
 	switch t := args[0].(type) {
@@ -72,28 +77,36 @@ func timeInterval(args ...object.Object) object.Object {
 	}
 
 	ticker := time.NewTicker(time.Duration(ms) * time.Millisecond)
-	// TODO: this clear is what should get returned, not the random int, but how
-	// to wrap it?
 	clear := make(chan bool)
 
 	go func() {
 		for {
 			select {
 			case <-ticker.C:
-				// TODO: eval the function here in another goroutine (go evalFn)
-				fmt.Println("here", f)
+				go ApplyFunction(env, f, make([]object.Object, 0))
 			case <-clear:
 				ticker.Stop()
 				return
 			}
 		}
 	}()
-	time.AfterFunc(time.Duration(ms)*time.Millisecond, func() {
-		fmt.Println("here", f)
-	})
 
-	// TODO: use this return value to clear the timeout if need be
-	return &object.Integer{Value: rand.Int63()}
+	intervalID := rand.Int63()
+	timerIds[intervalID] = clear
+	return &object.Integer{Value: intervalID}
+}
+
+func timeCancel(args ...object.Object) object.Object {
+	switch t := args[0].(type) {
+	case *object.Integer:
+		if timerIds[t.Value] != nil {
+			timerIds[t.Value] <- true
+		}
+	default:
+		return newError("Expected timerid, got %s", args[0].Type())
+	}
+
+	return &object.Boolean{Value: true}
 }
 
 func init() {
@@ -111,10 +124,14 @@ func init() {
 		})
 	RegisterBuiltin("time.interval",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (timeInterval(args...))
+			return (timeInterval(env, args...))
 		})
 	RegisterBuiltin("time.timeout",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (timeTimeout(args...))
+			return (timeTimeout(env, args...))
+		})
+	RegisterBuiltin("time.cancel",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (timeCancel(args...))
 		})
 }

@@ -12,9 +12,8 @@ import (
 	"github.com/zacanger/cozy/parser"
 )
 
-// EvalFun evaluates a string containing cozy code
-// Exported for use in timers
-func EvalFun(env *object.Environment, args ...object.Object) object.Object {
+// evalFun evaluates a string containing cozy code
+func evalFun(env *object.Environment, args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return newError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -278,7 +277,7 @@ func typeFun(args ...object.Object) object.Object {
 func init() {
 	RegisterBuiltin("eval",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (EvalFun(env, args...))
+			return (evalFun(env, args...))
 		})
 	RegisterBuiltin("int",
 		func(env *object.Environment, args ...object.Object) object.Object {

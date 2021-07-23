@@ -157,7 +157,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 			return args[0]
 		}
 
-		res := applyFunction(env, function, args)
+		res := ApplyFunction(env, function, args)
 		if isError(res) {
 			fmt.Fprintf(os.Stderr, "Error calling `%s` : %s\n", node.Function, res.Inspect())
 			os.Exit(1)
@@ -1084,7 +1084,8 @@ func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Obje
 
 }
 
-func applyFunction(env *object.Environment, fn object.Object, args []object.Object) object.Object {
+// ApplyFunction applies a function in an environment
+func ApplyFunction(env *object.Environment, fn object.Object, args []object.Object) object.Object {
 	switch fn := fn.(type) {
 	case *object.Function:
 		extendEnv := extendFunctionEnv(fn, args)

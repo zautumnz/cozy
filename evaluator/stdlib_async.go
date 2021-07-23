@@ -58,8 +58,6 @@ type Promise struct {
 
 	// Error
 	err error
-
-	batch bool
 }
 
 // Start executes the promise in the new go routine

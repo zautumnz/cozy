@@ -1,26 +1,26 @@
 # these all take values in ints representing ms
 
-# sleep
-print("going to sleep 1000 ms");
-time.sleep(1000);
-print("slept 1000 ms");
-
 # unix timestamp
-print("unix time", time.unix());
+print("unix time", time.unix())
 
 # RFC3339 format (basically ISO 8601)
 # no other date formats or timezones are supported
-print("utc time", time.utc());
+print("utc time", time.utc())
 
-# TODO: not implemented yet
-# let intervalId = time.interval(100, fn () {
-#     print("printing hi on a 100 ms interval");
-# });
-#
-# time.clear_timer(intervalId);
-#
-# let timeoutId = time.timeout(1000, fn () {
-#     print("printing after a 1000 ms timeout");
-# });
-#
-# time.clear_timer(timeoutId);
+let interval_id = time.interval(100, fn () {
+    print("printing hi on a 100 ms interval")
+})
+time.sleep(500)
+time.cancel(interval_id)
+
+let timeout_id = time.timeout(500, fn () {
+    print("printing after a 500 ms timeout")
+})
+
+# sleep
+print("going to sleep 1000 ms")
+time.sleep(1000)
+print("slept 1000 ms")
+
+# TODO: this isn't used yet
+time.cancel(timeout_id)
