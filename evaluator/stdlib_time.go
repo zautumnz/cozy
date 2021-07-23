@@ -49,13 +49,16 @@ func timeTimeout(env *object.Environment, args ...object.Object) object.Object {
 
 	clear := make(chan bool)
 
-	// TODO: cancel if clear has been set to true somehow
-	time.AfterFunc(time.Duration(ms)*time.Millisecond, func() {
-		ApplyFunction(env, f, make([]object.Object, 0))
-	})
-
 	timeoutID := rand.Int63()
 	timerIds[timeoutID] = clear
+	// TODO: cancel if clear has been set to true somehow; this isn't working
+	// right now, it's causing the whole program to just hang
+	time.AfterFunc(time.Duration(ms)*time.Millisecond, func() {
+		if timerIds[timeoutID] != nil {
+			ApplyFunction(env, f, make([]object.Object, 0))
+		}
+	})
+
 	return &object.Integer{Value: timeoutID}
 }
 

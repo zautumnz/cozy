@@ -6,6 +6,8 @@
     * Cryptography builtins
     * Proper errors/exceptions
 * Minor things:
+    * Add argument validation to all functions
+    * Improve all error messages
     * Add tab completion and arrow support to the REPL
     * Flesh out the testing library with functions to test failure and errors
     * Remove parens in `if`, `while`, and `for`

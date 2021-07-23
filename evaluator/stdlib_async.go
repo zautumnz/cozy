@@ -93,6 +93,8 @@ func (p *Promise) Await() (interface{}, error) {
 }
 
 func asyncFn(env *object.Environment, args ...object.Object) object.Object {
+	Go(ApplyFunction, env, args[0], make([]object.Object, 0))
+
 	// TODO: implementation:
 	/*
 	   let v = async(fn() {

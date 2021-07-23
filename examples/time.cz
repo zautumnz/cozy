@@ -22,5 +22,5 @@ print("going to sleep 1000 ms")
 time.sleep(1000)
 print("slept 1000 ms")
 
-# TODO: this isn't used yet
-time.cancel(timeout_id)
+# TODO: this isn't working yet, causing things to hang
+# time.cancel(timeout_id)
