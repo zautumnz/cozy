@@ -17,10 +17,10 @@ let timeout_id = time.timeout(500, fn () {
     print("printing after a 500 ms timeout")
 })
 
+# cancellation works for both interval and timeout
+time.cancel(timeout_id)
+
 # sleep
 print("going to sleep 1000 ms")
 time.sleep(1000)
 print("slept 1000 ms")
-
-# TODO: this isn't working yet, causing things to hang
-# time.cancel(timeout_id)

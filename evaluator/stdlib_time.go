@@ -28,7 +28,8 @@ func timeUtc(args ...object.Object) object.Object {
 	return &object.String{Value: time.Now().Format(time.RFC3339)}
 }
 
-var timerIds = make(map[int64]chan bool)
+var intervalIDs = make(map[int64]chan bool)
+var timeoutIDs = make(map[int64]bool)
 
 func timeTimeout(env *object.Environment, args ...object.Object) object.Object {
 	var ms int64
@@ -47,14 +48,11 @@ func timeTimeout(env *object.Environment, args ...object.Object) object.Object {
 		return newError("Second argument to `time.timeout should be function!`")
 	}
 
-	clear := make(chan bool)
-
 	timeoutID := rand.Int63()
-	timerIds[timeoutID] = clear
-	// TODO: cancel if clear has been set to true somehow; this isn't working
-	// right now, it's causing the whole program to just hang
+	timeoutIDs[timeoutID] = false
 	time.AfterFunc(time.Duration(ms)*time.Millisecond, func() {
-		if timerIds[timeoutID] != nil {
+		v, ok := timeoutIDs[timeoutID]
+		if ok && !v {
 			ApplyFunction(env, f, make([]object.Object, 0))
 		}
 	})
@@ -95,15 +93,20 @@ func timeInterval(env *object.Environment, args ...object.Object) object.Object 
 	}()
 
 	intervalID := rand.Int63()
-	timerIds[intervalID] = clear
+	intervalIDs[intervalID] = clear
 	return &object.Integer{Value: intervalID}
 }
 
 func timeCancel(args ...object.Object) object.Object {
 	switch t := args[0].(type) {
 	case *object.Integer:
-		if timerIds[t.Value] != nil {
-			timerIds[t.Value] <- true
+		if intervalIDs[t.Value] != nil {
+			intervalIDs[t.Value] <- true
+		} else {
+			_, ok := timeoutIDs[t.Value]
+			if ok {
+				timeoutIDs[t.Value] = true
+			}
 		}
 	default:
 		return newError("Expected timerid, got %s", args[0].Type())
