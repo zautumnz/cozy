@@ -114,13 +114,13 @@ func main() {
 	// Showing the version?
 	if *vers {
 		fmt.Printf("cozy %s\n", COZY_VERSION)
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	// Executing code?
 	if *eval != "" {
 		Execute(*eval)
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	// Otherwise we're either reading from STDIN, or the
