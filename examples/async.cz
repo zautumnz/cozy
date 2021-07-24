@@ -1,0 +1,13 @@
+let x = fn () {
+    print("foo")
+    time.sleep(5000)
+    return "bar"
+}
+let a = async(x)
+print(a) # async function id (int)
+
+print("1")
+let res = await(a)
+print("2")
+print(res) # bar
+print("3")

@@ -1,9 +1,0 @@
-let x = fn () {
-    sleep(10000)
-    return "hello"
-}
-let y = async(x())
-print("invoked in async")
-let z = y.await()
-print(z)
-print("awaited")

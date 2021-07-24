@@ -1,116 +1,87 @@
 package evaluator
 
 import (
-	"sync"
+	"context"
+	"math/rand"
 
 	"github.com/zacanger/cozy/object"
 )
 
-// Based on code from github.com/maniartech/async, MIT licensed
+// Based on code from github.com/Gurpartap/async, Apache 2.0 licensed.
+type ValueFuture interface {
+	Await() interface{}
+}
 
-// Promise status
-const (
-	notStarted uint8 = iota
-	pending
-	finished
-)
+type valueFuture struct {
+	await func(ctx context.Context) interface{}
+}
 
-// Go creates a new promise which provides easy to await mechanism.
-// It can be started either by using calling a `Start` or `Await` method.
-//
-//    func(fn promiseHandler, args ...interface{}) *Promsie
-//
-// Example: Immediate start and await
-//
-//    // Starts a new process and awaits for it to finish.
-//    v, err := async.Go(process, 1).Await()
-//    if err != nil {
-//      println("An error occurred while processing the promise.")
-//    }
-//    print(v) // Print the resulted value
-func Go(fn promiseHandler, args ...interface{}) *Promise {
-	return &Promise{
-		fn:   fn,
-		args: args,
-		wg:   sync.WaitGroup{},
+func (f valueFuture) Await() interface{} {
+	return f.await(context.Background())
+}
+
+func Async(f func() interface{}) ValueFuture {
+	var result interface{}
+	c := make(chan struct{}, 1)
+	go func() {
+		defer close(c)
+		result = f()
+	}()
+	return valueFuture{
+		await: func(ctx context.Context) interface{} {
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			case <-c:
+				return result
+			}
+		},
 	}
 }
 
-// promiseHandler provides a signature validation for promise function.
-type promiseHandler func(*Promise, ...interface{})
+var asyncFunctions = make(map[int64]ValueFuture)
 
-// Promise is the type of a promise
-type Promise struct {
-	// Fn represent the underlaying promised function
-	fn func(*Promise, ...interface{})
-
-	// Args represents the arguments that needs to be passed when the promise is invoked
-	args []interface{}
-
-	// Not Started: 0
-	// Pending: 1
-	// Finished: 2
-	status byte
-	wg     sync.WaitGroup
-
-	// result
-	result interface{}
-
-	// Error
-	err error
-}
-
-// Start executes the promise in the new go routine
-func (p *Promise) start() {
-
-	// Proceed only when the promise has not yet started.
-	if p.status != notStarted {
-		return
+func awaitFn(env *object.Environment, args ...object.Object) object.Object {
+	var res interface{}
+	var err error
+	switch t := args[0].(type) {
+	case *object.Integer:
+		f := asyncFunctions[t.Value]
+		res = f.Await()
+	default:
+		return newError("Expected async function id, got %s", args[0].Type())
 	}
 
-	// Add a wait group counter.
-	p.wg.Add(1)
-	p.status = pending
-
-	// Execute the associated function in a new go routine
-	go p.fn(p, p.args...)
-}
-
-// Await waits for promise to finish and returns a resulting value.
-func (p *Promise) Await() (interface{}, error) {
-	// If the promise has already finished do not wait further.
-	if p.status == finished {
-		return p.result, p.err
+	if err != nil {
+		return &object.Error{Message: err.Error()}
 	}
 
-	// The promise has not yet started, start it!
-	if p.status == notStarted {
-		p.start()
-	}
+	switch x := res.(type) {
+	case object.Object:
+		return x
+	default:
+		return newError("Something went wrong in await!")
 
-	p.wg.Wait()
-	return p.result, p.err
+	}
 }
 
 func asyncFn(env *object.Environment, args ...object.Object) object.Object {
-	// Go(ApplyFunction, env, args[0], make([]object.Object, 0))
+	x := Async(func() interface{} {
+		return ApplyFunction(env, args[0], make([]object.Object, 0))
+	})
 
-	// TODO: implementation:
-	/*
-	   let v = async(fn() {
-	   	// do some long running thing
-	   }())
-	   let result = v.await()
-	   if (type(result) == "error") { handle_error(error) }
-	   else { do_things_with(result) }
-	*/
-
-	return &object.Boolean{Value: true}
+	fnID := rand.Int63()
+	asyncFunctions[fnID] = x
+	return &object.Integer{Value: fnID}
 }
 
 func init() {
 	RegisterBuiltin("async",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (asyncFn(env, args...))
+		})
+	RegisterBuiltin("await",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (awaitFn(env, args...))
 		})
 }

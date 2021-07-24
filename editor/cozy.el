@@ -42,7 +42,8 @@
 ;; The language-core and functions from the standard-library.
 (defvar cozy-functions
   '(
-    "doc"
+    "async"
+    "await"
     "error"
     "exit"
     "file"
@@ -58,7 +59,6 @@
     "quote"
     "read"
     "rest"
-    "set"
     "string"
     "type"
     "unquote"
