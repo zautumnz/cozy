@@ -246,7 +246,7 @@ func (fl *FloatLiteral) String() string { return fl.Token.Literal }
 
 // PrefixExpression holds a prefix-based expression
 type PrefixExpression struct {
-	// Token holds the token.  e.g. "!"
+	// Token holds the token. e.g. "!"
 	Token token.Token
 
 	// Operator holds the operator being invoked (e.g. "!").
@@ -343,7 +343,7 @@ func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
 func (b *Boolean) String() string { return b.Token.Literal }
 
 // BlockStatement holds a group of statements, which are treated
-// as a block.  (For example the body of an `if` expression.)
+// as a block. (For example the body of an `if` expression.)
 type BlockStatement struct {
 	// Token holds the actual token
 	Token token.Token
@@ -796,7 +796,7 @@ func (hl *HashLiteral) String() string {
 // example), such that we can do self-operations.
 //
 // Specifically "x += y" is defined as an assignment-statement with
-// the operator set to "+=".  The same applies for "+=", "-=", "*=", and
+// the operator set to "+=". The same applies for "+=", "-=", "*=", and
 // "/=".
 type AssignStatement struct {
 	Token    token.Token

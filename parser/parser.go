@@ -905,7 +905,7 @@ func (p *Parser) peekTokenIs(t token.Type) bool {
 }
 
 // expectPeek validates the next token is of the given type,
-// and advances if so.  If it is not an error is stored.
+// and advances if so. If it is not an error is stored.
 func (p *Parser) expectPeek(t token.Type) bool {
 	if p.peekTokenIs(t) {
 		p.nextToken()

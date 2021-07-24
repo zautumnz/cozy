@@ -161,7 +161,7 @@ func (e *Environment) SetLet(name string, val Object) Object {
 }
 
 // ExportedHash returns a new Hash with the names and values of every publically
-// exported binding in the environment; that is, every top-level binding  (not
+// exported binding in the environment; that is, every top-level binding (not
 // in a block).
 // This is used by the module import system to wrap up the
 // evaulated module into an object.

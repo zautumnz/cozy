@@ -700,9 +700,9 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 	}
 }
 
-// evalTernaryExpression handles a ternary-expression.  If the condition
+// evalTernaryExpression handles a ternary-expression. If the condition
 // is true we return the contents of evaluating the true-branch, otherwise
-// the false-branch.  (Unlike an `if` statement we know that we always have
+// the false-branch. (Unlike an `if` statement we know that we always have
 // an alternative/false branch.)
 func evalTernaryExpression(te *ast.TernaryExpression, env *object.Environment) object.Object {
 
@@ -1120,7 +1120,7 @@ func upwrapReturnValue(obj object.Object) object.Object {
 	return obj
 }
 
-// RegisterBuiltin registers a built-in function.  This is used to register
+// RegisterBuiltin registers a built-in function. This is used to register
 // our "standard library" functions.
 func RegisterBuiltin(name string, fun object.BuiltinFunction) {
 	builtins[name] = &object.Builtin{Fn: fun}
@@ -1151,7 +1151,7 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 		//  * We have the arguments.
 		//
 		// We'll use the type + name to lookup the (global) function
-		// to invoke.  For example in this case we'll invoke
+		// to invoke. For example in this case we'll invoke
 		// `string.len()` - because the type of the object we're
 		// invoking-against is string:
 		//  "zac".len();

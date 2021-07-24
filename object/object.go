@@ -75,7 +75,7 @@ type Hashable interface {
 
 // Iterable is an interface that some objects might support.
 // If this interface is implemented then it will be possible to
-// use the `foreach` function to iterate over the object.  If
+// use the `foreach` function to iterate over the object. If
 // the interface is not implemented then a run-time error will
 // be generated instead.
 type Iterable interface {

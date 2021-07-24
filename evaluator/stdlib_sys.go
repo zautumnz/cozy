@@ -105,7 +105,7 @@ func sysExec(args ...object.Object) object.Object {
 	err := cmd.Run()
 
 	// If the command exits with a non-zero exit-code it
-	// is regarded as a failure.  Here we test for ExitError
+	// is regarded as a failure. Here we test for ExitError
 	// to regard that as a non-failure.
 	if err != nil && err != err.(*exec.ExitError) {
 		fmt.Printf("Failed to run '%s' -> %s\n", command, err.Error())

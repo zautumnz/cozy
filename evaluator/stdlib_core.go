@@ -35,7 +35,7 @@ func evalFun(env *object.Environment, args ...object.Object) object.Object {
 			return (Eval(program, env))
 		}
 
-		// Otherwise abort.  We should have try { } catch
+		// Otherwise abort. We should have try { } catch
 		// to allow this kind of error to be caught in the future!
 		fmt.Printf("Error parsing eval-string: %s", txt)
 		for _, msg := range p.Errors() {
@@ -268,6 +268,8 @@ func typeFun(args ...object.Object) object.Object {
 		return &object.String{Value: "module"}
 	case *object.DocString:
 		return &object.String{Value: "docstring"}
+	case *object.Error:
+		return &object.String{Value: "error"}
 	default:
 		return newError("argument to `type` not supported, got=%s",
 			args[0].Type())
