@@ -548,7 +548,6 @@ func TestForLoopExpression(t *testing.T) {
 	if !testMutableStatement(t, consequence, "x") {
 		t.Fatalf("exp.Consequence is not MutableStatement")
 	}
-
 }
 
 func TestFunctionLiteralParsing(t *testing.T) {
@@ -854,9 +853,8 @@ func TestMutators(t *testing.T) {
 
 // Test method-call operation.
 func TestObjectMethodCall(t *testing.T) {
-	input := []string{"\"zac\".len()",
-		"mutable x = 15; x.string();",
-		"`ls`"}
+	input := []string{"\"zac\".ord()",
+		"let x = {}; x.keys();"}
 
 	for _, txt := range input {
 		l := lexer.New(txt)

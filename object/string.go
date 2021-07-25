@@ -40,13 +40,9 @@ func (s *String) HashKey() HashKey {
 // (Built-in methods only.)
 func (s *String) GetMethod(method string) BuiltinFunction {
 	switch method {
-	case "len":
-		return func(env *Environment, args ...Object) Object {
-			return &Integer{Value: int64(utf8.RuneCountInString(s.Value))}
-		}
 	case "methods":
 		return func(env *Environment, args ...Object) Object {
-			static := []string{"len", "methods", "ord", "to_i", "to_f"}
+			static := []string{"methods", "ord", "to_i", "to_f"}
 			dynamic := env.Names("string.")
 
 			var names []string

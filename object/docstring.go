@@ -6,7 +6,6 @@ import (
 	"hash/fnv"
 	"sort"
 	"strings"
-	"unicode/utf8"
 )
 
 // DocString wraps string and implements Object and Hashable interfaces.
@@ -37,13 +36,9 @@ func (s *DocString) HashKey() HashKey {
 // (Built-in methods only.)
 func (s *DocString) GetMethod(method string) BuiltinFunction {
 	switch method {
-	case "len":
-		return func(env *Environment, args ...Object) Object {
-			return &Integer{Value: int64(utf8.RuneCountInString(s.Value))}
-		}
 	case "methods":
 		return func(env *Environment, args ...Object) Object {
-			static := []string{"len", "methods"}
+			static := []string{"methods"}
 			dynamic := env.Names("string.")
 
 			var names []string

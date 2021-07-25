@@ -356,13 +356,12 @@ let c = 3.113;
 	}
 }
 
-// TestStdLib ensures that identifiers are parsed correctly for the
-// case where we need to support the legacy-names.
+// TestStdLib ensures that identifiers are parsed correctly
 func TestStdLib(t *testing.T) {
 	input := `
-os.getenv
-os.setenv
-os.environment
+sys.getenv
+sys.setenv
+sys.environment
 fs.glob
 math.abs
 math.random
@@ -380,9 +379,9 @@ foo.bar
 		expectedType    token.Type
 		expectedLiteral string
 	}{
-		{token.IDENT, "os.getenv"},
-		{token.IDENT, "os.setenv"},
-		{token.IDENT, "os.environment"},
+		{token.IDENT, "sys.getenv"},
+		{token.IDENT, "sys.setenv"},
+		{token.IDENT, "sys.environment"},
 		{token.IDENT, "fs.glob"},
 		{token.IDENT, "math.abs"},
 		{token.IDENT, "math.random"},

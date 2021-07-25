@@ -1152,9 +1152,9 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 		//
 		// We'll use the type + name to lookup the (global) function
 		// to invoke. For example in this case we'll invoke
-		// `string.len()` - because the type of the object we're
+		// `string.foo()` - because the type of the object we're
 		// invoking-against is string:
-		//  "zac".len();
+		//  "zac".foo();
 		// For this case we'll be looking for `array.foo()`.
 		//   let a = [ 1, 2, 3 ];
 		//   print(a.foo());
