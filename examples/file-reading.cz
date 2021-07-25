@@ -4,7 +4,7 @@ let fh = fs.open("/etc/passwd");
 mutable lines = 0;
 
 # Read a line
-let r = fh.read();
+mutable r = fh.read();
 
 # Loop while that is non-empty
 for (len(r) > 0) {

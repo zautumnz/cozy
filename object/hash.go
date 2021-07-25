@@ -128,7 +128,6 @@ func (h *Hash) GetMethod(method string) BuiltinFunction {
 			for i, txt := range names {
 				result[i] = &String{Value: txt}
 			}
-			fmt.Println(result)
 			return &Array{Elements: result}
 		}
 	}

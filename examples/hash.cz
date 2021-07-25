@@ -40,7 +40,7 @@ let h = sys.exec("/bin/ls / /fdsf");
 dump(h);
 
 print("Running via bash:");
-let h = sys.exec()"/bin/sh -c \"/bin/ls /etc\"";
+let h = sys.exec("/bin/sh -c \"/bin/ls /etc\"")
 dump(h);
 
 # Using dot access

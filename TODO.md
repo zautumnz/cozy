@@ -1,5 +1,10 @@
 # TODO
 
+Currently failing example files:
+* file-ops
+* interp
+* modules (see TODO)
+
 List of things to get done before a v1.
 * Major things missing:
     * HTTP server and client
@@ -9,6 +14,8 @@ List of things to get done before a v1.
     * Try/catch (or treat errors as values, don't throw them)
     * At least 50% code coverage
 * Minor things:
+    * Confirm that everything under ./examples works
+    * Write real docs
     * Add argument validation to all functions
     * Improve all error messages
     * Add tab completion and arrow support to the REPL

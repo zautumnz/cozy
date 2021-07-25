@@ -86,6 +86,10 @@ func sysExit(args ...object.Object) object.Object {
 // Run a command and return a hash containing the result.
 // `stderr`, `stdout`, and `error` will be the fields
 func sysExec(args ...object.Object) object.Object {
+	if len(args) < 1 {
+		return newError("`sys.exec` wanted string, got invalid argument")
+	}
+
 	var command string
 	switch c := args[0].(type) {
 	case *object.String:
@@ -94,6 +98,9 @@ func sysExec(args ...object.Object) object.Object {
 		return newError("`sys.exec` wanted string, got invalid argument")
 	}
 
+	if len(command) < 1 {
+		return newError("`sys.exec` expected string, got invalid argument")
+	}
 	// split the command
 	toExec := splitCommand(command)
 	cmd := exec.Command(toExec[0], toExec[1:]...)

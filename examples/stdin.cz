@@ -1,11 +1,11 @@
 # This example shows reading from STDIN.
 
-print("Please enter your name: ");
+print("Please enter your name:");
 mutable name = STDIN.read();
 name = name.trim();
-print("Hello, ", name, "!");
+print("Hello,", name, "!");
 
-print("How old are you? ");
+print("How old are you?");
 mutable age = STDIN.read();
 age = age.trim();
-print("You are ", age, " years old.");
+print("You are", age, "years old.");

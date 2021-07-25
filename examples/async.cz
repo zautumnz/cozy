@@ -1,6 +1,6 @@
 let x = fn () {
     print("foo")
-    time.sleep(5000)
+    time.sleep(1000)
     return "bar"
 }
 let a = async(x)

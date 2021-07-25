@@ -18,13 +18,13 @@ mutable i = 0;
 for (i < len(t)) {
     # Show the type + methods.
     let item  = t[i];
-    let metod = item.methods();
+    let m = item.methods();
     print(type(item), ":");
 
     # Show the methods.
     mutable j = 0;
-    for (j < len(metod)) {
-        print("\t", metod[j]);
+    for (j < len(m)) {
+        print("\t", m[j]);
         j++;
     }
     i++;

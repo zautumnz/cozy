@@ -2,8 +2,8 @@
 # The `type` function returns the type of an item.
 
 let show = fn(input) {
-   print("Type of input was ", type(input));
-   print("\tAfter converting to string we found: ", string(input));
+   print("Type of input was", type(input));
+   print("\tAfter converting to string we found:", string(input));
 };
 
 show("String input");
@@ -12,5 +12,5 @@ show(3);
 show([ 0, 1, 2,3,4,5,6,7,8,9,10]);
 show({"Name": "Zac", "Email": "foo@bar.com"});
 
-let g = fn() { return "Hello, world!" ; };
+let g = fn() { "Hello, world!" };
 show(g);
