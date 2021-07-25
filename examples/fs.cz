@@ -1,0 +1,49 @@
+# writing
+let name = "/tmp/cozy-file-write-test"
+mutable fh = fs.open(name, "w")
+# Now we have a handle we can write (strings) to it:
+fh.write("This is a test")
+fh.write(string({"foo": "bar", "baz": 8}))
+# And close it.
+fh.close()
+# Appending
+let fh2 = fs.open(name, "wa")
+fh2.write("\nanother line")
+fh2.close()
+
+# reading
+fh = fs.open("/etc/passwd")
+# Count of lines
+mutable lines = 0
+# Read a line
+mutable r = fh.read()
+# Loop while that is non-empty
+for (len(r) > 0) {
+     # Bump the line-count
+     lines++
+     # strip newlines / space, and show the output
+     r = r.trim()
+     print("Read: '", r, "'")
+     # loop
+     r = fh.read()
+}
+fh.close()
+print("Read:" , lines, " lines")
+
+# reading lines
+fh = fs.open("/etc/passwd", "r")
+lines = fh.lines()
+print("Read ", len(lines), " lines")
+
+# other operations
+fh = fs.open(name, "w")
+fh.write("#!/bin/sh")
+fh.write("echo hello")
+fs.chmod(name, "755")
+fs.chmod(name, "644")
+# remove
+fs.unlink(name)
+fs.mkdir("/tmp/foo")
+fs.unlink("/tmp/foo")
+# file info
+print(fs.stat("./README.md"))

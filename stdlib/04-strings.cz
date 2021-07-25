@@ -101,24 +101,6 @@ assert("\"zac\".find(\"anger\") == -1");
 assert("\"天研\".find(\"天研\") == 0");
 assert("\"st天eve研es\".find(\"研\") == 6");
 
-# string.interpolate replaces ${blah} with the value of "blah" from
-# the specified hash.
-# TODO: replace with core syntax
-let string.interpolate = fn(hsh) {
-    let reg = "(?s)^(.*?)\\$\\{([^\\}]+)\\}(.*)";
-    let out = match(reg, self);
-
-    for (out) {
-        let pre = out[0];
-        let tok = out[1];
-        let pst = out[2];
-        let self = pre + string(hsh[tok]) + pst;
-        let out = match(reg, self);
-    }
-
-    return self;
-};
-
 # string.split returns an array splitting on any characters included
 # in the separator string.
 # By default the split is on whitespace: " ", "TAB", & "RETURN".

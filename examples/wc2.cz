@@ -1,6 +1,0 @@
-# A simple script to read a file and count the lines
-
-# Open the file
-let fh = fs.open("/etc/passwd", "r");
-let lines = fh.lines();
-print("Read ", len(lines), " lines");

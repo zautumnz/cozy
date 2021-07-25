@@ -32,3 +32,13 @@ print(indexed[1]);
 mutable root = "a";
 root += "s";
 print(root + "d", "f");
+
+# Interpolation
+# TODO: implement this
+let me = { "first": "Zac", "last": "Anger", "loc": "USA", "age": 999 }
+let foods = ["pizza", "chocolate"]
+let activity = "movies"
+let s = "My name is {{me.first}} {{me.last}};
+I live in {{me.loc}} and am {{me.age}} years old}.
+I like {{foods.join(\", \")}}, and {{activity}}."
+print(s)

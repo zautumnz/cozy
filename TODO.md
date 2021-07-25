@@ -1,10 +1,5 @@
 # TODO
 
-Currently failing example files:
-* file-ops
-* interp
-* modules (see TODO)
-
 List of things to get done before a v1.
 * Major things missing:
     * HTTP server and client
@@ -13,6 +8,7 @@ List of things to get done before a v1.
     * Proper errors/exceptions
     * Try/catch (or treat errors as values, don't throw them)
     * At least 50% code coverage
+    * Add string interpolation (see failing example string.cz)
 * Minor things:
     * Confirm that everything under ./examples works
     * Write real docs
