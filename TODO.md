@@ -1,9 +1,9 @@
 # TODO
 
 List of things to get done before a v1.
+
 * Major things missing:
     * HTTP server and client
-    * Concurrency
     * Cryptography builtins
     * Proper errors/exceptions
     * Try/catch (or treat errors as values, don't throw them)

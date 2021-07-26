@@ -155,12 +155,6 @@ function! s:hi()
     hi def link cozyDiagnosticError SpellBad
     hi def link cozyDiagnosticWarning SpellRare
 
-    " TODO(bc): is it appropriate to define text properties in a syntax file?
-    " The highlight groups need to be defined before the text properties types
-    " are added, and when users have syntax enabled in their vimrc after
-    " filetype plugin on, the highlight groups won't be defined when
-    " ftplugin/go.vim is executed when the first go file is opened.
-    " See https://github.com/fatih/vim-go/issues/2658.
     if has('textprop')
         if empty(prop_type_get('cozySameId'))
             call prop_type_add('cozySameId', {'highlight': 'cozySameId'})
