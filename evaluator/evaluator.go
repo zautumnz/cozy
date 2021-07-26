@@ -173,7 +173,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		}
 		return &object.Array{Elements: elements}
 	case *ast.StringLiteral:
-		return &object.String{Value: node.Value}
+		return &object.String{Value: Interpolate(node.Value, env)}
 	case *ast.CurrentArgsLiteral:
 		return &object.Array{Token: node.Token, Elements: env.CurrentArgs, IsCurrentArgs: true}
 	case *ast.RegexpLiteral:

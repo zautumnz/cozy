@@ -891,3 +891,19 @@ func TestExpandMacros(t *testing.T) {
 		}
 	}
 }
+
+func TestStringInterpolation(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{`let a = "123"; "abc${a}"`, "abc123"},
+		{`let a = "123"; "abc\\${a}"`, "abc${a}"},
+		{`let a = "123"; "$${a}$${a}$${a}"`, "$123$123$123"},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testStringObject(t, evaluated, tt.expected)
+	}
+}
