@@ -5,8 +5,11 @@ List of things to get done before a v1.
 * Major things missing:
     * HTTP server and client
     * Cryptography builtins
-    * Proper errors/exceptions
-    * Try/catch (or treat errors as values, don't throw them)
+    * Errors and exceptions:
+        * As values?
+        * Try/catch?
+        * Move all os.Exit-ing up to top level and pass around exit code?
+        * Stack traces? Or at least better file/line indicators?
 * Minor things:
     * At least 50% code coverage
     * Confirm that everything under ./examples works
