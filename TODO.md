@@ -7,9 +7,10 @@ List of things to get done before a v1.
     * Cryptography builtins
     * Proper errors/exceptions
     * Try/catch (or treat errors as values, don't throw them)
-    * At least 50% code coverage
 * Minor things:
+    * At least 50% code coverage
     * Confirm that everything under ./examples works
+    * Complete all lingering TODOs
     * Write real docs
     * Add argument validation to all functions
     * Improve all error messages

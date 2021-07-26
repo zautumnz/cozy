@@ -47,7 +47,7 @@ let array.filter = fn(predicate) {
 
     for (i < l) {
         let entry = self[i];
-        if (predicate(entry)) {
+        if (predicate(entry, i)) {
             result = result.push(entry);
         }
 
@@ -342,8 +342,8 @@ assert("mutable a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3");
 let array.map = fn(fnc) {
     mutable result = [];
 
-    foreach item in self {
-        result = result.push(fnc(item));
+    foreach index, item in self {
+        result = result.push(fnc(item, index));
     }
 
     return result;
