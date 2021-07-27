@@ -9,7 +9,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/zacanger/cozy/lexer"
 	"github.com/zacanger/cozy/object"
+	"github.com/zacanger/cozy/parser"
 )
 
 var searchPaths []string
@@ -67,14 +69,14 @@ func IsNumber(s string) bool {
 // Interpolate (str, env)
 // return input string with $vars interpolated from environment
 func Interpolate(str string, env *object.Environment) string {
-	// Match all strings preceded by ${
-	// TODO: make this work on complex expressions, like
-	// "${foo.bar.split().join(\",\")}"
-	re := regexp.MustCompile(`(\\)?\$(\{)([a-zA-Z_0-9]{1,})(\})`)
+	// Match all strings preceded by {{
+	// re := regexp.MustCompile(`(\\)?\(\{\{)([a-zA-Z_0-9]{1,})(\}\})`)
+	// re := regexp.MustCompile(`(\\)?\$(\{)([a-zA-Z_0-9]{1,})(\})`)
+	re := regexp.MustCompile(`(\\)?(\{\{)(.*?)(\}\})`)
 	str = re.ReplaceAllStringFunc(str, func(m string) string {
 		// If the string starts with a backslash, that's an escape, so we should
-		// replace it with the remaining portion of the match. \${VAR} becomes
-		// ${VAR}
+		// replace it with the remaining portion of the match. \{{VAR}} becomes
+		// {{VAR}}
 		if string(m[0]) == "\\" {
 			return m[1:]
 		}
@@ -82,18 +84,34 @@ func Interpolate(str string, env *object.Environment) string {
 		varName := ""
 
 		// If you type a variable wrong, forgetting the closing bracket, we
-		// simply return it to you: eg "my ${variable"
+		// simply return it to you: eg "my {{variable"
 
-		if m[len(m)-1] != '}' {
+		if m[len(m)-1] != '}' || m[len(m)-2] != '}' {
 			return m
 		}
 
-		varName = m[2 : len(m)-1]
+		varName = m[2 : len(m)-2]
 
 		v, ok := env.Get(varName)
 
-		// If the variable is not found, we just dump an empty string
+		// The variable might be an index expression
 		if !ok {
+			// basically just spinning up a whole new
+			// instance of cozy; very inefficient,
+			// but it's the same thing we do on every module
+			// require.
+			l := lexer.New(string(varName))
+			p := parser.New(l)
+			program := p.ParseProgram()
+			macroEnv := object.NewEnvironment()
+			DefineMacros(program, macroEnv)
+			expanded := ExpandMacros(program, macroEnv)
+			evaluated := Eval(expanded, env)
+			if evaluated != nil {
+				return evaluated.Inspect()
+			}
+
+			// still no match found, so:
 			return ""
 		}
 

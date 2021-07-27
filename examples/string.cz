@@ -34,15 +34,10 @@ root += "s";
 print(root + "d", "f");
 
 # Interpolation
-# TODO: adjust the regex to work on complex expressions
-# See evaluator/utils.go
-let first = "Zac"
-let last = "Anger"
-let loc = "USA"
-let age = 999
-let food = "pizza"
+let me = {"first": "Zac", "last": "Anger", "loc": "USA", "age": 999}
+let foods = ["pizza", "chocolate"]
 let activity = "movies"
-let s = "My name is ${first} ${last};
-I live in ${loc} and am ${age} years old.
-I like ${food} and ${activity}."
+let s = "My name is {{me.first}} {{me.last}};
+I live in {{me.loc}} and am {{me[\"age\"]}} years old.
+I like {{foods.join(\", \")}}, and {{activity}}."
 print(s)

@@ -29,12 +29,13 @@ func TestInterpolate(t *testing.T) {
 		expected string
 	}{
 		{"string", "string"},
-		{"$string", "$string"},
-		{"\\${string}", "${string}"},
+		{"{string}", "{string}"},
+		{"\\{{string}}", "{{string}}"},
 		{"xy\\z", "xy\\z"},
-		{"${string}", "test"},
-		{"${string}_", "test_"},
-		{"${string x", "${string x"},
+		{"{{string}}", "test"},
+		{"{{string}}_", "test_"},
+		{"{{string x", "{{string x"},
+		{"{{string} x", "{{string} x"},
 	}
 
 	env := object.NewEnvironment()

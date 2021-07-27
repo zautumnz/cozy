@@ -232,7 +232,10 @@ func EvalModule(name string) object.Object {
 	}
 
 	env := object.NewEnvironment()
-	Eval(module, env)
+	macroEnv := object.NewEnvironment()
+	DefineMacros(module, macroEnv)
+	expanded := ExpandMacros(module, macroEnv)
+	Eval(expanded, env)
 
 	return env.ExportedHash()
 }

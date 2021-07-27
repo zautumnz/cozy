@@ -897,9 +897,8 @@ func TestStringInterpolation(t *testing.T) {
 		input    string
 		expected string
 	}{
-		{`let a = "123"; "abc${a}"`, "abc123"},
-		{`let a = "123"; "abc\\${a}"`, "abc${a}"},
-		{`let a = "123"; "$${a}$${a}$${a}"`, "$123$123$123"},
+		{`let a = "123"; "abc{{a}}"`, "abc123"},
+		{`let a = "123"; "abc\\{{a}}"`, "abc{{a}}"},
 	}
 
 	for _, tt := range tests {
