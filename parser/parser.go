@@ -4,6 +4,8 @@ package parser
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"strconv"
 	"strings"
 
@@ -949,4 +951,28 @@ func (p *Parser) parseMacroLiteral() ast.Expression {
 	lit.Body = p.parseBlockStatement()
 
 	return lit
+}
+
+// ParserErrorsParams is used in main and repl
+type ParserErrorsParams struct {
+	Errors []string
+	Out    io.Writer
+}
+
+// PrintParserErrors prints parser errors
+func PrintParserErrors(arg ParserErrorsParams) {
+	if arg.Out != nil {
+		io.WriteString(arg.Out, "ERROR!\n")
+		io.WriteString(arg.Out, " parser errors:\n")
+		for _, msg := range arg.Errors {
+			io.WriteString(arg.Out, "\t"+msg+"\n")
+		}
+		// we're in a repl, so don't do anything else
+	} else {
+		for _, msg := range arg.Errors {
+			fmt.Printf("\t%s\n", msg)
+		}
+		// we're not in a repl, so exit
+		os.Exit(1)
+	}
 }

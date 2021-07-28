@@ -1232,7 +1232,7 @@ func objectToNativeBoolean(o object.Object) bool {
 	}
 }
 
-// Macro-related code
+// DefineMacros puts macros into an env
 func DefineMacros(program *ast.Program, env *object.Environment) {
 	definitions := []int{}
 
@@ -1275,6 +1275,7 @@ func addMacro(stmt ast.Statement, env *object.Environment) {
 	env.SetLet(letStatement.Name.Value, macro)
 }
 
+// ExpandMacros handles unquoting
 func ExpandMacros(program ast.Node, env *object.Environment) ast.Node {
 	return ast.Modify(program, func(node ast.Node) ast.Node {
 		callExpression, ok := node.(*ast.CallExpression)
@@ -1402,4 +1403,31 @@ func isUnquoteCall(node ast.Node) bool {
 	}
 
 	return callExpression.Function.TokenLiteral() == "unquote"
+}
+
+// RunCozyCode inits a whole cozy instance, used in the repl,
+// top-level cmd, expanding macros, and evaling modules
+// TODO: actually use this
+func RunCozyCode(input string, e *object.Environment, m *object.Environment) object.Object {
+	var env *object.Environment
+	var macroEnv *object.Environment
+	if e == nil {
+		env = object.NewEnvironment()
+	} else {
+		env = e
+	}
+
+	if m == nil {
+		macroEnv = object.NewEnvironment()
+	} else {
+		macroEnv = m
+	}
+
+	l := lexer.New(input)
+	p := parser.New(l)
+	prog := p.ParseProgram()
+	DefineMacros(prog, macroEnv)
+	expanded := ExpandMacros(prog, macroEnv)
+	evaled := Eval(expanded, env)
+	return evaled
 }

@@ -68,10 +68,7 @@ func Execute(input string) int {
 
 	program := p.ParseProgram()
 	if len(p.Errors()) != 0 {
-		for _, msg := range p.Errors() {
-			fmt.Printf("\t%s\n", msg)
-		}
-		os.Exit(1)
+		parser.PrintParserErrors(parser.ParserErrorsParams{Errors: p.Errors()})
 	}
 
 	// Register a function called version()
