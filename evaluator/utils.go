@@ -96,10 +96,9 @@ func Interpolate(str string, env *object.Environment) string {
 
 		// The variable might be an index expression
 		if !ok {
-			// basically just spinning up a whole new
-			// instance of cozy; very inefficient,
-			// but it's the same thing we do on every module
-			// require.
+			// Basically just spinning up a whole new instance of cozy; very
+			// inefficient, but it's the same thing we do on every module
+			// require and eval() calls.
 			l := lexer.New(string(varName))
 			p := parser.New(l)
 			program := p.ParseProgram()
@@ -111,7 +110,7 @@ func Interpolate(str string, env *object.Environment) string {
 				return evaluated.Inspect()
 			}
 
-			// still no match found, so:
+			// Still no match found, so return an empty string
 			return ""
 		}
 
