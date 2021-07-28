@@ -74,28 +74,6 @@ func (e *Environment) Names(prefix string) []string {
 	return ret
 }
 
-// TODO: this isn't quite right, but when it is,
-// use it to ensure we're walking all the way up the chain rather than
-// just one level up
-func (e *Environment) lookupInEnvs(name string) (Object, Environment) {
-	currentEnv := e
-
-	for currentEnv != nil {
-		if currentEnv.store[name] != nil {
-			return currentEnv.store[name], *currentEnv
-		}
-
-		if currentEnv.outer == nil {
-			break
-		} else {
-			currentEnv = currentEnv.outer
-			continue
-		}
-	}
-
-	return nil, *currentEnv
-}
-
 // Get returns the value of a given variable, by name.
 func (e *Environment) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]

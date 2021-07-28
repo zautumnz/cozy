@@ -91,6 +91,7 @@ entered code will be evaluated when you exit with `ctrl+d`.
     returns (without the `return` keyword) are possible
 * No top level mutable variables, because all top level variables are exported
 * Parens are optional in for and if conditions
+* No third-party libraries; all you need to build is a current version of Go
 
 ### Builtins
 
