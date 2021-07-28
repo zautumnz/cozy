@@ -14,7 +14,6 @@ let dump = fn(hsh) {
     }
 };
 
-
 # Here is a sample hash
 let h = {"Zac": "Anger" , "seven": 7, 3.14: "pi-ish"};
 

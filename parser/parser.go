@@ -514,13 +514,14 @@ func (p *Parser) parseIfExpression() ast.Expression {
 // parseBracketExpression looks for an expression surrounded by "(" + ")".
 // Used by parseIfExpression.
 func (p *Parser) parseBracketExpression() ast.Expression {
+	usingParens := false
 
-	// look for (
-	if !p.expectPeek(token.LPAREN) {
-		msg := fmt.Sprintf("expected '(' but got %s", p.curToken.Literal)
-		p.errors = append(p.errors, msg)
-		return nil
+	// check for (
+	if p.peekTokenIs(token.LPAREN) {
+		usingParens = true
+		p.nextToken()
 	}
+
 	p.nextToken()
 
 	// Look for the expression itself
@@ -529,11 +530,18 @@ func (p *Parser) parseBracketExpression() ast.Expression {
 		return nil
 	}
 
-	// look for )
-	if !p.expectPeek(token.RPAREN) {
-		msg := fmt.Sprintf("expected ')' but got %s", p.curToken.Literal)
-		p.errors = append(p.errors, msg)
-		return nil
+	// if we started with parens...
+	if usingParens {
+		if !p.expectPeek(token.RPAREN) {
+			msg := fmt.Sprintf("expected ')' but got %s", p.curToken.Literal)
+			p.errors = append(p.errors, msg)
+			return nil
+		}
+	}
+
+	// otherwise
+	if p.peekTokenIs(token.RPAREN) {
+		p.nextToken()
 	}
 
 	return tmp
@@ -542,17 +550,32 @@ func (p *Parser) parseBracketExpression() ast.Expression {
 // parseForLoopExpression parses a for-loop.
 func (p *Parser) parseForLoopExpression() ast.Expression {
 	expression := &ast.ForLoopExpression{Token: p.curToken}
-	if !p.expectPeek(token.LPAREN) {
-		return nil
+	usingParens := false
+
+	// see if we're using parens
+	if p.peekTokenIs(token.LPAREN) {
+		usingParens = true
+		p.nextToken()
 	}
 	p.nextToken()
 	expression.Condition = p.parseExpression(LOWEST)
-	if !p.expectPeek(token.RPAREN) {
-		return nil
+
+	// if we started with parens
+	if usingParens {
+		if !p.expectPeek(token.RPAREN) {
+			return nil
+		}
 	}
+
+	// otherwise
+	if p.peekTokenIs(token.RPAREN) {
+		p.nextToken()
+	}
+
 	if !p.expectPeek(token.LBRACE) {
 		return nil
 	}
+
 	expression.Consequence = p.parseBlockStatement()
 	return expression
 }

@@ -24,5 +24,6 @@ print(false ?
 );
 
 # these are expressions, not statements
-let asdf = if (1 > 2) { true } else { false };
+# note that parens in if statement conditions are optional
+let asdf = if 1 > 2 { true } else { false };
 print(asdf);
