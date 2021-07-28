@@ -5,6 +5,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/zacanger/cozy/lexer"
@@ -250,37 +251,7 @@ func typeFun(args ...object.Object) object.Object {
 		return newError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
-	switch args[0].(type) {
-	case *object.String:
-		return &object.String{Value: "string"}
-	case *object.Regexp:
-		return &object.String{Value: "regexp"}
-	case *object.Boolean:
-		return &object.String{Value: "bool"}
-	case *object.Builtin:
-		return &object.String{Value: "builtin"}
-	case *object.File:
-		return &object.String{Value: "file"}
-	case *object.Array:
-		return &object.String{Value: "array"}
-	case *object.Function:
-		return &object.String{Value: "function"}
-	case *object.Integer:
-		return &object.String{Value: "int"}
-	case *object.Float:
-		return &object.String{Value: "float"}
-	case *object.Hash:
-		return &object.String{Value: "hash"}
-	case *object.Module:
-		return &object.String{Value: "module"}
-	case *object.DocString:
-		return &object.String{Value: "docstring"}
-	case *object.Error:
-		return &object.String{Value: "error"}
-	default:
-		return newError("argument to `type` not supported, got=%s",
-			args[0].Type())
-	}
+	return &object.String{Value: strings.ToLower(string(args[0].Type()))}
 }
 
 func init() {
