@@ -68,3 +68,20 @@ print("\nEven numbers:")
 print("\t", ints.filter(even?))
 print("\nPrime numbers:")
 print("\t", ints.filter(prime?))
+
+# memoize
+let adder = fn (q, w, e) {
+    return q + w + e
+}
+let memoized = memoize(adder)
+print(memoized(1, 2, 3))
+# second call will fetch from in-mem cache
+print(memoized(1, 2, 3))
+
+# curry
+# TODO: this working depends on a spread-type operator
+let curried = curry(adder)
+let first = curried(1)
+let second = first(1)
+let third = second(1)()
+print(third)

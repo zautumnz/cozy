@@ -13,7 +13,7 @@ fmt:
 	go fmt ./...
 
 clean:
-	@rm -f cozy
+	@rm -f cozy coverage.out
 
 test:
 	@go test ./...

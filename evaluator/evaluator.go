@@ -173,6 +173,8 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 	case *ast.StringLiteral:
 		return &object.String{Value: Interpolate(node.Value, env)}
 	case *ast.CurrentArgsLiteral:
+		// TODO: turn an args literal into just a regular array so it can be
+		// used like regular values without an additional loop
 		return &object.Array{Token: node.Token, Elements: env.CurrentArgs, IsCurrentArgs: true}
 	case *ast.RegexpLiteral:
 		return &object.Regexp{Value: node.Value, Flags: node.Flags}

@@ -55,3 +55,45 @@ let module?    = fn (x) { return type(x) == "module" };
 let number?    = fn (x) { return int?(x) || float?(x) };
 let regexp?    = fn (x) { return type(x) == "regexp" };
 let string?    = fn (x) { return type(x) == "string" };
+
+let memoize = fn (f) {
+    mutable results = {}
+    return fn () {
+        mutable res = []
+        foreach x in ... {
+            res = res.push(x)
+        }
+        res = res.join("__cozy__memo__arg__")
+        if (results.keys().includes?(res)) {
+            return results[res]
+        }
+        let f_result = f(...)
+        results = results.set(res, f_result)
+        return f_result
+    }
+}
+
+# TODO: this is incomplete
+let curry = fn (f) {
+    mutable f_args = []
+    let inner = fn () {
+        mutable inner_args = []
+        foreach x in ... {
+            inner_args = inner_args.push(x)
+        }
+
+        if (len(inner_args) > 0) {
+            foreach x in inner_args {
+                f_args = f_args.push(x)
+            }
+            return inner
+        }
+
+        # TODO: depends on a "spread" type operator
+        let res = f(f_args)
+        f_args = []
+        return res
+    }
+
+    return inner
+}

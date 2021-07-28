@@ -21,4 +21,3 @@ List of things to get done before a v1.
     * Flesh out the testing library with functions to test failure and errors
     * Remove parens in `if` and `for`
     * Remove `self`?
-    * Cozy, memo, and other FP utils
