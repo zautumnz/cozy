@@ -109,6 +109,9 @@ func (e *Environment) Get(name string) (Object, bool) {
 func (e *Environment) Set(name string, val Object) Object {
 	cur := e.store[name]
 
+	// TODO: this isn't quite right. It results in function scope
+	// rather than block scope for mutable variables, but we want
+	// block (lexical) scope.
 	if e.outer == nil {
 		fmt.Printf("No mutable variables at the top level! %s must be bound with let!\n", name)
 		os.Exit(3)
