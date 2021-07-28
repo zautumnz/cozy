@@ -11,3 +11,23 @@ let res = await(a)
 print("2")
 print(res) # bar
 print("3")
+
+# This is equivalent to the following in JS:
+# const sleep = (ms) =>
+#     new Promise((res) => {
+#         setTimeout(res, ms)
+#     })
+#
+# let x = async () => {
+#     console.log("foo")
+#     await sleep(1000)
+#     return "bar"
+# }
+#
+# ;(async () => {
+#     console.log(1)
+#     let res = await x()
+#     console.log(2)
+#     console.log(res)
+#     console.log(3)
+# })()
