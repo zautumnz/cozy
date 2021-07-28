@@ -15,7 +15,7 @@ hi def link     cozyDeclaration     Keyword
 " Keywords within functions
 syn keyword     cozyStatement         return
 syn keyword     cozyConditional       if else
-syn keyword     cozyRepeat            for foreach in while
+syn keyword     cozyRepeat            for foreach in
 hi def link     cozyStatement         Statement
 hi def link     cozyConditional       Conditional
 hi def link     cozyRepeat            Repeat

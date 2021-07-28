@@ -32,9 +32,12 @@ foreach key,val in h {
      print("\t", key, "\t=>\t", val);
 };
 
-# While
-mutable q = 0;
-while (q < 10) {
-    q++;
-    print("q", q);
-};
+let for_loop = fn () {
+    # While
+    mutable q = 0;
+    for (q < 10) {
+        q++;
+        print("q", q);
+    };
+}
+for_loop()

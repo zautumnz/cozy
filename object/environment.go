@@ -109,6 +109,11 @@ func (e *Environment) Get(name string) (Object, bool) {
 func (e *Environment) Set(name string, val Object) Object {
 	cur := e.store[name]
 
+	if e.outer == nil {
+		fmt.Printf("No mutable variables at the top level! %s must be bound with let!\n", name)
+		os.Exit(3)
+	}
+
 	if (cur != nil && e.readonly[name]) || (e.outer != nil && e.outer.store[name] != nil && e.outer.readonly[name]) {
 		fmt.Printf("Attempting to modify '%s' denied; it was defined as a constant.\n", name)
 		os.Exit(3)

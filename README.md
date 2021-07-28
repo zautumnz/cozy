@@ -89,6 +89,7 @@ entered code will be evaluated when you exit with `ctrl+d`.
 * Semicolons are optional
 * Most statements are expressions, including if/else; this also means implicit
     returns (without the `return` keyword) are possible
+* No top level mutable variables, because all top level variables are exported
 
 ### Builtins
 

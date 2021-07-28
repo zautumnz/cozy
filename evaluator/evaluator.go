@@ -88,8 +88,6 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		return evalBlockStatement(node, env)
 	case *ast.IfExpression:
 		return evalIfExpression(node, env)
-	case *ast.WhileExpression:
-		return evalWhileExpression(node, env)
 	case *ast.TernaryExpression:
 		return evalTernaryExpression(node, env)
 	case *ast.ImportExpression:
@@ -241,29 +239,6 @@ func EvalModule(name string) object.Object {
 	Eval(expanded, env)
 
 	return env.ExportedHash()
-}
-
-func evalWhileExpression(we *ast.WhileExpression, env *object.Environment) object.Object {
-	var result object.Object
-
-	for {
-		condition := Eval(we.Condition, env)
-		if isError(condition) {
-			return condition
-		}
-
-		if isTruthy(condition) {
-			result = Eval(we.Consequence, env)
-		} else {
-			break
-		}
-	}
-
-	if result != nil {
-		return result
-	}
-
-	return &object.Boolean{Value: false}
 }
 
 func evalImportExpression(ie *ast.ImportExpression, env *object.Environment) object.Object {

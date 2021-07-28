@@ -10,19 +10,22 @@ let dump = fn(i) {
 };
 
 
-# An array of integers.
-mutable a = [ 32, 2, 33, 1, -1 ];
-print("The original array : ", a)
-dump(a);
+let x = fn () {
+    # An array of integers.
+    mutable a = [ 32, 2, 33, 1, -1 ];
+    print("The original array : ", a)
+    dump(a);
 
-a = a.sort();
-print("The sorted array : ", a);
-dump(a);
+    a = a.sort();
+    print("The sorted array : ", a);
+    dump(a);
 
-# Now sort some ints
-a = [ "Zebra", "zebra", "x-ray", "Zac", "Anger", "Yan" ];
-print("Original Array: " , string(a));
-dump(a);
-a = a.sort();
-print("Sorted Array: " , string(a));
-dump(a);
+    # Now sort some ints
+    a = [ "Zebra", "zebra", "x-ray", "Zac", "Anger", "Yan" ];
+    print("Original Array: " , string(a));
+    dump(a);
+    a = a.sort();
+    print("Sorted Array: " , string(a));
+    dump(a);
+}
+x()

@@ -17,20 +17,23 @@ let str = string(3.14 * 22 + math.random());
 let str = "The result was : " + str;
 print(str);
 
+let ops_example = fn () {
 # Operations
-let a = 3;
-let b = 1.2;
-print(a + b);
-print(a - b);
-print(a * b);
-print(a / b);
-print(2 ** 3);
-print(15 % 3);
-mutable ops = 1;
-ops++;
-ops--;
-ops += 1;
-ops -= 1;
-ops *= 1;
-ops /= 1;
-print(ops == 1);
+    let a = 3;
+    let b = 1.2;
+    print(a + b);
+    print(a - b);
+    print(a * b);
+    print(a / b);
+    print(2 ** 3);
+    print(15 % 3);
+    mutable ops = 1;
+    ops++;
+    ops--;
+    ops += 1;
+    ops -= 1;
+    ops *= 1;
+    ops /= 1;
+    print(ops == 1);
+}
+ops_example()

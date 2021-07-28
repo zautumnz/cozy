@@ -63,7 +63,6 @@
     "type"
     "unquote"
     "version"
-    "while"
     ))
 
 
