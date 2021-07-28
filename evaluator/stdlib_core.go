@@ -131,6 +131,8 @@ func lenFun(args ...object.Object) object.Object {
 		return &object.Integer{Value: int64(utf8.RuneCountInString(arg.Value))}
 	case *object.Array:
 		return &object.Integer{Value: int64(len(arg.Elements))}
+	case *object.Hash:
+		return &object.Integer{Value: int64(len(arg.Pairs))}
 	default:
 		return newError("argument to `len` not supported, got=%s",
 			args[0].Type())

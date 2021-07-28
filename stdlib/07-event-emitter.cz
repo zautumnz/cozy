@@ -3,14 +3,29 @@ let event_emitter = fn() {
     let data = {
         "subscribe": fn(name, f) {
             if (!events.keys().includes?(name)) {
-                events = events.set(name, f);
+                events = events.set(name, [f]);
             } else {
-                print("Event already registered for", name);
+                mutable ets = events[name]
+                ets = ets.push(f)
+                events = events.set(name, ets)
+            }
+
+            # unsubscribe
+            # TODO: this isn't working, see examples/events.cz
+            return fn () {
+                mutable ets = []
+                foreach x in events[name] {
+                    if (x != f) {
+                        ets = ets.push(x)
+                    }
+                }
+                events = events.set(name, ets)
             }
         },
         "emit": fn(name, x) {
-            let f = events[name];
-            f(x);
+            foreach f in events[name] {
+                f(x)
+            }
         },
         "events": events
     };
