@@ -9,6 +9,9 @@ var isRepl = false
 // used below in ExitConditionally
 func SetReplOrRun(rep bool) {
 	isRepl = rep
+	if isRepl {
+		os.Setenv("COZY_RUNNING_IN_REPL", "true")
+	}
 }
 
 // ExitConditionally exits only if we're not currently in a REPL
