@@ -2,7 +2,6 @@ package evaluator
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -11,6 +10,7 @@ import (
 	"github.com/zacanger/cozy/lexer"
 	"github.com/zacanger/cozy/object"
 	"github.com/zacanger/cozy/parser"
+	"github.com/zacanger/cozy/utils"
 )
 
 // Evaluate a string containing cozy code
@@ -45,7 +45,7 @@ func evalFun(env *object.Environment, args ...object.Object) object.Object {
 		for _, msg := range p.Errors() {
 			fmt.Printf("\t%s\n", msg)
 		}
-		os.Exit(1)
+		utils.ExitConditionally(1)
 	}
 	return newError("argument to `eval` not supported, got=%s",
 		args[0].Type())

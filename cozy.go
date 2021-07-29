@@ -21,6 +21,7 @@ import (
 	"github.com/zacanger/cozy/object"
 	"github.com/zacanger/cozy/parser"
 	"github.com/zacanger/cozy/repl"
+	"github.com/zacanger/cozy/utils"
 )
 
 // COZY_VERSION is replaced by go build in makefile
@@ -111,13 +112,13 @@ func main() {
 	// Showing the version?
 	if *vers {
 		fmt.Printf("cozy %s\n", COZY_VERSION)
-		os.Exit(0)
+		utils.ExitConditionally(0)
 	}
 
 	// Executing code?
 	if *eval != "" {
 		Execute(*eval)
-		os.Exit(0)
+		utils.ExitConditionally(0)
 	}
 
 	// Otherwise we're either reading from STDIN, or the

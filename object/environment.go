@@ -2,8 +2,9 @@ package object
 
 import (
 	"fmt"
-	"os"
 	"strings"
+
+	"github.com/zacanger/cozy/utils"
 )
 
 // Environment stores our functions, variables, constants, etc.
@@ -92,12 +93,12 @@ func (e *Environment) Set(name string, val Object) Object {
 	// block (lexical) scope.
 	if e.outer == nil {
 		fmt.Printf("No mutable variables at the top level! %s must be bound with let!\n", name)
-		os.Exit(3)
+		utils.ExitConditionally(3)
 	}
 
 	if (cur != nil && e.readonly[name]) || (e.outer != nil && e.outer.store[name] != nil && e.outer.readonly[name]) {
 		fmt.Printf("Attempting to modify '%s' denied; it was defined as a constant.\n", name)
-		os.Exit(3)
+		utils.ExitConditionally(3)
 	}
 
 	// Store the (updated) value.
@@ -118,7 +119,7 @@ func (e *Environment) Set(name string, val Object) Object {
 
 		// Otherwise something is very broken!
 		fmt.Printf("Something is broken with scope!\n")
-		os.Exit(5)
+		utils.ExitConditionally(5)
 	}
 
 	// Otherwise we're just in a regular block

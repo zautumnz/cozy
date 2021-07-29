@@ -8,7 +8,6 @@ List of things to get done before a v1.
     * Errors and exceptions:
         * As values?
         * Try/catch?
-        * Move all os.Exit-ing up to top level and pass around exit code?
         * Stack traces? Or at least better file/line indicators?
 * Minor things:
     * At least 50% code coverage

@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/zacanger/cozy/object"
+	"github.com/zacanger/cozy/utils"
 )
 
 // getenv() -> (Hash)
@@ -79,7 +80,7 @@ func sysExit(args ...object.Object) object.Object {
 		}
 	}
 
-	os.Exit(code)
+	utils.ExitConditionally(code)
 	return &object.Integer{Value: int64(code)}
 }
 

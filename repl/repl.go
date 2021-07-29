@@ -9,10 +9,12 @@ import (
 	"github.com/zacanger/cozy/lexer"
 	"github.com/zacanger/cozy/object"
 	"github.com/zacanger/cozy/parser"
+	"github.com/zacanger/cozy/utils"
 )
 
 // Start runs the REPL
 func Start(in io.Reader, out io.Writer) {
+	utils.SetReplOrRun(true)
 	scanner := bufio.NewScanner(in)
 	env := object.NewEnvironment()
 	macroEnv := object.NewEnvironment()

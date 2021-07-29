@@ -50,7 +50,7 @@ func TestBadMutableLetStatement(t *testing.T) {
 
 		errors := p.errors
 		if len(errors) < 1 {
-			t.Errorf("UNexpected error-count!")
+			t.Errorf("Unexpected error-count!")
 		}
 
 		if len(p.Errors()) != len(errors) {

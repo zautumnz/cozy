@@ -5,13 +5,13 @@ package parser
 import (
 	"fmt"
 	"io"
-	"os"
 	"strconv"
 	"strings"
 
 	"github.com/zacanger/cozy/ast"
 	"github.com/zacanger/cozy/lexer"
 	"github.com/zacanger/cozy/token"
+	"github.com/zacanger/cozy/utils"
 )
 
 // prefix Parse function
@@ -972,6 +972,6 @@ func PrintParserErrors(arg ParserErrorsParams) {
 			fmt.Printf("\t%s\n", msg)
 		}
 		// we're not in a repl, so exit
-		os.Exit(1)
+		utils.ExitConditionally(1)
 	}
 }

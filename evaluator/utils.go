@@ -62,7 +62,6 @@ func FindModule(name string) string {
 // IsNumber checks to see if a value is a number
 func IsNumber(s string) bool {
 	_, err := strconv.ParseFloat(s, 64)
-
 	return err == nil
 }
 

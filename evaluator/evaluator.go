@@ -16,6 +16,7 @@ import (
 	"github.com/zacanger/cozy/object"
 	"github.com/zacanger/cozy/parser"
 	"github.com/zacanger/cozy/token"
+	"github.com/zacanger/cozy/utils"
 )
 
 // pre-defined objects
@@ -80,7 +81,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		res := evalInfixExpression(node.Operator, left, right, env)
 		if isError(res) {
 			fmt.Printf("Error: %s\n", res.Inspect())
-			os.Exit(1)
+			utils.ExitConditionally(1)
 		}
 		return res
 
@@ -158,7 +159,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		res := ApplyFunction(env, function, args)
 		if isError(res) {
 			fmt.Fprintf(os.Stderr, "Error calling `%s` : %s\n", node.Function, res.Inspect())
-			os.Exit(1)
+			utils.ExitConditionally(1)
 			return res
 		}
 
@@ -782,7 +783,7 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 		_, ok := env.Get(a.Name.String())
 		if !ok {
 			fmt.Printf("Setting unknown variable '%s' is an error!\n", a.Name.String())
-			os.Exit(1)
+			utils.ExitConditionally(1)
 		}
 
 		env.Set(a.Name.String(), evaluated)
@@ -909,7 +910,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 		return builtin
 	}
 	fmt.Fprintf(os.Stderr, "identifier not found: %s\n", node.Value)
-	os.Exit(1)
+	utils.ExitConditionally(1)
 	return newError("identifier not found: " + node.Value)
 }
 
