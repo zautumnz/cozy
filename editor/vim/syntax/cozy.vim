@@ -13,7 +13,7 @@ hi def link     cozyLet             Keyword
 hi def link     cozyDeclaration     Keyword
 
 " Keywords within functions
-syn keyword     cozyStatement         return
+syn keyword     cozyStatement         return null
 syn keyword     cozyConditional       if else
 syn keyword     cozyRepeat            for foreach in
 hi def link     cozyStatement         Statement

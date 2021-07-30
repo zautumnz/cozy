@@ -132,6 +132,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.CURRENT_ARGS, p.parseCurrentArgsLiteral)
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
+	p.registerPrefix(token.NULL, p.parseNull)
 	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
 	p.registerPrefix(token.STRING, p.ParseStringLiteral)
 	p.registerPrefix(token.TRUE, p.ParseBoolean)
@@ -379,6 +380,11 @@ func (p *Parser) ParseFloatLiteral() ast.Expression {
 // ParseBoolean parses a boolean token.
 func (p *Parser) ParseBoolean() ast.Expression {
 	return &ast.Boolean{Token: p.curToken, Value: p.curTokenIs(token.TRUE)}
+}
+
+// parseNull parses a null keyword
+func (p *Parser) parseNull() ast.Expression {
+	return &ast.NullLiteral{Token: p.curToken}
 }
 
 // parsePrefixExpression parses a prefix-based expression.

@@ -53,6 +53,7 @@ const (
 	MUTABLE         = "MUTABLE"
 	NOT_CONTAINS    = "!~"
 	NOT_EQ          = "!="
+	NULL            = "null"
 	OR              = "||"
 	PERIOD          = "."
 	PLUS            = "+"
@@ -86,6 +87,7 @@ var keywords = map[string]Type{
 	"let":     LET,
 	"macro":   MACRO,
 	"mutable": MUTABLE,
+	"null":    NULL,
 	"return":  RETURN,
 	"true":    TRUE,
 }

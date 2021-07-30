@@ -36,6 +36,7 @@
     "in"
     "let"
     "mutable"
+    "null"
     "return"
     ))
 
