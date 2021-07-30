@@ -41,7 +41,7 @@ hi def link     cozyBuiltins            Identifier
 hi def link     cozyBoolean             Boolean
 
 " Comments; their contents
-syn keyword     cozyTodo              contained TODO FIXME XXX BUG
+syn keyword     cozyTodo              contained TODO
 syn cluster     cozyCommentGroup      contains=cozyTodo
 syn region      cozyComment           start="#" end="$" contains=@cozyCommentGroup,@Spell
 hi def link     cozyComment           Comment
@@ -50,10 +50,8 @@ hi def link     cozyTodo              Todo
 " Strings and their contents
 syn region      cozyString            start=+"+ skip=+\\\\\|\\"+ end=+"+ contains=@Spell
 syn region      cozyDocString         start=+'+ skip=+\\\\\|\\'+ end=+'+ contains=@Spell
-syn region      cozyExecString        start=+`+ end=+`+ contains=@Spell
 hi def link cozyString String
 hi def link cozyDocString String
-hi def link cozyExecString String
 
 " TODO: this section copied from ruby.vim, needs work
 syn region cozyInterpolation   matchgroup=cozyInterpolationDelimiter start="${" end="}" contained contains=ALLBUT,@cozyComment
