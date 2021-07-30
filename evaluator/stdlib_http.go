@@ -19,18 +19,21 @@ type httpRoute struct {
 }
 
 type app struct {
-	DefaultRoute httpHandler
-	Routes       []httpRoute
+	Routes []httpRoute
 }
 
 var appInstances = make(map[int64]app)
 
+func defaultRoute(ctx *httpContext) {
+	ctx.send(
+		&object.Integer{Value: int64(http.StatusNotFound)},
+		&object.String{Value: "Not found"},
+		&object.String{Value: "text/plain"},
+	)
+}
+
 func newApp() *app {
-	app := &app{
-		DefaultRoute: func(ctx *httpContext) {
-			ctx.send(&object.Integer{Value: int64(http.StatusNotFound)}, &object.String{Value: "Not found"})
-		},
-	}
+	app := &app{}
 
 	return app
 }
@@ -76,7 +79,11 @@ func handleRoute(env *object.Environment, args ...object.Object) object.Object {
 	default:
 		return NewError("route expected callback function!")
 	}
-	fmt.Println(f)
+
+	// TODO: this is just so we don't get a compile error on f not being used
+	if f == nil {
+		fmt.Println(f)
+	}
 
 	appInstance := appInstances[appInstanceID]
 	re := regexp.MustCompile(pattern)
@@ -87,6 +94,7 @@ func handleRoute(env *object.Environment, args ...object.Object) object.Object {
 	return &object.Boolean{Value: true}
 }
 
+// TODO: make this `a` our `appInstance`
 func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := &httpContext{Request: r, ResponseWriter: w}
 
@@ -102,7 +110,7 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	a.DefaultRoute(ctx)
+	defaultRoute(ctx)
 }
 
 type httpContext struct {
@@ -111,11 +119,12 @@ type httpContext struct {
 	Params []string
 }
 
+// TODO: this doesn't seem to actually be working...
 // static("./public")
 // static("./public", "/some-mount-point")
 func staticHandler(env *object.Environment, args ...object.Object) object.Object {
 	dir := ""
-	mount := ""
+	mount := "/"
 	/*
 		var appInstance app
 
@@ -145,8 +154,9 @@ func staticHandler(env *object.Environment, args ...object.Object) object.Object
 		}
 	}
 
+	// TODO: return this so it can work with request and response
 	http.Handle(mount, http.FileServer(http.Dir(dir)))
-	return &object.Boolean{Value: true}
+	return NULL
 }
 
 // this method can be used in the cozy stdlib to build
