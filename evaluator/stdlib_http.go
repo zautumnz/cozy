@@ -3,6 +3,7 @@ package evaluator
 import (
 	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
 	"regexp"
 
@@ -14,12 +15,15 @@ type httpHandler func(*httpContext)
 type httpRoute struct {
 	Pattern *regexp.Regexp
 	Handler httpHandler
+	Methods []string
 }
 
 type app struct {
-	Routes       []httpRoute
 	DefaultRoute httpHandler
+	Routes       []httpRoute
 }
+
+var appInstances = make(map[int64]app)
 
 func newApp() *app {
 	app := &app{
@@ -31,20 +35,28 @@ func newApp() *app {
 	return app
 }
 
-func (a *app) handleRoute(env *object.Environment, args ...object.Object) object.Object {
+func handleRoute(env *object.Environment, args ...object.Object) object.Object {
 	var pattern string
 	var methods []string
 	var f *object.Function
 	var handler httpHandler
+	var appInstanceID int64
 
 	switch a := args[0].(type) {
+	case *object.Integer:
+		appInstanceID = a.Value
+	default:
+		return NewError("route expected app instance id!")
+	}
+
+	switch a := args[1].(type) {
 	case *object.String:
 		pattern = a.Value
 	default:
 		return NewError("route expected pattern string!")
 	}
 
-	switch a := args[1].(type) {
+	switch a := args[2].(type) {
 	case *object.Array:
 		for _, e := range a.Elements {
 			switch x := e.(type) {
@@ -58,18 +70,20 @@ func (a *app) handleRoute(env *object.Environment, args ...object.Object) object
 		return NewError("route expected methods string array!")
 	}
 
-	switch a := args[2].(type) {
+	switch a := args[3].(type) {
 	case *object.Function:
 		f = a
 	default:
 		return NewError("route expected callback function!")
 	}
+	fmt.Println(f)
 
+	appInstance := appInstances[appInstanceID]
 	re := regexp.MustCompile(pattern)
 	// TODO: get handler out of object.Function f
-	route := httpRoute{Pattern: re, Handler: handler}
+	route := httpRoute{Pattern: re, Handler: handler, Methods: methods}
 
-	a.Routes = append(a.Routes, route)
+	appInstance.Routes = append(appInstance.Routes, route)
 	return &object.Boolean{Value: true}
 }
 
@@ -82,6 +96,7 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				ctx.Params = matches[1:]
 			}
 
+			// TODO: check method against rt.Methods
 			rt.Handler(ctx)
 			return
 		}
@@ -101,20 +116,33 @@ type httpContext struct {
 func staticHandler(env *object.Environment, args ...object.Object) object.Object {
 	dir := ""
 	mount := ""
-	switch a := args[0].(type) {
+	/*
+		var appInstance app
+
+		switch a := args[0].(type) {
+		case *object.Integer:
+			appInstance = appInstances[a.Value]
+		default:
+			return NewError("http static expected an app instance id!")
+		}
+	*/
+
+	switch a := args[1].(type) {
 	case *object.String:
 		dir = a.Value
 	default:
 		return NewError("http static expected a string!")
 	}
 
-	switch a := args[1].(type) {
-	case *object.String:
-		mount = a.Value
-	}
+	if len(args) > 2 {
+		switch a := args[2].(type) {
+		case *object.String:
+			mount = a.Value
+		}
 
-	if mount == "" {
-		mount = "/"
+		if mount == "" {
+			mount = "/"
+		}
 	}
 
 	http.Handle(mount, http.FileServer(http.Dir(dir)))
@@ -124,6 +152,7 @@ func staticHandler(env *object.Environment, args ...object.Object) object.Object
 // this method can be used in the cozy stdlib to build
 // all other reponse methods (text, json, etc.)
 // example: json = (hash) -> ctx.send(200, json.serialize(hash))
+// TODO: need to figure out how to pass the context instance
 func (c *httpContext) send(args ...object.Object) object.Object {
 	code := 200
 	body := ""
@@ -176,16 +205,21 @@ func main() {
 */
 
 func listen(env *object.Environment, args ...object.Object) object.Object {
+	var appInstance app
+
 	switch a := args[0].(type) {
 	case *object.Integer:
-		// TODO: this isn't right, i just realized...
-		// we don't want all these methods on the hash returned by httpServer,
-		// we want them on the instance of app. this could get complicated....
-		http.ListenAndServe(":"+fmt.Sprint(a.Value), app)
+		appInstance = appInstances[a.Value]
 	default:
-		return NewError("http.server.listen expeced int port!")
+		return NewError("http.server.listen expected app instance id!")
 	}
-	return &object.Boolean{Value: true}
+	switch a := args[1].(type) {
+	case *object.Integer:
+		http.ListenAndServe(":"+fmt.Sprint(a.Value), &appInstance)
+		return &object.Boolean{Value: true}
+	default:
+		return NewError("http.server.listen expected int port!")
+	}
 }
 
 func httpServer(args ...object.Object) object.Object {
@@ -197,18 +231,22 @@ func httpServer(args ...object.Object) object.Object {
 
 	// route(pattern, callback(context) { respond })
 	routeKey := &object.String{Value: "route"}
-	routeVal := &object.Boolean{Value: false} // TODO
+	routeVal := &object.Builtin{Fn: handleRoute}
 	res[routeKey.HashKey()] = object.HashPair{Key: routeKey, Value: routeVal}
 
 	staticKey := &object.String{Value: "static"}
 	staticVal := &object.Builtin{Fn: staticHandler}
 	res[staticKey.HashKey()] = object.HashPair{Key: staticKey, Value: staticVal}
 
+	appIDKey := &object.String{Value: "id"}
+	appIDVal := &object.Integer{Value: rand.Int63()}
+	res[appIDKey.HashKey()] = object.HashPair{Key: appIDKey, Value: appIDVal}
+
 	return &object.Hash{Pairs: res}
 }
 
 func init() {
-	RegisterBuiltin("http.server",
+	RegisterBuiltin("http.create_server",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (httpServer(args...))
 		})

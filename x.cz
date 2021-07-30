@@ -1,0 +1,35 @@
+# the biggest thing missing right now is handling ctx;
+# how to pass that around, i'm not sure yet.
+# until then, there's no way to actually respond to requests.
+# once ctx is figured out, add methods for text(), json(), etc.
+
+let http.server = fn () {
+    let instance = http.create_server()
+    let id = instance.id
+
+    return {
+        "route": fn (pattern, methods, cb) {
+            instance.route(id, pattern, methods, cb)
+        },
+        "listen": fn (port, cb) {
+            intance.listen(id, port)
+            if (cb) {
+                cb(port)
+            }
+        },
+        "static": fn (dir, mount) {
+            if (mount) {
+                instance.static(id, dir, mount)
+            } else {
+                instance.static(id, dir)
+            }
+        }
+    }
+}
+
+let app = http.server()
+app.static(".")
+app.route("/foo", ["GET"], fn (ctx) {
+    print(ctx)
+})
+app.listen(8000)

@@ -302,6 +302,7 @@ func (l *Lexer) readIdentifier() string {
 		"float.",
 		"fs.",
 		"hash.",
+		"http.",
 		"integer.",
 		"json.",
 		"math.",
