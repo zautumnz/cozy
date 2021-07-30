@@ -1,9 +1,17 @@
 package object
 
+import (
+	"fmt"
+	"strings"
+)
+
 // Error wraps string and implements Object interface.
 type Error struct {
 	// Message contains the error-message we're wrapping
 	Message string
+
+	// Optional exit code
+	Code *int
 }
 
 // Type returns the type of this object.
@@ -13,7 +21,11 @@ func (e *Error) Type() Type {
 
 // Inspect returns a string-representation of the given object.
 func (e *Error) Inspect() string {
-	return "ERROR: " + e.Message
+	msg := "ERROR: " + e.Message
+	if e.Code != nil {
+		msg += "; CODE: " + fmt.Sprint(*e.Code)
+	}
+	return msg
 }
 
 // GetMethod returns a method against the object.
@@ -32,5 +44,10 @@ func (e *Error) ToInterface() interface{} {
 
 // Json returns a json-friendly string
 func (e *Error) Json() string {
-	return e.Inspect()
+	s := `{"error":"` + strings.ReplaceAll(e.Message, `"`, `\"`) + `"`
+	if e.Code != nil {
+		s += `,"code":` + fmt.Sprint(*e.Code)
+	}
+	s += "}"
+	return s
 }
