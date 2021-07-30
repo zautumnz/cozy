@@ -1,6 +1,6 @@
 # cozy
 
-This is a WIP. See [TODO](./TODO.md).
+This is a WIP. See the TODO section.
 
 [![Support with PayPal](https://img.shields.io/badge/paypal-donate-yellow.png)](https://paypal.me/zacanger) [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/zacanger) [![ko-fi](https://img.shields.io/badge/donate-KoFi-yellow.svg)](https://ko-fi.com/U7U2110VB)
 
@@ -120,3 +120,22 @@ Core modules (see examples for docs):
 * `time`
 
 See also the standard library (written mostly in cozy itself).
+
+## TODO
+
+List of things to get done before a v1.
+
+* Major things missing:
+    * HTTP server and client
+    * Cryptography builtins
+    * Errors and exceptions: as values? Try/catch? Stack traces?
+* Minor things:
+    * At least 50% code coverage
+    * Confirm that everything under ./examples works
+    * Complete all lingering TODOs
+    * Write real docs
+    * Add argument validation to all functions
+    * Improve all error messages
+    * Add tab completion and arrow support to the REPL
+    * Flesh out the testing library with functions to test failure and errors
+    * Remove `self`?
