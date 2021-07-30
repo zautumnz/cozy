@@ -8,6 +8,7 @@ import (
 	"github.com/zacanger/cozy/lexer"
 	"github.com/zacanger/cozy/object"
 	"github.com/zacanger/cozy/parser"
+	"github.com/zacanger/cozy/utils"
 )
 
 func TestEvalArithmeticExpression(t *testing.T) {
@@ -220,8 +221,6 @@ func TestReturnStatements(t *testing.T) {
 	}
 }
 
-/*
-// TODO: testing errors is broken
 func TestErrorHandling(t *testing.T) {
 	tests := []struct {
 		input           string
@@ -243,6 +242,8 @@ func TestErrorHandling(t *testing.T) {
 		{"foobar", "identifier not found: foobar"},
 		{`"Hello" - "World"`, "unknown operator: STRING - STRING"},
 	}
+	// set this so we don't os.Exit
+	utils.SetReplOrRun(true)
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
 		errObj, ok := evaluated.(*object.Error)
@@ -257,7 +258,6 @@ func TestErrorHandling(t *testing.T) {
 		}
 	}
 }
-*/
 
 func TestMutableStatements(t *testing.T) {
 	tests := []struct {

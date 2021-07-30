@@ -219,12 +219,12 @@ func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) obje
 func EvalModule(name string) object.Object {
 	filename := FindModule(name)
 	if filename == "" {
-		return newError("ImportError: no module named '%s'", name)
+		return NewError("ImportError: no module named '%s'", name)
 	}
 
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return newError("IOError: error reading module '%s': %s", name, err)
+		return NewError("IOError: error reading module '%s': %s", name, err)
 	}
 
 	l := lexer.New(string(b))
@@ -232,7 +232,7 @@ func EvalModule(name string) object.Object {
 
 	module := p.ParseProgram()
 	if len(p.Errors()) != 0 {
-		return newError("ParseError: %s", p.Errors())
+		return NewError("ParseError: %s", p.Errors())
 	}
 
 	env := object.NewEnvironment()
@@ -257,7 +257,7 @@ func evalImportExpression(ie *ast.ImportExpression, env *object.Environment) obj
 		}
 		return &object.Module{Name: s.Value, Attrs: attrs}
 	}
-	return newError("ImportError: invalid import path '%s'", name)
+	return NewError("ImportError: invalid import path '%s'", name)
 }
 
 // for performance, using single instance of boolean
@@ -276,7 +276,7 @@ func evalPrefixExpression(operator string, right object.Object) object.Object {
 	case "-":
 		return evalMinusPrefixOperatorExpression(right)
 	default:
-		return newError("unknown operator: %s%s", operator, right.Type())
+		return NewError("unknown operator: %s%s", operator, right.Type())
 	}
 }
 
@@ -285,7 +285,7 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 	case "++":
 		val, ok := env.Get(node.Token.Literal)
 		if !ok {
-			return newError("%s is unknown", node.Token.Literal)
+			return NewError("%s is unknown", node.Token.Literal)
 		}
 
 		switch arg := val.(type) {
@@ -294,12 +294,12 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 			env.Set(node.Token.Literal, &object.Integer{Value: v + 1})
 			return arg
 		default:
-			return newError("%s is not an int", node.Token.Literal)
+			return NewError("%s is not an int", node.Token.Literal)
 		}
 	case "--":
 		val, ok := env.Get(node.Token.Literal)
 		if !ok {
-			return newError("%s is unknown", node.Token.Literal)
+			return NewError("%s is unknown", node.Token.Literal)
 		}
 
 		switch arg := val.(type) {
@@ -308,11 +308,11 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 			env.Set(node.Token.Literal, &object.Integer{Value: v - 1})
 			return arg
 		default:
-			return newError("%s is not an int", node.Token.Literal)
+			return NewError("%s is not an int", node.Token.Literal)
 		}
 
 	default:
-		return newError("unknown operator: %s", operator)
+		return NewError("unknown operator: %s", operator)
 	}
 }
 
@@ -334,7 +334,7 @@ func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
 	case *object.Float:
 		return &object.Float{Value: -obj.Value}
 	default:
-		return newError("unknown operator: -%s", right.Type())
+		return NewError("unknown operator: -%s", right.Type())
 	}
 }
 
@@ -367,10 +367,10 @@ func evalInfixExpression(operator string, left, right object.Object, env *object
 	case left.Type() == object.BOOLEAN_OBJ && right.Type() == object.BOOLEAN_OBJ:
 		return evalBooleanInfixExpression(operator, left, right)
 	case left.Type() != right.Type():
-		return newError("type mismatch: %s %s %s",
+		return NewError("type mismatch: %s %s %s",
 			left.Type(), operator, right.Type())
 	default:
-		return newError("unknown operator: %s %s %s",
+		return NewError("unknown operator: %s %s %s",
 			left.Type(), operator, right.Type())
 	}
 }
@@ -379,7 +379,7 @@ func matches(left, right object.Object, env *object.Environment) object.Object {
 	str := left.Inspect()
 
 	if right.Type() != object.REGEXP_OBJ {
-		return newError("regexp required for regexp-match, given %s", right.Type())
+		return NewError("regexp required for regexp-match, given %s", right.Type())
 	}
 
 	val := right.(*object.Regexp).Value
@@ -392,7 +392,7 @@ func matches(left, right object.Object, env *object.Environment) object.Object {
 
 	// Ensure it compiled
 	if err != nil {
-		return newError("error compiling regexp '%s': %s", right.Inspect(), err)
+		return NewError("error compiling regexp '%s': %s", right.Inspect(), err)
 	}
 
 	res := r.FindStringSubmatch(str)
@@ -416,7 +416,7 @@ func notMatches(left, right object.Object) object.Object {
 	str := left.Inspect()
 
 	if right.Type() != object.REGEXP_OBJ {
-		return newError("regexp required for regexp-match, given %s", right.Type())
+		return NewError("regexp required for regexp-match, given %s", right.Type())
 	}
 
 	val := right.(*object.Regexp).Value
@@ -429,7 +429,7 @@ func notMatches(left, right object.Object) object.Object {
 
 	// Ensure it compiled
 	if err != nil {
-		return newError("error compiling regexp '%s': %s", right.Inspect(), err)
+		return NewError("error compiling regexp '%s': %s", right.Inspect(), err)
 	}
 
 	// Test if it matched
@@ -456,7 +456,7 @@ func evalBooleanInfixExpression(operator string, left, right object.Object) obje
 	case ">=":
 		return evalStringInfixExpression(operator, l, r)
 	default:
-		return newError("unknown operator: %s %s %s",
+		return NewError("unknown operator: %s %s %s",
 			left.Type(), operator, right.Type())
 	}
 }
@@ -508,7 +508,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 		}
 		return &object.Array{Elements: array}
 	default:
-		return newError("unknown operator: %s %s %s",
+		return NewError("unknown operator: %s %s %s",
 			left.Type(), operator, right.Type())
 	}
 }
@@ -547,7 +547,7 @@ func evalFloatInfixExpression(operator string, left, right object.Object) object
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("unknown operator: %s %s %s",
+		return NewError("unknown operator: %s %s %s",
 			left.Type(), operator, right.Type())
 	}
 }
@@ -587,7 +587,7 @@ func evalFloatIntegerInfixExpression(operator string, left, right object.Object)
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("unknown operator: %s %s %s",
+		return NewError("unknown operator: %s %s %s",
 			left.Type(), operator, right.Type())
 	}
 }
@@ -627,7 +627,7 @@ func evalIntegerFloatInfixExpression(operator string, left, right object.Object)
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	default:
-		return newError("unknown operator: %s %s %s",
+		return NewError("unknown operator: %s %s %s",
 			left.Type(), operator, right.Type())
 	}
 }
@@ -655,7 +655,7 @@ func evalStringInfixExpression(operator string, left, right object.Object) objec
 		return &object.String{Value: l.Value + r.Value}
 	}
 
-	return newError("unknown operator: %s %s %s",
+	return NewError("unknown operator: %s %s %s",
 		left.Type(), operator, right.Type())
 }
 
@@ -717,7 +717,7 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 		// Get the current value
 		current, ok := env.Get(a.Name.String())
 		if !ok {
-			return newError("%s is unknown", a.Name.String())
+			return NewError("%s is unknown", a.Name.String())
 		}
 
 		res := evalInfixExpression("+=", current, evaluated, env)
@@ -734,7 +734,7 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 		// Get the current value
 		current, ok := env.Get(a.Name.String())
 		if !ok {
-			return newError("%s is unknown", a.Name.String())
+			return NewError("%s is unknown", a.Name.String())
 		}
 
 		res := evalInfixExpression("-=", current, evaluated, env)
@@ -750,7 +750,7 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 		// Get the current value
 		current, ok := env.Get(a.Name.String())
 		if !ok {
-			return newError("%s is unknown", a.Name.String())
+			return NewError("%s is unknown", a.Name.String())
 		}
 
 		res := evalInfixExpression("*=", current, evaluated, env)
@@ -767,7 +767,7 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 		// Get the current value
 		current, ok := env.Get(a.Name.String())
 		if !ok {
-			return newError("%s is unknown", a.Name.String())
+			return NewError("%s is unknown", a.Name.String())
 		}
 
 		res := evalInfixExpression("/=", current, evaluated, env)
@@ -818,7 +818,7 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) o
 
 	helper, ok := val.(object.Iterable)
 	if !ok {
-		return newError("%s object doesn't implement the Iterable interface", val.Type())
+		return NewError("%s object doesn't implement the Iterable interface", val.Type())
 	}
 
 	// The one/two values we're going to permit
@@ -889,24 +889,6 @@ func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 	return result
 }
 
-func newError(format string, a ...interface{}) *object.Error {
-	message := fmt.Sprintf(format, a...)
-	fmt.Fprintf(os.Stderr, message+"\n")
-	return &object.Error{Message: message}
-}
-
-// NewErrorWithExitCode takes an exit code, format string, and variables for
-// the string. It prints the error, optionally exits, and otherwise returns the
-// error.
-// TODO: this isn't used anywhere yet, but could be used in places where both an
-// error is created and/or printed and also there's an ExitConditionally call
-func NewErrorWithExitCode(code int, format string, a ...interface{}) *object.Error {
-	message := fmt.Sprintf(format, a...)
-	fmt.Fprintf(os.Stderr, message+"\n")
-	utils.ExitConditionally(code)
-	return &object.Error{Message: message, Code: &code}
-}
-
 func isError(obj object.Object) bool {
 	if obj != nil {
 		return obj.Type() == object.ERROR_OBJ
@@ -923,7 +905,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 	}
 	fmt.Fprintf(os.Stderr, "identifier not found: %s\n", node.Value)
 	utils.ExitConditionally(1)
-	return newError("identifier not found: " + node.Value)
+	return NewError("identifier not found: " + node.Value)
 }
 
 func evalExpression(exps []ast.Expression, env *object.Environment) []object.Object {
@@ -985,7 +967,7 @@ func evalIndexExpression(left, index object.Object, env *object.Environment) obj
 		if fn, ok := objectGetMethod(left, index, env); ok {
 			return fn
 		}
-		return newError("index operator not support:%s", left.Type())
+		return NewError("index operator not support:%s", left.Type())
 
 	}
 }
@@ -1017,7 +999,7 @@ func evalHashIndexExpression(hash, index object.Object, env *object.Environment)
 	hashObject := hash.(*object.Hash)
 	key, ok := index.(object.Hashable)
 	if !ok {
-		return newError("unusable as hash key: %s", index.Type())
+		return NewError("unusable as hash key: %s", index.Type())
 	}
 	pair, ok := hashObject.Pairs[key.HashKey()]
 	if !ok {
@@ -1066,7 +1048,7 @@ func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Obje
 		}
 		hashKey, ok := key.(object.Hashable)
 		if !ok {
-			return newError("unusable as hash key: %s", key.Type())
+			return NewError("unusable as hash key: %s", key.Type())
 		}
 		value := Eval(valueNode, env)
 		if isError(value) {
@@ -1090,7 +1072,7 @@ func ApplyFunction(env *object.Environment, fn object.Object, args []object.Obje
 	case *object.Builtin:
 		return fn.Fn(env, args...)
 	default:
-		return newError("not a function: %s", fn.Type())
+		return NewError("not a function: %s", fn.Type())
 	}
 }
 

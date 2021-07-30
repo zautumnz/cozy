@@ -106,17 +106,17 @@ func Socket(args ...object.Object) object.Object {
 		typ = syscall.SOCK_DGRAM
 		proto = syscall.IPPROTO_UDP
 	default:
-		return newError("ValueError: invalid socket type '%s'", arg)
+		return NewError("ValueError: invalid socket type '%s'", arg)
 	}
 
 	fd, err := syscall.Socket(domain, typ, proto)
 	if err != nil {
-		return newError("SocketError: %s", err)
+		return NewError("SocketError: %s", err)
 	}
 
 	if domain == syscall.AF_INET || domain == syscall.AF_INET6 {
 		if err = syscall.SetsockoptInt(fd, syscall.SOL_SOCKET, syscall.SO_REUSEADDR, 1); err != nil {
-			return newError("SocketError: cannot enable SO_REUSEADDR: %s", err)
+			return NewError("SocketError: cannot enable SO_REUSEADDR: %s", err)
 		}
 	}
 
@@ -129,7 +129,7 @@ func Listen(args ...object.Object) object.Object {
 	backlog := int(args[1].(*object.Integer).Value)
 
 	if err := syscall.Listen(fd, backlog); err != nil {
-		return newError("SocketError: %s", err)
+		return NewError("SocketError: %s", err)
 	}
 
 	// fd
@@ -145,27 +145,27 @@ func Connect(args ...object.Object) object.Object {
 
 	sockaddr, err := syscall.Getsockname(fd)
 	if err != nil {
-		return newError("ValueError: %s", err)
+		return NewError("ValueError: %s", err)
 	}
 
 	if _, ok := sockaddr.(*syscall.SockaddrInet4); ok {
 		addr, port, err := parseV4Address(address)
 		if err != nil {
-			return newError("ValueError: Invalid IPv4 address '%s': %s", address, err)
+			return NewError("ValueError: Invalid IPv4 address '%s': %s", address, err)
 		}
 		sa = &syscall.SockaddrInet4{Addr: addr, Port: port}
 	} else if _, ok := sockaddr.(*syscall.SockaddrInet6); ok {
 		addr, port, err := parseV6Address(address)
 		if err != nil {
-			return newError("ValueError: Invalid IPv6 address '%s': %s", address, err)
+			return NewError("ValueError: Invalid IPv6 address '%s': %s", address, err)
 		}
 		sa = &syscall.SockaddrInet6{Addr: addr, Port: port}
 	} else {
-		return newError("ValueError: Invalid socket type %T for bind '%s'", sockaddr, address)
+		return NewError("ValueError: Invalid socket type %T for bind '%s'", sockaddr, address)
 	}
 
 	if err = syscall.Connect(fd, sa); err != nil {
-		return newError("SocketError: %s", err)
+		return NewError("SocketError: %s", err)
 	}
 
 	// address
@@ -178,7 +178,7 @@ func Close(args ...object.Object) object.Object {
 
 	err := syscall.Close(fd)
 	if err != nil {
-		return newError("IOError: %s", err)
+		return NewError("IOError: %s", err)
 	}
 
 	// file descriptor
@@ -197,28 +197,28 @@ func Bind(args ...object.Object) object.Object {
 
 	sockaddr, err = syscall.Getsockname(fd)
 	if err != nil {
-		return newError("ValueError: %s", err)
+		return NewError("ValueError: %s", err)
 	}
 
 	if _, ok := sockaddr.(*syscall.SockaddrInet4); ok {
 		addr, port, err := parseV4Address(address)
 		if err != nil {
-			return newError("ValueError: Invalid IPv4 address '%s': %s", address, err)
+			return NewError("ValueError: Invalid IPv4 address '%s': %s", address, err)
 		}
 		sockaddr = &syscall.SockaddrInet4{Addr: addr, Port: port}
 	} else if _, ok := sockaddr.(*syscall.SockaddrInet6); ok {
 		addr, port, err := parseV6Address(address)
 		if err != nil {
-			return newError("ValueError: Invalid IPv6 address '%s': %s", address, err)
+			return NewError("ValueError: Invalid IPv6 address '%s': %s", address, err)
 		}
 		sockaddr = &syscall.SockaddrInet6{Addr: addr, Port: port}
 	} else {
-		return newError("ValueError: Invalid socket type %T for bind '%s'", sockaddr, address)
+		return NewError("ValueError: Invalid socket type %T for bind '%s'", sockaddr, address)
 	}
 
 	err = syscall.Bind(fd, sockaddr)
 	if err != nil {
-		return newError("SocketError: %s", err)
+		return NewError("SocketError: %s", err)
 	}
 
 	// address
@@ -236,7 +236,7 @@ func Accept(args ...object.Object) object.Object {
 
 	nfd, _, err = syscall.Accept(fd)
 	if err != nil {
-		return newError("SocketError: %s", err)
+		return NewError("SocketError: %s", err)
 	}
 
 	return &object.Integer{Value: int64(nfd)}
@@ -249,7 +249,7 @@ func Write(args ...object.Object) object.Object {
 
 	n, err := syscall.Write(fd, data)
 	if err != nil {
-		return newError("IOError: %s", err)
+		return NewError("IOError: %s", err)
 	}
 
 	return &object.Integer{Value: int64(n)}
@@ -274,7 +274,7 @@ func Read(args ...object.Object) object.Object {
 	buf := make([]byte, n)
 	n, err := syscall.Read(fd, buf)
 	if err != nil {
-		return newError("IOError: %s", err)
+		return NewError("IOError: %s", err)
 	}
 
 	return &object.String{Value: string(buf[:n])}

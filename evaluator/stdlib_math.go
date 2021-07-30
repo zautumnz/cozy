@@ -10,7 +10,7 @@ import (
 
 func mathAbs(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 
@@ -28,7 +28,7 @@ func mathAbs(args ...object.Object) object.Object {
 		}
 		return &object.Float{Value: v}
 	default:
-		return newError("argument to `math.abs` not supported, got=%s",
+		return NewError("argument to `math.abs` not supported, got=%s",
 			args[0].Type())
 	}
 }
@@ -41,7 +41,7 @@ func mathRandom(args ...object.Object) object.Object {
 // val = math.sqrt(int);
 func mathSqrt(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 
@@ -53,7 +53,7 @@ func mathSqrt(args ...object.Object) object.Object {
 		v := arg.Value
 		return &object.Float{Value: math.Sqrt(v)}
 	default:
-		return newError("argument to `math.sqrt` not supported, got=%s",
+		return NewError("argument to `math.sqrt` not supported, got=%s",
 			args[0].Type())
 	}
 }

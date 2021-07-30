@@ -36,11 +36,11 @@ func envFun(args ...object.Object) object.Object {
 // getenv("PATH") -> string
 func getEnvFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 	if args[0].Type() != object.STRING_OBJ {
-		return newError("argument must be a string, got=%s",
+		return NewError("argument must be a string, got=%s",
 			args[0].Type())
 	}
 	input := args[0].(*object.String).Value
@@ -50,15 +50,15 @@ func getEnvFun(args ...object.Object) object.Object {
 // setenv("PATH", "/home/z/bin:/usr/bin");
 func setEnvFun(args ...object.Object) object.Object {
 	if len(args) != 2 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 	if args[0].Type() != object.STRING_OBJ {
-		return newError("argument must be a string, got=%s",
+		return NewError("argument must be a string, got=%s",
 			args[0].Type())
 	}
 	if args[1].Type() != object.STRING_OBJ {
-		return newError("argument must be a string, got=%s",
+		return NewError("argument must be a string, got=%s",
 			args[1].Type())
 	}
 	name := args[0].(*object.String).Value
@@ -88,7 +88,7 @@ func sysExit(args ...object.Object) object.Object {
 // `stderr`, `stdout`, and `error` will be the fields
 func sysExec(args ...object.Object) object.Object {
 	if len(args) < 1 {
-		return newError("`sys.exec` wanted string, got invalid argument")
+		return NewError("`sys.exec` wanted string, got invalid argument")
 	}
 
 	var command string
@@ -96,11 +96,11 @@ func sysExec(args ...object.Object) object.Object {
 	case *object.String:
 		command = c.Value
 	default:
-		return newError("`sys.exec` wanted string, got invalid argument")
+		return NewError("`sys.exec` wanted string, got invalid argument")
 	}
 
 	if len(command) < 1 {
-		return newError("`sys.exec` expected string, got invalid argument")
+		return NewError("`sys.exec` expected string, got invalid argument")
 	}
 	// split the command
 	toExec := splitCommand(command)

@@ -19,7 +19,7 @@ import (
 // evaling modules and working with string interpolation.
 func evalFun(env *object.Environment, args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 	switch args[0].(type) {
@@ -47,14 +47,14 @@ func evalFun(env *object.Environment, args ...object.Object) object.Object {
 		}
 		utils.ExitConditionally(1)
 	}
-	return newError("argument to `eval` not supported, got=%s",
+	return NewError("argument to `eval` not supported, got=%s",
 		args[0].Type())
 }
 
 // convert a string to a float
 func floatFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 	switch args[0].(type) {
@@ -64,7 +64,7 @@ func floatFun(args ...object.Object) object.Object {
 		if err == nil {
 			return &object.Float{Value: float64(i)}
 		}
-		return newError("Converting string '%s' to float failed %s", input, err.Error())
+		return NewError("Converting string '%s' to float failed %s", input, err.Error())
 
 	case *object.Boolean:
 		input := args[0].(*object.Boolean).Value
@@ -80,7 +80,7 @@ func floatFun(args ...object.Object) object.Object {
 		input := args[0].(*object.Integer).Value
 		return &object.Float{Value: float64(input)}
 	default:
-		return newError("argument to `float` not supported, got=%s",
+		return NewError("argument to `float` not supported, got=%s",
 			args[0].Type())
 	}
 }
@@ -88,7 +88,7 @@ func floatFun(args ...object.Object) object.Object {
 // convert a double/string to an int
 func intFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 	switch args[0].(type) {
@@ -98,7 +98,7 @@ func intFun(args ...object.Object) object.Object {
 		if err == nil {
 			return &object.Integer{Value: int64(i)}
 		}
-		return newError("Converting string '%s' to int failed %s", input, err.Error())
+		return NewError("Converting string '%s' to int failed %s", input, err.Error())
 
 	case *object.Boolean:
 		input := args[0].(*object.Boolean).Value
@@ -114,7 +114,7 @@ func intFun(args ...object.Object) object.Object {
 		input := args[0].(*object.Float).Value
 		return &object.Integer{Value: int64(input)}
 	default:
-		return newError("argument to `int` not supported, got=%s",
+		return NewError("argument to `int` not supported, got=%s",
 			args[0].Type())
 	}
 }
@@ -122,7 +122,7 @@ func intFun(args ...object.Object) object.Object {
 // length of item
 func lenFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 	switch arg := args[0].(type) {
@@ -135,7 +135,7 @@ func lenFun(args ...object.Object) object.Object {
 	case *object.Hash:
 		return &object.Integer{Value: int64(len(arg.Pairs))}
 	default:
-		return newError("argument to `len` not supported, got=%s",
+		return NewError("argument to `len` not supported, got=%s",
 			args[0].Type())
 	}
 }
@@ -143,16 +143,16 @@ func lenFun(args ...object.Object) object.Object {
 // regular expression match
 func matchFun(args ...object.Object) object.Object {
 	if len(args) != 2 {
-		return newError("wrong number of arguments. got=%d, want=2",
+		return NewError("wrong number of arguments. got=%d, want=2",
 			len(args))
 	}
 
 	if args[0].Type() != object.STRING_OBJ {
-		return newError("argument to `match` must be STRING, got %s",
+		return NewError("argument to `match` must be STRING, got %s",
 			args[0].Type())
 	}
 	if args[1].Type() != object.STRING_OBJ {
-		return newError("argument to `match` must be STRING, got %s",
+		return NewError("argument to `match` must be STRING, got %s",
 			args[1].Type())
 	}
 
@@ -237,7 +237,7 @@ func sprintfFun(args ...object.Object) object.Object {
 
 func strFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 
@@ -248,7 +248,7 @@ func strFun(args ...object.Object) object.Object {
 // type of an item
 func typeFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 	return &object.String{Value: strings.ToLower(string(args[0].Type()))}

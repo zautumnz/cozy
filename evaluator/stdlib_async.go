@@ -49,7 +49,7 @@ func awaitFn(env *object.Environment, args ...object.Object) object.Object {
 		f := asyncFunctions[t.Value]
 		res = f.Await()
 	default:
-		return newError("Expected async function id, got %s", args[0].Type())
+		return NewError("Expected async function id, got %s", args[0].Type())
 	}
 
 	if err != nil {
@@ -60,7 +60,7 @@ func awaitFn(env *object.Environment, args ...object.Object) object.Object {
 	case object.Object:
 		return x
 	default:
-		return newError("Something went wrong in await!")
+		return NewError("Something went wrong in await!")
 
 	}
 }

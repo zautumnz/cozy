@@ -12,7 +12,7 @@ import (
 // array = fs.glob("/etc/*.conf")
 func fsGlob(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 	pattern := args[0].(*object.String).Value
@@ -35,7 +35,7 @@ func fsGlob(args ...object.Object) object.Object {
 // to emphasise octal.
 func chmodFun(args ...object.Object) object.Object {
 	if len(args) != 2 {
-		return newError("wrong number of arguments. got=%d, want=2",
+		return NewError("wrong number of arguments. got=%d, want=2",
 			len(args))
 	}
 
@@ -46,7 +46,7 @@ func chmodFun(args ...object.Object) object.Object {
 	case *object.String:
 		mode = args[1].(*object.String).Value
 	default:
-		return newError("Second argument must be string, got %v", args[1])
+		return NewError("Second argument must be string, got %v", args[1])
 	}
 
 	// convert from octal -> decimal
@@ -66,12 +66,12 @@ func chmodFun(args ...object.Object) object.Object {
 // mkdir
 func mkdirFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 
 	if args[0].Type() != object.STRING_OBJ {
-		return newError("argument to `mkdir` must be STRING, got %s",
+		return NewError("argument to `mkdir` must be STRING, got %s",
 			args[0].Type())
 	}
 
@@ -98,7 +98,7 @@ func openFun(args ...object.Object) object.Object {
 
 	// We need at least one arg
 	if len(args) < 1 {
-		return newError("wrong number of arguments. got=%d, want=1+",
+		return NewError("wrong number of arguments. got=%d, want=1+",
 			len(args))
 	}
 
@@ -107,7 +107,7 @@ func openFun(args ...object.Object) object.Object {
 	case *object.String:
 		path = args[0].(*object.String).Value
 	default:
-		return newError("argument to `file` not supported, got=%s",
+		return NewError("argument to `file` not supported, got=%s",
 			args[0].Type())
 
 	}
@@ -118,7 +118,7 @@ func openFun(args ...object.Object) object.Object {
 		case *object.String:
 			mode = args[1].(*object.String).Value
 		default:
-			return newError("argument to `file` not supported, got=%s",
+			return NewError("argument to `file` not supported, got=%s",
 				args[0].Type())
 
 		}
@@ -133,7 +133,7 @@ func openFun(args ...object.Object) object.Object {
 // Get file info.
 func statFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 	path := args[0].Inspect()
@@ -193,7 +193,7 @@ func statFun(args ...object.Object) object.Object {
 // Remove a file/directory.
 func unlinkFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
+		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
 	}
 
