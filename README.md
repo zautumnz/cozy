@@ -16,7 +16,14 @@ macros.
 ## Example
 
 ```cozy
+# reduce is a built-in method on arrays, int? is a built-in type checking
+# function, and sum is a built-in method on arrays, but this example shows
+# how they might be implemented by a user.
+
+# let is for immutable variables
 let reduce = fn(fun, xs, init) {
+    # mutable obvious
+    # mutable is only available within blocks, not at at the top level
     mutable acc = init
 
     foreach i, x in xs {
@@ -26,17 +33,22 @@ let reduce = fn(fun, xs, init) {
     return acc
 }
 
+# identifiers can have unicode (for example, chinese characters),
+# and question marks
 let ints? = fn(xs) {
     foreach x in xs {
+        # parens in if conditions and for loops are optional
         if type(x) != "integer" && type(x) != "float" {
             return false
         }
     }
 
-    return true
+    # returns can be implicit (without the `return` keyword)
+    true
 }
 
 let sum = fn(xs) {
+    # basic assertions and a TAP-producing test library are built in
     assert(ints?(xs), "expected only numbers!")
     return reduce(
         fn(x, acc) {
@@ -44,6 +56,7 @@ let sum = fn(xs) {
         }, xs, 0)
 }
 
+# only one level of equality checking, unlike JS's == vs ===
 print(sum([1, 2, 3, 4]) == 10) # true
 ```
 
@@ -128,13 +141,13 @@ List of things to get done before a v1.
 * Major things missing:
     * HTTP server and client
     * Cryptography builtins
-    * Errors and exceptions: as values? Try/catch? Stack traces?
+    * Errors and exceptions: As values? Try/catch? Stack traces?
 * Minor things:
     * At least 50% code coverage
     * Confirm that everything under ./examples works
-    * Complete all lingering TODOs
+    * Complete all lingering TODOs in the code
     * Write real docs
-    * Add argument validation to all functions
+    * Add argument validation to all internal functions and stdlib
     * Improve all error messages
     * Add tab completion and arrow support to the REPL
     * Flesh out the testing library with functions to test failure and errors
