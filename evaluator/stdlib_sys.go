@@ -64,7 +64,7 @@ func setEnvFun(args ...object.Object) object.Object {
 	name := args[0].(*object.String).Value
 	value := args[1].(*object.String).Value
 	os.Setenv(name, value)
-	return &object.Boolean{Value: true}
+	return NULL
 }
 
 func sysExit(args ...object.Object) object.Object {

@@ -21,6 +21,7 @@ import (
 
 // pre-defined objects
 var (
+	NULL  = &object.Null{}
 	TRUE  = &object.Boolean{Value: true}
 	FALSE = &object.Boolean{Value: false}
 	CTX   = context.Background()
@@ -130,7 +131,7 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		body := node.Body
 		defaults := node.Defaults
 		env.SetLet(node.TokenLiteral(), &object.Function{Parameters: params, Env: env, Body: body, Defaults: defaults})
-		return &object.Boolean{Value: false}
+		return NULL
 	case *ast.CallExpression:
 		if node.Function.TokenLiteral() == "quote" {
 			return quote(node.Arguments[0], env)
@@ -321,6 +322,8 @@ func evalBangOperatorExpression(right object.Object) object.Object {
 	case TRUE:
 		return FALSE
 	case FALSE:
+		return TRUE
+	case NULL:
 		return TRUE
 	default:
 		return FALSE
@@ -680,7 +683,7 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 	} else if ie.Alternative != nil {
 		return Eval(ie.Alternative, nEnv)
 	} else {
-		return &object.Boolean{Value: false}
+		return NULL
 	}
 }
 
@@ -861,7 +864,7 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) o
 		ret, idx, ok = helper.Next()
 	}
 
-	return &object.Boolean{Value: true}
+	return NULL
 }
 
 func isTruthy(obj object.Object) bool {
@@ -869,6 +872,8 @@ func isTruthy(obj object.Object) bool {
 	case TRUE:
 		return true
 	case FALSE:
+		return false
+	case NULL:
 		return false
 	default:
 		return true
@@ -984,14 +989,14 @@ func evalArrayIndexExpression(array, index object.Object, env *object.Environmen
 		idx := t.Value
 		max := int64(len(arrayObject.Elements) - 1)
 		if idx < 0 || idx > max {
-			return &object.Error{Message: "Indexing failed on array, out of bounds"}
+			return NULL
 		}
 		return arrayObject.Elements[idx]
 	default:
 		if fn, ok := objectGetMethod(array, index, env); ok {
 			return fn
 		}
-		return &object.Error{Message: "Indexing on array failed"}
+		return NULL
 	}
 }
 
@@ -1007,7 +1012,7 @@ func evalHashIndexExpression(hash, index object.Object, env *object.Environment)
 		if fn, ok = objectGetMethod(hash, index, env); ok {
 			return fn
 		}
-		return &object.Error{Message: "Indexing not possible on this object"}
+		return NULL
 	}
 	return pair.Value
 }
@@ -1019,7 +1024,7 @@ func evalStringIndexExpression(input, index object.Object, env *object.Environme
 		idx := t.Value
 		max := int64(len(str))
 		if idx < 0 || idx > max {
-			return &object.Error{Message: "Indexing not possible on this object"}
+			return NULL
 		}
 
 		// Get the characters as an array of runes
@@ -1035,7 +1040,7 @@ func evalStringIndexExpression(input, index object.Object, env *object.Environme
 			return fn
 		}
 
-		return &object.Error{Message: "Indexing not possible on this object"}
+		return NULL
 	}
 }
 
@@ -1179,6 +1184,8 @@ func objectToNativeBoolean(o object.Object) bool {
 		return obj.Value != ""
 	case *object.Regexp:
 		return obj.Value != ""
+	case *object.Null:
+		return false
 	case *object.Integer:
 		if obj.Value == 0 {
 			return false

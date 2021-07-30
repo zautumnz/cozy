@@ -8,28 +8,35 @@ let http.server = fn () {
     let id = instance.id
 
     return {
-        "route": fn (pattern, methods, cb) {
-            instance.route(id, pattern, methods, cb)
+        "route": fn (opts) {
+            let pattern = opts.pattern
+            mutable methods = opts.methods
+            if !methods {
+                methods = ["GET"]
+            }
+            let handler = opts.handler
+            instance.route(id, pattern, methods, handler)
         },
-        "listen": fn (port, cb) {
+        "listen": fn (opts) {
+            let port = opts.port
             intance.listen(id, port)
-            if (cb) {
-                cb(port)
+            if (opts.handler) {
+                opts.handler(port)
             }
         },
-        "static": fn (dir, mount) {
-            if (mount) {
-                instance.static(id, dir, mount)
+        "static": fn (opts) {
+            if (opts.mount) {
+                instance.static(id, opts.dir, opts.mount)
             } else {
-                instance.static(id, dir)
+                instance.static(id, opts.dir)
             }
         }
     }
 }
 
 let app = http.server()
-app.static(".")
+app.static({ "dir": "." })
 app.route("/foo", ["GET"], fn (ctx) {
     print(ctx)
 })
-app.listen(8000)
+app.listen({ port: 8000 })

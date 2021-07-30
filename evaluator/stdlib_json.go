@@ -46,6 +46,10 @@ func jsonDeserialize(args ...object.Object) object.Object {
 		node, ok = p.ParseBoolean().(*ast.Boolean)
 	}
 
+	if str == "null" {
+		return NULL
+	}
+
 	if ok {
 		return Eval(node, env)
 	}

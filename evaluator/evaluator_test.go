@@ -199,9 +199,17 @@ func TestIfElseExpression(t *testing.T) {
 		if ok {
 			testDecimalObject(t, evaluated, int64(integer))
 		} else {
-			testBooleanObject(t, evaluated, false)
+			testNullObject(t, evaluated)
 		}
 	}
+}
+
+func testNullObject(t *testing.T, obj object.Object) bool {
+	if obj != NULL {
+		t.Errorf("object is not NULL. got=%T(%+v)", obj, obj)
+		return false
+	}
+	return true
 }
 
 func TestReturnStatements(t *testing.T) {
@@ -357,14 +365,18 @@ func TestBuiltinFunction(t *testing.T) {
 		case int:
 			testDecimalObject(t, evaluated, int64(expected))
 		case string:
-			errObj, ok := evaluated.(*object.Error)
-			if !ok {
-				t.Errorf("object is not Error, got=%T(%+v)",
-					evaluated, evaluated)
-			}
-			if errObj.Message != expected {
-				t.Errorf("wrong err messsage. expected=%q, got=%q",
-					expected, errObj.Message)
+			if evaluated == NULL {
+				t.Errorf("Got NULL output on input of '%s'\n", tt.input)
+			} else {
+				errObj, ok := evaluated.(*object.Error)
+				if !ok {
+					t.Errorf("object is not Error, got=%T(%+v)",
+						evaluated, evaluated)
+				}
+				if errObj.Message != expected {
+					t.Errorf("wrong err messsage. expected=%q, got=%q",
+						expected, errObj.Message)
+				}
 			}
 		}
 	}
@@ -420,17 +432,14 @@ func TestArrayIndexExpression(t *testing.T) {
 			"mutable myArray=[1,2,3];mutable i = myArray[0]; myArray[i]",
 			2,
 		},
-		/*
-			TODO:
-			{
-				"[1,2,3][3]",
-				nil,
-			},
-			{
-				"[1,2,3][-1]",
-				nil,
-			},
-		*/
+		{
+			"[1,2,3][3]",
+			nil,
+		},
+		{
+			"[1,2,3][-1]",
+			nil,
+		},
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
@@ -438,7 +447,7 @@ func TestArrayIndexExpression(t *testing.T) {
 		if ok {
 			testDecimalObject(t, evaluated, int64(integer))
 		} else {
-			testBooleanObject(t, evaluated, false)
+			testNullObject(t, evaluated)
 		}
 	}
 }
@@ -456,17 +465,14 @@ func TestStringIndexExpression(t *testing.T) {
 			"\"Zac\"[1]",
 			"a",
 		},
-		/*
-			TODO:
-			{
-				"\"Zac\"[101]",
-				nil,
-			},
-			{
-				"\"Zac\"[-1]",
-				nil,
-			},
-		*/
+		{
+			"\"Zac\"[101]",
+			nil,
+		},
+		{
+			"\"Zac\"[-1]",
+			nil,
+		},
 		{
 			"\"天研\"[0]",
 			"天",
@@ -483,7 +489,7 @@ func TestStringIndexExpression(t *testing.T) {
 		if ok {
 			testStringObject(t, evaluated, str)
 		} else {
-			testBooleanObject(t, evaluated, false)
+			testNullObject(t, evaluated)
 		}
 	}
 }
@@ -630,7 +636,7 @@ func TestTypeBuiltin(t *testing.T) {
 		if ok {
 			testStringObject(t, evaluated, str)
 		} else {
-			testBooleanObject(t, evaluated, false)
+			testNullObject(t, evaluated)
 		}
 	}
 }

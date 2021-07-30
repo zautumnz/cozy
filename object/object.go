@@ -18,6 +18,7 @@ const (
 	INTEGER_OBJ      = "INTEGER"
 	MACRO_OBJ        = "MACRO"
 	MODULE_OBJ       = "MODULE"
+	NULL_OBJ         = "NULL"
 	QUOTE_OBJ        = "QUOTE"
 	REGEXP_OBJ       = "REGEXP"
 	RETURN_VALUE_OBJ = "RETURN_VALUE"
@@ -38,6 +39,7 @@ var SystemTypesMap = map[Type]Object{
 	INTEGER_OBJ:      &Integer{},
 	MACRO_OBJ:        &Macro{},
 	MODULE_OBJ:       &Module{},
+	NULL_OBJ:         &Null{},
 	QUOTE_OBJ:        &Quote{},
 	REGEXP_OBJ:       &Regexp{},
 	RETURN_VALUE_OBJ: &ReturnValue{},

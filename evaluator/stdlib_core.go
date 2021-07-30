@@ -132,6 +132,8 @@ func lenFun(args ...object.Object) object.Object {
 		return &object.Integer{Value: int64(utf8.RuneCountInString(arg.Value))}
 	case *object.Array:
 		return &object.Integer{Value: int64(len(arg.Elements))}
+	case *object.Null:
+		return &object.Integer{Value: 0}
 	case *object.Hash:
 		return &object.Integer{Value: int64(len(arg.Pairs))}
 	default:
@@ -185,7 +187,7 @@ func printFun(args ...object.Object) object.Object {
 		fmt.Print(arg.Inspect() + " ")
 	}
 	fmt.Print("\n")
-	return &object.Boolean{Value: true}
+	return NULL
 }
 
 // printfFun is the implementation of our `printf` function.
@@ -200,19 +202,19 @@ func printfFun(args ...object.Object) object.Object {
 
 	}
 
-	return &object.Boolean{Value: true}
+	return NULL
 }
 
 // sprintfFun is the implementation of our `sprintf` function.
 func sprintfFun(args ...object.Object) object.Object {
 	// We expect 1+ arguments
 	if len(args) < 1 {
-		return &object.String{Value: ""}
+		return NULL
 	}
 
 	// Type-check
 	if args[0].Type() != object.STRING_OBJ {
-		return &object.String{Value: ""}
+		return NULL
 	}
 
 	// Get the format-string.
