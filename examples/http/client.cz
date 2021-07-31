@@ -1,5 +1,5 @@
-# Example of how an http client might look
-let r = net.http.client;
+# WIP
+let r = http.client();
 let res = r("https://example.com");
 let resp = r(
     "https://some.api",

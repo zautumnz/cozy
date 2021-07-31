@@ -139,7 +139,6 @@ See also the standard library (written mostly in cozy itself).
 List of things to get done before a v1.
 
 * Major things missing:
-    * HTTP server and client
     * Cryptography builtins
     * Errors and exceptions: As values? Try/catch? Stack traces?
     * Try removing null again? Tried before and had to bring it back....
