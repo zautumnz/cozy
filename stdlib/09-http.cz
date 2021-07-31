@@ -1,6 +1,5 @@
 let http.server = fn () {
     let instance = http.create_server()
-    let id = instance.id
 
     return {
         # app.route(path, [optional_methods], callback(ctx))
@@ -21,7 +20,7 @@ let http.server = fn () {
                 handler = opts[1]
             }
 
-            instance.route(id, path, mets, handler)
+            instance.route(path, mets, handler)
         },
 
         # app.listen(port, optional_callback(port))
@@ -32,9 +31,9 @@ let http.server = fn () {
             }
             if len(opts) > 1 {
                 opts[1](opts[0])
-                instance.listen(id, opts[0])
+                instance.listen(opts[0])
             } else {
-                instance.listen(id, opts[0])
+                instance.listen(opts[0])
             }
         },
 
@@ -45,9 +44,9 @@ let http.server = fn () {
                 opts = opts.push(x)
             }
             if len(opts) > 1 {
-                instance.static(id, opts[0], opts[1])
+                instance.static(opts[0], opts[1])
             } else {
-                instance.static(id, opts[0])
+                instance.static(opts[0])
             }
         }
     }

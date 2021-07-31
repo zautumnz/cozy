@@ -3,7 +3,6 @@ package evaluator
 import (
 	"fmt"
 	"io"
-	"math/rand"
 	"net/http"
 	"regexp"
 
@@ -18,24 +17,33 @@ type httpRoute struct {
 	Methods []string
 }
 
+var routes = make([]httpRoute, 0)
+
 type app struct {
 	Routes []httpRoute
 }
 
-var appInstances = make(map[int64]app)
+func newApp() *app {
+	app := &app{}
+	return app
+}
 
-func defaultRoute(ctx *httpContext) {
+var appInstance = newApp()
+
+func sendWrapper(ctx *httpContext, statusCode int, body string, contentType string) {
 	ctx.send(
-		&object.Integer{Value: int64(http.StatusNotFound)},
-		&object.String{Value: "Not found"},
-		&object.String{Value: "text/plain"},
+		&object.Integer{Value: int64(statusCode)},
+		&object.String{Value: body},
+		&object.String{Value: contentType},
 	)
 }
 
-func newApp() *app {
-	app := &app{}
+func notFound(ctx *httpContext) {
+	sendWrapper(ctx, http.StatusNotFound, "Not found", "text/plain")
+}
 
-	return app
+func methodNotAllowed(ctx *httpContext) {
+	sendWrapper(ctx, http.StatusMethodNotAllowed, "Not allowed", "text/plain")
 }
 
 func handleRoute(env *object.Environment, args ...object.Object) object.Object {
@@ -43,23 +51,15 @@ func handleRoute(env *object.Environment, args ...object.Object) object.Object {
 	var methods []string
 	var f *object.Function
 	var handler httpHandler
-	var appInstanceID int64
 
 	switch a := args[0].(type) {
-	case *object.Integer:
-		appInstanceID = a.Value
-	default:
-		return NewError("route expected app instance id!")
-	}
-
-	switch a := args[1].(type) {
 	case *object.String:
 		pattern = a.Value
 	default:
 		return NewError("route expected pattern string!")
 	}
 
-	switch a := args[2].(type) {
+	switch a := args[1].(type) {
 	case *object.Array:
 		for _, e := range a.Elements {
 			switch x := e.(type) {
@@ -73,7 +73,7 @@ func handleRoute(env *object.Environment, args ...object.Object) object.Object {
 		return NewError("route expected methods string array!")
 	}
 
-	switch a := args[3].(type) {
+	switch a := args[2].(type) {
 	case *object.Function:
 		f = a
 	default:
@@ -85,12 +85,11 @@ func handleRoute(env *object.Environment, args ...object.Object) object.Object {
 		fmt.Println(f)
 	}
 
-	appInstance := appInstances[appInstanceID]
 	re := regexp.MustCompile(pattern)
 	// TODO: get handler out of object.Function f
 	route := httpRoute{Pattern: re, Handler: handler, Methods: methods}
 
-	appInstance.Routes = append(appInstance.Routes, route)
+	routes = append(routes, route)
 	return &object.Boolean{Value: true}
 }
 
@@ -98,19 +97,24 @@ func handleRoute(env *object.Environment, args ...object.Object) object.Object {
 func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := &httpContext{Request: r, ResponseWriter: w}
 
-	for _, rt := range a.Routes {
+	for _, rt := range routes {
 		if matches := rt.Pattern.FindStringSubmatch(ctx.URL.Path); len(matches) > 0 {
 			if len(matches) > 1 {
 				ctx.Params = matches[1:]
 			}
 
-			// TODO: check method against rt.Methods
-			rt.Handler(ctx)
-			return
+			for _, m := range rt.Methods {
+				if m == r.Method {
+					rt.Handler(ctx)
+					return
+				}
+			}
+
+			methodNotAllowed(ctx)
 		}
 	}
 
-	defaultRoute(ctx)
+	notFound(ctx)
 }
 
 type httpContext struct {
@@ -119,32 +123,21 @@ type httpContext struct {
 	Params []string
 }
 
-// TODO: this doesn't seem to actually be working...
 // static("./public")
 // static("./public", "/some-mount-point")
 func staticHandler(env *object.Environment, args ...object.Object) object.Object {
 	dir := ""
 	mount := "/"
-	/*
-		var appInstance app
 
-		switch a := args[0].(type) {
-		case *object.Integer:
-			appInstance = appInstances[a.Value]
-		default:
-			return NewError("http static expected an app instance id!")
-		}
-	*/
-
-	switch a := args[1].(type) {
+	switch a := args[0].(type) {
 	case *object.String:
 		dir = a.Value
 	default:
 		return NewError("http static expected a string!")
 	}
 
-	if len(args) > 2 {
-		switch a := args[2].(type) {
+	if len(args) > 1 {
+		switch a := args[1].(type) {
 		case *object.String:
 			mount = a.Value
 		}
@@ -215,17 +208,12 @@ func main() {
 */
 
 func listen(env *object.Environment, args ...object.Object) object.Object {
-	var appInstance app
-
 	switch a := args[0].(type) {
 	case *object.Integer:
-		appInstance = appInstances[a.Value]
-	default:
-		return NewError("http.server.listen expected app instance id!")
-	}
-	switch a := args[1].(type) {
-	case *object.Integer:
-		http.ListenAndServe(":"+fmt.Sprint(a.Value), &appInstance)
+		err := http.ListenAndServe(":"+fmt.Sprint(a.Value), appInstance)
+		if err != nil {
+			return NewError("Could not start server: %s\n", err.Error())
+		}
 		return &object.Boolean{Value: true}
 	default:
 		return NewError("http.server.listen expected int port!")
@@ -247,10 +235,6 @@ func httpServer(args ...object.Object) object.Object {
 	staticKey := &object.String{Value: "static"}
 	staticVal := &object.Builtin{Fn: staticHandler}
 	res[staticKey.HashKey()] = object.HashPair{Key: staticKey, Value: staticVal}
-
-	appIDKey := &object.String{Value: "id"}
-	appIDVal := &object.Integer{Value: rand.Int63()}
-	res[appIDKey.HashKey()] = object.HashPair{Key: appIDKey, Value: appIDVal}
 
 	return &object.Hash{Pairs: res}
 }
