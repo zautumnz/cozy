@@ -37,5 +37,5 @@ func (r *Regexp) ToInterface() interface{} {
 
 // Json returns a json-friendly string
 func (r *Regexp) Json() string {
-	return `"` + strings.ReplaceAll(r.Inspect(), `"`, `\"`) + `"`
+	return `"` + strings.ReplaceAll(strings.ReplaceAll(r.Inspect(), `\`, `\\`), `"`, `\"`) + `"`
 }
