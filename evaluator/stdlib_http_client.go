@@ -9,10 +9,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"mime/multipart"
 	"net/http"
 	"net/url"
-	"os"
 	"reflect"
 	"strings"
 	"time"
@@ -232,14 +230,14 @@ func (r *Request) Put(url string, data ...interface{}) (*Response, error) {
 	return r.request(http.MethodPut, url, data...)
 }
 
+// Patch is a put http request
+func (r *Request) Patch(url string, data ...interface{}) (*Response, error) {
+	return r.request(http.MethodPatch, url, data...)
+}
+
 // Delete is a delete http request
 func (r *Request) Delete(url string, data ...interface{}) (*Response, error) {
 	return r.request(http.MethodDelete, url, data...)
-}
-
-// Upload file
-func (r *Request) Upload(url, filename, fileinput string) (*Response, error) {
-	return r.sendFile(url, filename, fileinput)
 }
 
 // Send http request
@@ -304,70 +302,6 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 	return response, nil
 }
 
-// Send file
-func (r *Request) sendFile(url, filename, fileinput string) (*Response, error) {
-	if url == "" {
-		return nil, errors.New("parameter url is required")
-	}
-
-	fileBuffer := &bytes.Buffer{}
-	bodyWriter := multipart.NewWriter(fileBuffer)
-	fileWriter, er := bodyWriter.CreateFormFile(fileinput, filename)
-	if er != nil {
-		return nil, er
-	}
-
-	f, er := os.Open(filename)
-	if er != nil {
-		return nil, er
-	}
-	defer f.Close()
-
-	_, er = io.Copy(fileWriter, f)
-	if er != nil {
-		return nil, er
-	}
-
-	contentType := bodyWriter.FormDataContentType()
-	bodyWriter.Close()
-
-	// Build Response
-	response := &Response{}
-
-	// Start time
-	start := time.Now().UnixNano() / 1e6
-	// Count elapsed time
-	defer r.elapsedTime(start, response)
-
-	r.url = url
-	r.data = nil
-
-	var (
-		err error
-		req *http.Request
-	)
-	r.cli = r.buildClient()
-	r.method = "POST"
-
-	req, err = http.NewRequest(r.method, url, fileBuffer)
-	if err != nil {
-		return nil, err
-	}
-
-	r.initHeaders(req)
-	req.Header.Set("Content-Type", contentType)
-
-	resp, err := r.cli.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	response.url = url
-	response.resp = resp
-
-	return response, nil
-}
-
 type Response struct {
 	time int64
 	url  string
@@ -380,13 +314,6 @@ func (r *Response) Response() *http.Response {
 		return r.resp
 	}
 	return nil
-}
-
-func (r *Response) StatusCode() int {
-	if r.resp == nil {
-		return 0
-	}
-	return r.resp.StatusCode
 }
 
 func (r *Response) Time() string {
@@ -534,101 +461,111 @@ func SetTimeout(d time.Duration) *Request {
 	return r.SetTimeout(d)
 }
 
-// Get is a get http request
-func Get(url string, data ...interface{}) (*Response, error) {
-	r := newRequest()
-	return r.Get(url, data...)
-}
-
-func Post(url string, data ...interface{}) (*Response, error) {
-	r := newRequest()
-	return r.Post(url, data...)
-}
-
-// Put is a put http request
-func Put(url string, data ...interface{}) (*Response, error) {
-	r := newRequest()
-	return r.Put(url, data...)
-}
-
-// Delete is a delete http request
-func Delete(url string, data ...interface{}) (*Response, error) {
-	r := newRequest()
-	return r.Delete(url, data...)
-}
-
-// Upload file
-func Upload(url, filename, fileinput string) (*Response, error) {
-	r := newRequest()
-	return r.Upload(url, filename, fileinput)
-}
-
 func httpClient(args ...object.Object) object.Object {
-	/*
-		var uri string
-		var method string
-		var headers map[string]string
-		var body string
+	var uri string
+	var method string
+	var headers map[string]string
+	var body string
 
-		switch a := args[0].(type) {
-		case *object.String:
-			method = a.Value
-		default:
-			return NewError("http client expected method as first arg!")
-		}
-		switch a := args[1].(type) {
-		case *object.String:
-			uri = a.Value
-		default:
-			return NewError("http client expected uri as second arg!")
-		}
+	switch a := args[0].(type) {
+	case *object.String:
+		method = a.Value
+	default:
+		return NewError("http client expected method as first arg!")
+	}
+	switch a := args[1].(type) {
+	case *object.String:
+		uri = a.Value
+	default:
+		return NewError("http client expected uri as second arg!")
+	}
 
-		if len(args) > 2 {
-			switch a := args[2].(type) {
-			case *object.Hash:
-				for _, pair := range a.Pairs {
-					headers[pair.Key.Inspect()] = pair.Value.Inspect()
-				}
-			case *object.String:
-				body = a.Value
-			default:
-				return NewError("http client expected headers or body as third arg!")
+	if len(args) > 2 {
+		switch a := args[2].(type) {
+		case *object.Hash:
+			for _, pair := range a.Pairs {
+				headers[pair.Key.Inspect()] = pair.Value.Inspect()
 			}
+		case *object.String:
+			body = a.Value
+		default:
+			return NewError("http client expected headers or body as third arg!")
 		}
+	}
 
-		if len(args) > 3 {
-			switch a := args[3].(type) {
-			case *object.String:
-				body = a.Value
-			default:
-				return NewError("http client expected body as fourth arg!")
-			}
+	if len(args) > 3 {
+		switch a := args[3].(type) {
+		case *object.String:
+			body = a.Value
+		default:
+			return NewError("http client expected body as fourth arg!")
 		}
-	*/
+	}
+
+	req := newRequest()
+
+	if headers != nil {
+		req.SetHeaders(headers)
+	}
+
+	var err error
+	var resp *Response
+	switch method {
+	case "GET":
+		resp, err = req.Get(uri, body)
+	case "POST":
+		resp, err = req.Post(uri, body)
+	case "PUT":
+		resp, err = req.Put(uri, body)
+	case "PATCH":
+		resp, err = req.Patch(uri, body)
+	case "DELETE":
+		resp, err = req.Delete(uri, body)
+	default:
+		return NewError("Unknown method!")
+	}
+
+	if err != nil {
+		return NewError(err.Error())
+	}
+
+	// inner http.Response struct
+	res := resp.resp
 
 	ret := make(map[object.HashKey]object.HashPair)
-	// TODO: switch on method, pass args, pull values out, put in ret
 
 	resStatusKey := &object.String{Value: "status_code"}
-	resStatusVal := &object.Integer{Value: 200} // TODO
+	resStatusVal := &object.Integer{Value: int64(res.StatusCode)}
 	ret[resStatusKey.HashKey()] = object.HashPair{Key: resStatusKey, Value: resStatusVal}
 
 	resProtoKey := &object.String{Value: "protocol"}
-	resProtoVal := &object.String{Value: "HTTP/1.0"} // TODO
+	resProtoVal := &object.String{Value: res.Proto}
 	ret[resProtoKey.HashKey()] = object.HashPair{Key: resProtoKey, Value: resProtoVal}
 
 	resContentLengthKey := &object.String{Value: "content_length"}
-	resContentLengthVal := &object.Integer{Value: 1} // TODO
+	resContentLengthVal := &object.Integer{Value: res.ContentLength}
 	ret[resContentLengthKey.HashKey()] = object.HashPair{Key: resContentLengthKey, Value: resContentLengthVal}
 
+	// TODO: is Content enough or should we grab JSON or Text or whatever?
+	bod, err := resp.Content()
+	if err != nil {
+		return NewError(err.Error())
+	}
 	resBodyKey := &object.String{Value: "body"}
-	resBodyVal := &object.Integer{Value: 1} // TODO
+	resBodyVal := &object.String{Value: bod}
 	ret[resBodyKey.HashKey()] = object.HashPair{Key: resBodyKey, Value: resBodyVal}
 
-	// TODO: get headers out of map into this structure in another loop
 	resHeaders := make(map[object.HashKey]object.HashPair)
+	for k, v := range res.Header {
+		key := &object.String{Value: k}
+		// TODO: I thought this would be a string, but apparently it's a
+		// []string? Debug and figure out what the right format is here
+		val := &object.String{Value: strings.Join(v, ",")}
+		resHeaders[key.HashKey()] = object.HashPair{Key: key, Value: val}
+
+	}
 	resHeadersKey := &object.String{Value: "headers"}
-	resHeadersVal := &object.Hash{Pairs: resHeaders} // TODO
+	resHeadersVal := &object.Hash{Pairs: resHeaders}
 	ret[resHeadersKey.HashKey()] = object.HashPair{Key: resHeadersKey, Value: resHeadersVal}
 
 	return &object.Hash{Pairs: ret}

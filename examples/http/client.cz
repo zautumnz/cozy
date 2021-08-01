@@ -1,14 +1,6 @@
 # WIP
-let r = http.client();
-let res = r("https://example.com");
-let resp = r(
-    "https://some.api",
-    {
-        "method": "POST",
-        "body": "[1,2,3]",
-        "headers": {
-            "x-foo": "bar"
-        }
-    }
-);
-print(json.deserialize(resp))
+let r = http.client
+let res = r("GET", "https://example.com");
+print(res.body)
+let post_res = r("POST", {"content-type": "application/json", json.serialize({"foo": "bar"})})
+print(json.deserialize(post_res))
