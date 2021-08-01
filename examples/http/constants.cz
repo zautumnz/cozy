@@ -1,0 +1,3 @@
+let c = http.constants()
+print(c.STATUS_CODES)
+print(c.METHODS)

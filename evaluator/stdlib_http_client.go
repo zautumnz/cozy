@@ -564,7 +564,75 @@ func Upload(url, filename, fileinput string) (*Response, error) {
 }
 
 func httpClient(args ...object.Object) object.Object {
-	return NULL
+	/*
+		var uri string
+		var method string
+		var headers map[string]string
+		var body string
+
+		switch a := args[0].(type) {
+		case *object.String:
+			method = a.Value
+		default:
+			return NewError("http client expected method as first arg!")
+		}
+		switch a := args[1].(type) {
+		case *object.String:
+			uri = a.Value
+		default:
+			return NewError("http client expected uri as second arg!")
+		}
+
+		if len(args) > 2 {
+			switch a := args[2].(type) {
+			case *object.Hash:
+				for _, pair := range a.Pairs {
+					headers[pair.Key.Inspect()] = pair.Value.Inspect()
+				}
+			case *object.String:
+				body = a.Value
+			default:
+				return NewError("http client expected headers or body as third arg!")
+			}
+		}
+
+		if len(args) > 3 {
+			switch a := args[3].(type) {
+			case *object.String:
+				body = a.Value
+			default:
+				return NewError("http client expected body as fourth arg!")
+			}
+		}
+	*/
+
+	ret := make(map[object.HashKey]object.HashPair)
+	// TODO: switch on method, pass args, pull values out, put in ret
+
+	resStatusKey := &object.String{Value: "status_code"}
+	resStatusVal := &object.Integer{Value: 200} // TODO
+	ret[resStatusKey.HashKey()] = object.HashPair{Key: resStatusKey, Value: resStatusVal}
+
+	resProtoKey := &object.String{Value: "protocol"}
+	resProtoVal := &object.String{Value: "HTTP/1.0"} // TODO
+	ret[resProtoKey.HashKey()] = object.HashPair{Key: resProtoKey, Value: resProtoVal}
+
+	resContentLengthKey := &object.String{Value: "content_length"}
+	resContentLengthVal := &object.Integer{Value: 1} // TODO
+	ret[resContentLengthKey.HashKey()] = object.HashPair{Key: resContentLengthKey, Value: resContentLengthVal}
+
+	resBodyKey := &object.String{Value: "body"}
+	resBodyVal := &object.Integer{Value: 1} // TODO
+	ret[resBodyKey.HashKey()] = object.HashPair{Key: resBodyKey, Value: resBodyVal}
+
+	// TODO: get headers out of map into this structure in another loop
+	resHeaders := make(map[object.HashKey]object.HashPair)
+	resHeadersKey := &object.String{Value: "headers"}
+	resHeadersVal := &object.Hash{Pairs: resHeaders} // TODO
+	ret[resHeadersKey.HashKey()] = object.HashPair{Key: resHeadersKey, Value: resHeadersVal}
+
+	return &object.Hash{Pairs: ret}
+
 }
 
 func init() {
