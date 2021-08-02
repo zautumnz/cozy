@@ -1,6 +1,12 @@
-# WIP
 let r = http.client
 let res = r("GET", "https://example.com");
 print(res.body)
-let post_res = r("POST", {"content-type": "application/json", json.serialize({"foo": "bar"})})
-print(json.deserialize(post_res))
+
+# spin up an echo server to test this out
+let post_res = r(
+    "POST",
+    "http://localhost:9999",
+    {"content-type": "application/json"},
+    json.serialize({"foo": "bar"})
+)
+print(post_res)

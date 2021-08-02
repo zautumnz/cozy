@@ -2,7 +2,6 @@ package evaluator
 
 import (
 	"bytes"
-	"crypto/tls"
 	"encoding/binary"
 	"encoding/json"
 	"errors"
@@ -10,7 +9,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"reflect"
 	"strings"
 	"time"
@@ -20,47 +18,28 @@ import (
 
 // Code based on github.com/kirinlabs/HttpRequest, apache 2.0 licensed
 
+// Request is the type of a req
 type Request struct {
-	cli               *http.Client
-	transport         *http.Transport
-	url               string
-	method            string
-	time              int64
-	timeout           time.Duration
-	headers           map[string]string
-	username          string
-	password          string
-	data              interface{}
-	disableKeepAlives bool
-	tlsClientConfig   *tls.Config
-	proxy             func(*http.Request) (*url.URL, error)
-	checkRedirect     func(req *http.Request, via []*http.Request) error
-}
-
-func (r *Request) DisableKeepAlives(v bool) *Request {
-	r.disableKeepAlives = v
-	return r
-}
-
-func (r *Request) CheckRedirect(v func(req *http.Request, via []*http.Request) error) *Request {
-	r.checkRedirect = v
-	return r
+	cli     *http.Client
+	url     string
+	method  string
+	timeout time.Duration
+	headers map[string]string
+	data    interface{}
 }
 
 // Build client
 func (r *Request) buildClient() *http.Client {
 	if r.cli == nil {
 		r.cli = &http.Client{
-			Transport:     http.DefaultTransport,
-			CheckRedirect: r.checkRedirect,
-			Timeout:       time.Second * r.timeout,
+			Transport: http.DefaultTransport,
+			Timeout:   time.Second * r.timeout,
 		}
 	}
 	return r.cli
 }
 
-// Set headers
-func (r *Request) SetHeaders(headers map[string]string) *Request {
+func (r *Request) setHeaders(headers map[string]string) *Request {
 	if headers != nil || len(headers) > 0 {
 		for k, v := range headers {
 			r.headers[k] = v
@@ -89,11 +68,6 @@ func (r *Request) isJson() bool {
 	return false
 }
 
-func (r *Request) JSON() *Request {
-	r.SetHeaders(map[string]string{"Content-Type": "application/json"})
-	return r
-}
-
 // Build query data
 func (r *Request) buildBody(d ...interface{}) (io.Reader, error) {
 	if r.method == "GET" || r.method == "DELETE" || len(d) == 0 || (len(d) > 0 && d[0] == nil) {
@@ -106,7 +80,7 @@ func (r *Request) buildBody(d ...interface{}) (io.Reader, error) {
 	case []byte:
 		return bytes.NewReader(d[0].([]byte)), nil
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
-		return bytes.NewReader(IntByte(d[0])), nil
+		return bytes.NewReader(intByte(d[0])), nil
 	case *bytes.Reader:
 		return d[0].(*bytes.Reader), nil
 	case *strings.Reader:
@@ -125,7 +99,7 @@ func (r *Request) buildBody(d ...interface{}) (io.Reader, error) {
 
 	t := reflect.TypeOf(d[0]).String()
 	if !strings.Contains(t, "map[string]interface") {
-		return nil, errors.New("Unsupported data type.")
+		return nil, errors.New("unsupported data type")
 	}
 
 	data := make([]string, 0)
@@ -196,7 +170,7 @@ func buildUrl(url string, data ...interface{}) (string, error) {
 				query = append(query, param)
 			}
 		default:
-			return url, errors.New("Unsupported data type.")
+			return url, errors.New("unsupported data type")
 		}
 
 	}
@@ -210,45 +184,10 @@ func buildUrl(url string, data ...interface{}) (string, error) {
 	return list[0], nil
 }
 
-func (r *Request) elapsedTime(n int64, resp *Response) {
-	end := time.Now().UnixNano() / 1e6
-	resp.time = end - n
-}
-
-// Get is a get http request
-func (r *Request) Get(url string, data ...interface{}) (*Response, error) {
-	return r.request(http.MethodGet, url, data...)
-}
-
-// Post is a post http request
-func (r *Request) Post(url string, data ...interface{}) (*Response, error) {
-	return r.request(http.MethodPost, url, data...)
-}
-
-// Put is a put http request
-func (r *Request) Put(url string, data ...interface{}) (*Response, error) {
-	return r.request(http.MethodPut, url, data...)
-}
-
-// Patch is a put http request
-func (r *Request) Patch(url string, data ...interface{}) (*Response, error) {
-	return r.request(http.MethodPatch, url, data...)
-}
-
-// Delete is a delete http request
-func (r *Request) Delete(url string, data ...interface{}) (*Response, error) {
-	return r.request(http.MethodDelete, url, data...)
-}
-
 // Send http request
 func (r *Request) request(method, url string, data ...interface{}) (*Response, error) {
 	// Build Response
 	response := &Response{}
-
-	// Start time
-	start := time.Now().UnixNano() / 1e6
-	// Count elapsed time
-	defer r.elapsedTime(start, response)
 
 	if method == "" || url == "" {
 		return nil, errors.New("parameter method and url is required")
@@ -302,44 +241,17 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 	return response, nil
 }
 
+// Response is the type of a response
 type Response struct {
-	time int64
 	url  string
 	resp *http.Response
 	body []byte
 }
 
-func (r *Response) Response() *http.Response {
-	if r != nil {
-		return r.resp
-	}
-	return nil
-}
-
-func (r *Response) Time() string {
-	if r != nil {
-		return fmt.Sprintf("%dms", r.time)
-	}
-	return "0ms"
-}
-
-func (r *Response) Url() string {
-	if r != nil {
-		return r.url
-	}
-	return ""
-}
-
-func (r *Response) Headers() http.Header {
-	if r != nil {
-		return r.resp.Header
-	}
-	return nil
-}
-
+// Body returns the body as a byte slice
 func (r *Response) Body() ([]byte, error) {
 	if r == nil {
-		return []byte{}, errors.New("HttpRequest.Response is nil.")
+		return []byte{}, errors.New("httpRequest.Response is nil")
 	}
 
 	defer r.resp.Body.Close()
@@ -361,6 +273,7 @@ func (r *Response) Body() ([]byte, error) {
 	return b, nil
 }
 
+// Content returns the body as a string
 func (r *Response) Content() (string, error) {
 	b, err := r.Body()
 	if err != nil {
@@ -369,61 +282,29 @@ func (r *Response) Content() (string, error) {
 	return string(b), nil
 }
 
-func (r *Response) Json(v interface{}) error {
-	return r.Unmarshal(v)
-}
-
-func (r *Response) Unmarshal(v interface{}) error {
-	b, err := r.Body()
-	if err != nil {
-		return err
-	}
-
-	if err := json.Unmarshal(b, &v); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (r *Response) Close() error {
-	if r != nil {
-		return r.resp.Body.Close()
-	}
-	return nil
-}
-
-func Json(v interface{}) string {
-	b, err := json.Marshal(v)
-	if err != nil {
-		return ""
-	}
-	return string(b)
-}
-
-func IntByte(v interface{}) []byte {
+func intByte(v interface{}) []byte {
 	b := bytes.NewBuffer([]byte{})
-	switch v.(type) {
+	switch x := v.(type) {
 	case int:
-		binary.Write(b, binary.BigEndian, int64(v.(int)))
+		binary.Write(b, binary.BigEndian, int64(x))
 	case int8:
-		binary.Write(b, binary.BigEndian, v.(int8))
+		binary.Write(b, binary.BigEndian, x)
 	case int16:
-		binary.Write(b, binary.BigEndian, v.(int16))
+		binary.Write(b, binary.BigEndian, x)
 	case int32:
-		binary.Write(b, binary.BigEndian, v.(int32))
+		binary.Write(b, binary.BigEndian, x)
 	case int64:
-		binary.Write(b, binary.BigEndian, v.(int64))
+		binary.Write(b, binary.BigEndian, x)
 	case uint:
-		binary.Write(b, binary.BigEndian, uint64(v.(uint)))
+		binary.Write(b, binary.BigEndian, uint64(x))
 	case uint8:
-		binary.Write(b, binary.BigEndian, v.(uint8))
+		binary.Write(b, binary.BigEndian, x)
 	case uint16:
-		binary.Write(b, binary.BigEndian, v.(uint16))
+		binary.Write(b, binary.BigEndian, x)
 	case uint32:
-		binary.Write(b, binary.BigEndian, v.(uint32))
+		binary.Write(b, binary.BigEndian, x)
 	case uint64:
-		binary.Write(b, binary.BigEndian, v.(uint64))
+		binary.Write(b, binary.BigEndian, x)
 	}
 	return b.Bytes()
 }
@@ -434,31 +315,6 @@ func newRequest() *Request {
 		headers: map[string]string{},
 	}
 	return r
-}
-
-func DisableKeepAlives(v bool) *Request {
-	r := newRequest()
-	return r.DisableKeepAlives(v)
-}
-
-func CheckRedirect(v func(req *http.Request, via []*http.Request) error) *Request {
-	r := newRequest()
-	return r.CheckRedirect(v)
-}
-
-func SetHeaders(headers map[string]string) *Request {
-	r := newRequest()
-	return r.SetHeaders(headers)
-}
-
-func JSON() *Request {
-	r := newRequest()
-	return r.JSON()
-}
-
-func SetTimeout(d time.Duration) *Request {
-	r := newRequest()
-	return r.SetTimeout(d)
 }
 
 func httpClient(args ...object.Object) object.Object {
@@ -483,6 +339,7 @@ func httpClient(args ...object.Object) object.Object {
 	if len(args) > 2 {
 		switch a := args[2].(type) {
 		case *object.Hash:
+			headers = make(map[string]string)
 			for _, pair := range a.Pairs {
 				headers[pair.Key.Inspect()] = pair.Value.Inspect()
 			}
@@ -505,25 +362,10 @@ func httpClient(args ...object.Object) object.Object {
 	req := newRequest()
 
 	if headers != nil {
-		req.SetHeaders(headers)
+		req.setHeaders(headers)
 	}
 
-	var err error
-	var resp *Response
-	switch method {
-	case "GET":
-		resp, err = req.Get(uri, body)
-	case "POST":
-		resp, err = req.Post(uri, body)
-	case "PUT":
-		resp, err = req.Put(uri, body)
-	case "PATCH":
-		resp, err = req.Patch(uri, body)
-	case "DELETE":
-		resp, err = req.Delete(uri, body)
-	default:
-		return NewError("Unknown method!")
-	}
+	resp, err := req.request(method, uri, body)
 
 	if err != nil {
 		return NewError(err.Error())
@@ -546,7 +388,6 @@ func httpClient(args ...object.Object) object.Object {
 	resContentLengthVal := &object.Integer{Value: res.ContentLength}
 	ret[resContentLengthKey.HashKey()] = object.HashPair{Key: resContentLengthKey, Value: resContentLengthVal}
 
-	// TODO: is Content enough or should we grab JSON or Text or whatever?
 	bod, err := resp.Content()
 	if err != nil {
 		return NewError(err.Error())
@@ -558,8 +399,6 @@ func httpClient(args ...object.Object) object.Object {
 	resHeaders := make(map[object.HashKey]object.HashPair)
 	for k, v := range res.Header {
 		key := &object.String{Value: k}
-		// TODO: I thought this would be a string, but apparently it's a
-		// []string? Debug and figure out what the right format is here
 		val := &object.String{Value: strings.Join(v, ",")}
 		resHeaders[key.HashKey()] = object.HashPair{Key: key, Value: val}
 
