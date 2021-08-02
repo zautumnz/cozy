@@ -39,7 +39,7 @@ func TestInterpolate(t *testing.T) {
 	}
 
 	env := object.NewEnvironment()
-	env.Set("string", &object.String{Value: "test"})
+	env.SetLet("string", &object.String{Value: "test"})
 
 	for _, tt := range tests {
 		output := Interpolate(tt.input, env)

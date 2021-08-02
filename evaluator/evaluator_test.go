@@ -11,6 +11,88 @@ import (
 	"github.com/zacanger/cozy/utils"
 )
 
+func testEval(input string) object.Object {
+	l := lexer.New(input)
+	p := parser.New(l)
+	program := p.ParseProgram()
+	env := object.NewEnvironment()
+	return Eval(program, env)
+}
+
+func testDecimalObject(t *testing.T, obj object.Object, expected interface{}) bool {
+	switch exp := expected.(type) {
+	case int64:
+		return testIntegerObject(t, obj, exp)
+	case float64:
+		return testFloatObject(t, obj, exp)
+	default:
+		return false
+	}
+}
+
+func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
+	result, ok := obj.(*object.Integer)
+	if !ok {
+		t.Errorf("obj is not Integer. got=%T(%+v)", obj, obj)
+		return false
+	}
+	if result.Value != expected {
+		t.Errorf("object has wrong value. got=%d, want=%d",
+			result.Value, expected)
+		return false
+	}
+	return true
+}
+
+func testFloatObject(t *testing.T, obj object.Object, expected float64) bool {
+	result, ok := obj.(*object.Float)
+	if !ok {
+		t.Errorf("obj is not Float. got=%T(%+v)", obj, obj)
+		return false
+	}
+	if math.Abs(result.Value-expected) > 0.00001 {
+		t.Errorf("object has wrong value. got=%f, want=%f",
+			result.Value, expected)
+		return false
+	}
+	return true
+}
+
+func testStringObject(t *testing.T, obj object.Object, expected string) bool {
+	result, ok := obj.(*object.String)
+	if !ok {
+		t.Errorf("obj is not String. got=%T(%+v)", obj, obj)
+		return false
+	}
+	if result.Value != expected {
+		t.Errorf("object has wrong value. got=%s, want=%s",
+			result.Value, expected)
+		return false
+	}
+	return true
+}
+
+func testNullObject(t *testing.T, obj object.Object) bool {
+	if obj != NULL {
+		t.Errorf("object is not NULL. got=%T(%+v)", obj, obj)
+		return false
+	}
+	return true
+}
+
+func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
+	result, ok := obj.(*object.Boolean)
+	if !ok {
+		t.Errorf("object is not boolean. got=%T(%+v)", obj, obj)
+		return false
+	}
+	if result.Value != expected {
+		t.Errorf("object has wrong value. got=%t, want=%t",
+			result.Value, expected)
+	}
+	return true
+}
+
 func TestEvalArithmeticExpression(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -47,64 +129,6 @@ func TestEvalArithmeticExpression(t *testing.T) {
 		evaluated := testEval(tt.input)
 		testDecimalObject(t, evaluated, tt.expected)
 	}
-}
-
-func testEval(input string) object.Object {
-	l := lexer.New(input)
-	p := parser.New(l)
-	program := p.ParseProgram()
-	env := object.NewEnvironment()
-	return Eval(program, env)
-}
-
-func testDecimalObject(t *testing.T, obj object.Object, expected interface{}) bool {
-	switch exp := expected.(type) {
-	case int64:
-		return testIntegerObject(t, obj, exp)
-	case float64:
-		return testFloatObject(t, obj, exp)
-	default:
-		return false
-	}
-}
-func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
-	result, ok := obj.(*object.Integer)
-	if !ok {
-		t.Errorf("obj is not Integer. got=%T(%+v)", obj, obj)
-		return false
-	}
-	if result.Value != expected {
-		t.Errorf("object has wrong value. got=%d, want=%d",
-			result.Value, expected)
-		return false
-	}
-	return true
-}
-func testFloatObject(t *testing.T, obj object.Object, expected float64) bool {
-	result, ok := obj.(*object.Float)
-	if !ok {
-		t.Errorf("obj is not Float. got=%T(%+v)", obj, obj)
-		return false
-	}
-	if math.Abs(result.Value-expected) > 0.00001 {
-		t.Errorf("object has wrong value. got=%f, want=%f",
-			result.Value, expected)
-		return false
-	}
-	return true
-}
-func testStringObject(t *testing.T, obj object.Object, expected string) bool {
-	result, ok := obj.(*object.String)
-	if !ok {
-		t.Errorf("obj is not String. got=%T(%+v)", obj, obj)
-		return false
-	}
-	if result.Value != expected {
-		t.Errorf("object has wrong value. got=%s, want=%s",
-			result.Value, expected)
-		return false
-	}
-	return true
 }
 
 func TestEvalBooleanExpression(t *testing.T) {
@@ -148,19 +172,6 @@ func TestEvalBooleanExpression(t *testing.T) {
 	}
 }
 
-func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
-	result, ok := obj.(*object.Boolean)
-	if !ok {
-		t.Errorf("object is not boolean. got=%T(%+v)", obj, obj)
-		return false
-	}
-	if result.Value != expected {
-		t.Errorf("object has wrong value. got=%t, want=%t",
-			result.Value, expected)
-	}
-	return true
-}
-
 func TestBangOperator(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -202,14 +213,6 @@ func TestIfElseExpression(t *testing.T) {
 			testNullObject(t, evaluated)
 		}
 	}
-}
-
-func testNullObject(t *testing.T, obj object.Object) bool {
-	if obj != NULL {
-		t.Errorf("object is not NULL. got=%T(%+v)", obj, obj)
-		return false
-	}
-	return true
 }
 
 func TestReturnStatements(t *testing.T) {
@@ -272,12 +275,12 @@ func TestMutableStatements(t *testing.T) {
 		input  string
 		expect int64
 	}{
-		{"mutable a=5;a;", 5},
-		{"mutable a=5*5; a;", 25},
-		{"mutable a=5; mutable b=a; b;", 5},
-		{"mutable a=5; a--; a;", 4},
-		{"mutable a=5; a++; a;", 6},
-		{"mutable a=5; mutable b=a; mutable c=a+b+5; c;", 15},
+		{"fn () {mutable a=5;a;}()", 5},
+		{"fn () {mutable a=5*5; a;}()", 25},
+		{"fn () {mutable a=5; mutable b=a; b;}()", 5},
+		{"fn () {mutable a=5; a--; a;}()", 4},
+		{"fn () {mutable a=5; a++; a;}()", 6},
+		{"fn () {mutable a=5; mutable b=a; mutable c=a+b+5; c;}()", 15},
 	}
 	for _, tt := range tests {
 		testDecimalObject(t, testEval(tt.input), tt.expect)
@@ -310,11 +313,11 @@ func TestFunctionApplication(t *testing.T) {
 		input    string
 		expected int64
 	}{
-		{"mutable identity=fn(x){x;}; identity(5);", 5},
-		{"mutable identity=fn(x){return x;}; identity(5);", 5},
-		{"mutable double=fn(x){x*2;}; double(5);", 10},
-		{"mutable add = fn(x, y) { x+y;}; add(5,5);", 10},
-		{"mutable add=fn(x,y){x+y;}; add(5+5, add(5,5));", 20},
+		{"let identity=fn(x){x;}; identity(5);", 5},
+		{"let identity=fn(x){return x;}; identity(5);", 5},
+		{"let double=fn(x){x*2;}; double(5);", 10},
+		{"let add = fn(x, y) { x+y;}; add(5,5);", 10},
+		{"let add=fn(x,y){x+y;}; add(5+5, add(5,5));", 20},
 		{"fn(x){x;}(5)", 5},
 	}
 	for _, tt := range tests {
@@ -324,10 +327,10 @@ func TestFunctionApplication(t *testing.T) {
 
 func TestClosures(t *testing.T) {
 	input := `
-mutable newAdder = fn(x) {
+let newAdder = fn(x) {
 	fn(y) { x+y };
 };
-mutable addTwo = newAdder(2);
+let addTwo = newAdder(2);
 addTwo(2);
 `
 	testDecimalObject(t, testEval(input), 4)
@@ -417,19 +420,19 @@ func TestArrayIndexExpression(t *testing.T) {
 			3,
 		},
 		{
-			"mutable i =0; [1][i]",
+			"let i =0; [1][i]",
 			1,
 		},
 		{
-			"mutable myArray=[1,2,3];myArray[2];",
+			"let myArray=[1,2,3];myArray[2];",
 			3,
 		},
 		{
-			"mutable myArray=[1,2,3];myArray[0]+myArray[1]+myArray[2]",
+			"let myArray=[1,2,3];myArray[0]+myArray[1]+myArray[2]",
 			6,
 		},
 		{
-			"mutable myArray=[1,2,3];mutable i = myArray[0]; myArray[i]",
+			"let myArray=[1,2,3];let i = myArray[0]; myArray[i]",
 			2,
 		},
 		{
@@ -495,7 +498,7 @@ func TestStringIndexExpression(t *testing.T) {
 }
 
 func TestHashLiterals(t *testing.T) {
-	input := `mutable two="two";
+	input := `let two="two";
 	{
 		"one":10-9,
 		two:1+1,
@@ -541,21 +544,18 @@ func TestHashIndexExpression(t *testing.T) {
 			5,
 		},
 		{
-			`mutable key = "foo"; {"foo":5}[key]`,
+			`let key = "foo"; {"foo":5}[key]`,
 			5,
 		},
-		/*
-			TODO:
-			{
-				`{"foo":5}["bar"]`,
-				nil,
-			},
+		{
+			`{"foo":5}["bar"]`,
+			nil,
+		},
 
-			{
-				`{}["foo"]`,
-				nil,
-			},
-		*/
+		{
+			`{}["foo"]`,
+			nil,
+		},
 		{
 			`{5:5}[5]`,
 			5,
@@ -583,21 +583,23 @@ func TestHashIndexExpression(t *testing.T) {
 		if ok {
 			testDecimalObject(t, evaluated, int64(integer))
 		} else {
-			testBooleanObject(t, evaluated, false)
+			testNullObject(t, evaluated)
 		}
 	}
 }
 
 func TestForLoopExpression(t *testing.T) {
 	input := `
-mutable x = 1;
-mutable sum = 0;
-mutable up = 100;
-for (x < up){
-	mutable sum = sum + x;
-	mutable x = x + 1;
-}
-sum
+fn () {
+	mutable x = 1;
+	mutable sum = 0;
+	mutable up = 100;
+	for (x < up) {
+		sum = sum + x;
+		x = x + 1;
+	}
+	sum
+}()
 `
 	evaluated := testEval(input)
 	testDecimalObject(t, evaluated, 4950)
