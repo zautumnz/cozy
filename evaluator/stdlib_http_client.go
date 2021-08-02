@@ -345,6 +345,8 @@ func httpClient(args ...object.Object) object.Object {
 			}
 		case *object.String:
 			body = a.Value
+		case *object.Null:
+			break
 		default:
 			return NewError("http client expected headers or body as third arg!")
 		}
@@ -354,6 +356,8 @@ func httpClient(args ...object.Object) object.Object {
 		switch a := args[3].(type) {
 		case *object.String:
 			body = a.Value
+		case *object.Null:
+			break
 		default:
 			return NewError("http client expected body as fourth arg!")
 		}
@@ -412,7 +416,7 @@ func httpClient(args ...object.Object) object.Object {
 }
 
 func init() {
-	RegisterBuiltin("http.client",
+	RegisterBuiltin("http.create_client",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (httpClient(args...))
 		})

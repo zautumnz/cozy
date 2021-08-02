@@ -156,3 +156,65 @@ let http.constants = {
         "UNSUBSCRIBE",
     ]
 }
+
+let http.client = fn () {
+    let r = http.create_client
+
+    return {
+        "get": fn () {
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            return r("GET", opts[0], opts[1], opts[2])
+        },
+
+        "post": fn () {
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            return r("POST", opts[0], opts[1], opts[2])
+        },
+
+        "put": fn () {
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            return r("PUT", opts[0], opts[1], opts[2])
+        },
+
+        "patch": fn () {
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            return r("PATCH", opts[0], opts[1], opts[2])
+        },
+
+        "del": fn () {
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            return r("DELETE", opts[0], opts[1], opts[2])
+        },
+
+        "options": fn () {
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            return r("OPTIONS", opts[0], opts[1], opts[2])
+        },
+
+        "head": fn () {
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            return r("HEAD", opts[0], opts[1], opts[2])
+        },
+    }
+}

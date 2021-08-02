@@ -1,10 +1,14 @@
-let r = http.client
+let request = http.client()
+# using http.client wrapper
+print(request.get("https://example.com").body)
+
+# using http.create_client directly
+let r = http.create_client
 let res = r("GET", "https://example.com");
 print(res.body)
 
 # spin up an echo server to test this out
-let post_res = r(
-    "POST",
+let post_res = request.post(
     "http://localhost:9999",
     {"content-type": "application/json"},
     json.serialize({"foo": "bar"})
