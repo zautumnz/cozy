@@ -11,8 +11,6 @@ programming but syntax similar to Python, Go, JavaScript, and Shell; no OOP
 constructs like classes; instead we have first-class functions, closures, and
 macros.
 
----
-
 ## Example
 
 ```cozy
@@ -78,9 +76,6 @@ This is the first large Go program I've worked on, so contributions, especially
 in areas where I didn't write idiomatic Go, are definitely welcome. See
 [CONTRIBUTING](.github/CONTRIBUTING.md) for contribution guidelines.
 
-The majority of the upstream versions of this code are MIT licensed. This code
-is LGPL-3.0 licensed (see [LICENSE.md](./LICENSE.md)).
-
 ## Usage
 
 Clone the repo and run `make`, and either copy the binary to somewhere in your
@@ -88,7 +83,7 @@ path or run `make install`. Write some code (see the examples), and run `cozy
 ./your-code.cz`. You can also run without a specified file, in which case your
 entered code will be evaluated when you exit with `ctrl+d`.
 
-## Important Notes
+### Important Notes
 
 * `print` adds an ending newline, use `printf` or `STDOUT`/`STDERR` for raw text
 * No undefined or uninitialized variables
@@ -127,9 +122,16 @@ Global functions:
 Core modules (see examples for docs):
 
 * `fs`
+* `http`
 * `json`
 * `math`
 * `net`
 * `time`
 
 See also the standard library (written mostly in cozy itself).
+
+## License
+
+This code is licensed [LGPL-3.0](./LICENSE.md). I've used code from various
+Monkey implementations, which are usually licensed MIT. Other code used in cozy
+includes comments with notes on the licenses.
