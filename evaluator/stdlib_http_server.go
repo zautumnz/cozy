@@ -73,8 +73,9 @@ func registerRoute(env *object.Environment, args ...object.Object) object.Object
 		return NewError("route expected methods string array!")
 	}
 
-	switch args[2].(type) {
+	switch f := args[2].(type) {
 	case *object.Function:
+		handler = f
 		break
 	default:
 		return NewError("route expected callback function!")
@@ -88,11 +89,8 @@ func registerRoute(env *object.Environment, args ...object.Object) object.Object
 }
 
 func httpContextToCozyReq(c *httpContext) object.Object {
-	cozyReq := make(map[object.HashKey]object.HashPair)
-	originalReq := c.Request
-
 	cReq := make(map[object.HashKey]object.HashPair)
-	cReqKey := &object.String{Value: "req"}
+	originalReq := c.Request
 
 	if originalReq.Body != nil {
 		cReqBodyKey := &object.String{Value: "body"}
@@ -124,10 +122,19 @@ func httpContextToCozyReq(c *httpContext) object.Object {
 	cReqHeadersVal := &object.Hash{Pairs: cReqHeaders}
 	cReq[cReqHeadersKey.HashKey()] = object.HashPair{Key: cReqHeadersKey, Value: cReqHeadersVal}
 
+	if c.Params != nil {
+		arr := make([]object.Object, 0)
+		for _, el := range c.Params {
+			arr = append(arr, &object.String{Value: el})
+		}
+		cReqParamsKey := &object.String{Value: "params"}
+		cReqParamsVal := &object.Array{Elements: arr}
+		cReq[cReqParamsKey.HashKey()] = object.HashPair{Key: cReqParamsKey, Value: cReqParamsVal}
+	}
+
 	// TODO: same as above for each anything else relevant on originalReq
 
-	cozyReq[cReqKey.HashKey()] = object.HashPair{Key: cReqKey, Value: &object.Hash{Pairs: cReq}}
-	return &object.Hash{Pairs: cozyReq}
+	return &object.Hash{Pairs: cReq}
 }
 
 // TODO: make this `a` our `appInstance`
@@ -155,37 +162,35 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						contentType := a.Pairs[contentTypeStr.HashKey()].Value
 						statusCode := a.Pairs[statusCodeStr.HashKey()].Value
 
+						sc := 200
+						bd := ""
+						ct := "text/plain"
+
 						// TODO: add a headers object
-						var sc int
 						switch s := statusCode.(type) {
 						case *object.Integer:
 							sc = int(s.Value)
 						default:
-							fmt.Println("oh no")
-							return
+							break
 						}
 
-						var bd string
 						switch b := body.(type) {
 						case *object.String:
 							bd = b.Value
 						default:
-							fmt.Println("oh no")
-							return
+							break
 						}
 
-						var ct string
 						switch c := contentType.(type) {
 						case *object.String:
 							ct = c.Value
 						default:
-							fmt.Println("oh no")
-							return
+							break
 						}
 
 						sendWrapper(ctx, sc, bd, ct)
 					default:
-						fmt.Println("oh no")
+						fmt.Println(res.Type(), "\n\noh no", res)
 						return
 					}
 					return

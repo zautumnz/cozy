@@ -2,7 +2,8 @@ let http.server = fn () {
     let instance = http.create_server()
 
     return {
-        # app.route(path, [optional_methods], callback(ctx))
+        # app.route(path, [optional_methods], callback(req) ->
+        # { status_code, content_type, body })
         "route": fn () {
             mutable opts = []
             foreach x in ... {

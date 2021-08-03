@@ -1,18 +1,21 @@
-# WIP
-# the biggest thing missing right now is handling ctx; how to pass that around,
-# i'm not sure yet. until then, there's no way to actually respond to requests.
-# once ctx is figured out, add methods for text(), json(), etc.
-
 let app = http.server()
 app.static("./")
-app.route("^/foo$", fn (ctx) { print("in get") })
-app.route("^/bar$", ["POST"], fn (ctx) { print("in post") })
-app.route("^/quux$", ["GET", "POST"], fn (ctx) {
-    if ctx.req.method == "GET" {
-        ctx.res.json({"got": "quux"})
+app.route("^/foo$", fn (req) {
+    return { "body": "in get foo" }
+})
+app.route("^/bar$", ["POST"], fn (req) {
+    return { "body": "posted!" }
+})
+app.route("^/quux$", ["GET", "POST"], fn (req) {
+    if req.method == "GET" {
+        return {
+            "body": json.serialize({ "got": "quux" }),
+            "content_type": "application/json",
+            "status_code": 203,
+        }
     } else {
-        ctx.res.text("you posted: " + ctx.req.body)
+        return { "body": string(req.body) }
     }
 })
-app.route("/test/(.*)", fn (ctx) { ctx.res.text(ctx.req.params[0]) })
+app.route("/test/(.*)", fn (req) { return {"body": req.params.join("\n")} })
 app.listen(8000, fn (x) { print("listening on", x) })
