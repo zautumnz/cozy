@@ -407,7 +407,7 @@ func (p *Parser) parsePostfixExpression() ast.Expression {
 	return expression
 }
 
-// /arseInfixExpression parses an infix-based expression.
+// parseInfixExpression parses an infix-based expression.
 func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 	expression := &ast.InfixExpression{
 		Token:    p.curToken,

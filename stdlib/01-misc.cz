@@ -102,3 +102,27 @@ let curry = fn (f) {
 
     return inner
 }
+
+let deep_equals = fn (a, b) {
+    if a == b {
+        return true
+    }
+
+    if type(a) != type(b) {
+        return false
+    }
+
+    return json.serialize(a) == json.serialize(b)
+}
+assert(deep_equals(1, 1), "deep_equals works on ints")
+assert(deep_equals("a", "a"), "deep_equals works on strings")
+assert(deep_equals([1], [1]), "deep_equals works on arrays")
+assert(deep_equals(
+    {"x":[1],"y":{"z":fn(){true}}},
+    {"x":[1],"y":{"z":fn(){true}}}
+), "deep_equals works on complex hashes")
+assert(!deep_equals(1, 2), "deep_equals works negative ints")
+assert(!deep_equals(
+    {"x":[1],"y":{"z":fn(){true}}},
+    {"x":[1],"y":{"z":fn(){false}}}
+), "deep_equals works negative complex hashes")
