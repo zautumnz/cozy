@@ -5,11 +5,12 @@ import (
 	"io"
 	"net/http"
 	"regexp"
+	"strings"
 
 	"github.com/zacanger/cozy/object"
 )
 
-type httpHandler func(*httpContext)
+type httpHandler func(object.Object) object.Object
 
 type httpRoute struct {
 	Pattern *regexp.Regexp
@@ -46,10 +47,9 @@ func methodNotAllowed(ctx *httpContext) {
 	sendWrapper(ctx, http.StatusMethodNotAllowed, "Not allowed", "text/plain")
 }
 
-func handleRoute(env *object.Environment, args ...object.Object) object.Object {
+func registerRoute(env *object.Environment, args ...object.Object) object.Object {
 	var pattern string
 	var methods []string
-	var f *object.Function
 	var handler httpHandler
 
 	switch a := args[0].(type) {
@@ -73,24 +73,65 @@ func handleRoute(env *object.Environment, args ...object.Object) object.Object {
 		return NewError("route expected methods string array!")
 	}
 
-	switch a := args[2].(type) {
+	switch args[2].(type) {
 	case *object.Function:
-		f = a
+		break
 	default:
 		return NewError("route expected callback function!")
 	}
 
-	// TODO: this is just so we don't get a compile error on f not being used
-	if f == nil {
-		fmt.Println(f)
-	}
-
 	re := regexp.MustCompile(pattern)
-	// TODO: get handler out of object.Function f
 	route := httpRoute{Pattern: re, Handler: handler, Methods: methods}
 
 	routes = append(routes, route)
-	return &object.Boolean{Value: true}
+	return NULL
+}
+
+func httpContextToCozyContext(c *httpContext) object.Object {
+	cozyContext := make(map[object.HashKey]object.HashPair)
+	originalReq := c.Request
+
+	cReq := make(map[object.HashKey]object.HashPair)
+	cRes := make(map[object.HashKey]object.HashPair)
+	cReqKey := &object.String{Value: "req"}
+	cResKey := &object.String{Value: "res"}
+
+	if originalReq.Body != nil {
+		cReqBodyKey := &object.String{Value: "body"}
+		buf := new(strings.Builder)
+		_, err := io.Copy(buf, originalReq.Body)
+		if err != nil {
+			return NewError("error in body!, %s", err.Error())
+		}
+		cReqBodyVal := &object.String{Value: buf.String()}
+		cReq[cReqBodyKey.HashKey()] = object.HashPair{Key: cReqBodyKey, Value: cReqBodyVal}
+	}
+
+	cReqContentLengthKey := &object.String{Value: "content_length"}
+	cReqContentLengthVal := &object.Integer{Value: originalReq.ContentLength}
+	cReq[cReqContentLengthKey.HashKey()] = object.HashPair{Key: cReqContentLengthKey, Value: cReqContentLengthVal}
+
+	cReqMethodKey := &object.String{Value: "method"}
+	cReqMethodVal := &object.String{Value: originalReq.Method}
+	cReq[cReqMethodKey.HashKey()] = object.HashPair{Key: cReqMethodKey, Value: cReqMethodVal}
+
+	cReqHeaders := make(map[object.HashKey]object.HashPair)
+	for k, v := range originalReq.Header {
+		key := &object.String{Value: k}
+		val := &object.String{Value: strings.Join(v, ",")}
+		cReqHeaders[key.HashKey()] = object.HashPair{Key: key, Value: val}
+
+	}
+	cReqHeadersKey := &object.String{Value: "headers"}
+	cReqHeadersVal := &object.Hash{Pairs: cReqHeaders}
+	cReq[cReqHeadersKey.HashKey()] = object.HashPair{Key: cReqHeadersKey, Value: cReqHeadersVal}
+
+	// TODO: same as above for each anything else relevant on originalReq
+
+	// TODO: handle res
+	cozyContext[cReqKey.HashKey()] = object.HashPair{Key: cReqKey, Value: &object.Hash{Pairs: cReq}}
+	cozyContext[cResKey.HashKey()] = object.HashPair{Key: cResKey, Value: &object.Hash{Pairs: cRes}}
+	return &object.Hash{Pairs: cozyContext}
 }
 
 // TODO: make this `a` our `appInstance`
@@ -105,7 +146,11 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 			for _, m := range rt.Methods {
 				if m == r.Method {
-					rt.Handler(ctx)
+					// TODO:
+					// applyArgs := make([]object.Object, 0)
+					// applyArgs = append(applyArgs, httpContextToCozyContext(ctx))
+					// ApplyFunction(env, rt.Handler, applyArgs)
+					rt.Handler(httpContextToCozyContext(ctx))
 					return
 				}
 			}
@@ -190,11 +235,11 @@ func (c *httpContext) send(args ...object.Object) object.Object {
 func main() {
 	app := newApp()
 
-	app.handleRoute(`^/hello$`, func(ctx *httpContext) {
+	app.registerRoute(`^/hello$`, func(ctx *httpContext) {
 		ctx.send(http.StatusOK, "Hello world")
 	})
 
-	app.handleRoute(`/hello/([\w\._-]+)$`, func(ctx *httpContext) {
+	app.registerRoute(`/hello/([\w\._-]+)$`, func(ctx *httpContext) {
 		ctx.send(http.StatusOK, fmt.Sprintf("Hello %s", ctx.Params[0]))
 	})
 
@@ -229,7 +274,7 @@ func httpServer(args ...object.Object) object.Object {
 
 	// route(pattern, callback(context) { respond })
 	routeKey := &object.String{Value: "route"}
-	routeVal := &object.Builtin{Fn: handleRoute}
+	routeVal := &object.Builtin{Fn: registerRoute}
 	res[routeKey.HashKey()] = object.HashPair{Key: routeKey, Value: routeVal}
 
 	staticKey := &object.String{Value: "static"}
