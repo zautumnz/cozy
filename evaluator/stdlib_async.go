@@ -75,6 +75,18 @@ func asyncFn(env *object.Environment, args ...object.Object) object.Object {
 	return &object.Integer{Value: fnID}
 }
 
+func backgroundFn(env *object.Environment, args ...object.Object) object.Object {
+	switch a := args[0].(type) {
+	case *object.Function:
+		go func() {
+			ApplyFunction(env, a, make([]object.Object, 0))
+		}()
+		return NULL
+	default:
+		return NewError("background expected function arg!")
+	}
+}
+
 func init() {
 	RegisterBuiltin("async",
 		func(env *object.Environment, args ...object.Object) object.Object {
@@ -83,5 +95,9 @@ func init() {
 	RegisterBuiltin("await",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (awaitFn(env, args...))
+		})
+	RegisterBuiltin("background",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (backgroundFn(env, args...))
 		})
 }

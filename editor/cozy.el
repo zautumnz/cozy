@@ -45,6 +45,7 @@
   '(
     "async"
     "await"
+    "background"
     "error"
     "exit"
     "file"

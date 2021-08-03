@@ -24,6 +24,7 @@ hi def link     cozyRepeat            Repeat
 syn keyword     cozyBuiltins
             \ async
             \ await
+            \ background
             \ exit
             \ fs
             \ http
