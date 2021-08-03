@@ -73,7 +73,16 @@ print(fn () { true }())
 print((fn () { true })())
 print((fn () { true }()))
 
-# memoize
+# callbacks:
+let cb_parent = fn (x, y, cb) {
+    let z = x + y
+    return cb(z)
+}
+cb_parent(1, 2, fn (val) {
+    print("result is", val)
+})
+
+# memoization
 let adder = fn (q, w, e) {
     return q + w + e
 }
