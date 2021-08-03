@@ -10,11 +10,11 @@ import (
 	"github.com/zacanger/cozy/object"
 )
 
-type httpHandler func(object.Object) object.Object
+var httpServerEnv *object.Environment
 
 type httpRoute struct {
 	Pattern *regexp.Regexp
-	Handler httpHandler
+	Handler *object.Function
 	Methods []string
 }
 
@@ -50,7 +50,7 @@ func methodNotAllowed(ctx *httpContext) {
 func registerRoute(env *object.Environment, args ...object.Object) object.Object {
 	var pattern string
 	var methods []string
-	var handler httpHandler
+	var handler *object.Function
 
 	switch a := args[0].(type) {
 	case *object.String:
@@ -87,14 +87,12 @@ func registerRoute(env *object.Environment, args ...object.Object) object.Object
 	return NULL
 }
 
-func httpContextToCozyContext(c *httpContext) object.Object {
-	cozyContext := make(map[object.HashKey]object.HashPair)
+func httpContextToCozyReq(c *httpContext) object.Object {
+	cozyReq := make(map[object.HashKey]object.HashPair)
 	originalReq := c.Request
 
 	cReq := make(map[object.HashKey]object.HashPair)
-	cRes := make(map[object.HashKey]object.HashPair)
 	cReqKey := &object.String{Value: "req"}
-	cResKey := &object.String{Value: "res"}
 
 	if originalReq.Body != nil {
 		cReqBodyKey := &object.String{Value: "body"}
@@ -128,10 +126,8 @@ func httpContextToCozyContext(c *httpContext) object.Object {
 
 	// TODO: same as above for each anything else relevant on originalReq
 
-	// TODO: handle res
-	cozyContext[cReqKey.HashKey()] = object.HashPair{Key: cReqKey, Value: &object.Hash{Pairs: cReq}}
-	cozyContext[cResKey.HashKey()] = object.HashPair{Key: cResKey, Value: &object.Hash{Pairs: cRes}}
-	return &object.Hash{Pairs: cozyContext}
+	cozyReq[cReqKey.HashKey()] = object.HashPair{Key: cReqKey, Value: &object.Hash{Pairs: cReq}}
+	return &object.Hash{Pairs: cozyReq}
 }
 
 // TODO: make this `a` our `appInstance`
@@ -146,11 +142,52 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 			for _, m := range rt.Methods {
 				if m == r.Method {
-					// TODO:
-					// applyArgs := make([]object.Object, 0)
-					// applyArgs = append(applyArgs, httpContextToCozyContext(ctx))
-					// ApplyFunction(env, rt.Handler, applyArgs)
-					rt.Handler(httpContextToCozyContext(ctx))
+					applyArgs := make([]object.Object, 0)
+					applyArgs = append(applyArgs, httpContextToCozyReq(ctx))
+					res := ApplyFunction(httpServerEnv, rt.Handler, applyArgs)
+					switch res.(type) {
+					case *object.Hash:
+						a := res.(*object.Hash)
+						bodyStr := &object.String{Value: "body"}
+						contentTypeStr := &object.String{Value: "content_type"}
+						statusCodeStr := &object.String{Value: "status_code"}
+						body := a.Pairs[bodyStr.HashKey()].Value
+						contentType := a.Pairs[contentTypeStr.HashKey()].Value
+						statusCode := a.Pairs[statusCodeStr.HashKey()].Value
+
+						// TODO: add a headers object
+						var sc int
+						switch s := statusCode.(type) {
+						case *object.Integer:
+							sc = int(s.Value)
+						default:
+							fmt.Println("oh no")
+							return
+						}
+
+						var bd string
+						switch b := body.(type) {
+						case *object.String:
+							bd = b.Value
+						default:
+							fmt.Println("oh no")
+							return
+						}
+
+						var ct string
+						switch c := contentType.(type) {
+						case *object.String:
+							ct = c.Value
+						default:
+							fmt.Println("oh no")
+							return
+						}
+
+						sendWrapper(ctx, sc, bd, ct)
+					default:
+						fmt.Println("oh no")
+						return
+					}
 					return
 				}
 			}
@@ -265,7 +302,8 @@ func listen(env *object.Environment, args ...object.Object) object.Object {
 	}
 }
 
-func httpServer(args ...object.Object) object.Object {
+func httpServer(env *object.Environment, args ...object.Object) object.Object {
+	httpServerEnv = env
 	res := make(map[object.HashKey]object.HashPair)
 
 	listenKey := &object.String{Value: "listen"}
@@ -287,6 +325,6 @@ func httpServer(args ...object.Object) object.Object {
 func init() {
 	RegisterBuiltin("http.create_server",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (httpServer(args...))
+			return (httpServer(env, args...))
 		})
 }
