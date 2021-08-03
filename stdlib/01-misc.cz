@@ -57,7 +57,7 @@ let function?  = fn (x) { return type(x) == "function" };
 let hash?      = fn (x) { return type(x) == "hash" };
 let integer?   = fn (x) { return type(x) == "integer" };
 let module?    = fn (x) { return type(x) == "module" };
-let number?    = fn (x) { return int?(x) || float?(x) };
+let number?    = fn (x) { return integer?(x) || float?(x) };
 let regexp?    = fn (x) { return type(x) == "regexp" };
 let string?    = fn (x) { return type(x) == "string" };
 
