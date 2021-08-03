@@ -35,4 +35,4 @@ lint:
 tags:
 	@ctags --exclude=x -R .
 
-.PHONY: clean install tags todo
+.PHONY: clean install tags
