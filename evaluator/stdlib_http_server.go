@@ -76,7 +76,6 @@ func registerRoute(env *object.Environment, args ...object.Object) object.Object
 	switch f := args[2].(type) {
 	case *object.Function:
 		handler = f
-		break
 	default:
 		return NewError("route expected callback function!")
 	}
