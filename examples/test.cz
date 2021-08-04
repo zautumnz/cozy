@@ -14,7 +14,6 @@ test("test suite", fn(t) {
 })
 
 test("second suite", fn(t) {
-    t("x(2) == 2", "example using a string")
     t(x(3) == 2, "three does not equal two")
     t("a" + "b" == "ab", "a + b == ab")
 })

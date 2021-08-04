@@ -6,11 +6,7 @@ let test = fn(suite, cb) {
 
     let handle_assertion = fn(val, msg = "Result was not 'true'!") {
         id++;
-        mutable result = false;
-        if (type(val) == "string") {
-            result = eval(val);
-        }
-        if (!result && !val) {
+        if (!val) {
             printf("not ok %d - %s\n", id, msg);
             failed++;
         } else {

@@ -6,5 +6,5 @@ let hash.empty? = fn() {
     return false;
 };
 
-assert("{}.empty?()");
-assert("! {\"name\":\"zac\"}.empty?()");
+assert({}.empty?());
+assert(! {"name":"zac"}.empty?());

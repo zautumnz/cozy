@@ -5,7 +5,6 @@ List of things to get done before a v1.
 * Major things missing:
     * Cryptography builtins
     * Errors and exceptions: As values? Try/catch? Stack traces?
-    * Try removing null again? Tried before and had to bring it back....
 * Minor things:
     * At least 50% code coverage
     * Confirm that everything under ./examples works

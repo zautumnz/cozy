@@ -7,8 +7,8 @@ let array.first = fn() {
     }
 };
 
-assert("[0,1].first() == 0");
-assert("[\"zac\",1].first() == \"zac\"");
+assert([0,1].first() == 0);
+assert(["zac",1].first() == "zac");
 
 # The rest of an array - i.e. all elements EXCEPT the first
 let array.rest = fn() {
@@ -25,10 +25,10 @@ let array.rest = fn() {
     return result;
 };
 
-assert("len([0,2].rest()) == 1");
-assert("len([0,1,2].rest()) == 2");
-assert("len([0,1,2,3,4,5].rest()) == 5");
-assert("string([\"zac\", 1].rest()) == \"[1]\"");
+assert(len([0,2].rest()) == 1);
+assert(len([0,1,2].rest()) == 2);
+assert(len([0,1,2,3,4,5].rest()) == 5);
+assert(string(["zac", 1].rest()) == "[1]");
 
 # Last element of an array
 let array.last = fn() {
@@ -36,7 +36,7 @@ let array.last = fn() {
     return(self[len(self) - 1]);
 };
 
-assert("[0,2].last() == 2");
+assert([0,2].last() == 2);
 
 # Call the given function on each entry, and return an array of the
 # items for which the predicate returned true.
@@ -58,19 +58,18 @@ let array.filter = fn(predicate) {
 };
 
 # Filter an array and keep only values which are "2".
-assert("
-let x = fn () {
-    mutable a = [ 1, 2, 3 , -1, \"zac\", 44 ];
+assert(
+fn () {
+    mutable a = [ 1, 2, 3 , -1, "zac", 44 ];
     a = a.filter(fn(n) { return n == 2 ; });
-    if (string(a) == \"[2]\") {
+    if (string(a) == "[2]") {
         return true;
     } else {
         print(a);
         return false;
     }
-}
-x()
-");
+}()
+);
 
 
 # Return the offset, if any, of the specified item in the array.
@@ -85,18 +84,18 @@ let array.find = fn(item) {
     return -1;
 };
 
-assert("[1,2,3].find(7) == -1");
-assert("[1,2,3].find(1) == 0");
-assert("[1,2,3].find(3) == 2");
-assert("[1,2,3,3].find(3) == 2");
+assert([1,2,3].find(7) == -1);
+assert([1,2,3].find(1) == 0);
+assert([1,2,3].find(3) == 2);
+assert([1,2,3,3].find(3) == 2);
 
 # Does the given value exist inside the array?
 let array.includes? = fn(obj) {
     return(self.find(obj) != -1);
 };
 
-assert("[1,2,3].includes?(2)");
-assert("! [1,2,3].includes?(23)");
+assert([1,2,3].includes?(2));
+assert(! [1,2,3].includes?(23));
 
 # Find minimum value in array
 let array.min = fn() {
@@ -139,10 +138,10 @@ let array.min = fn() {
     return min;
 };
 
-assert("([1,2,3].min() == 1)");
-assert("(1..10.min() == 1)");
-assert("([-1,-2,-3].min() == -3)");
-assert("([].min() == 0)", "minimum of an empty array is zero");
+assert(([1,2,3].min() == 1));
+assert((1..10.min() == 1));
+assert(([-1,-2,-3].min() == -3));
+assert(([].min() == 0), "minimum of an empty array is zero");
 
 # Find maximum value in array
 let array.max = fn() {
@@ -185,10 +184,10 @@ let array.max = fn() {
     return max;
 };
 
-assert("(1..15.max() == 15)");
-assert("([1,2,3].max() == 3)");
-assert("([-1,-2,-3].max() == -1)");
-assert("([].max() == 0)", "maximum of an empty array is zero");
+assert((1..15.max() == 15));
+assert(([1,2,3].max() == 3));
+assert(([-1,-2,-3].max() == -1));
+assert(([].max() == 0), "maximum of an empty array is zero");
 
 # Join the elements of an array by the given string.
 let array.join = fn(char) {
@@ -210,8 +209,8 @@ let array.join = fn(char) {
     return r;
 };
 
-assert("[1,2,3].join(\".\") == \"1.2.3\"");
-assert("[1,2,3].join(\"\") == \"123\"");
+assert([1,2,3].join(".") == "1.2.3");
+assert([1,2,3].join("") == "123");
 
 # Reverse an array.
 let array.reverse = fn() {
@@ -225,7 +224,7 @@ let array.reverse = fn() {
     return r;
 };
 
-assert("string([1,2,3].reverse()) == \"[3, 2, 1]\"");
+assert(string([1,2,3].reverse()) == "[3, 2, 1]");
 
 # sorted? returns true if the specified array is sorted.
 let array.sorted? = fn() {
@@ -270,9 +269,9 @@ let array.sorted? = fn() {
     return true;
 };
 
-assert("[-1,0,1].sorted?()");
-assert("[1].sorted?()");
-assert("[].sorted?()");
+assert([-1,0,1].sorted?());
+assert([1].sorted?());
+assert([].sorted?());
 
 # Swap the value of two array indexes.
 #
@@ -305,19 +304,20 @@ let array.swap = fn(a, b) {
     return r;
 };
 
-assert("
-let x = fn () {
-mutable a = [10,20]; a = a.swap(0,1); if (a[0] == 20) { true; } else { false; }
-}
-x()
-");
-assert("
-let x = fn () {
-mutable a = [10,20]; a = a.swap(0,1); if (a[1] == 10) { true; } else { false; }
-}
-x()
-");
-
+assert(
+fn () {
+    mutable a = [10,20];
+    a = a.swap(0,1);
+    if (a[0] == 20) { true; } else { false; }
+}()
+);
+assert(
+fn () {
+    mutable a = [10,20];
+    a = a.swap(0,1);
+    if (a[1] == 10) { true; } else { false; }
+}()
+);
 
 # Sort the given array.
 # This is grossly inefficient, obviously.
@@ -361,10 +361,10 @@ let array.sort = fn() {
     return self;
 };
 
-assert("let x = fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a.sorted?()};x()");
-assert("let x = fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[0] == 1};x()");
-assert("let x = fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[1] == 2};x()");
-assert("let x = fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3};x()");
+assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a.sorted?()}());
+assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[0] == 1}());
+assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[1] == 2}());
+assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3}());
 
 # Return an array containing the result of applying the specified
 # function to each element in the array.
@@ -379,32 +379,30 @@ let array.map = fn(fnc) {
 };
 
 
-assert("
-let x = fn () {
+assert(
+fn () {
     mutable a = [3,9,-4];
     a = a.map(fn(n) { return n * n; });
     a = a.sort();
-    if (string(a) == \"[9, 16, 81]\") {
+    if (string(a) == "[9, 16, 81]") {
         return true;
     } else {
         return false;
     }
-}
-x()
-");
-assert("
-let x = fn () {
+}()
+);
+assert(
+fn () {
     mutable a = [2,-1,-12];
     a = a.map(fn(n) { return n +2; });
     a = a.sort();
-    if (string(a) == \"[-10, 1, 4]\") {
+    if (string(a) == "[-10, 1, 4]") {
         return true;
     } else {
         return false;
     }
-}
-x()
-");
+}()
+);
 
 # array.uniq returns the unique members of an array.
 let array.uniq = fn() {
@@ -418,7 +416,7 @@ let array.uniq = fn() {
     return(tmp.keys().sort());
 };
 
-assert("string([1,1,1,1,2].uniq()) == \"[1, 2]\"");
+assert(string([1,1,1,1,2].uniq()) == "[1, 2]");
 # Is the given array empty?
 let array.empty? = fn() {
     if (len(self) == 0) {
@@ -427,9 +425,9 @@ let array.empty? = fn() {
     return false;
 };
 
-assert("[].empty?()");
-assert("![1,2].empty?()");
-assert("![\"zacanger\",3].empty?()");
+assert([].empty?());
+assert(![1,2].empty?());
+assert(!["zacanger",3].empty?());
 
 # Reduce. The cb takes current item, accumulator, and index
 let array.reduce = fn(fun, init) {

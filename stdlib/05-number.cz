@@ -5,12 +5,21 @@ let float.to_i = fn() {
 };
 
 assert(type(3.1.to_i()) == "integer");
-assert("let a = 3.1; if (a.to_i() == 3) { return true; } else { return false; }");
+assert(
+    fn () {
+        let a = 3.1
+        if (a.to_i() == 3) {
+            return true
+        } else {
+            return false;
+        }
+    }()
+)
 
 # Convert an integer to a float.
 let integer.to_f = fn() {
     return(self + 0.0);
 };
 
-assert("type(3.to_f()) == \"float\"");
-assert("3.to_f() == 3.0");
+assert(type(3.to_f()) == "float");
+assert(3.to_f() == 3.0);

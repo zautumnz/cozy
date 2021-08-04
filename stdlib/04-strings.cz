@@ -95,11 +95,11 @@ let string.find = fn(needle) {
     return -1;
 };
 
-assert("\"zac\".find(\"a\") == 1");
-assert("\"zac\".find(\"c\") == 2");
-assert("\"zac\".find(\"anger\") == -1");
-assert("\"天研\".find(\"天研\") == 0");
-assert("\"st天eve研es\".find(\"研\") == 6");
+assert("zac".find("a") == 1);
+assert("zac".find("c") == 2);
+assert("zac".find("anger") == -1);
+assert("天研".find("天研") == 0);
+assert("st天eve研es".find("研") == 6);
 
 # string.split returns an array splitting on any characters included
 # in the separator string.
@@ -140,8 +140,8 @@ let string.split = fn(sep = " \r\t\n") {
     return r;
 };
 
-assert("len(\"1 2 3\".split()) == 3");
-assert("type(\"1 2 3\".split(\"2\")) == \"array\"");
+assert(len("1 2 3".split()) == 3);
+assert(type("1 2 3".split("2")) == "array");
 
 # string.replace removes a value from a string, replacing it with a new value.
 let string.replace = fn(old, new) {
@@ -227,10 +227,10 @@ let string.count = fn(char) {
     return c;
 };
 
-assert("\"zac\".count(\"a\") == 1");
-assert("\"zac\".count(\"E\") == 0");
-assert("\"研天\".count(\"天\") == 1");
-assert("\"研研研研研研天\".count(\"研\") == 6");
+assert("zac".count("a") == 1);
+assert("zac".count("E") == 0);
+assert("研天".count("天") == 1);
+assert("研研研研研研天".count("研") == 6);
 
 # Repeat a string N times.
 let string.repeat = fn(count) {
