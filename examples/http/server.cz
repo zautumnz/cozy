@@ -7,14 +7,18 @@ app.route("^/bar$", ["POST"], fn (req) {
     return { "body": "posted!" }
 })
 app.route("^/quux$", ["GET", "POST"], fn (req) {
+    let content_type = "application/json"
     if req.method == "GET" {
         return {
             "body": json.serialize({ "got": "quux" }),
-            "content_type": "application/json",
-            "status_code": 203,
+            "content_type": content_type,
         }
     } else {
-        return { "body": string(req.body) }
+        if req.content_type == "application/json" {
+            return { "body": req.body, "content_type": content_type }
+        } else {
+            return { "status_code": 403 }
+        }
     }
 })
 app.route("/test/(.*)", fn (req) { return {"body": req.params.join("\n")} })
