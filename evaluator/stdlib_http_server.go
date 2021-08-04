@@ -91,6 +91,7 @@ func httpContextToCozyReq(c *httpContext) object.Object {
 	cReq := make(map[object.HashKey]object.HashPair)
 	originalReq := c.Request
 
+	// body
 	if originalReq.Body != nil {
 		cReqBodyKey := &object.String{Value: "body"}
 		buf := new(strings.Builder)
@@ -102,14 +103,17 @@ func httpContextToCozyReq(c *httpContext) object.Object {
 		cReq[cReqBodyKey.HashKey()] = object.HashPair{Key: cReqBodyKey, Value: cReqBodyVal}
 	}
 
+	// content-length
 	cReqContentLengthKey := &object.String{Value: "content_length"}
 	cReqContentLengthVal := &object.Integer{Value: originalReq.ContentLength}
 	cReq[cReqContentLengthKey.HashKey()] = object.HashPair{Key: cReqContentLengthKey, Value: cReqContentLengthVal}
 
+	// method
 	cReqMethodKey := &object.String{Value: "method"}
 	cReqMethodVal := &object.String{Value: originalReq.Method}
 	cReq[cReqMethodKey.HashKey()] = object.HashPair{Key: cReqMethodKey, Value: cReqMethodVal}
 
+	// headers
 	cReqHeaders := make(map[object.HashKey]object.HashPair)
 	for k, v := range originalReq.Header {
 		key := &object.String{Value: k}
@@ -121,6 +125,12 @@ func httpContextToCozyReq(c *httpContext) object.Object {
 	cReqHeadersVal := &object.Hash{Pairs: cReqHeaders}
 	cReq[cReqHeadersKey.HashKey()] = object.HashPair{Key: cReqHeadersKey, Value: cReqHeadersVal}
 
+	// url
+	cReqURLKey := &object.String{Value: "url"}
+	cReqURLVal := &object.String{Value: string(originalReq.URL.String())}
+	cReq[cReqURLKey.HashKey()] = object.HashPair{Key: cReqURLKey, Value: cReqURLVal}
+
+	// params
 	if c.Params != nil {
 		arr := make([]object.Object, 0)
 		for _, el := range c.Params {
@@ -131,7 +141,16 @@ func httpContextToCozyReq(c *httpContext) object.Object {
 		cReq[cReqParamsKey.HashKey()] = object.HashPair{Key: cReqParamsKey, Value: cReqParamsVal}
 	}
 
-	// TODO: same as above for each anything else relevant on originalReq
+	// query string
+	cReqQuery := make(map[object.HashKey]object.HashPair)
+	for k, v := range originalReq.URL.Query() {
+		key := &object.String{Value: k}
+		val := &object.String{Value: strings.Join(v, ",")}
+		cReqQuery[key.HashKey()] = object.HashPair{Key: key, Value: val}
+	}
+	cReqQueryKey := &object.String{Value: "query"}
+	cReqQueryVal := &object.Hash{Pairs: cReqQuery}
+	cReq[cReqQueryKey.HashKey()] = object.HashPair{Key: cReqQueryKey, Value: cReqQueryVal}
 
 	return &object.Hash{Pairs: cReq}
 }
@@ -187,6 +206,16 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// TODO: this still isn't quite right
+	// we need to disable file directory listings
+	// http.Handle(h.Mount, h.Handler).ServeHTTP(w, r)
+	for _, h := range staticHandlers {
+		if strings.HasPrefix(ctx.URL.Path, h.Mount) {
+			http.FileServer(http.Dir(h.Path)).ServeHTTP(w, r)
+			return
+		}
+	}
+
 	notFound(ctx)
 }
 
@@ -195,6 +224,13 @@ type httpContext struct {
 	*http.Request
 	Params []string
 }
+
+type staticHandlerMount struct {
+	Mount string
+	Path  string
+}
+
+var staticHandlers = make([]staticHandlerMount, 0)
 
 // static("./public")
 // static("./public", "/some-mount-point")
@@ -220,8 +256,11 @@ func staticHandler(env *object.Environment, args ...object.Object) object.Object
 		}
 	}
 
-	// TODO: return this so it can work with request and response
-	http.Handle(mount, http.FileServer(http.Dir(dir)))
+	staticHandlers = append(staticHandlers, staticHandlerMount{
+		Mount: mount,
+		Path:  dir,
+	})
+
 	return NULL
 }
 
