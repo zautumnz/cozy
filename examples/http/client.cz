@@ -1,15 +1,16 @@
+# run cozy examples/http/server.cz to test this
+
 let request = http.client()
 # using http.client wrapper
-print(request.get("https://example.com").body)
+print(request.get("http://localhost:8000/foo").body)
 
 # using http.create_client directly
 let r = http.create_client
-let res = r("GET", "https://example.com");
+let res = r("GET", "http://localhost:8000/quux");
 print(res.body)
 
-# spin up an echo server to test this out
 let post_res = request.post(
-    "http://localhost:9999",
+    "http://localhost:8000/quux",
     {"content-type": "application/json"},
     json.serialize({"foo": "bar"})
 )

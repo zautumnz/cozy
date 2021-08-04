@@ -125,6 +125,10 @@ func httpContextToCozyReq(c *httpContext) object.Object {
 	cReqHeadersVal := &object.Hash{Pairs: cReqHeaders}
 	cReq[cReqHeadersKey.HashKey()] = object.HashPair{Key: cReqHeadersKey, Value: cReqHeadersVal}
 
+	cReqContentTypeKey := &object.String{Value: "content_type"}
+	cReqContentTypeVal := &object.String{Value: originalReq.Header.Get("Content-Type")}
+	cReq[cReqContentTypeKey.HashKey()] = object.HashPair{Key: cReqContentTypeKey, Value: cReqContentTypeVal}
+
 	// url
 	cReqURLKey := &object.String{Value: "url"}
 	cReqURLVal := &object.String{Value: string(originalReq.URL.String())}
@@ -209,6 +213,7 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// TODO: this still isn't quite right
 	// we need to disable file directory listings
 	// http.Handle(h.Mount, h.Handler).ServeHTTP(w, r)
+	// Also it falls through to both 404 and 405 sometimes?
 	for _, h := range staticHandlers {
 		if strings.HasPrefix(ctx.URL.Path, h.Mount) {
 			http.FileServer(http.Dir(h.Path)).ServeHTTP(w, r)
