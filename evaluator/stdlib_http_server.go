@@ -150,43 +150,31 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					applyArgs := make([]object.Object, 0)
 					applyArgs = append(applyArgs, httpContextToCozyReq(ctx))
 					res := ApplyFunction(httpServerEnv, rt.Handler, applyArgs)
-					switch res.(type) {
+					switch a := res.(type) {
 					case *object.Hash:
-						a := res.(*object.Hash)
 						bodyStr := &object.String{Value: "body"}
 						contentTypeStr := &object.String{Value: "content_type"}
 						statusCodeStr := &object.String{Value: "status_code"}
 						body := a.Pairs[bodyStr.HashKey()].Value
 						contentType := a.Pairs[contentTypeStr.HashKey()].Value
 						statusCode := a.Pairs[statusCodeStr.HashKey()].Value
+						headersStr := &object.String{Value: "headers"}
+						headers := a.Pairs[headersStr.HashKey()].Value
 
-						sc := 200
-						bd := ""
-						ct := "text/plain"
-
-						// TODO: add a headers object
-						switch s := statusCode.(type) {
-						case *object.Integer:
-							sc = int(s.Value)
-						default:
-							break
+						if statusCode == nil {
+							statusCode = &object.Integer{Value: 200}
 						}
-
-						switch b := body.(type) {
-						case *object.String:
-							bd = b.Value
-						default:
-							break
+						if body == nil {
+							body = &object.String{Value: ""}
 						}
-
-						switch c := contentType.(type) {
-						case *object.String:
-							ct = c.Value
-						default:
-							break
+						if contentType == nil {
+							contentType = &object.String{Value: "text/plain"}
 						}
-
-						sendWrapper(ctx, sc, bd, ct)
+						if headers == nil {
+							emptyPairs := make(map[object.HashKey]object.HashPair)
+							headers = &object.Hash{Pairs: emptyPairs}
+						}
+						ctx.send(statusCode, body, contentType, headers)
 					default:
 						fmt.Println(res.Type(), "\n\noh no", res)
 						return
@@ -241,27 +229,41 @@ func (c *httpContext) send(args ...object.Object) object.Object {
 	code := 200
 	body := ""
 	contentType := "text/plain"
+	extraHeaders := make(map[string]string)
 	switch a := args[0].(type) {
 	case *object.Integer:
 		code = int(a.Value)
 	default:
-		return NewError("Incorrect argument provided to route handler")
+		return NewError("Incorrect argument provided to route handler 1")
 	}
 	switch a := args[1].(type) {
 	case *object.String:
 		body = a.Value
 	default:
-		return NewError("Incorrect argument provided to route handler")
+		return NewError("Incorrect argument provided to route handler 2")
 	}
 	switch a := args[2].(type) {
 	case *object.String:
 		contentType = a.Value
 	default:
-		return NewError("Incorrect argument provided to route handler")
+		return NewError("Incorrect argument provided to route handler 3")
 
+	}
+	if len(args) > 3 {
+		switch a := args[3].(type) {
+		case *object.Hash:
+			for _, pair := range a.Pairs {
+				extraHeaders[pair.Key.Inspect()] = pair.Value.Inspect()
+			}
+		default:
+			return NewError("Incorrect argument provided to route handler 4")
+		}
 	}
 
 	c.ResponseWriter.Header().Set("Content-Type", contentType)
+	for k, v := range extraHeaders {
+		c.ResponseWriter.Header().Set(k, v)
+	}
 	c.WriteHeader(code)
 	io.WriteString(c.ResponseWriter, fmt.Sprintf("%s\n", body))
 	return &object.Boolean{Value: true}
