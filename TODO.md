@@ -12,3 +12,4 @@ List of things to get done before a v1.
     * Complete all lingering TODOs in the code
     * Add argument validation to all internal functions and stdlib
     * Improve all error messages
+    * Remove other extraneous things from readline fork

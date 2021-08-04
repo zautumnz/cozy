@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"os"
 	"runtime"
 	"strings"
 
@@ -38,17 +39,19 @@ func Start(in io.Reader, out io.Writer) {
 	if useFancyRepl() {
 		l, err := readline.NewEx(&readline.Config{
 			Prompt:              "> ",
-			HistoryFile:         "/tmp/cozy-repl.tmp",
+			HistoryFile:         os.Getenv("HOME") + "/.cozy_history",
 			InterruptPrompt:     "^C",
 			EOFPrompt:           "exit",
 			HistorySearchFold:   true,
 			FuncFilterInputRune: filterInput,
+			HistoryLimit:        1000,
 		})
 
 		if err != nil {
 			panic(err)
 		}
 		defer l.Close()
+
 		for {
 			line, err := l.Readline()
 			if err == readline.ErrInterrupt {

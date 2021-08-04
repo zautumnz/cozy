@@ -130,7 +130,7 @@ func main() {
 		input, err = ioutil.ReadFile(os.Args[1])
 	} else {
 		fmt.Printf("cozy version %s\n", COZY_VERSION)
-		fmt.Println("Use ctrl+c or exit() to quit")
+		fmt.Println("Use ctrl+d to quit")
 		repl.Start(os.Stdin, os.Stdout)
 	}
 
