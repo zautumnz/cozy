@@ -136,7 +136,6 @@ func httpContextToCozyReq(c *httpContext) object.Object {
 	return &object.Hash{Pairs: cReq}
 }
 
-// TODO: make this `a` our `appInstance`
 func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := &httpContext{Request: r, ResponseWriter: w}
 
@@ -238,10 +237,6 @@ func staticHandler(env *object.Environment, args ...object.Object) object.Object
 	return NULL
 }
 
-// this method can be used in the cozy stdlib to build
-// all other reponse methods (text, json, etc.)
-// example: json = (hash) -> ctx.send(200, json.serialize(hash))
-// TODO: need to figure out how to pass the context instance
 func (c *httpContext) send(args ...object.Object) object.Object {
 	code := 200
 	body := ""
@@ -272,27 +267,6 @@ func (c *httpContext) send(args ...object.Object) object.Object {
 	return &object.Boolean{Value: true}
 }
 
-/*
-func main() {
-	app := newApp()
-
-	app.registerRoute(`^/hello$`, func(ctx *httpContext) {
-		ctx.send(http.StatusOK, "Hello world")
-	})
-
-	app.registerRoute(`/hello/([\w\._-]+)$`, func(ctx *httpContext) {
-		ctx.send(http.StatusOK, fmt.Sprintf("Hello %s", ctx.Params[0]))
-	})
-
-	err := http.ListenAndServe(":9000", app)
-
-	if err != nil {
-		log.Fatalf("Could not start server: %s\n", err.Error())
-	}
-
-}
-*/
-
 func listen(env *object.Environment, args ...object.Object) object.Object {
 	switch a := args[0].(type) {
 	case *object.Integer:
@@ -314,7 +288,6 @@ func httpServer(env *object.Environment, args ...object.Object) object.Object {
 	listenVal := &object.Builtin{Fn: listen}
 	res[listenKey.HashKey()] = object.HashPair{Key: listenKey, Value: listenVal}
 
-	// route(pattern, callback(context) { respond })
 	routeKey := &object.String{Value: "route"}
 	routeVal := &object.Builtin{Fn: registerRoute}
 	res[routeKey.HashKey()] = object.HashPair{Key: routeKey, Value: routeVal}
