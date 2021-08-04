@@ -14,9 +14,7 @@ let y = fn () { return true }
 let x = {
     "foo": [1,2,"3"],
     "bar": { "baz": y },
-    # TODO: see regex examples for details; regex literals fail to parse
-    # when there's a token immediately following the regex
-    "re": /[a-z]/ ,
     "asdf": null,
+    "re": /[a-z]/
 }
 print(json.serialize(x), "complex example")
