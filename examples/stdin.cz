@@ -1,13 +1,14 @@
 # This example shows reading from STDIN.
 
 let x = fn () {
+    let stdin = sys.STDIN
     print("Please enter your name:");
-    mutable name = STDIN.read();
+    mutable name = stdin.read();
     name = name.trim();
     print("Hello,", name, "!");
 
     print("How old are you?");
-    mutable age = STDIN.read();
+    mutable age = stdin.read();
     age = age.trim();
     print("You are", age, "years old.");
 }

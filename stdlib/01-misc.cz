@@ -1,13 +1,15 @@
 # Mathematical constants
-let PI = 3.141592653589793;
-let E = 2.718281828459045;
+let math.constants = {
+    "PI": 3.141592653589793,
+    "E": 2.718281828459045,
+};
 
 # File-objects for STDIN, STDOUT, and STDERR.
 # Rather than opening these by name/path we have magic-strings which
 # are recognized by our "open" primitive.
-let STDIN = fs.open("!STDIN!");
-let STDOUT = fs.open("!STDOUT!");
-let STDERR = fs.open("!STDERR!");
+let sys.STDIN = fs.open("!STDIN!");
+let sys.STDOUT = fs.open("!STDOUT!");
+let sys.STDERR = fs.open("!STDERR!");
 
 # The `assert` method allows the code in our standard-library to be
 # tested every time it is loaded.
@@ -24,9 +26,9 @@ let in_repl = sys.getenv("COZY_RUNNING_IN_REPL") == "true"
 assert("true");
 assert(true);
 assert(!false);
-assert(type(STDIN) == "file");
-assert(type(STDOUT) == "file");
-assert(type(STDERR) == "file");
+assert(type(sys.STDIN) == "file");
+assert(type(sys.STDOUT) == "file");
+assert(type(sys.STDERR) == "file");
 
 let unless = macro(condition, consequence, alternative) {
     quote(if(!(unquote(condition))) {

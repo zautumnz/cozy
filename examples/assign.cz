@@ -1,8 +1,9 @@
 #!/usr/bin/env cozy
 
 let assignment_examples = fn () {
+    let constants = math.constants;
     mutable i = 3;
-    i = 2 * PI ;
+    i = 2 * constants.PI ;
     print("2xPI ", i);
 
     let x = 3;

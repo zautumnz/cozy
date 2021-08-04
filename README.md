@@ -85,7 +85,8 @@ entered code will be evaluated when you exit with `ctrl+d`.
 
 ### Important Notes
 
-* `print` adds an ending newline, use `printf` or `STDOUT`/`STDERR` for raw text
+* `print` adds an ending newline, use `printf` or `sys.STDOUT`/`sys.STDERR` for
+    raw text
 * No undefined or uninitialized variables
 * Comments are Python/Shell style
 * No switch statements
