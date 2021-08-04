@@ -12,7 +12,6 @@ import (
 	"github.com/zacanger/cozy/lexer"
 	"github.com/zacanger/cozy/object"
 	"github.com/zacanger/cozy/parser"
-	"github.com/zacanger/cozy/utils"
 )
 
 var searchPaths []string
@@ -116,18 +115,6 @@ func Interpolate(str string, env *object.Environment) string {
 	})
 
 	return str
-}
-
-// NewErrorWithExitCode takes an exit code, format string, and variables for
-// the string. It prints the error, optionally exits, and otherwise returns the
-// error.
-// TODO: this isn't used anywhere yet, but could be used in places where both an
-// error is created and/or printed and also there's an ExitConditionally call
-func NewErrorWithExitCode(code int, format string, a ...interface{}) *object.Error {
-	message := fmt.Sprintf(format, a...)
-	fmt.Fprintf(os.Stderr, message+"\n")
-	utils.ExitConditionally(code)
-	return &object.Error{Message: message, Code: &code}
 }
 
 // NewError prints and returns an error

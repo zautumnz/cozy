@@ -9,18 +9,6 @@ let event_emitter = fn() {
                 ets = ets.push(f)
                 events = events.set(name, ets)
             }
-
-            # unsubscribe
-            # TODO: this isn't working, see examples/events.cz
-            return fn () {
-                mutable ets = []
-                foreach x in events[name] {
-                    if (x != f) {
-                        ets = ets.push(x)
-                    }
-                }
-                events = events.set(name, ets)
-            }
         },
         "emit": fn(name, x) {
             foreach f in events[name] {

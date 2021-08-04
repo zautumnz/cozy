@@ -1008,12 +1008,6 @@ func RegisterBuiltin(name string, fun object.BuiltinFunction) {
 	builtins[name] = &object.Builtin{Fn: fun}
 }
 
-// SetContext lets you configure a context, which is helpful if you wish to
-// cause execution to timeout after a given period, for example.
-func SetContext(ctx context.Context) {
-	CTX = ctx
-}
-
 func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.Object, ok bool) {
 	switch k := key.(type) {
 	case *object.String:
@@ -1279,31 +1273,4 @@ func isUnquoteCall(node ast.Node) bool {
 	}
 
 	return callExpression.Function.TokenLiteral() == "unquote"
-}
-
-// RunCozyCode inits a whole cozy instance, used in the repl,
-// top-level cmd, expanding macros, and evaling modules
-// TODO: actually use this
-func RunCozyCode(input string, e *object.Environment, m *object.Environment) object.Object {
-	var env *object.Environment
-	var macroEnv *object.Environment
-	if e == nil {
-		env = object.NewEnvironment()
-	} else {
-		env = e
-	}
-
-	if m == nil {
-		macroEnv = object.NewEnvironment()
-	} else {
-		macroEnv = m
-	}
-
-	l := lexer.New(input)
-	p := parser.New(l)
-	prog := p.ParseProgram()
-	DefineMacros(prog, macroEnv)
-	expanded := ExpandMacros(prog, macroEnv)
-	evaled := Eval(expanded, env)
-	return evaled
 }

@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/zacanger/cozy/ast"
@@ -588,9 +589,8 @@ func TestFunctionLiteralParsing(t *testing.T) {
 	testInfixExpression(t, bodyStmt.Expression, "x", "+", "y")
 }
 
-// TODO: complete this
 func TestFunctionParsing(t *testing.T) {
-	input := `mutable f = fn(x,y){x+y;};`
+	input := `let f = fn(x,y){x+y;};`
 	l := lexer.New(input)
 	p := New(l)
 	program := p.ParseProgram()
@@ -864,17 +864,11 @@ func TestObjectMethodCall(t *testing.T) {
 	}
 }
 
-// TODO: because of the ASI change this test is now broken
-// Test that incomplete blocks / statements are handled.
-/*
 func TestIncompleThings(t *testing.T) {
 	input := []string{
 		`if (true) { `,
 		`if (true) { print("OK") ; } else { `,
-		`return 3`,
-		`mutable x = `,
-		`let x =`,
-		`mutable foo = fn(a, b ="zac", `,
+		`let foo = fn(a, b ="zac", `,
 	}
 
 	for _, str := range input {
@@ -891,7 +885,6 @@ func TestIncompleThings(t *testing.T) {
 		}
 	}
 }
-*/
 
 // Copy-pasted directly from the book
 func TestMacroLiteralParsing(t *testing.T) {

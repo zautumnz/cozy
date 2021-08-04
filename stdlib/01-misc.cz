@@ -68,7 +68,6 @@ let memoize = fn (f) {
     }
 }
 
-# TODO: this is incomplete
 let curry = fn (f) {
     mutable f_args = []
     let inner = fn () {
@@ -84,7 +83,7 @@ let curry = fn (f) {
             return inner
         }
 
-        # TODO: depends on a "spread" type operator
+        # TODO: this is incomplete, depends on a "spread" type operator
         let res = f(f_args)
         f_args = []
         return res

@@ -755,38 +755,6 @@ func TestQuoteUnquote(t *testing.T) {
 	}
 }
 
-/*
-// TODO: Disabled, this takes forever
-func TestTimeout(t *testing.T) {
-	input := `
-mutable i = 1;
-for (true) {
-  i++;
-}
-`
-	ctx, cancel := context.WithTimeout(context.Background(), 350*time.Millisecond)
-	defer cancel()
-
-	l := lexer.New(input)
-	p := parser.New(l)
-	program := p.ParseProgram()
-	env := object.NewEnvironment()
-	SetContext(ctx)
-	evaluated := Eval(program, env)
-
-	errObj, ok := evaluated.(*object.Error)
-	if !ok {
-		t.Errorf("no error object returned. got=%T(%+v)",
-			evaluated, evaluated)
-	}
-
-	if !strings.Contains(errObj.Message, "deadline") {
-		t.Errorf("got error, but wasn't timeout: %s", errObj.Message)
-	}
-
-}
-*/
-
 func TestDefineMacros(t *testing.T) {
 	input := `
     let number = 1;
