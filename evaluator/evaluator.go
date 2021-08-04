@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"math"
 	"os"
-	"regexp"
 	"strings"
 
 	"github.com/zacanger/cozy/ast"
@@ -180,8 +179,6 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		// TODO: turn an args literal into just a regular array so it can be
 		// used like regular values without an additional loop
 		return &object.Array{Token: node.Token, Elements: env.CurrentArgs, IsCurrentArgs: true}
-	case *ast.RegexpLiteral:
-		return &object.Regexp{Value: node.Value, Flags: node.Flags}
 	case *ast.IndexExpression:
 		left := Eval(node.Left, env)
 		if isError(left) {
@@ -359,14 +356,8 @@ func evalInfixExpression(operator string, left, right object.Object, env *object
 		return nativeBoolToBooleanObject(objectToNativeBoolean(left) && objectToNativeBoolean(right))
 	case operator == "||":
 		return nativeBoolToBooleanObject(objectToNativeBoolean(left) || objectToNativeBoolean(right))
-	case operator == "!~":
-		return notMatches(left, right)
-	case operator == "~=":
-		return matches(left, right, env)
-
 	case operator == "==":
 		return nativeBoolToBooleanObject(left == right)
-
 	case operator == "!=":
 		return nativeBoolToBooleanObject(left != right)
 	case left.Type() == object.BOOLEAN_OBJ && right.Type() == object.BOOLEAN_OBJ:
@@ -378,71 +369,6 @@ func evalInfixExpression(operator string, left, right object.Object, env *object
 		return NewError("unknown operator: %s %s %s",
 			left.Type(), operator, right.Type())
 	}
-}
-
-func matches(left, right object.Object, env *object.Environment) object.Object {
-	str := left.Inspect()
-
-	if right.Type() != object.REGEXP_OBJ {
-		return NewError("regexp required for regexp-match, given %s", right.Type())
-	}
-
-	val := right.(*object.Regexp).Value
-	if right.(*object.Regexp).Flags != "" {
-		val = "(?" + right.(*object.Regexp).Flags + ")" + val
-	}
-
-	// Compile the regular expression.
-	r, err := regexp.Compile(val)
-
-	// Ensure it compiled
-	if err != nil {
-		return NewError("error compiling regexp '%s': %s", right.Inspect(), err)
-	}
-
-	res := r.FindStringSubmatch(str)
-
-	// Do we have any captures?
-	if len(res) > 1 {
-		for i := 1; i < len(res); i++ {
-			env.Set(fmt.Sprintf("$%d", i), &object.String{Value: res[i]})
-		}
-	}
-
-	// Test if it matched
-	if len(res) > 0 {
-		return TRUE
-	}
-
-	return FALSE
-}
-
-func notMatches(left, right object.Object) object.Object {
-	str := left.Inspect()
-
-	if right.Type() != object.REGEXP_OBJ {
-		return NewError("regexp required for regexp-match, given %s", right.Type())
-	}
-
-	val := right.(*object.Regexp).Value
-	if right.(*object.Regexp).Flags != "" {
-		val = "(?" + right.(*object.Regexp).Flags + ")" + val
-	}
-
-	// Compile the regular expression.
-	r, err := regexp.Compile(val)
-
-	// Ensure it compiled
-	if err != nil {
-		return NewError("error compiling regexp '%s': %s", right.Inspect(), err)
-	}
-
-	// Test if it matched
-	if r.MatchString(str) {
-		return FALSE
-	}
-
-	return TRUE
 }
 
 // boolean operations
@@ -668,22 +594,14 @@ func evalStringInfixExpression(operator string, left, right object.Object) objec
 // if the condition matches, and running any optional else block
 // otherwise.
 func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Object {
-	// Create an environment for handling regexps
-	var permit []string
-	i := 1
-	for i < 32 {
-		permit = append(permit, fmt.Sprintf("$%d", i))
-		i++
-	}
-	nEnv := object.NewTemporaryScope(env, permit)
-	condition := Eval(ie.Condition, nEnv)
+	condition := Eval(ie.Condition, env)
 	if isError(condition) {
 		return condition
 	}
 	if isTruthy(condition) {
-		return Eval(ie.Consequence, nEnv)
+		return Eval(ie.Consequence, env)
 	} else if ie.Alternative != nil {
-		return Eval(ie.Alternative, nEnv)
+		return Eval(ie.Alternative, env)
 	} else {
 		return NULL
 	}
@@ -927,29 +845,6 @@ func evalExpression(exps []ast.Expression, env *object.Environment) []object.Obj
 	return result
 }
 
-// Split a line of text into tokens, but keep anything "quoted"
-// together..
-// So this input:
-//   /bin/sh -c "ls /etc"
-// Would give output of the form:
-//   /bin/sh
-//   -c
-//   ls /etc
-func splitCommand(input string) []string {
-
-	// This does the split into an array
-	r := regexp.MustCompile(`[^\s"']+|"([^"]*)"|'([^']*)`)
-	res := r.FindAllString(input, -1)
-
-	// However the resulting pieces might be quoted.
-	// So we have to remove them, if present.
-	var result []string
-	for _, e := range res {
-		result = append(result, trimQuotes(e, '"'))
-	}
-	return result
-}
-
 // Remove balanced characters around a string.
 func trimQuotes(in string, c byte) string {
 	if len(in) >= 2 {
@@ -1183,8 +1078,6 @@ func objectToNativeBoolean(o object.Object) bool {
 	case *object.Boolean:
 		return obj.Value
 	case *object.String:
-		return obj.Value != ""
-	case *object.Regexp:
 		return obj.Value != ""
 	case *object.Null:
 		return false

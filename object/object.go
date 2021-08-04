@@ -20,7 +20,6 @@ const (
 	MODULE_OBJ       = "MODULE"
 	NULL_OBJ         = "NULL"
 	QUOTE_OBJ        = "QUOTE"
-	REGEXP_OBJ       = "REGEXP"
 	RETURN_VALUE_OBJ = "RETURN_VALUE"
 	STRING_OBJ       = "STRING"
 )
@@ -41,7 +40,6 @@ var SystemTypesMap = map[Type]Object{
 	MODULE_OBJ:       &Module{},
 	NULL_OBJ:         &Null{},
 	QUOTE_OBJ:        &Quote{},
-	REGEXP_OBJ:       &Regexp{},
 	RETURN_VALUE_OBJ: &ReturnValue{},
 	STRING_OBJ:       &String{},
 }

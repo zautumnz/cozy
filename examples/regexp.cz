@@ -1,6 +1,3 @@
-# TODO: allow match to take a regex literal
-# Get rid of !~ and ~= operators?
-
 # Substring match
 if (match("nge", "Zac Anger")) {
    print("Match found");
@@ -25,17 +22,3 @@ if (out) {
 } else {
    print("Not true!");
 }
-
-# The same thing using literal a regular expression
-let ip = "192.168.1.1";
-
-# TODO: need a space before the closing paren,
-# otherwise it breaks.
-if (ip ~= /([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/ ) {
-   printf("We matched an IP address succesfully.");
-   # Matches are available only within this scope
-   printf("Captures: %s.%s.%s.%s\n", $1, $2, $3, $4);
-}
-# Also works storing a regex in a variable
-let re = /([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/;
-print(type(re));

@@ -27,36 +27,33 @@ type (
 const (
 	_ int = iota
 	LOWEST
-	COND         // OR or AND
-	ASSIGN       // =
-	TERNARY      // ? :
-	EQUALS       // == or !=
-	REGEXP_MATCH // !~ ~=
-	LESSGREATER  // > or <
-	SUM          // + or -
-	PRODUCT      // * or /
-	POWER        // **
-	MOD          // %
-	PREFIX       // -X or !X
-	CALL         // myFunction(X)
-	RANGE        // ..
-	INDEX        // array[index], map[key], map.key
+	COND        // OR or AND
+	ASSIGN      // =
+	TERNARY     // ? :
+	EQUALS      // == or !=
+	LESSGREATER // > or <
+	SUM         // + or -
+	PRODUCT     // * or /
+	POWER       // **
+	MOD         // %
+	PREFIX      // -X or !X
+	CALL        // myFunction(X)
+	RANGE       // ..
+	INDEX       // array[index], map[key], map.key
 	HIGHEST
 )
 
 // each token precedence
 var precedences = map[token.Type]int{
-	token.QUESTION:     TERNARY,
-	token.ASSIGN:       ASSIGN,
-	token.RANGE:        RANGE,
-	token.EQ:           EQUALS,
-	token.NOT_EQ:       EQUALS,
-	token.LT:           LESSGREATER,
-	token.LT_EQUALS:    LESSGREATER,
-	token.GT:           LESSGREATER,
-	token.GT_EQUALS:    LESSGREATER,
-	token.CONTAINS:     REGEXP_MATCH,
-	token.NOT_CONTAINS: REGEXP_MATCH,
+	token.QUESTION:  TERNARY,
+	token.ASSIGN:    ASSIGN,
+	token.RANGE:     RANGE,
+	token.EQ:        EQUALS,
+	token.NOT_EQ:    EQUALS,
+	token.LT:        LESSGREATER,
+	token.LT_EQUALS: LESSGREATER,
+	token.GT:        LESSGREATER,
+	token.GT_EQUALS: LESSGREATER,
 
 	token.PLUS:            SUM,
 	token.PLUS_EQUALS:     SUM,
@@ -133,7 +130,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 	p.registerPrefix(token.NULL, p.parseNull)
-	p.registerPrefix(token.REGEXP, p.parseRegexpLiteral)
 	p.registerPrefix(token.STRING, p.ParseStringLiteral)
 	p.registerPrefix(token.TRUE, p.ParseBoolean)
 	p.registerPrefix(token.MACRO, p.parseMacroLiteral)
@@ -144,7 +140,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.ASSIGN, p.parseAssignExpression)
 	p.registerInfix(token.ASTERISK, p.parseInfixExpression)
 	p.registerInfix(token.ASTERISK_EQUALS, p.parseAssignExpression)
-	p.registerInfix(token.CONTAINS, p.parseInfixExpression)
 	p.registerInfix(token.RANGE, p.parseInfixExpression)
 	p.registerInfix(token.EQ, p.parseInfixExpression)
 	p.registerInfix(token.GT, p.parseInfixExpression)
@@ -156,7 +151,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.MINUS, p.parseInfixExpression)
 	p.registerInfix(token.MINUS_EQUALS, p.parseAssignExpression)
 	p.registerInfix(token.MOD, p.parseInfixExpression)
-	p.registerInfix(token.NOT_CONTAINS, p.parseInfixExpression)
 	p.registerInfix(token.NOT_EQ, p.parseInfixExpression)
 	p.registerInfix(token.OR, p.parseInfixExpression)
 	p.registerInfix(token.PERIOD, p.parseIndexDotExpression)
@@ -755,30 +749,6 @@ func (p *Parser) parseDocStringLiteral() *ast.DocStringLiteral {
 	x := &ast.DocStringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 	p.nextToken()
 	return x
-}
-
-// parseRegexpLiteral parses a regular-expression.
-func (p *Parser) parseRegexpLiteral() ast.Expression {
-	flags := ""
-
-	val := p.curToken.Literal
-	if strings.HasPrefix(val, "(?") {
-		val = strings.TrimPrefix(val, "(?")
-
-		i := 0
-		for i < len(val) {
-			if val[i] == ')' {
-				val = val[i+1:]
-				break
-			} else {
-				flags += string(val[i])
-			}
-
-			i++
-		}
-	}
-
-	return &ast.RegexpLiteral{Token: p.curToken, Value: val, Flags: flags}
 }
 
 // ParseArrayLiteral parses an array literal.

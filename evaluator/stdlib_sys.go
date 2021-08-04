@@ -5,11 +5,35 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 
 	"github.com/zacanger/cozy/object"
 	"github.com/zacanger/cozy/utils"
 )
+
+// Split a line of text into tokens, but keep anything "quoted"
+// together..
+// So this input:
+//   /bin/sh -c "ls /etc"
+// Would give output of the form:
+//   /bin/sh
+//   -c
+//   ls /etc
+func splitCommand(input string) []string {
+
+	// This does the split into an array
+	r := regexp.MustCompile(`[^\s"']+|"([^"]*)"|'([^']*)`)
+	res := r.FindAllString(input, -1)
+
+	// However the resulting pieces might be quoted.
+	// So we have to remove them, if present.
+	var result []string
+	for _, e := range res {
+		result = append(result, trimQuotes(e, '"'))
+	}
+	return result
+}
 
 // getenv() -> (Hash)
 func envFun(args ...object.Object) object.Object {

@@ -70,8 +70,6 @@ func IsNumber(s string) bool {
 // return input string with $vars interpolated from environment
 func Interpolate(str string, env *object.Environment) string {
 	// Match all strings preceded by {{
-	// re := regexp.MustCompile(`(\\)?\(\{\{)([a-zA-Z_0-9]{1,})(\}\})`)
-	// re := regexp.MustCompile(`(\\)?\$(\{)([a-zA-Z_0-9]{1,})(\})`)
 	re := regexp.MustCompile(`(\\)?(\{\{)(.*?)(\}\})`)
 	str = re.ReplaceAllStringFunc(str, func(m string) string {
 		// If the string starts with a backslash, that's an escape, so we should
