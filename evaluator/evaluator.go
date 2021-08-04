@@ -787,6 +787,8 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) o
 	return NULL
 }
 
+// TODO: possibly change this to return false on empty objects?
+// that way we could do something like if ([]) // and have it work
 func isTruthy(obj object.Object) bool {
 	switch obj {
 	case TRUE:
