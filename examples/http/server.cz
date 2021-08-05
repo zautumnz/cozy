@@ -1,8 +1,15 @@
+# cozy's built-in http server is significantly faster than node with express,
+# with a similar API, at least for simple examples.
+# ab shows roughly 5000 rps for express, and 14000 for cozy.
+
 let app = http.server()
 app.static("./")
-app.route("^/foo$", fn (req) {
-    return { "body": "in get foo" }
+# route pattern can be a simple string
+app.route("/foo", fn (req) {
+    # implicit return example
+    { "body": "in get foo" }
 })
+# or a regex
 app.route("^/bar$", ["POST"], fn (req) {
     return { "body": "posted!" }
 })
@@ -22,5 +29,6 @@ app.route("^/quux$", ["GET", "POST"], fn (req) {
         }
     }
 })
-app.route("/test/(.*)", fn (req) { return {"body": req.params.join("\n")} })
+# regex is necessary to capture params
+app.route("/test/(.*)", fn (req) { {"body": req.params.join("\n")} })
 app.listen(8000, fn (x) { print("listening on", x) })

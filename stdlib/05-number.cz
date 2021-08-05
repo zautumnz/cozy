@@ -1,6 +1,7 @@
-# Convert a float to an integer.
-# Like Go we discard the value after the period, so 4.9 will become 4.
 let float.to_i = fn() {
+    # 'float.to_i converts a float to an integer.
+    # We discard the value after the dot, which may be the equivalent
+    # of rounding down.'
     return(int(self));
 };
 
@@ -16,8 +17,8 @@ assert(
     }()
 )
 
-# Convert an integer to a float.
 let integer.to_f = fn() {
+    # 'integer.to_f converts an integer to a float.'
     return(self + 0.0);
 };
 

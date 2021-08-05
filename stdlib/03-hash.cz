@@ -1,9 +1,6 @@
-# Is the given hash empty?
 let hash.empty? = fn() {
-    if (len(self.keys()) == 0) {
-        return true;
-    }
-    return false;
+    # 'hash.empty? returns true if the hash is empty.'
+    return len(self.keys()) == 0;
 };
 
 assert({}.empty?());

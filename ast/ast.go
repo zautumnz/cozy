@@ -518,7 +518,6 @@ func (ie *ImportExpression) String() string {
 }
 
 // FunctionLiteral holds a function-definition
-// See-also FunctionDefineLiteral.
 type FunctionLiteral struct {
 	// Token is the actual token
 	Token token.Token
@@ -544,48 +543,6 @@ func (fl *FunctionLiteral) TokenLiteral() string { return fl.Token.Literal }
 
 // String returns this object as a string.
 func (fl *FunctionLiteral) String() string {
-	var out bytes.Buffer
-	params := make([]string, 0)
-	for _, p := range fl.Parameters {
-		params = append(params, p.String())
-	}
-	out.WriteString(fl.TokenLiteral())
-	out.WriteString("(")
-	out.WriteString(strings.Join(params, ", "))
-	out.WriteString(") ")
-	out.WriteString(fl.Body.String())
-	return out.String()
-
-}
-
-// FunctionDefineLiteral holds a function-definition.
-// See-also FunctionLiteral.
-type FunctionDefineLiteral struct {
-	// Token holds the token
-	Token token.Token
-
-	// Paremeters holds the function parameters.
-	Parameters []*Identifier
-
-	// Defaults holds any default-arguments.
-	Defaults map[string]Expression
-
-	// Body holds the set of statements in the functions' body.
-	Body *BlockStatement
-
-	// DocString
-	DocString *DocStringLiteral
-}
-
-func (fl *FunctionDefineLiteral) expressionNode() {}
-
-// TokenLiteral returns the literal token.
-func (fl *FunctionDefineLiteral) TokenLiteral() string {
-	return fl.Token.Literal
-}
-
-// String returns this object as a string.
-func (fl *FunctionDefineLiteral) String() string {
 	var out bytes.Buffer
 	params := make([]string, 0)
 	for _, p := range fl.Parameters {
@@ -831,7 +788,6 @@ func Modify(node Node, modifier ModifierFunc) Node {
 		node.Value, _ = Modify(node.Value, modifier).(Expression)
 
 	case *FunctionLiteral:
-	case *FunctionDefineLiteral:
 		for i := range node.Parameters {
 			node.Parameters[i], _ = Modify(node.Parameters[i], modifier).(*Identifier)
 		}

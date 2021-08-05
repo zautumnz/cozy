@@ -127,12 +127,6 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		defaults := node.Defaults
 		docstring := node.DocString
 		return &object.Function{Parameters: params, Env: env, Body: body, Defaults: defaults, DocString: docstring}
-	case *ast.FunctionDefineLiteral:
-		params := node.Parameters
-		body := node.Body
-		defaults := node.Defaults
-		env.SetLet(node.TokenLiteral(), &object.Function{Parameters: params, Env: env, Body: body, Defaults: defaults})
-		return NULL
 	case *ast.CallExpression:
 		if node.Function.TokenLiteral() == "quote" {
 			return quote(node.Arguments[0], env)

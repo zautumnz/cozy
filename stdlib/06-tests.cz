@@ -1,4 +1,8 @@
 let test = fn(suite, cb) {
+    # 'test takes a suite name and a callbac. the callback should
+    # take a parameter which is an assertion, which takes a value and optionally
+    # a message to print on failure.'
+
     mutable id = 0;
     mutable failed = 0;
 

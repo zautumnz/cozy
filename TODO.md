@@ -13,3 +13,6 @@ List of things to get done before a v1.
     * Add argument validation to all internal functions and stdlib
     * Improve all error messages
     * Remove other extraneous things from readline fork
+    * Docstrings cause parsing errors, fix that
+    * Possibly remove `self`
+    * Possibly remove `null`

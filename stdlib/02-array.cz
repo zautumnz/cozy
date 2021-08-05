@@ -1,5 +1,5 @@
-# First element of an array
 let array.first = fn() {
+    # 'array.first returns the first element.'
     assert(len(self) >= 1, "Array contains no values!")
 
     if (len(self) >= 1) {
@@ -10,8 +10,8 @@ let array.first = fn() {
 assert([0,1].first() == 0);
 assert(["zac",1].first() == "zac");
 
-# The rest of an array - i.e. all elements EXCEPT the first
 let array.rest = fn() {
+    # 'array.rest returns all but the first element.'
     mutable result = [];
 
     if (len(self) >= 1) {
@@ -30,17 +30,17 @@ assert(len([0,1,2].rest()) == 2);
 assert(len([0,1,2,3,4,5].rest()) == 5);
 assert(string(["zac", 1].rest()) == "[1]");
 
-# Last element of an array
 let array.last = fn() {
+    # 'array.last returns the last element.'
     assert(len(self) >= 1, "Array contains no values!")
     return(self[len(self) - 1]);
 };
 
 assert([0,2].last() == 2);
 
-# Call the given function on each entry, and return an array of the
-# items for which the predicate returned true.
 let array.filter = fn(predicate) {
+    # 'array.filter takes a predicate which should return a boolean,
+    # and returns a new array filtered based on the predicate.'
     mutable i = 0;
     let l = len(self);
     mutable result = [];
@@ -72,8 +72,8 @@ fn () {
 );
 
 
-# Return the offset, if any, of the specified item in the array.
 let array.find = fn(item) {
+    # 'array.find returns the offset, or -1, of the specified item in the array.'
     foreach index, value in self {
         if (value == item) {
             return index;
@@ -89,17 +89,16 @@ assert([1,2,3].find(1) == 0);
 assert([1,2,3].find(3) == 2);
 assert([1,2,3,3].find(3) == 2);
 
-# Does the given value exist inside the array?
 let array.includes? = fn(obj) {
+    # 'array.includes? returns a boolean if the array includes the passed element.'
     return(self.find(obj) != -1);
 };
 
 assert([1,2,3].includes?(2));
 assert(! [1,2,3].includes?(23));
 
-# Find minimum value in array
 let array.min = fn() {
-    let in_repl = sys.getenv("COZY_RUNNING_IN_REPL") == "true"
+    # 'array.min returns the minimum value in the array, or 0.'
     mutable i = 0;
 
     let l = len(self);
@@ -113,7 +112,7 @@ let array.min = fn() {
     # type checking.
     if (type(min) != "integer" && type(min) != "float") {
         print("array.min only works on numbers - not " , type(min));
-        if !in_repl {
+        if !sys.in_repl() {
             sys.exit(1);
         }
     }
@@ -123,7 +122,7 @@ let array.min = fn() {
         # type checking.
         if (type(self[i]) != "integer" && type(self[i]) != "float") {
             print("array.min only works on numbers - not " , type(self[i]));
-            if !in_repl {
+            if !sys.in_repl() {
                 sys.exit(1);
             }
         }
@@ -143,9 +142,8 @@ assert((1..10.min() == 1));
 assert(([-1,-2,-3].min() == -3));
 assert(([].min() == 0), "minimum of an empty array is zero");
 
-# Find maximum value in array
 let array.max = fn() {
-    let in_repl = sys.getenv("COZY_RUNNING_IN_REPL") == "true"
+    # 'array.max returns the maximum value in the array, or 0.'
     mutable i = 0;
 
     let l = len(self);
@@ -159,7 +157,7 @@ let array.max = fn() {
     # ensure we're dealing with types
     if (type(max) != "integer" && type(max) != "float") {
         print("array.max only works on numbers - not " , type(max));
-        if !in_repl {
+        if !sys.in_repl() {
             sys.exit(1);
         }
     }
@@ -169,7 +167,7 @@ let array.max = fn() {
         # type checking.
         if (type(self[i]) != "integer" && type(self[i]) != "float") {
             print("array.max only works on numbers - not " , type(self[i]), "\n");
-            if !in_repl {
+            if !sys.in_repl() {
                 sys.exit(1);
             }
         }
@@ -189,8 +187,8 @@ assert(([1,2,3].max() == 3));
 assert(([-1,-2,-3].max() == -1));
 assert(([].max() == 0), "maximum of an empty array is zero");
 
-# Join the elements of an array by the given string.
 let array.join = fn(char) {
+    # 'array.join joins elements of an array on the passed string.'
     mutable r = "";
     mutable i = 0;
     let l = len(self);
@@ -212,8 +210,8 @@ let array.join = fn(char) {
 assert([1,2,3].join(".") == "1.2.3");
 assert([1,2,3].join("") == "123");
 
-# Reverse an array.
 let array.reverse = fn() {
+    # 'array.reverse reverses the array.'
     mutable r = [];
     mutable l = len(self);
 
@@ -226,9 +224,8 @@ let array.reverse = fn() {
 
 assert(string([1,2,3].reverse()) == "[3, 2, 1]");
 
-# sorted? returns true if the specified array is sorted.
 let array.sorted? = fn() {
-    let in_repl = sys.getenv("COZY_RUNNING_IN_REPL") == "true"
+    # 'array.sorted? returns true if the array is sorted.'
     # Ensure each array-member has the same type.
     mutable tmp = {};
     mutable i = 0;
@@ -243,7 +240,7 @@ let array.sorted? = fn() {
     if (len(tmp.keys()) > 1) {
         print("Attempting to check an array with mixed-type values!\n");
         print(string(self));
-        if !in_repl {
+        if !sys.in_repl() {
             sys.exit(1);
         }
     }
@@ -273,15 +270,8 @@ assert([-1,0,1].sorted?());
 assert([1].sorted?());
 assert([].sorted?());
 
-# Swap the value of two array indexes.
-#
-# This is used by our sorting function. Currently it isn't possible
-# to mutate an array-member in-place. So we create a new array
-# correctly swapping the values at the given index.
-#
-# This would be easier if we had "elseif" support, or even a case
-# statement. (Due to the nested if usage here.)
 let array.swap = fn(a, b) {
+    # 'array.swap swaps the value of two array indexes.'
     let aVal = self[b];
     let bVal = self[a];
 
@@ -319,10 +309,8 @@ fn () {
 }()
 );
 
-# Sort the given array.
-# This is grossly inefficient, obviously.
 let array.sort = fn() {
-    let in_repl = sys.getenv("COZY_RUNNING_IN_REPL") == "true"
+    # 'array.sort sorts the array.'
     # Ensure each array-member has the same type.
     mutable tmp = {};
     mutable i = 0;
@@ -337,7 +325,7 @@ let array.sort = fn() {
     if (len(tmp.keys()) > 1) {
         print("Attempting to sort an array with mixed-type values!\n");
         print(string(self));
-        if !in_repl {
+        if !sys.in_repl() {
             sys.exit(1);
         }
     }
@@ -366,9 +354,10 @@ assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[0] == 1}());
 assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[1] == 2}());
 assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3}());
 
-# Return an array containing the result of applying the specified
-# function to each element in the array.
 let array.map = fn(fnc) {
+    # 'array.map returns an array which is the result of applying the
+    # passed function to each element in the array. The function should take an
+    # item and optionally the index.'
     mutable result = [];
 
     foreach index, item in self {
@@ -404,8 +393,8 @@ fn () {
 }()
 );
 
-# array.uniq returns the unique members of an array.
 let array.uniq = fn() {
+    # 'array.uniq returns the unique members of an array.'
     mutable tmp = {};
 
     foreach item in self {
@@ -417,8 +406,9 @@ let array.uniq = fn() {
 };
 
 assert(string([1,1,1,1,2].uniq()) == "[1, 2]");
-# Is the given array empty?
+
 let array.empty? = fn() {
+    # 'array.empty? returns true if the array is empty.'
     if (len(self) == 0) {
         return true;
     }
@@ -429,8 +419,9 @@ assert([].empty?());
 assert(![1,2].empty?());
 assert(!["zacanger",3].empty?());
 
-# Reduce. The cb takes current item, accumulator, and index
 let array.reduce = fn(fun, init) {
+    # 'array.reduce takes a function and an initial value. The function
+    # is passed the current item, the accumulated value, and the current index.'
     mutable acc = init;
     foreach i, x in self {
         acc = fun(x, acc, i);
@@ -438,12 +429,13 @@ let array.reduce = fn(fun, init) {
 
     return acc;
 };
+
 let array.sum = fn() {
-    let in_repl = sys.getenv("COZY_RUNNING_IN_REPL") == "true"
+    # 'array.sum sums numbers in the array.'
     foreach x in self {
         if (type(x) != "integer" && type(x) != "float") {
             print("Sum expected only integers, got", type(x));
-            if !in_repl {
+            if !sys.in_repl() {
                 sys.exit(1);
             }
         }

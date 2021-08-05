@@ -11,6 +11,14 @@ programming but syntax similar to Python, Go, JavaScript, and Shell; no OOP
 constructs like classes; instead we have first-class functions, closures, and
 macros.
 
+It's meant to feel comfortable and familiar no matter what languages you might
+already know (hence the name). Performance isn't an explicit goal, but cozy is
+fairly fast (time the examples and try a benchmarking tool against the http
+server if you're curious).
+
+Documentation mostly lives in the examples and standard library. One day maybe
+I'll write real docs.
+
 ## Example
 
 ```cozy
@@ -68,9 +76,12 @@ Originally designed by writing a bunch of examples and a small stdlib.
 Implementation started as a fork from [skx's
 version](https://github.com/skx/monkey) of the language from the [Go
 Interpreters Book](https://interpreterbook.com), and also includes some pieces
-of [prologic's](https://github.com/prologic/monkey-lang) upstream version.
-Written in pure Go with no third-party dependencies, with a large amount of the
-standard library implemented in cozy itself.
+of [prologic's](https://github.com/prologic/monkey-lang) upstream version and
+[ABS](https://github.com/abs-lang), among others (see comments). The differences
+between cozy and Monkey are too numerous to list here; it's best to think of it
+as a totally separate language. It's written in pure Go with no third-party
+dependencies, with a large amount of the standard library implemented in cozy
+itself.
 
 This is the first large Go program I've worked on, so contributions, especially
 in areas where I didn't write idiomatic Go, are definitely welcome. See
@@ -100,7 +111,8 @@ entered code will be evaluated when you exit with `ctrl+d`.
     returns (without the `return` keyword) are possible
 * No top level mutable variables, because all top level variables are exported
 * Parens are optional in for and if conditions
-* No third-party libraries; all you need to build is a current version of Go
+* No third-party libraries in this codebase; all you need to build is a current
+    version of Go
 
 ### Builtins
 
@@ -127,6 +139,7 @@ Core modules (see examples for docs):
 * `json`
 * `math`
 * `net`
+* `sys`
 * `time`
 
 See also the standard library (written mostly in cozy itself).

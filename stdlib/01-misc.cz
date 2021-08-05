@@ -11,16 +11,14 @@ let sys.STDIN = fs.open("!STDIN!");
 let sys.STDOUT = fs.open("!STDOUT!");
 let sys.STDERR = fs.open("!STDERR!");
 
-# The `assert` method allows the code in our standard-library to be
-# tested every time it is loaded.
 let assert = fn(val, msg = "Result was not 'true'!") {
-let in_repl = sys.getenv("COZY_RUNNING_IN_REPL") == "true"
+    # 'assert takes a value and an optional failure message.'
     if (!val) {
         print(msg);
-        if !in_repl {
+        if (!sys.in_repl()) {
             sys.exit(1);
         }
-}
+    }
 };
 
 assert("true");
@@ -38,20 +36,58 @@ let unless = macro(condition, consequence, alternative) {
     });
 };
 
-let array?     = fn (x) { return type(x) == "array" };
-let bool?      = fn (x) { return type(x) == "bool" };
-let builtin?   = fn (x) { return type(x) == "builtin" };
-let docstring? = fn (x) { return type(x) == "docstring" };
-let file?      = fn (x) { return type(x) == "file" };
-let float?     = fn (x) { return type(x) == "float" };
-let function?  = fn (x) { return type(x) == "function" };
-let hash?      = fn (x) { return type(x) == "hash" };
-let integer?   = fn (x) { return type(x) == "integer" };
-let module?    = fn (x) { return type(x) == "module" };
-let number?    = fn (x) { return integer?(x) || float?(x) };
-let string?    = fn (x) { return type(x) == "string" };
+let array? = fn (x) {
+    # 'array? returns true if the value provided is an array.'
+    return type(x) == "array"
+};
+let boolean? = fn (x) {
+    # 'boolean? returns true if the value provided is a boolean.'
+    return type(x) == "bool"
+};
+let builtin? = fn (x) {
+    # 'builtin? returns true if the value provided is a builtin.'
+    return type(x) == "builtin"
+};
+let docstring? = fn (x) {
+    # 'docstring? returns true if the value provided is a docstring.'
+    return type(x) == "docstring"
+};
+let file? = fn (x) {
+    # 'file? returns true if the value provided is a file.'
+    return type(x) == "file"
+};
+let float? = fn (x) {
+    # 'float? returns true if the value provided is a float.'
+    return type(x) == "float"
+};
+let function? = fn (x) {
+    # 'function? returns true if the value provided is a function.'
+    return type(x) == "function"
+};
+let hash? = fn (x) {
+    # 'hash? returns true if the value provided is a hash.'
+    return type(x) == "hash"
+};
+let integer? = fn (x) {
+    # 'integer? returns true if the value provided is an integer.'
+    return type(x) == "integer"
+};
+let module? = fn (x) {
+    # 'module? returns true if the value provided is a module.'
+    return type(x) == "module"
+};
+let number? = fn (x) {
+    # 'number? returns true if the value provided is an integer or a float.'
+    return integer?(x) || float?(x)
+};
+let string? = fn (x) {
+    # 'string? returns true if the value provided is a string.'
+    return type(x) == "string"
+};
 
 let memoize = fn (f) {
+    # 'memoize takes a function and returns a new function,
+    # and looks up results based on arguments in its internal cache.'
     mutable results = {}
     return fn () {
         mutable res = []
@@ -69,6 +105,7 @@ let memoize = fn (f) {
 }
 
 let curry = fn (f) {
+    # 'curry takes a function and curries it so it can be applied gradually.'
     mutable f_args = []
     let inner = fn () {
         mutable inner_args = []
@@ -93,6 +130,7 @@ let curry = fn (f) {
 }
 
 let deep_equals = fn (a, b) {
+    # 'deep_equals takes two values and checks for deep equality.'
     if a == b {
         return true
     }

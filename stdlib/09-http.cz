@@ -1,58 +1,3 @@
-let http.server = fn () {
-    let instance = http.create_server()
-
-    return {
-        # app.route(path, [optional_methods], callback(req) ->
-        # { status_code, content_type, body })
-        "route": fn () {
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
-            mutable path = ""
-            mutable mets = ["GET"]
-            mutable handler = fn () { true }
-
-            path = opts[0]
-            if len(opts) == 3 {
-                mets = opts[1]
-                handler = opts[2]
-            } else if len(opts) == 2 {
-                handler = opts[1]
-            }
-
-            instance.route(path, mets, handler)
-        },
-
-        # app.listen(port, optional_callback(port))
-        "listen": fn () {
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
-            if len(opts) > 1 {
-                opts[1](opts[0])
-                instance.listen(opts[0])
-            } else {
-                instance.listen(opts[0])
-            }
-        },
-
-        # app.static(directory, optional_mount_point)
-        "static": fn () {
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
-            if len(opts) > 1 {
-                instance.static(opts[0], opts[1])
-            } else {
-                instance.static(opts[0])
-            }
-        }
-    }
-}
-
 let http.constants = {
     "STATUS_CODES": {
         100: "Continue",
@@ -158,11 +103,76 @@ let http.constants = {
     ]
 };
 
+let http.server = fn () {
+    # 'http.server returns a new app instance.
+    # Available methods: route, listen, static.'
+    let instance = http.create_server()
+
+    return {
+        "route": fn () {
+            # 'route takes a path, methods, and callback.
+            # Path can be a string or regex. If methods are not provided,
+            # the default will be GET. The callback takes a request object and
+            # should return a body, status code, content type, and/or headers.'
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            mutable path = ""
+            mutable mets = ["GET"]
+            mutable handler = fn () { true }
+
+            path = opts[0]
+            if len(opts) == 3 {
+                mets = opts[1]
+                handler = opts[2]
+            } else if len(opts) == 2 {
+                handler = opts[1]
+            }
+
+            instance.route(path, mets, handler)
+        },
+
+        "listen": fn () {
+            # 'listen takes a port number and an optional callback,
+            # which is passed the same port.'
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            if len(opts) > 1 {
+                opts[1](opts[0])
+                instance.listen(opts[0])
+            } else {
+                instance.listen(opts[0])
+            }
+        },
+
+        "static": fn () {
+            # 'static takes a directory to serve and an optional mount point.'
+            mutable opts = []
+            foreach x in ... {
+                opts = opts.push(x)
+            }
+            if len(opts) > 1 {
+                instance.static(opts[0], opts[1])
+            } else {
+                instance.static(opts[0])
+            }
+        }
+    }
+}
+
 let http.client = fn () {
+    # 'http.client returns a new http client with convenience methods
+    # for making requests. See also http.create_client.
+    # Each method returned by http.client() takes a url, optionally headers as a
+    # hash, and optionally a body.'
     let r = http.create_client
 
     return {
         "get": fn () {
+            # 'get is a convenience method for making GET requests.'
             mutable opts = []
             foreach x in ... {
                 opts = opts.push(x)
@@ -171,6 +181,7 @@ let http.client = fn () {
         },
 
         "post": fn () {
+            # 'post is a convenience method for making POST requests.'
             mutable opts = []
             foreach x in ... {
                 opts = opts.push(x)
@@ -179,6 +190,7 @@ let http.client = fn () {
         },
 
         "put": fn () {
+            # 'put is a convenience method for making PUT requests.'
             mutable opts = []
             foreach x in ... {
                 opts = opts.push(x)
@@ -187,6 +199,7 @@ let http.client = fn () {
         },
 
         "patch": fn () {
+            # 'patch is a convenience method for making PATCH requests.'
             mutable opts = []
             foreach x in ... {
                 opts = opts.push(x)
@@ -195,6 +208,7 @@ let http.client = fn () {
         },
 
         "del": fn () {
+            # 'del is a convenience method for making DELETE requests.'
             mutable opts = []
             foreach x in ... {
                 opts = opts.push(x)
@@ -203,6 +217,7 @@ let http.client = fn () {
         },
 
         "options": fn () {
+            # 'options is a convenience method for making OPTIONS requests.'
             mutable opts = []
             foreach x in ... {
                 opts = opts.push(x)
@@ -211,6 +226,7 @@ let http.client = fn () {
         },
 
         "head": fn () {
+            # 'head is a convenience method for making HEAD requests.'
             mutable opts = []
             foreach x in ... {
                 opts = opts.push(x)
