@@ -131,7 +131,7 @@ func main() {
 	} else {
 		fmt.Printf("cozy version %s\n", COZY_VERSION)
 		fmt.Println("Use ctrl+d to quit")
-		repl.Start(os.Stdin, os.Stdout)
+		repl.Start(os.Stdin, os.Stdout, getStdlibString())
 	}
 
 	if err != nil {

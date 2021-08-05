@@ -47,13 +47,13 @@ func (l *Lexer) GetLine() int {
 	i := 0
 
 	for i < l.readPosition && i < chars {
-
 		if l.characters[i] == rune('\n') {
 			line++
 		}
 
 		i++
 	}
+
 	return line
 }
 

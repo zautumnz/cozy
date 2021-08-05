@@ -31,7 +31,7 @@ func filterInput(r rune) (rune, bool) {
 }
 
 // Start runs the REPL
-func Start(in io.Reader, out io.Writer) {
+func Start(in io.Reader, out io.Writer, stdlib string) {
 	utils.SetReplOrRun(true)
 	env := object.NewEnvironment()
 	macroEnv := object.NewEnvironment()
@@ -65,7 +65,7 @@ func Start(in io.Reader, out io.Writer) {
 			}
 
 			line = strings.TrimSpace(line)
-			lex := lexer.New(line)
+			lex := lexer.New(stdlib + "\n\n" + line)
 			p := parser.New(lex)
 			program := p.ParseProgram()
 			if len(p.Errors()) != 0 {
@@ -89,7 +89,7 @@ func Start(in io.Reader, out io.Writer) {
 				return
 			}
 			line := scanner.Text()
-			l := lexer.New(line)
+			l := lexer.New(stdlib + "\n\n" + line)
 			p := parser.New(l)
 
 			program := p.ParseProgram()

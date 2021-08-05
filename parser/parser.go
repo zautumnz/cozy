@@ -193,7 +193,6 @@ func (p *Parser) Errors() []string {
 // peekError raises an error if the next token is not the expected type.
 func (p *Parser) peekError(t token.Type) {
 	msg := fmt.Sprintf("expected next token to be %s, got %s instead around line %d", t, p.curToken.Type, p.l.GetLine())
-
 	p.errors = append(p.errors, msg)
 }
 

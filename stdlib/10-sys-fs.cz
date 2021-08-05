@@ -1,0 +1,23 @@
+let fs.ls = fn () {
+    mutable opts = [];
+    mutable all = false;
+    foreach x in ... {
+        opts = opts.push(x);
+    }
+
+    let p = opts[0];
+
+    if len(opts) > 1 {
+        all = opts[1];
+    }
+
+    mutable res = fs.glob(p + "/*");
+
+    if !all {
+        res = res.filter(fn (x) {
+            return x.find(".") != 0;
+        });
+    }
+
+    return res.join("\n");
+};

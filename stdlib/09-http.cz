@@ -154,9 +154,9 @@ let http.constants = {
         "UNBIND",
         "UNLINK",
         "UNLOCK",
-        "UNSUBSCRIBE",
+        "UNSUBSCRIBE"
     ]
-}
+};
 
 let http.client = fn () {
     let r = http.create_client
