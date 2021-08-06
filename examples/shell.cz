@@ -1,0 +1,22 @@
+# basic implementation of a shell
+
+let stdin = sys.STDIN
+let stdout = sys.STDOUT
+
+let main = fn () {
+    mutable inp = ""
+
+    for true {
+        stdout.write("$ ")
+        let x = stdin.read()
+        inp = x.trim()
+        let res = sys.exec(inp)
+        if res.stderr != "" {
+            print("err:", res.stderr)
+        } else {
+            print(res.stdout)
+        }
+    }
+}
+
+main()

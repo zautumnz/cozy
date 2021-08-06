@@ -45,9 +45,9 @@ let fs_examples = fn () {
     fs.chmod(name, "644")
     fh.close()
     # remove
-    fs.unlink(name)
+    fs.rm(name)
     fs.mkdir("/tmp/foo")
-    fs.unlink("/tmp/foo")
+    fs.rm("/tmp/foo")
     # file info
     print(fs.stat("./README.md"))
 

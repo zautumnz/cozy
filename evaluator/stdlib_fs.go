@@ -192,7 +192,7 @@ func statFun(args ...object.Object) object.Object {
 }
 
 // Remove a file/directory.
-func unlinkFun(args ...object.Object) object.Object {
+func rmFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -322,9 +322,9 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (statFun(args...))
 		})
-	RegisterBuiltin("fs.unlink",
+	RegisterBuiltin("fs.rm",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (unlinkFun(args...))
+			return (rmFun(args...))
 		})
 	RegisterBuiltin("fs.mv",
 		func(env *object.Environment, args ...object.Object) object.Object {
