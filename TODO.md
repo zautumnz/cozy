@@ -16,3 +16,4 @@ List of things to get done before a v1.
     * Docstrings cause parsing errors, fix that
     * Possibly remove `self`
     * Possibly remove `null`
+    * See what else in the stdlib can be moved into cozy code

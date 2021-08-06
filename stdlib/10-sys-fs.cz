@@ -1,4 +1,5 @@
 let sys.in_repl = fn () {
+    # 'sys.in_repl returns true if the current cozy process is in a repl'
     return sys.getenv("COZY_RUNNING_IN_REPL") == "true"
 };
 
