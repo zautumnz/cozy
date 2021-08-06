@@ -309,7 +309,9 @@ func (c *httpContext) send(args ...object.Object) object.Object {
 		c.ResponseWriter.Header().Set(k, v)
 	}
 	c.WriteHeader(code)
-	io.WriteString(c.ResponseWriter, fmt.Sprintf("%s\n", body))
+	if body != "" {
+		io.WriteString(c.ResponseWriter, fmt.Sprintf("%s\n", body))
+	}
 	return &object.Boolean{Value: true}
 }
 
