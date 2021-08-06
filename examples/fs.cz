@@ -34,6 +34,7 @@ let fs_examples = fn () {
     # reading lines
     fh = fs.open("/etc/passwd", "r")
     lines = fh.lines()
+    fh.close()
     print("Read ", len(lines), " lines")
 
     # other operations
@@ -42,11 +43,24 @@ let fs_examples = fn () {
     fh.write("echo hello")
     fs.chmod(name, "755")
     fs.chmod(name, "644")
+    fh.close()
     # remove
     fs.unlink(name)
     fs.mkdir("/tmp/foo")
     fs.unlink("/tmp/foo")
     # file info
     print(fs.stat("./README.md"))
+
+    # mv
+    fh = fs.open(name, "w")
+    fh.write("test")
+    fh.close()
+    fs.mv(name, name + "moved")
+
+    # cp
+    fh = fs.open(name, "w")
+    fh.write("testing")
+    fh.close()
+    fs.cp(name, name + "copied")
 }
 fs_examples()

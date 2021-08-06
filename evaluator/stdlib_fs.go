@@ -2,6 +2,7 @@ package evaluator
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -206,6 +207,100 @@ func unlinkFun(args ...object.Object) object.Object {
 	return &object.Boolean{Value: true}
 }
 
+func mvFun(args ...object.Object) object.Object {
+	var from string
+	var to string
+	switch a := args[0].(type) {
+	case *object.String:
+		from = a.Value
+	default:
+		return NewError("mv expected string arg!")
+	}
+	switch a := args[1].(type) {
+	case *object.String:
+		to = a.Value
+	default:
+		return NewError("mv expected string arg!")
+	}
+
+	e := os.Rename(from, to)
+	if e != nil {
+		return NewError("error moving file %s", e.Error())
+	}
+
+	return NULL
+}
+
+func cpFun(args ...object.Object) object.Object {
+	var src string
+	var dst string
+	switch a := args[0].(type) {
+	case *object.String:
+		src = a.Value
+	default:
+		return NewError("mv expected string arg!")
+	}
+	switch a := args[1].(type) {
+	case *object.String:
+		dst = a.Value
+	default:
+		return NewError("mv expected string arg!")
+	}
+
+	sfi, err := os.Stat(src)
+	if err != nil {
+		return NewError("fs.cp source does not exist!")
+	}
+	if !sfi.Mode().IsRegular() {
+		// cannot copy non-regular files (e.g., directories,
+		// symlinks, devices, etc.)
+		return NewError("fs.cp expected regular file!")
+	}
+	dfi, err := os.Stat(dst)
+	if err != nil {
+		if !os.IsNotExist(err) {
+			return NewError("error copying file %s", err.Error())
+		}
+	} else {
+		if !(dfi.Mode().IsRegular()) {
+			return NewError("non-regular destination file")
+		}
+		if os.SameFile(sfi, dfi) {
+			return NewError("copying to same file")
+		}
+	}
+
+	in, err := os.Open(src)
+	if err != nil {
+		return NewError("error copying file %s", err.Error())
+	}
+
+	defer in.Close()
+
+	out, err := os.Create(dst)
+	if err != nil {
+		return NewError("error copying file %s", err.Error())
+	}
+
+	defer func() {
+		cerr := out.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
+
+	if _, err = io.Copy(out, in); err != nil {
+		return NewError("error copying file %s", err.Error())
+	}
+	err = out.Sync()
+
+	if err != nil {
+		return NewError("error copying file %s", err.Error())
+	}
+
+	return NULL
+}
+
 func init() {
 	RegisterBuiltin("fs.glob",
 		func(env *object.Environment, args ...object.Object) object.Object {
@@ -230,5 +325,13 @@ func init() {
 	RegisterBuiltin("fs.unlink",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (unlinkFun(args...))
+		})
+	RegisterBuiltin("fs.mv",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (mvFun(args...))
+		})
+	RegisterBuiltin("fs.cp",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (cpFun(args...))
 		})
 }
