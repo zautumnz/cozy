@@ -220,6 +220,16 @@ func flagFun(args ...object.Object) object.Object {
 	return FALSE
 }
 
+func cdFun(args ...object.Object) object.Object {
+	switch a := args[0].(type) {
+	case *object.String:
+		os.Chdir(a.Value)
+	default:
+		return NewError("cd expected string argument!")
+	}
+	return NULL
+}
+
 func init() {
 	RegisterBuiltin("sys.getenv",
 		func(env *object.Environment, args ...object.Object) object.Object {
@@ -248,5 +258,9 @@ func init() {
 	RegisterBuiltin("sys.args",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (argsFun(args...))
+		})
+	RegisterBuiltin("sys.cd",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (cdFun(args...))
 		})
 }

@@ -3,6 +3,15 @@
 let stdin = sys.STDIN
 let stdout = sys.STDOUT
 
+let is_cd = fn (s) {
+    return s.split()[0] == "cd"
+}
+
+let handle_cd = fn (s) {
+    let dir = s.split()[1]
+    return sys.cd(dir)
+}
+
 let main = fn () {
     mutable inp = ""
 
@@ -10,11 +19,20 @@ let main = fn () {
         stdout.write("$ ")
         let x = stdin.read()
         inp = x.trim()
-        let res = sys.exec(inp)
-        if res.stderr != "" {
-            print("err:", res.stderr)
+
+        if is_cd(inp) {
+            handle_cd(inp)
         } else {
-            print(res.stdout)
+            if inp == "exit" {
+                sys.exit(0)
+            } else {
+                let res = sys.exec(inp)
+                if res.stderr != "" {
+                    print("err:", res.stderr)
+                } else {
+                    print(res.stdout)
+                }
+            }
         }
     }
 }
