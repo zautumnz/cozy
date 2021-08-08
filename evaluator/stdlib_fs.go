@@ -3,6 +3,7 @@ package evaluator
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -128,7 +129,7 @@ func openFun(args ...object.Object) object.Object {
 	// Create the object
 	file := &object.File{Filename: path}
 	file.Open(mode)
-	return (file)
+	return file
 }
 
 // Get file info.
@@ -301,6 +302,21 @@ func cpFun(args ...object.Object) object.Object {
 	return NULL
 }
 
+func templateFn(env *object.Environment, args ...object.Object) object.Object {
+	switch a := args[0].(type) {
+	case *object.String:
+		b, err := ioutil.ReadFile(a.Value)
+		if err != nil {
+			return NewError("Error reading template file: %s", err)
+		}
+		s := string(b)
+		res := Interpolate(s, env)
+		return &object.String{Value: res}
+	default:
+		return NewError("fs.tmpl expected string arg!")
+	}
+}
+
 func init() {
 	RegisterBuiltin("fs.glob",
 		func(env *object.Environment, args ...object.Object) object.Object {
@@ -334,4 +350,9 @@ func init() {
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (cpFun(args...))
 		})
+	RegisterBuiltin("fs.tmpl",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return (templateFn(env, args...))
+		})
+
 }

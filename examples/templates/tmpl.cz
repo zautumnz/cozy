@@ -1,0 +1,7 @@
+let me = {
+    "name": "Zac",
+}
+
+let h = fs.tmpl("./examples/templates/template.html")
+
+print(h)
