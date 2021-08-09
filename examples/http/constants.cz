@@ -1,3 +1,5 @@
 let c = http.constants
-print(c.STATUS_CODES)
+let s = c.STATUS_CODES
+print(s)
+print(s["I'm a Teapot"])
 print(c.METHODS)

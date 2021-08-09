@@ -20,6 +20,8 @@ v1 work:
 
 v2 work:
 * Move as much of the stdlib into cozy (out of Go) as possible
+* Optionally indent json in json.serialize
+* Simplify registerBuiltin calls so they can be looped over
 * Microblogging site real-life example, or something similar in scope
 * Cryptography builtins
     * Guid
