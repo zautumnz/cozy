@@ -29,7 +29,6 @@ const (
 	LOWEST
 	COND        // OR or AND
 	ASSIGN      // =
-	TERNARY     // ? :
 	EQUALS      // == or !=
 	LESSGREATER // > or <
 	SUM         // + or -
@@ -45,7 +44,6 @@ const (
 
 // each token precedence
 var precedences = map[token.Type]int{
-	token.QUESTION:  TERNARY,
 	token.ASSIGN:    ASSIGN,
 	token.RANGE:     RANGE,
 	token.EQ:        EQUALS,
@@ -157,7 +155,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
 	p.registerInfix(token.PLUS_EQUALS, p.parseAssignExpression)
 	p.registerInfix(token.POW, p.parseInfixExpression)
-	p.registerInfix(token.QUESTION, p.parseTernaryExpression)
 	p.registerInfix(token.SLASH, p.parseInfixExpression)
 	p.registerInfix(token.SLASH_EQUALS, p.parseAssignExpression)
 
@@ -411,27 +408,6 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 	precedence := p.curPrecedence()
 	p.nextToken()
 	expression.Right = p.parseExpression(precedence)
-	return expression
-}
-
-// parseTernaryExpression parses a ternary expression
-func (p *Parser) parseTernaryExpression(condition ast.Expression) ast.Expression {
-	expression := &ast.TernaryExpression{
-		Token:     p.curToken,
-		Condition: condition,
-	}
-	p.nextToken() // skip the '?'
-	precedence := p.curPrecedence()
-	expression.IfTrue = p.parseExpression(precedence)
-
-	if !p.expectPeek(token.COLON) { // skip the ":"
-		return nil
-	}
-
-	// Get to next token, then parse the else part
-	p.nextToken()
-	expression.IfFalse = p.parseExpression(precedence)
-
 	return expression
 }
 

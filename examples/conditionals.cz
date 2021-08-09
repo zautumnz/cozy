@@ -10,17 +10,14 @@ if (x == "y") {
     print("x == x");
 }
 
-# ternary
+# ternary-like
 let max = fn(a, b) {
-    return a > b ? a : b;
+    if a > b { a } else { b }
 };
 print(max(1, 2));
 # nested works fine too
-print(false ?
-    1 :
-    false ?
-    2 :
-    3
+print(
+    if false { 1 } else if false { 2 } else { 3 }
 );
 
 # these are expressions, not statements

@@ -91,8 +91,6 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		return evalBlockStatement(node, env)
 	case *ast.IfExpression:
 		return evalIfExpression(node, env)
-	case *ast.TernaryExpression:
-		return evalTernaryExpression(node, env)
 	case *ast.ImportExpression:
 		return evalImportExpression(node, env)
 	case *ast.ForLoopExpression:
@@ -599,23 +597,6 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 	} else {
 		return NULL
 	}
-}
-
-// evalTernaryExpression handles a ternary-expression. If the condition
-// is true we return the contents of evaluating the true-branch, otherwise
-// the false-branch. (Unlike an `if` statement we know that we always have
-// an alternative/false branch.)
-func evalTernaryExpression(te *ast.TernaryExpression, env *object.Environment) object.Object {
-
-	condition := Eval(te.Condition, env)
-	if isError(condition) {
-		return condition
-	}
-
-	if isTruthy(condition) {
-		return Eval(te.IfTrue, env)
-	}
-	return Eval(te.IfFalse, env)
 }
 
 func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val object.Object) {

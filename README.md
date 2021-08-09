@@ -112,6 +112,8 @@ entered code will be evaluated when you exit with `ctrl+d`.
 * Parens are optional in for and if conditions
 * No third-party libraries in this codebase; all you need to build is a current
     version of Go
+* No ternary expressions; if statements are expressions, so there's no need for
+    ternaries
 
 ### Builtins
 
