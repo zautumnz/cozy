@@ -6,11 +6,8 @@ let sys.in_repl = fn () {
 let fs.ls = fn () {
     # 'fs.ls takes a path and an optional boolean,
     # the equivalent of `ls` with an optional -A flag'
-    mutable opts = [];
     mutable all = false;
-    foreach x in ... {
-        opts = opts.push(x);
-    }
+    let opts = gather_args(...)
 
     let p = opts[0];
 

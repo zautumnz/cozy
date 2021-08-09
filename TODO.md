@@ -9,9 +9,14 @@ v1 work:
 * Improve all error messages
 * Remove other extraneous things from readline fork
 * Docstrings cause parsing errors, fix that
+* Add splat/spread operator and finish curry fn
+* Possibly change the ... literal to return a regular array
 
 v2 work:
 * Move as much of the stdlib into cozy (out of Go) as possible
 * More real-world examples (twitter clone, todo app, better shell)
 * Cryptography builtins
 * Multiple-db ORM
+* Add some properties to functions (and to all objects?):
+    * name
+    * maybe arguments as a named array, like es5

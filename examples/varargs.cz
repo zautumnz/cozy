@@ -5,3 +5,10 @@ let x = fn() {
 x(1);
 x(1, 2);
 x("hi", 10.1, {"a": "b"});
+
+let y = fn () {
+    # TODO: if the ... literal is changed to just return
+    # a regular array, the gather_args global can go away
+    print(gather_args(...))
+}
+y(1, 2, 3)

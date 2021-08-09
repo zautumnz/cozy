@@ -114,10 +114,8 @@ let http.server = fn () {
             # Path can be a string or regex. If methods are not provided,
             # the default will be GET. The callback takes a request object and
             # should return a body, status code, content type, and/or headers.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
+
             mutable path = ""
             mutable mets = ["GET"]
             mutable handler = fn () { true }
@@ -136,10 +134,8 @@ let http.server = fn () {
         "listen": fn () {
             # 'listen takes a port number and an optional callback,
             # which is passed the same port.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
+
             if len(opts) > 1 {
                 opts[1](opts[0])
                 instance.listen(opts[0])
@@ -150,10 +146,8 @@ let http.server = fn () {
 
         "static": fn () {
             # 'static takes a directory to serve and an optional mount point.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
+
             if len(opts) > 1 {
                 instance.static(opts[0], opts[1])
             } else {
@@ -173,64 +167,43 @@ let http.client = fn () {
     return {
         "get": fn () {
             # 'get is a convenience method for making GET requests.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
             return r("GET", opts[0], opts[1], opts[2])
         },
 
         "post": fn () {
             # 'post is a convenience method for making POST requests.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
             return r("POST", opts[0], opts[1], opts[2])
         },
 
         "put": fn () {
             # 'put is a convenience method for making PUT requests.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
             return r("PUT", opts[0], opts[1], opts[2])
         },
 
         "patch": fn () {
             # 'patch is a convenience method for making PATCH requests.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
             return r("PATCH", opts[0], opts[1], opts[2])
         },
 
         "del": fn () {
             # 'del is a convenience method for making DELETE requests.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
             return r("DELETE", opts[0], opts[1], opts[2])
         },
 
         "options": fn () {
             # 'options is a convenience method for making OPTIONS requests.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
             return r("OPTIONS", opts[0], opts[1], opts[2])
         },
 
         "head": fn () {
             # 'head is a convenience method for making HEAD requests.'
-            mutable opts = []
-            foreach x in ... {
-                opts = opts.push(x)
-            }
+            let opts = gather_args(...)
             return r("HEAD", opts[0], opts[1], opts[2])
         },
     }

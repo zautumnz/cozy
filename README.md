@@ -4,20 +4,19 @@ This is a WIP. See the [TODO](./TODO.md).
 
 [![Support with PayPal](https://img.shields.io/badge/paypal-donate-yellow.png)](https://paypal.me/zacanger) [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/zacanger) [![ko-fi](https://img.shields.io/badge/donate-KoFi-yellow.svg)](https://ko-fi.com/U7U2110VB)
 
-Simple, high-ish-level interpreted programming language that sits somewhere
-between scripting and general-purpose programming. Dynamically and strongly
-typed, with some with semantics that work well with pseudo-functional
-programming but syntax similar to Python, Go, JavaScript, and Shell; no OOP
-constructs like classes; instead we have first-class functions, closures, and
-macros.
+`cozy` is a simple, high-ish-level, interpreted programming language that sits
+somewhere between scripting and general-purpose programming. It can be used for
+many of the same tasks as shell scripts, Python, Node, and Ruby. It's
+dynamically and strongly typed, with some with semantics that work well with
+pseudo-functional programming but syntax similar to C-family languages. There
+are no OOP constructs like classes; instead we have first-class functions,
+closures, and macros.
 
 It's meant to feel comfortable and familiar no matter what languages you might
 already know (hence the name). Performance isn't an explicit goal, but cozy is
 fairly fast (time the examples and try a benchmarking tool against the http
-server if you're curious).
-
-Documentation mostly lives in the examples and standard library. One day maybe
-I'll write real docs.
+server if you're curious). Documentation mostly lives in the examples and
+standard library.
 
 ## Example
 
