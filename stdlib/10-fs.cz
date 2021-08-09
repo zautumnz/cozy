@@ -1,11 +1,6 @@
-let sys.in_repl = fn () {
-    # 'sys.in_repl returns true if the current cozy process is in a repl'
-    return sys.getenv("COZY_RUNNING_IN_REPL") == "true"
-};
-
 let fs.ls = fn () {
-    # 'fs.ls takes a path and an optional boolean,
-    # the equivalent of `ls` with an optional -A flag'
+    'fs.ls takes a path and an optional boolean,
+    the equivalent of `ls` with an optional -A flag'
     mutable all = false;
     let opts = array_from(...)
 

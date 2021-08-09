@@ -1,10 +1,10 @@
 let event_emitter = fn() {
-    # 'event_emitter returns an object containing methods for managing events.'
+    'event_emitter returns an object containing methods for managing events.'
     mutable events = {};
     let data = {
         "subscribe": fn(name, f) {
-            # 'subscribe takes an event name and a function,
-            # and subscribes that function to emitted events with that name.'
+            'subscribe takes an event name and a function,
+            and subscribes that function to emitted events with that name.'
             if (!events.keys().includes?(name)) {
                 events = events.set(name, [f]);
             } else {
@@ -14,14 +14,14 @@ let event_emitter = fn() {
             }
         },
         "emit": fn(name, x) {
-            # 'emit takes an event name and a value and calls all
-            # subscribed functions with that value.'
+            'emit takes an event name and a value and calls all
+            subscribed functions with that value.'
             foreach f in events[name] {
                 f(x)
             }
         },
         "get_events": fn () {
-            # 'get_events returns all events'
+            'get_events returns all events'
             return events
         }
     };

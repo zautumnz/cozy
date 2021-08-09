@@ -1,21 +1,21 @@
 let create_state = fn(reducer, initial_state) {
-    # 'create_state takes a reducer and an initial state,
-    # and returns an object containing methods for managing state.'
+    'create_state takes a reducer and an initial state,
+    and returns an object containing methods for managing state.'
     mutable current_reducer = reducer;
     mutable current_state = initial_state;
     mutable listeners = [];
 
     return {
         "get_state": fn () {
-            # 'get_state returns the current state'
+            'get_state returns the current state'
             return current_state;
         },
         "subscribe": fn(new_listener) {
-            # 'subscribe adds a new listener to state changes.'
+            'subscribe adds a new listener to state changes.'
             listeners = listeners.append(new_listener);
         },
         "dispatch": fn(action) {
-            # 'dispatch dispatches an action.'
+            'dispatch dispatches an action.'
             current_state = current_reducer(current_state, action);
             foreach listener in listeners {
                 listener(current_state);

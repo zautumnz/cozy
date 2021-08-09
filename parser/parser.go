@@ -129,6 +129,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 	p.registerPrefix(token.NULL, p.parseNull)
 	p.registerPrefix(token.STRING, p.ParseStringLiteral)
+	p.registerPrefix(token.DOCSTRING, p.parseDocStringLiteral)
 	p.registerPrefix(token.TRUE, p.ParseBoolean)
 	p.registerPrefix(token.MACRO, p.parseMacroLiteral)
 
@@ -655,7 +656,11 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 		return nil
 	}
 	if p.peekTokenIs(token.DOCSTRING) {
-		lit.DocString = p.parseDocStringLiteral()
+		x := p.parseDocStringLiteral()
+		switch a := x.(type) {
+		case *ast.DocStringLiteral:
+			lit.DocString = a
+		}
 	}
 	lit.Body = p.parseBlockStatement()
 	return lit
@@ -719,10 +724,12 @@ func (p *Parser) ParseStringLiteral() ast.Expression {
 }
 
 // parseDocStringLiteral parses a docstring-literal.
-func (p *Parser) parseDocStringLiteral() *ast.DocStringLiteral {
+func (p *Parser) parseDocStringLiteral() ast.Expression {
 	p.nextToken()
 	x := &ast.DocStringLiteral{Token: p.curToken, Value: p.curToken.Literal}
-	p.nextToken()
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
 	return x
 }
 

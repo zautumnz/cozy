@@ -11,12 +11,17 @@ let sys.STDIN = fs.open("!STDIN!");
 let sys.STDOUT = fs.open("!STDOUT!");
 let sys.STDERR = fs.open("!STDERR!");
 
+let sys.in_repl = fn () {
+    'sys.in_repl returns true if the current cozy process is in a repl'
+    return sys.getenv("COZY_RUNNING_IN_REPL") == "true"
+};
+
 # TODO: if the ... literal is changed to just return a regular array,
 # this function and its usages can go away
 let array_from = fn () {
-    # 'array_from is a global function used to convert an unknown
-    # number of arguments into an array. It should be passed the ...
-    # literal representing the parent function's args.'
+    'array_from is a global function used to convert an unknown
+    number of arguments into an array. It should be passed the ...
+    literal representing the parent function\'s args.'
     mutable xs = []
     foreach x in ... {
         xs = xs.append(x)
@@ -25,7 +30,7 @@ let array_from = fn () {
 }
 
 let assert = fn(val, msg = "Result was not 'true'!") {
-    # 'assert takes a value and an optional failure message.'
+    'assert takes a value and an optional failure message.'
     if (!val) {
         print(msg);
         if (!sys.in_repl()) {
@@ -50,57 +55,57 @@ let unless = macro(condition, consequence, alternative) {
 };
 
 let array? = fn (x) {
-    # 'array? returns true if the value provided is an array.'
+    'array? returns true if the value provided is an array.'
     return type(x) == "array"
 };
 let boolean? = fn (x) {
-    # 'boolean? returns true if the value provided is a boolean.'
+    'boolean? returns true if the value provided is a boolean.'
     return type(x) == "bool"
 };
 let builtin? = fn (x) {
-    # 'builtin? returns true if the value provided is a builtin.'
+    'builtin? returns true if the value provided is a builtin.'
     return type(x) == "builtin"
 };
 let docstring? = fn (x) {
-    # 'docstring? returns true if the value provided is a docstring.'
+    'docstring? returns true if the value provided is a docstring.'
     return type(x) == "docstring"
 };
 let file? = fn (x) {
-    # 'file? returns true if the value provided is a file.'
+    'file? returns true if the value provided is a file.'
     return type(x) == "file"
 };
 let float? = fn (x) {
-    # 'float? returns true if the value provided is a float.'
+    'float? returns true if the value provided is a float.'
     return type(x) == "float"
 };
 let function? = fn (x) {
-    # 'function? returns true if the value provided is a function.'
+    'function? returns true if the value provided is a function.'
     return type(x) == "function"
 };
 let hash? = fn (x) {
-    # 'hash? returns true if the value provided is a hash.'
+    'hash? returns true if the value provided is a hash.'
     return type(x) == "hash"
 };
 let integer? = fn (x) {
-    # 'integer? returns true if the value provided is an integer.'
+    'integer? returns true if the value provided is an integer.'
     return type(x) == "integer"
 };
 let module? = fn (x) {
-    # 'module? returns true if the value provided is a module.'
+    'module? returns true if the value provided is a module.'
     return type(x) == "module"
 };
 let number? = fn (x) {
-    # 'number? returns true if the value provided is an integer or a float.'
+     'number? returns true if the value provided is an integer or a float.'
     return integer?(x) || float?(x)
 };
 let string? = fn (x) {
-    # 'string? returns true if the value provided is a string.'
+    'string? returns true if the value provided is a string.'
     return type(x) == "string"
 };
 
 let memoize = fn (f) {
-    # 'memoize takes a function and returns a new function,
-    # and looks up results based on arguments in its internal cache.'
+    'memoize takes a function and returns a new function,
+    and looks up results based on arguments in its internal cache.'
     mutable results = {}
     return fn () {
         let res = array_from(...).join("__cozy__memo__arg__")
@@ -114,7 +119,7 @@ let memoize = fn (f) {
 }
 
 let curry = fn (f) {
-    # 'curry takes a function and curries it so it can be applied gradually.'
+    'curry takes a function and curries it so it can be applied gradually.'
     mutable f_args = []
     let inner = fn () {
         let inner_args = array_from(...)
@@ -136,7 +141,7 @@ let curry = fn (f) {
 }
 
 let deep_equals = fn (a, b) {
-    # 'deep_equals takes two values and checks for deep equality.'
+    'deep_equals takes two values and checks for deep equality.'
     if a == b {
         return true
     }

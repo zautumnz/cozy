@@ -457,8 +457,8 @@ func (l *Lexer) readDocString() string {
 			if l.ch == rune('t') {
 				l.ch = '\t'
 			}
-			if l.ch == rune('"') {
-				l.ch = '"'
+			if l.ch == rune('\'') {
+				l.ch = '\''
 			}
 			if l.ch == rune('\\') {
 				l.ch = '\\'
