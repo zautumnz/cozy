@@ -3,6 +3,7 @@
 v1 work:
 * Errors and exceptions: As values? Try/catch? Stack traces?
 * At least 50% code coverage
+* More than one level of dot access doesn't seem to always work
 * Confirm that everything under ./examples works
 * Complete all lingering TODOs in the code
 * Add argument validation to all internal functions and stdlib
@@ -19,6 +20,7 @@ v1 work:
         inline IIFEs
 
 v2 work:
+* Markdown parser
 * Move as much of the stdlib into cozy (out of Go) as possible
 * Optionally indent json in json.serialize
 * Simplify registerBuiltin calls so they can be looped over
