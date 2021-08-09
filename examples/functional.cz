@@ -2,12 +2,12 @@
 
 # Return true if the given number is even
 let even? = fn(n) {
-    return(n % 2 == 0)
+    return n % 2 == 0
 }
 
 # Return true if the given number is odd.
 let odd? = fn(n) {
-    return(n % 2 == 1)
+    return n % 2 == 1
 }
 
 # Return true if the given number is prime
@@ -81,6 +81,16 @@ let cb_parent = fn (x, y, cb) {
 cb_parent(1, 2, fn (val) {
     print("result is", val)
 })
+
+# closures, nested functions, implicit returns
+let lots_of_nesting = fn () {
+    fn () {
+        fn () {
+            true
+        }
+    }
+}
+print(lots_of_nesting()()())
 
 # memoization
 let adder = fn (q, w, e) {
