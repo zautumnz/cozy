@@ -12,7 +12,7 @@ let create_state = fn(reducer, initial_state) {
         },
         "subscribe": fn(new_listener) {
             # 'subscribe adds a new listener to state changes.'
-            listeners = listeners.push(new_listener);
+            listeners = listeners.append(new_listener);
         },
         "dispatch": fn(action) {
             # 'dispatch dispatches an action.'

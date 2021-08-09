@@ -10,7 +10,7 @@ let fizzbuzz = fn(n = 100) {
     mutable ret = [];
 
     foreach i in 0..n {
-        ret = ret.push(fb(i));
+        ret = ret.append(fb(i));
     }
 
     return ret.join("\n");

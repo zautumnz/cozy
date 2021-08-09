@@ -3,19 +3,19 @@ package utils
 import "testing"
 
 func TestSetReplOrRun(t *testing.T) {
-	if isRepl {
-		t.Errorf("isRepl initialized at true!")
+	if IsRepl {
+		t.Errorf("IsRepl initialized at true!")
 	}
 
 	SetReplOrRun(true)
 
-	if !isRepl {
-		t.Errorf("isRepl not set to true!")
+	if !IsRepl {
+		t.Errorf("IsRepl not set to true!")
 	}
 
 	SetReplOrRun(false)
 
-	if isRepl {
-		t.Errorf("isRepl not set to false!")
+	if IsRepl {
+		t.Errorf("IsRepl not set to false!")
 	}
 }

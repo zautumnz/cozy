@@ -17,7 +17,7 @@ let array.rest = fn() {
     if (len(self) >= 1) {
         mutable i = 1;
         for (i < len(self)) {
-            result = result.push(self[i]);
+            result = result.append(self[i]);
             i++;
         }
     }
@@ -48,7 +48,7 @@ let array.filter = fn(predicate) {
     for (i < l) {
         let entry = self[i];
         if (predicate(entry, i)) {
-            result = result.push(entry);
+            result = result.append(entry);
         }
 
         i++;
@@ -216,7 +216,7 @@ let array.reverse = fn() {
     mutable l = len(self);
 
     for (l > 0) {
-        r = r.push(self[l-1]);
+        r = r.append(self[l-1]);
         l--;
     }
     return r;
@@ -281,11 +281,11 @@ let array.swap = fn(a, b) {
 
     for (i < l) {
         if (i == a) {
-            r = r.push(aVal);
+            r = r.append(aVal);
         } else if (i == b) {
-            r = r.push(bVal);
+            r = r.append(bVal);
         } else {
-            r = r.push(self[i]);
+            r = r.append(self[i]);
         }
 
         i++;
@@ -361,7 +361,7 @@ let array.map = fn(fnc) {
     mutable result = [];
 
     foreach index, item in self {
-        result = result.push(fnc(item, index));
+        result = result.append(fnc(item, index));
     }
 
     return result;

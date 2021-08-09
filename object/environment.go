@@ -91,7 +91,7 @@ func (e *Environment) Set(name string, val Object) Object {
 	// TODO: this isn't quite right. It results in function scope
 	// rather than block scope for mutable variables, but we want
 	// block (lexical) scope.
-	if e.outer == nil {
+	if e.outer == nil && !utils.IsRepl {
 		fmt.Printf("No mutable variables at the top level! %s must be bound with let!\n", name)
 		utils.ExitConditionally(3)
 	}

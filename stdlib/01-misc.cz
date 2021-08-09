@@ -19,7 +19,7 @@ let gather_args = fn () {
     # literal representing the parent function's args.'
     mutable xs = []
     foreach x in ... {
-        xs = xs.push(x)
+        xs = xs.append(x)
     }
     return xs
 }
@@ -121,7 +121,7 @@ let curry = fn (f) {
 
         if (len(inner_args) > 0) {
             foreach x in inner_args {
-                f_args = f_args.push(x)
+                f_args = f_args.append(x)
             }
             return inner
         }

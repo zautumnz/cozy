@@ -122,9 +122,9 @@ let string.split = fn(sep = " \r\t\n") {
         # is the character one of our split-characters?
         if (sep.find(c) != -1) {
 
-            # push any previously-accumulated token into our array.
+            # append any previously-accumulated token into our array.
             if (len(tmp) > 0) {
-                r = r.push(tmp);
+                r = r.append(tmp);
             }
             tmp = "";
 
@@ -138,7 +138,7 @@ let string.split = fn(sep = " \r\t\n") {
 
     # Do we have a dangling-string? If so append it.
     if (len(tmp) > 0) {
-        r = r.push(tmp);
+        r = r.append(tmp);
     }
 
     return r;

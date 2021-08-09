@@ -44,7 +44,7 @@ func (ao *Array) Inspect() string {
 // (Built-in methods only.)
 func (ao *Array) GetMethod(method string) BuiltinFunction {
 	switch method {
-	case "push":
+	case "append":
 		return func(env *Environment, args ...Object) Object {
 			arr := ao
 			length := len(arr.Elements)
@@ -55,7 +55,7 @@ func (ao *Array) GetMethod(method string) BuiltinFunction {
 		}
 	case "methods":
 		return func(env *Environment, args ...Object) Object {
-			static := []string{"methods", "push"}
+			static := []string{"methods", "append"}
 			dynamic := env.Names("array.")
 
 			var names []string

@@ -9,7 +9,7 @@ let event_emitter = fn() {
                 events = events.set(name, [f]);
             } else {
                 mutable ets = events[name]
-                ets = ets.push(f)
+                ets = ets.append(f)
                 events = events.set(name, ets)
             }
         },
