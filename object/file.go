@@ -156,14 +156,15 @@ func (f *File) GetMethod(method string) BuiltinFunction {
 		return func(env *Environment, args ...Object) Object {
 			// Check we have a reader.
 			if f.Reader == nil {
-				return (&String{Value: ""})
+				return &String{Value: ""}
 			}
 
 			// Read and return a line.
 			line, err := f.Reader.ReadString('\n')
 			if err != nil {
-				return (&String{Value: ""})
+				return &String{Value: ""}
 			}
+
 			return &String{Value: line}
 		}
 	case "rewind":

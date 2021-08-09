@@ -97,7 +97,7 @@ func (o *Operation) GetConfig() *Config {
 func (o *Operation) ioloop() {
 	for {
 		keepInSearchMode := false
-		r := o.t.ReadRune()
+		r, _, _ := o.t.ReadRune()
 		if o.GetConfig().FuncFilterInputRune != nil {
 			var process bool
 			r, process = o.GetConfig().FuncFilterInputRune(r)
@@ -110,9 +110,7 @@ func (o *Operation) ioloop() {
 		if r == 0 { // io.EOF
 			if o.buf.Len() == 0 {
 				o.buf.Clean()
-				select {
-				case o.errchan <- io.EOF:
-				}
+				o.errchan <- io.EOF
 				break
 			} else {
 				// if stdin got io.EOF and there is something left in buffer,
@@ -131,7 +129,6 @@ func (o *Operation) ioloop() {
 			}
 		case CharTab:
 			o.t.Bell()
-			break
 		case CharBckSearch:
 			if !o.SearchMode(S_DIR_BCK) {
 				o.t.Bell()

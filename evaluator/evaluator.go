@@ -998,8 +998,8 @@ func upwrapReturnValue(obj object.Object) object.Object {
 
 // RegisterBuiltin registers a built-in function. This is used to register
 // our "standard library" functions.
-func RegisterBuiltin(name string, fun object.BuiltinFunction) {
-	builtins[name] = &object.Builtin{Fn: fun}
+func RegisterBuiltin(name string, fn object.BuiltinFunction) {
+	builtins[name] = &object.Builtin{Fn: fn}
 }
 
 func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.Object, ok bool) {

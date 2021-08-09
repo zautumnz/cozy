@@ -33,7 +33,7 @@ func mathAbs(args ...object.Object) object.Object {
 	}
 }
 
-// val = math.random()
+// val = math.rand()
 func mathRandom(args ...object.Object) object.Object {
 	return &object.Float{Value: rand.Float64()}
 }
@@ -63,14 +63,14 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 	RegisterBuiltin("math.abs",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (mathAbs(args...))
+			return mathAbs(args...)
 		})
-	RegisterBuiltin("math.random",
+	RegisterBuiltin("math.rand",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (mathRandom(args...))
+			return mathRandom(args...)
 		})
 	RegisterBuiltin("math.sqrt",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (mathSqrt(args...))
+			return mathSqrt(args...)
 		})
 }

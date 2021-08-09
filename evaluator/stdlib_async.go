@@ -90,14 +90,14 @@ func backgroundFn(env *object.Environment, args ...object.Object) object.Object 
 func init() {
 	RegisterBuiltin("async",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (asyncFn(env, args...))
+			return asyncFn(env, args...)
 		})
 	RegisterBuiltin("await",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (awaitFn(env, args...))
+			return awaitFn(env, args...)
 		})
 	RegisterBuiltin("background",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (backgroundFn(env, args...))
+			return backgroundFn(env, args...)
 		})
 }

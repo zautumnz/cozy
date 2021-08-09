@@ -1,19 +1,17 @@
 # TODO
 
-List of things to get done before a v1.
+v1 work:
+* Errors and exceptions: As values? Try/catch? Stack traces?
+* At least 50% code coverage
+* Confirm that everything under ./examples works
+* Complete all lingering TODOs in the code
+* Add argument validation to all internal functions and stdlib
+* Improve all error messages
+* Remove other extraneous things from readline fork
+* Docstrings cause parsing errors, fix that
 
-* Major things missing:
-    * Cryptography builtins
-    * Errors and exceptions: As values? Try/catch? Stack traces?
-    * Dot access only works at one level at a time
-* Minor things:
-    * At least 50% code coverage
-    * Confirm that everything under ./examples works
-    * Complete all lingering TODOs in the code
-    * Add argument validation to all internal functions and stdlib
-    * Improve all error messages
-    * Remove other extraneous things from readline fork
-    * Docstrings cause parsing errors, fix that
-    * Possibly remove `self`
-    * Possibly remove `null`
-    * See what else in the stdlib can be moved into cozy code
+v2 work:
+* Move as much of the stdlib into cozy (out of Go) as possible
+* More real-world examples (twitter clone, todo app, better shell)
+* Cryptography builtins
+* Multiple-db ORM

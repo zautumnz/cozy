@@ -10,13 +10,6 @@ import (
 	"syscall"
 )
 
-type winsize struct {
-	Row    uint16
-	Col    uint16
-	Xpixel uint16
-	Ypixel uint16
-}
-
 // SuspendMe use to send suspend signal to myself, when we in the raw mode.
 // For OSX it need to send to parent's pid
 // For Linux it need to send to myself

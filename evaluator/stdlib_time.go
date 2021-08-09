@@ -118,26 +118,26 @@ func timeCancel(args ...object.Object) object.Object {
 func init() {
 	RegisterBuiltin("time.sleep",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (timeSleep(args...))
+			return timeSleep(args...)
 		})
 	RegisterBuiltin("time.unix",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (timeUnix(args...))
+			return timeUnix(args...)
 		})
 	RegisterBuiltin("time.utc",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (timeUtc(args...))
+			return timeUtc(args...)
 		})
 	RegisterBuiltin("time.interval",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (timeInterval(env, args...))
+			return timeInterval(env, args...)
 		})
 	RegisterBuiltin("time.timeout",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (timeTimeout(env, args...))
+			return timeTimeout(env, args...)
 		})
 	RegisterBuiltin("time.cancel",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (timeCancel(args...))
+			return timeCancel(args...)
 		})
 }

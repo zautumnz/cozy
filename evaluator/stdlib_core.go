@@ -17,7 +17,7 @@ import (
 // This creates basically a whole new instance of cozy,
 // which is inefficient, but it's the same thing we do when
 // evaling modules and working with string interpolation.
-func evalFun(env *object.Environment, args ...object.Object) object.Object {
+func evalFn(env *object.Environment, args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -36,7 +36,7 @@ func evalFun(env *object.Environment, args ...object.Object) object.Object {
 		program := p.ParseProgram()
 		if len(p.Errors()) == 0 {
 			// evaluate it, and return the output.
-			return (Eval(program, env))
+			return Eval(program, env)
 		}
 
 		// Otherwise abort. We should have try { } catch
@@ -52,7 +52,7 @@ func evalFun(env *object.Environment, args ...object.Object) object.Object {
 }
 
 // convert a string to a float
-func floatFun(args ...object.Object) object.Object {
+func floatFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -86,7 +86,7 @@ func floatFun(args ...object.Object) object.Object {
 }
 
 // convert a double/string to an int
-func intFun(args ...object.Object) object.Object {
+func intFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -120,7 +120,7 @@ func intFun(args ...object.Object) object.Object {
 }
 
 // length of item
-func lenFun(args ...object.Object) object.Object {
+func lenFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -143,7 +143,7 @@ func lenFun(args ...object.Object) object.Object {
 }
 
 // regular expression match
-func matchFun(args ...object.Object) object.Object {
+func matchFn(args ...object.Object) object.Object {
 	if len(args) != 2 {
 		return NewError("wrong number of arguments. got=%d, want=2",
 			len(args))
@@ -182,7 +182,7 @@ func matchFun(args ...object.Object) object.Object {
 }
 
 // output a string to stdout
-func printFun(args ...object.Object) object.Object {
+func printFn(args ...object.Object) object.Object {
 	for _, arg := range args {
 		fmt.Print(arg.Inspect() + " ")
 	}
@@ -190,11 +190,11 @@ func printFun(args ...object.Object) object.Object {
 	return NULL
 }
 
-// printfFun is the implementation of our `printf` function.
-func printfFun(args ...object.Object) object.Object {
+// printfFn is the implementation of our `printf` function.
+func printfFn(args ...object.Object) object.Object {
 	// Convert to the formatted version, via our `sprintf`
 	// function.
-	out := sprintfFun(args...)
+	out := sprintfFn(args...)
 
 	// If that returned a string then we can print it
 	if out.Type() == object.STRING_OBJ {
@@ -205,8 +205,8 @@ func printfFun(args ...object.Object) object.Object {
 	return NULL
 }
 
-// sprintfFun is the implementation of our `sprintf` function.
-func sprintfFun(args ...object.Object) object.Object {
+// sprintfFn is the implementation of our `sprintf` function.
+func sprintfFn(args ...object.Object) object.Object {
 	// We expect 1+ arguments
 	if len(args) < 1 {
 		return NULL
@@ -237,7 +237,7 @@ func sprintfFun(args ...object.Object) object.Object {
 	return &object.String{Value: out}
 }
 
-func strFun(args ...object.Object) object.Object {
+func strFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -248,7 +248,7 @@ func strFun(args ...object.Object) object.Object {
 }
 
 // type of an item
-func typeFun(args ...object.Object) object.Object {
+func typeFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -259,42 +259,42 @@ func typeFun(args ...object.Object) object.Object {
 func init() {
 	RegisterBuiltin("eval",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (evalFun(env, args...))
+			return evalFn(env, args...)
 		})
 	RegisterBuiltin("int",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (intFun(args...))
+			return intFn(args...)
 		})
 	RegisterBuiltin("float",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (floatFun(args...))
+			return floatFn(args...)
 		})
 	RegisterBuiltin("len",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (lenFun(args...))
+			return lenFn(args...)
 		})
 	RegisterBuiltin("match",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (matchFun(args...))
+			return matchFn(args...)
 		})
 	RegisterBuiltin("print",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (printFun(args...))
+			return printFn(args...)
 		})
 	RegisterBuiltin("printf",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (printfFun(args...))
+			return printfFn(args...)
 		})
 	RegisterBuiltin("sprintf",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (sprintfFun(args...))
+			return sprintfFn(args...)
 		})
 	RegisterBuiltin("string",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (strFun(args...))
+			return strFn(args...)
 		})
 	RegisterBuiltin("type",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (typeFun(args...))
+			return typeFn(args...)
 		})
 }

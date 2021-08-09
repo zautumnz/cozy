@@ -56,7 +56,7 @@ func getStdlibString() string {
 }
 
 // Implemention of "version()" function.
-func versionFun(args ...object.Object) object.Object {
+func versionFn(args ...object.Object) object.Object {
 	return &object.String{Value: COZY_VERSION}
 }
 
@@ -76,7 +76,7 @@ func Execute(input string) int {
 	// that the script can call.
 	evaluator.RegisterBuiltin("version",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (versionFun(args...))
+			return versionFn(args...)
 		})
 
 	//  Parse and evaluate our standard-library.

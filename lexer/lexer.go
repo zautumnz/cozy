@@ -3,7 +3,6 @@
 package lexer
 
 import (
-	"fmt"
 	"strings"
 	"unicode"
 
@@ -178,8 +177,6 @@ func (l *Lexer) NextToken() token.Token {
 				l.prevToken.Type == token.FLOAT {
 
 				tok = newToken(token.SLASH, l.ch)
-			} else {
-				fmt.Println("should this be an error?")
 			}
 		}
 	case rune('*'):

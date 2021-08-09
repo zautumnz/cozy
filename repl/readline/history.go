@@ -3,7 +3,6 @@ package readline
 import (
 	"bufio"
 	"container/list"
-	"fmt"
 	"os"
 	"strings"
 	"sync"
@@ -91,7 +90,6 @@ func (o *opHistory) historyUpdatePath(path string) {
 	}
 	o.historyVer++
 	o.Push(nil)
-	return
 }
 
 func (o *opHistory) Compact() {
@@ -233,13 +231,6 @@ func (o *opHistory) Disable() {
 // Enable the current history
 func (o *opHistory) Enable() {
 	o.enable = true
-}
-
-func (o *opHistory) debug() {
-	Debug("-------")
-	for item := o.history.Front(); item != nil; item = item.Next() {
-		Debug(fmt.Sprintf("%+v", item.Value))
-	}
 }
 
 // save history

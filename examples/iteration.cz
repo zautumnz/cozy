@@ -28,7 +28,7 @@ foreach key in h {
      print("\t", key);
 }
 print("Hash: key/value")
-foreach key,val in h {
+foreach key, val in h {
      print("\t", key, "\t=>\t", val);
 };
 

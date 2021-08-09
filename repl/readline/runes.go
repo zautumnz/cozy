@@ -198,7 +198,7 @@ aggregate:
 func (Runes) TrimSpaceLeft(in []rune) []rune {
 	firstIndex := len(in)
 	for i, r := range in {
-		if unicode.IsSpace(r) == false {
+		if !unicode.IsSpace(r) {
 			firstIndex = i
 			break
 		}

@@ -36,7 +36,7 @@ func splitCommand(input string) []string {
 }
 
 // getenv() -> (Hash)
-func envFun(args ...object.Object) object.Object {
+func envFn(args ...object.Object) object.Object {
 
 	env := os.Environ()
 	newHash := make(map[object.HashKey]object.HashPair)
@@ -58,7 +58,7 @@ func envFun(args ...object.Object) object.Object {
 }
 
 // getenv("PATH") -> string
-func getEnvFun(args ...object.Object) object.Object {
+func getEnvFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -72,7 +72,7 @@ func getEnvFun(args ...object.Object) object.Object {
 }
 
 // setenv("PATH", "/home/z/bin:/usr/bin");
-func setEnvFun(args ...object.Object) object.Object {
+func setEnvFn(args ...object.Object) object.Object {
 	if len(args) != 2 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -164,7 +164,7 @@ func sysExec(args ...object.Object) object.Object {
 }
 
 // Implemention of "args()" function.
-func argsFun(args ...object.Object) object.Object {
+func argsFn(args ...object.Object) object.Object {
 	l := len(os.Args[1:])
 	result := make([]object.Object, l)
 	for i, txt := range os.Args[1:] {
@@ -174,7 +174,7 @@ func argsFun(args ...object.Object) object.Object {
 }
 
 // flag("my-flag")
-func flagFun(args ...object.Object) object.Object {
+func flagFn(args ...object.Object) object.Object {
 	// flag we're trying to retrieve
 	name := args[0].(*object.String)
 	found := false
@@ -220,7 +220,7 @@ func flagFun(args ...object.Object) object.Object {
 	return FALSE
 }
 
-func cdFun(args ...object.Object) object.Object {
+func cdFn(args ...object.Object) object.Object {
 	switch a := args[0].(type) {
 	case *object.String:
 		os.Chdir(a.Value)
@@ -233,34 +233,34 @@ func cdFun(args ...object.Object) object.Object {
 func init() {
 	RegisterBuiltin("sys.getenv",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (getEnvFun(args...))
+			return getEnvFn(args...)
 		})
 	RegisterBuiltin("sys.setenv",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (setEnvFun(args...))
+			return setEnvFn(args...)
 		})
 	RegisterBuiltin("sys.environment",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (envFun(args...))
+			return envFn(args...)
 		})
 	RegisterBuiltin("sys.exit",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (sysExit(args...))
+			return sysExit(args...)
 		})
 	RegisterBuiltin("sys.exec",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (sysExec(args...))
+			return sysExec(args...)
 		})
 	RegisterBuiltin("sys.flag",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (flagFun(args...))
+			return flagFn(args...)
 		})
 	RegisterBuiltin("sys.args",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (argsFun(args...))
+			return argsFn(args...)
 		})
 	RegisterBuiltin("sys.cd",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (cdFun(args...))
+			return cdFn(args...)
 		})
 }

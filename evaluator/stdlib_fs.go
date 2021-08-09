@@ -35,7 +35,7 @@ func fsGlob(args ...object.Object) object.Object {
 
 // Change a mode of a file - note the second argument is a string
 // to emphasise octal.
-func chmodFun(args ...object.Object) object.Object {
+func chmodFn(args ...object.Object) object.Object {
 	if len(args) != 2 {
 		return NewError("wrong number of arguments. got=%d, want=2",
 			len(args))
@@ -66,7 +66,7 @@ func chmodFun(args ...object.Object) object.Object {
 }
 
 // mkdir
-func mkdirFun(args ...object.Object) object.Object {
+func mkdirFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -94,7 +94,7 @@ func mkdirFun(args ...object.Object) object.Object {
 }
 
 // Open a file
-func openFun(args ...object.Object) object.Object {
+func openFn(args ...object.Object) object.Object {
 	path := ""
 	mode := "r"
 
@@ -133,7 +133,7 @@ func openFun(args ...object.Object) object.Object {
 }
 
 // Get file info.
-func statFun(args ...object.Object) object.Object {
+func statFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -193,7 +193,7 @@ func statFun(args ...object.Object) object.Object {
 }
 
 // Remove a file/directory.
-func rmFun(args ...object.Object) object.Object {
+func rmFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -208,7 +208,7 @@ func rmFun(args ...object.Object) object.Object {
 	return &object.Boolean{Value: true}
 }
 
-func mvFun(args ...object.Object) object.Object {
+func mvFn(args ...object.Object) object.Object {
 	var from string
 	var to string
 	switch a := args[0].(type) {
@@ -232,7 +232,7 @@ func mvFun(args ...object.Object) object.Object {
 	return NULL
 }
 
-func cpFun(args ...object.Object) object.Object {
+func cpFn(args ...object.Object) object.Object {
 	var src string
 	var dst string
 	switch a := args[0].(type) {
@@ -320,39 +320,39 @@ func templateFn(env *object.Environment, args ...object.Object) object.Object {
 func init() {
 	RegisterBuiltin("fs.glob",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (fsGlob(args...))
+			return fsGlob(args...)
 		})
 	RegisterBuiltin("fs.chmod",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (chmodFun(args...))
+			return chmodFn(args...)
 		})
 	RegisterBuiltin("fs.mkdir",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (mkdirFun(args...))
+			return mkdirFn(args...)
 		})
 	RegisterBuiltin("fs.open",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (openFun(args...))
+			return openFn(args...)
 		})
 	RegisterBuiltin("fs.stat",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (statFun(args...))
+			return statFn(args...)
 		})
 	RegisterBuiltin("fs.rm",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (rmFun(args...))
+			return rmFn(args...)
 		})
 	RegisterBuiltin("fs.mv",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (mvFun(args...))
+			return mvFn(args...)
 		})
 	RegisterBuiltin("fs.cp",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (cpFun(args...))
+			return cpFn(args...)
 		})
 	RegisterBuiltin("fs.tmpl",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (templateFn(env, args...))
+			return templateFn(env, args...)
 		})
 
 }

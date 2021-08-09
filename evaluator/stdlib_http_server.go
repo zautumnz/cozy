@@ -350,6 +350,6 @@ func httpServer(env *object.Environment, args ...object.Object) object.Object {
 func init() {
 	RegisterBuiltin("http.create_server",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (httpServer(env, args...))
+			return httpServer(env, args...)
 		})
 }

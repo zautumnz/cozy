@@ -279,41 +279,34 @@ func Read(args ...object.Object) object.Object {
 func init() {
 	RegisterBuiltin("net.socket",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (Socket(args...))
+			return Socket(args...)
 		})
-
 	RegisterBuiltin("net.listen",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (Listen(args...))
+			return Listen(args...)
 		})
-
 	RegisterBuiltin("net.connect",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (Connect(args...))
+			return Connect(args...)
 		})
-
 	RegisterBuiltin("net.close",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (Close(args...))
+			return Close(args...)
 		})
-
 	RegisterBuiltin("net.bind",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (Bind(args...))
+			return Bind(args...)
 		})
-
 	RegisterBuiltin("net.accept",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (Accept(args...))
+			return Accept(args...)
 		})
-
 	RegisterBuiltin("net.write",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (Write(args...))
+			return Write(args...)
 		})
-
 	RegisterBuiltin("net.read",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return (Read(args...))
+			return Read(args...)
 		})
 }

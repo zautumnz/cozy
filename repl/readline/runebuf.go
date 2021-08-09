@@ -604,7 +604,6 @@ func (r *RuneBuffer) cleanOutput(w io.Writer, idxLine int) {
 		}
 	}
 	buf.Flush()
-	return
 }
 
 func (r *RuneBuffer) Clean() {
