@@ -7,7 +7,7 @@ let fs.ls = fn () {
     # 'fs.ls takes a path and an optional boolean,
     # the equivalent of `ls` with an optional -A flag'
     mutable all = false;
-    let opts = gather_args(...)
+    let opts = array_from(...)
 
     let p = opts[0];
 

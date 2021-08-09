@@ -13,8 +13,8 @@ let sys.STDERR = fs.open("!STDERR!");
 
 # TODO: if the ... literal is changed to just return a regular array,
 # this function and its usages can go away
-let gather_args = fn () {
-    # 'gather_args is a global function used to convert an unknown
+let array_from = fn () {
+    # 'array_from is a global function used to convert an unknown
     # number of arguments into an array. It should be passed the ...
     # literal representing the parent function's args.'
     mutable xs = []
@@ -103,7 +103,7 @@ let memoize = fn (f) {
     # and looks up results based on arguments in its internal cache.'
     mutable results = {}
     return fn () {
-        let res = gather_args(...).join("__cozy__memo__arg__")
+        let res = array_from(...).join("__cozy__memo__arg__")
         if (results.keys().includes?(res)) {
             return results[res]
         }
@@ -117,7 +117,7 @@ let curry = fn (f) {
     # 'curry takes a function and curries it so it can be applied gradually.'
     mutable f_args = []
     let inner = fn () {
-        let inner_args = gather_args(...)
+        let inner_args = array_from(...)
 
         if (len(inner_args) > 0) {
             foreach x in inner_args {

@@ -388,10 +388,6 @@ func httpClient(args ...object.Object) object.Object {
 	resProtoVal := &object.String{Value: res.Proto}
 	ret[resProtoKey.HashKey()] = object.HashPair{Key: resProtoKey, Value: resProtoVal}
 
-	resContentLengthKey := &object.String{Value: "content_length"}
-	resContentLengthVal := &object.Integer{Value: res.ContentLength}
-	ret[resContentLengthKey.HashKey()] = object.HashPair{Key: resContentLengthKey, Value: resContentLengthVal}
-
 	bod, err := resp.Content()
 	if err != nil {
 		return NewError(err.Error())
