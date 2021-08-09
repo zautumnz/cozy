@@ -28,10 +28,12 @@ print(multiLine);
 let indexed = "asdf";
 print(indexed[1]);
 
-# Appending
-mutable root = "a";
-root += "s";
-print(root + "d", "f");
+fn () {
+    # Appending
+    mutable root = "a";
+    root += "s";
+    print(root + "d", "f");
+}()
 
 # Interpolation
 let me = {"first": "Zac", "last": "Anger", "loc": "USA", "age": 999}
@@ -41,3 +43,10 @@ let s = "My name is {{me.first}} {{me.last}};
 I live in {{me.loc}} and am {{me[\"age\"]}} years old.
 I like {{foods.join(\", \")}}, and {{activity}}."
 print(s)
+print("
+{{
+    fn () {
+        return \"hello\"
+    }()
+}}
+")

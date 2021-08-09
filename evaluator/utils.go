@@ -69,7 +69,7 @@ func IsNumber(s string) bool {
 // return input string with $vars interpolated from environment
 func Interpolate(str string, env *object.Environment) string {
 	// Match all strings preceded by {{
-	re := regexp.MustCompile(`(\\)?(\{\{)(.*?)(\}\})`)
+	re := regexp.MustCompile(`(?s)(\\)?(\{\{)(.*?)(\}\})`)
 	str = re.ReplaceAllStringFunc(str, func(m string) string {
 		// If the string starts with a backslash, that's an escape, so we should
 		// replace it with the remaining portion of the match. \{{VAR}} becomes
