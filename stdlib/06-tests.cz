@@ -6,20 +6,20 @@ let test = fn(suite, cb) {
     mutable id = 0;
     mutable failed = 0;
 
-    printf("# %s\n", suite);
+    print("# {{suite}}");
 
     let handle_assertion = fn(val, msg = "Result was not 'true'!") {
         id++;
         if (!val) {
-            printf("not ok %d - %s\n", id, msg);
+            print("not ok {{id}} - {{msg}}");
             failed++;
         } else {
-            printf("ok %d - %s\n", id, msg);
+            print("ok {{id}} - {{msg}}");
         }
     };
 
     cb(handle_assertion);
 
     # Print total amount of tests
-    printf("1..%d\n", id);
+    print("1..{{id}}", id);
 };

@@ -95,8 +95,7 @@ entered code will be evaluated when you exit with `ctrl+d`.
 
 ### Important Notes
 
-* `print` adds an ending newline, use `printf` or `sys.STDOUT`/`sys.STDERR` for
-    raw text
+* `print` adds an ending newline, use  or `sys.STDOUT`/`sys.STDERR` for raw text
 * No undefined or uninitialized variables
 * Comments are Python/Shell style
 * No switch statements
@@ -128,8 +127,6 @@ Global functions:
 * `macro`/`quote`/`unquote` for building macros
 * `match` Regular-expression matching
 * `print` Write values to STDOUT with newlines
-* `printf` Write values to STDOUT, via a format-string
-* `sprintf` Create strings, via a format-string
 * `string` convert the given item to a string
 * `type` returns the type of a variable.
 

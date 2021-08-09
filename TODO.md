@@ -12,7 +12,6 @@ v1 work:
 * Add splat/spread operator and finish curry fn
 * Possibly change the ... literal to return a regular array
 * Remove requirement for braces in if/else expressions
-* Possibly remove printf and sprintf globals
 * Assertions are somehow creating globals? Reproduction:
     * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
         inline IIFEs
