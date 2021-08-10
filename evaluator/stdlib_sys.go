@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"runtime"
 	"strings"
 
 	"github.com/zacanger/cozy/object"
@@ -21,7 +22,6 @@ import (
 //   -c
 //   ls /etc
 func splitCommand(input string) []string {
-
 	// This does the split into an array
 	r := regexp.MustCompile(`[^\s"']+|"([^"]*)"|'([^']*)`)
 	res := r.FindAllString(input, -1)
@@ -37,7 +37,6 @@ func splitCommand(input string) []string {
 
 // getenv() -> (Hash)
 func envFn(args ...object.Object) object.Object {
-
 	env := os.Environ()
 	newHash := make(map[object.HashKey]object.HashPair)
 
@@ -174,6 +173,7 @@ func argsFn(args ...object.Object) object.Object {
 }
 
 // flag("my-flag")
+// TODO: this could possibly be rewritten in cozy using sys.args()
 func flagFn(args ...object.Object) object.Object {
 	// flag we're trying to retrieve
 	name := args[0].(*object.String)
@@ -230,6 +230,30 @@ func cdFn(args ...object.Object) object.Object {
 	return NULL
 }
 
+func infoFn(args ...object.Object) object.Object {
+	res := make(map[object.HashKey]object.HashPair)
+
+	os := runtime.GOOS
+	osKey := &object.String{Value: "os"}
+	osVal := &object.String{Value: os}
+	osPair := object.HashPair{Key: osKey, Value: osVal}
+	res[osKey.HashKey()] = osPair
+
+	arch := runtime.GOARCH
+	archKey := &object.String{Value: "arch"}
+	archVal := &object.String{Value: arch}
+	archPair := object.HashPair{Key: archKey, Value: archVal}
+	res[archKey.HashKey()] = archPair
+
+	cpus := runtime.NumCPU()
+	cpusKey := &object.String{Value: "cpus"}
+	cpusVal := &object.Integer{Value: int64(cpus)}
+	cpusPair := object.HashPair{Key: cpusKey, Value: cpusVal}
+	res[cpusKey.HashKey()] = cpusPair
+
+	return &object.Hash{Pairs: res}
+}
+
 func init() {
 	RegisterBuiltin("sys.getenv",
 		func(env *object.Environment, args ...object.Object) object.Object {
@@ -262,5 +286,9 @@ func init() {
 	RegisterBuiltin("sys.cd",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return cdFn(args...)
+		})
+	RegisterBuiltin("sys.info",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return infoFn(args...)
 		})
 }

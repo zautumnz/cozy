@@ -1,4 +1,5 @@
 # basic implementation of a shell
+# shows some sys builtin functionality
 
 let stdin = sys.STDIN
 let stdout = sys.STDOUT
@@ -22,16 +23,19 @@ let main = fn () {
 
         if is_cd(inp) {
             handle_cd(inp)
+        } else if inp == "exit" {
+            sys.exit(0)
+        } else if inp == "info()" {
+            let i = sys.info()
+            print("os:", i.os)
+            print("arch:", i.arch)
+            print("cpus:", i.cpus)
         } else {
-            if inp == "exit" {
-                sys.exit(0)
+            let res = sys.exec(inp)
+            if res.stderr != "" {
+                print("err:", res.stderr)
             } else {
-                let res = sys.exec(inp)
-                if res.stderr != "" {
-                    print("err:", res.stderr)
-                } else {
-                    print(res.stdout)
-                }
+                print(res.stdout)
             }
         }
     }

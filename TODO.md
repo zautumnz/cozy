@@ -15,6 +15,7 @@ v1 work:
 * Remove requirement for braces in if/else expressions
 * Nested interpolations
 * Maybe combine float/integer to just one number type?
+* Convenience method for creating new hashes
 * Assertions are somehow creating globals? Reproduction:
     * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
         inline IIFEs
