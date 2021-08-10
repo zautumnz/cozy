@@ -46,14 +46,6 @@ assert(type(sys.STDIN) == "file");
 assert(type(sys.STDOUT) == "file");
 assert(type(sys.STDERR) == "file");
 
-let unless = macro(condition, consequence, alternative) {
-    quote(if(!(unquote(condition))) {
-        unquote(consequence);
-    } else {
-        unquote(alternative);
-    });
-};
-
 let array? = fn (x) {
     'array? returns true if the value provided is an array.'
     return type(x) == "array"

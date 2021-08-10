@@ -131,7 +131,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.STRING, p.ParseStringLiteral)
 	p.registerPrefix(token.DOCSTRING, p.parseDocStringLiteral)
 	p.registerPrefix(token.TRUE, p.ParseBoolean)
-	p.registerPrefix(token.MACRO, p.parseMacroLiteral)
 
 	// Register infix functions
 	p.infixParseFns = make(map[token.Type]infixParseFn)
@@ -889,25 +888,6 @@ func (p *Parser) curPrecedence() int {
 		return p
 	}
 	return LOWEST
-}
-
-// parseMacroLiteral was copy-pasted from the book
-func (p *Parser) parseMacroLiteral() ast.Expression {
-	lit := &ast.MacroLiteral{Token: p.curToken}
-
-	if !p.expectPeek(token.LPAREN) {
-		return nil
-	}
-
-	_, lit.Parameters = p.parseFunctionParameters()
-
-	if !p.expectPeek(token.LBRACE) {
-		return nil
-	}
-
-	lit.Body = p.parseBlockStatement()
-
-	return lit
 }
 
 // ParserErrorsParams is used in main and repl

@@ -1,8 +1,5 @@
 // Simple, high-ish-level interpreted programming language that sits somewhere
-// between scripting and general-purpose programming. Dynamically and strongly
-// typed, with some with semantics that work well with pseudo-functional
-// programming but syntax similar to Python, Go, and Shell; no OOP constructs
-// like classes; instead we have first-class functions, closures, and macros.
+// between scripting and general-purpose programming.
 // For more details, see github.com/zacanger/cozy.
 
 package main
@@ -63,7 +60,6 @@ func versionFn(args ...object.Object) object.Object {
 // Execute the supplied string as a program.
 func Execute(input string) int {
 	env := object.NewEnvironment()
-	macroEnv := object.NewEnvironment()
 	l := lexer.New(input)
 	p := parser.New(l)
 
@@ -83,17 +79,13 @@ func Execute(input string) int {
 	initL := lexer.New(getStdlibString())
 	initP := parser.New(initL)
 	initProg := initP.ParseProgram()
-	evaluator.DefineMacros(initProg, macroEnv)
-	expanded := evaluator.ExpandMacros(initProg, macroEnv)
-	evaluator.Eval(expanded, env)
+	evaluator.Eval(initProg, env)
 
 	//  Now evaluate the code the user wanted to load.
 	//  Note that here our environment will still contain
 	// the code we just loaded from our data-resource
 	//  (i.e. Our cozy-based standard library.)
-	evaluator.DefineMacros(program, macroEnv)
-	expandedProg := evaluator.ExpandMacros(program, macroEnv)
-	evaluator.Eval(expandedProg, env)
+	evaluator.Eval(program, env)
 	return 0
 }
 

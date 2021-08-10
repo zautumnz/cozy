@@ -10,7 +10,7 @@ many of the same tasks as shell scripts, Python, Node, and Ruby. It's
 dynamically and strongly typed, with some with semantics that work well with
 pseudo-functional programming but syntax similar to C-family languages. There
 are no OOP constructs like classes; instead we have first-class functions,
-closures, and macros.
+closures, plain data structures, and modules.
 
 It's meant to feel comfortable and familiar no matter what languages you might
 already know (hence the name). Performance isn't an explicit goal, but cozy is
@@ -111,8 +111,8 @@ entered code will be evaluated when you exit with `ctrl+d`.
 * Parens are optional in for and if conditions
 * No third-party libraries in this codebase; all you need to build is a current
     version of Go
-* No ternary expressions; if statements are expressions, so there's no need for
-    ternaries
+* No ternary expressions, switch statements, or pattern matching; if statements
+    are expressions, so they work for the same use cases
 
 ### Builtins
 
@@ -124,7 +124,6 @@ Global functions:
 * `import` imports another cozy file as a module
 * `int` convert the given float/string to an integer
 * `len` Yield the length of builtin containers
-* `macro`/`quote`/`unquote` for building macros
 * `match` Regular-expression matching
 * `print` Write values to STDOUT with newlines
 * `string` convert the given item to a string

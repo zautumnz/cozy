@@ -99,10 +99,7 @@ func Interpolate(str string, env *object.Environment) string {
 			l := lexer.New(string(varName))
 			p := parser.New(l)
 			program := p.ParseProgram()
-			macroEnv := object.NewEnvironment()
-			DefineMacros(program, macroEnv)
-			expanded := ExpandMacros(program, macroEnv)
-			evaluated := Eval(expanded, env)
+			evaluated := Eval(program, env)
 			if evaluated != nil {
 				return evaluated.Inspect()
 			}

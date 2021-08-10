@@ -16,10 +16,8 @@ const (
 	FUNCTION_OBJ     = "FUNCTION"
 	HASH_OBJ         = "HASH"
 	INTEGER_OBJ      = "INTEGER"
-	MACRO_OBJ        = "MACRO"
 	MODULE_OBJ       = "MODULE"
 	NULL_OBJ         = "NULL"
-	QUOTE_OBJ        = "QUOTE"
 	RETURN_VALUE_OBJ = "RETURN_VALUE"
 	STRING_OBJ       = "STRING"
 )
@@ -36,10 +34,8 @@ var SystemTypesMap = map[Type]Object{
 	FUNCTION_OBJ:     &Function{},
 	HASH_OBJ:         &Hash{},
 	INTEGER_OBJ:      &Integer{},
-	MACRO_OBJ:        &Macro{},
 	MODULE_OBJ:       &Module{},
 	NULL_OBJ:         &Null{},
-	QUOTE_OBJ:        &Quote{},
 	RETURN_VALUE_OBJ: &ReturnValue{},
 	STRING_OBJ:       &String{},
 }

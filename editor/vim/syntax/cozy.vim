@@ -29,14 +29,11 @@ syn keyword     cozyBuiltins
             \ fs
             \ http
             \ json
-            \ macro
             \ math
             \ net
             \ print
-            \ quote
             \ sys
             \ time
-            \ unquote
 syn keyword     cozyBoolean             true false
 hi def link     cozyBuiltins            Identifier
 hi def link     cozyBoolean             Boolean

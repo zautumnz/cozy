@@ -55,18 +55,15 @@
     "int"
     "last"
     "len"
-    "macro"
     "match"
     "math"
     "net"
     "print"
-    "quote"
     "read"
     "rest"
     "string"
     "sys"
     "type"
-    "unquote"
     "version"
     ))
 

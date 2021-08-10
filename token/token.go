@@ -44,7 +44,6 @@ const (
 	LPAREN          = "("
 	LT              = "<"
 	LT_EQUALS       = "<="
-	MACRO           = "MACRO"
 	MINUS           = "-"
 	MINUS_EQUALS    = "-="
 	MINUS_MINUS     = "--"
@@ -82,7 +81,6 @@ var keywords = map[string]Type{
 	"import":  IMPORT,
 	"in":      IN,
 	"let":     LET,
-	"macro":   MACRO,
 	"mutable": MUTABLE,
 	"null":    NULL,
 	"return":  RETURN,

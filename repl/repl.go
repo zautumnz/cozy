@@ -34,7 +34,6 @@ func filterInput(r rune) (rune, bool) {
 func Start(in io.Reader, out io.Writer, stdlib string) {
 	utils.SetReplOrRun(true)
 	env := object.NewEnvironment()
-	macroEnv := object.NewEnvironment()
 
 	if useFancyRepl() {
 		l, err := readline.NewEx(&readline.Config{
@@ -72,9 +71,7 @@ func Start(in io.Reader, out io.Writer, stdlib string) {
 				parser.PrintParserErrors(parser.ParserErrorsParams{Errors: p.Errors(), Out: out})
 				continue
 			}
-			evaluator.DefineMacros(program, macroEnv)
-			expanded := evaluator.ExpandMacros(program, macroEnv)
-			evaluated := evaluator.Eval(expanded, env)
+			evaluated := evaluator.Eval(program, env)
 			if evaluated != nil {
 				io.WriteString(out, evaluated.Inspect())
 				io.WriteString(out, "\n")
@@ -97,9 +94,7 @@ func Start(in io.Reader, out io.Writer, stdlib string) {
 				parser.PrintParserErrors(parser.ParserErrorsParams{Errors: p.Errors(), Out: out})
 				continue
 			}
-			evaluator.DefineMacros(program, macroEnv)
-			expanded := evaluator.ExpandMacros(program, macroEnv)
-			evaluated := evaluator.Eval(expanded, env)
+			evaluated := evaluator.Eval(program, env)
 			if evaluated != nil {
 				io.WriteString(out, evaluated.Inspect())
 				io.WriteString(out, "\n")
