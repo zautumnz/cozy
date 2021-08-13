@@ -125,6 +125,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.LBRACE, p.ParseHashLiteral)
 	p.registerPrefix(token.LBRACKET, p.ParseArrayLiteral)
 	p.registerPrefix(token.CURRENT_ARGS, p.parseCurrentArgsLiteral)
+	p.registerPrefix(token.SPREAD, p.parseSpreadLiteral)
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 	p.registerPrefix(token.NULL, p.parseNull)
@@ -670,6 +671,14 @@ func (p *Parser) parseCurrentArgsLiteral() ast.Expression {
 	return &ast.CurrentArgsLiteral{Token: p.curToken}
 }
 
+// ....
+func (p *Parser) parseSpreadLiteral() ast.Expression {
+	exp := &ast.SpreadLiteral{Token: p.curToken}
+	p.nextToken()
+	exp.Right = p.parseExpression(PREFIX)
+	return exp
+}
+
 // parseFunctionParameters parses the parameters used for a function.
 func (p *Parser) parseFunctionParameters() (map[string]ast.Expression, []*ast.Identifier) {
 
@@ -759,7 +768,7 @@ func (p *Parser) parseExpressionList(end token.Type) []ast.Expression {
 	return list
 }
 
-// parseInfixExpression parses an array index expression.
+// parseIndexExpression parses an array index expression.
 func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression {
 	exp := &ast.IndexExpression{Token: p.curToken, Left: left}
 	p.nextToken()
@@ -770,7 +779,7 @@ func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression {
 	return exp
 }
 
-// parseAssignExpression parses a bare assignment, without a `mutable`.
+// parseAssignExpression parses a bare assignment, without a `mutable` or `let`
 func (p *Parser) parseAssignExpression(name ast.Expression) ast.Expression {
 	stmt := &ast.AssignStatement{Token: p.curToken}
 	if n, ok := name.(*ast.Identifier); ok {

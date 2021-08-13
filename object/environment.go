@@ -25,6 +25,9 @@ type Environment struct {
 
 	// Args used when creating this env. Used in ...
 	CurrentArgs []Object
+
+	// Spread elements from an array, used in ....
+	SpreadElements []Object
 }
 
 // NewEnvironment creates new environment

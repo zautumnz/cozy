@@ -531,6 +531,20 @@ func (cal *CurrentArgsLiteral) String() string {
 	return "..."
 }
 
+type SpreadLiteral struct {
+	// Token is ....
+	Token token.Token
+
+	// Right is the value being spread out of
+	Right Expression
+}
+
+func (s *SpreadLiteral) expressionNode()      {}
+func (s *SpreadLiteral) TokenLiteral() string { return s.Token.Literal }
+func (s *SpreadLiteral) String() string {
+	return "...."
+}
+
 // CallExpression holds the invokation of a method-call.
 type CallExpression struct {
 	// Token stores the literal token

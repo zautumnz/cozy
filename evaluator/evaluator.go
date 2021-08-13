@@ -162,9 +162,9 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		return &object.Array{Elements: elements}
 	case *ast.StringLiteral:
 		return &object.String{Value: Interpolate(node.Value, env)}
+	case *ast.SpreadLiteral:
+		return evalSpread(node, env)
 	case *ast.CurrentArgsLiteral:
-		// TODO: turn an args literal into just a regular array so it can be
-		// used like regular values without an additional loop
 		return &object.Array{Token: node.Token, Elements: env.CurrentArgs, IsCurrentArgs: true}
 	case *ast.IndexExpression:
 		left := Eval(node.Left, env)
@@ -754,8 +754,6 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) o
 	return NULL
 }
 
-// TODO: possibly change this to return false on empty objects?
-// that way we could do something like if ([]) // and have it work
 func isTruthy(obj object.Object) bool {
 	switch obj {
 	case TRUE:
@@ -1067,4 +1065,24 @@ func objectToNativeBoolean(o object.Object) bool {
 	default:
 		return true
 	}
+}
+
+func evalSpread(node ast.Node, env *object.Environment) object.Object {
+	switch n := node.(type) {
+	case *ast.SpreadLiteral:
+		a := n.Right.TokenLiteral()
+		val, ok := env.Get(a)
+		if !ok {
+			return NewError("%s is unknown", a)
+		}
+
+		switch ao := val.(type) {
+		case *object.Array:
+			return &object.Array{Elements: ao.Elements, IsCurrentArgs: true}
+		default:
+			return NewError("spread expected an array, got %s", ao.Type())
+		}
+	}
+
+	return NULL
 }

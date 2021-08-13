@@ -7,8 +7,17 @@ x(1, 2);
 x("hi", 10.1, {"a": "b"});
 
 let y = fn () {
-    # TODO: if the ... literal is changed to just return
-    # a regular array, the array_from global can go away
+    # array_from is a global to gather elements into an array
     print(array_from(...))
 }
 y(1, 2, 3)
+
+# using the .... spread operator, which is the opposite of array_from
+let whatever = fn () {
+    print(...)
+}
+let thing = fn () {
+    let gathered = array_from(...)
+    return whatever(....gathered)
+}
+thing(1, 2, 3)

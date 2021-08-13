@@ -102,7 +102,7 @@ print(memoized(1, 2, 3))
 print(memoized(1, 2, 3))
 
 # curry
-# TODO: this working depends on a spread-type operator
+# TODO: not quite correct yet
 # let curried = curry(adder)
 # let first = curried(1)
 # let second = first(1)

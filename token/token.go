@@ -66,6 +66,7 @@ const (
 	SEMICOLON       = ";"
 	SLASH           = "/"
 	SLASH_EQUALS    = "/="
+	SPREAD          = "...."
 	STRING          = "STRING"
 	TRUE            = "TRUE"
 )

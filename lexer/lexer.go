@@ -113,15 +113,25 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.COMMA, l.ch)
 	case rune('.'):
 		if l.peekChar() == rune('.') {
+			// range, args, or spread
 			l.readChar()
-
 			if l.peekChar() == rune('.') {
-				tok = token.Token{Type: token.CURRENT_ARGS, Literal: "..."}
+				// args or spread
 				l.readChar()
+				if l.peekChar() == rune('.') {
+					// spread
+					tok = token.Token{Type: token.SPREAD, Literal: "...."}
+					l.readChar()
+				} else {
+					// args
+					tok = token.Token{Type: token.CURRENT_ARGS, Literal: "..."}
+				}
 			} else {
+				// range
 				tok = token.Token{Type: token.RANGE, Literal: ".."}
 			}
 		} else {
+			// just a dot
 			tok = newToken(token.PERIOD, l.ch)
 		}
 	case rune('+'):

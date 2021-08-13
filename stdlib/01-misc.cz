@@ -16,8 +16,6 @@ let sys.in_repl = fn () {
     return sys.getenv("COZY_RUNNING_IN_REPL") == "true"
 };
 
-# TODO: if the ... literal is changed to just return a regular array,
-# this function and its usages can go away
 let array_from = fn () {
     'array_from is a global function used to convert an unknown
     number of arguments into an array. It should be passed the ...
@@ -110,6 +108,7 @@ let memoize = fn (f) {
     }
 }
 
+# TODO: this still needs work
 let curry = fn (f) {
     'curry takes a function and curries it so it can be applied gradually.'
     mutable f_args = []
@@ -123,8 +122,7 @@ let curry = fn (f) {
             return inner
         }
 
-        # TODO: this is incomplete, depends on a "spread" type operator
-        let res = f(f_args)
+        let res = f(....f_args)
         f_args = []
         return res
     }

@@ -10,8 +10,6 @@ v1 work:
 * Improve all Go error messages
 * Remove other extraneous things from readline fork
 * Find and remove any unused Go code
-* Add splat/spread operator and finish curry fn
-* Possibly change the ... literal to return a regular array
 * Remove requirement for braces in if/else expressions
 * Nested interpolations
 * Maybe combine float/integer to just one number type?

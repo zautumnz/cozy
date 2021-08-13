@@ -22,6 +22,7 @@ hi def link     cozyRepeat            Repeat
 
 " Predefined functions and values
 syn keyword     cozyBuiltins
+            \ array_from
             \ async
             \ await
             \ background
