@@ -7,49 +7,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/zacanger/cozy/lexer"
 	"github.com/zacanger/cozy/object"
-	"github.com/zacanger/cozy/parser"
-	"github.com/zacanger/cozy/utils"
 )
-
-// Evaluate a string containing cozy code
-// This creates basically a whole new instance of cozy,
-// which is inefficient, but it's the same thing we do when
-// evaling modules and working with string interpolation.
-func evalFn(env *object.Environment, args ...object.Object) object.Object {
-	if len(args) != 1 {
-		return NewError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-	switch args[0].(type) {
-	case *object.String:
-		txt := args[0].(*object.String).Value
-
-		// Lex the input
-		l := lexer.New(txt)
-
-		// parse it.
-		p := parser.New(l)
-
-		// If there are no errors
-		program := p.ParseProgram()
-		if len(p.Errors()) == 0 {
-			// evaluate it, and return the output.
-			return Eval(program, env)
-		}
-
-		// Otherwise abort. We should have try { } catch
-		// to allow this kind of error to be caught in the future!
-		fmt.Printf("Error parsing eval-string: %s", txt)
-		for _, msg := range p.Errors() {
-			fmt.Printf("\t%s\n", msg)
-		}
-		utils.ExitConditionally(1)
-	}
-	return NewError("argument to `eval` not supported, got=%s",
-		args[0].Type())
-}
 
 // convert a string to a float
 func floatFn(args ...object.Object) object.Object {
@@ -210,10 +169,6 @@ func typeFn(args ...object.Object) object.Object {
 }
 
 func init() {
-	RegisterBuiltin("eval",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return evalFn(env, args...)
-		})
 	RegisterBuiltin("int",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return intFn(args...)

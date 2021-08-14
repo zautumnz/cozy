@@ -628,7 +628,6 @@ func (p *Parser) parseBlockStatementWithoutBraces() *ast.BlockStatement {
 	p.nextToken()
 	stmt := p.parseStatement()
 	block.Statements = append(block.Statements, stmt)
-	// p.nextToken()
 	return block
 }
 

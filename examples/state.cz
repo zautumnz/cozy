@@ -4,13 +4,9 @@ let dec = "DECREMENT"
 
 let counter = fn(state, action) {
     let t = action.type
-    if (t == inc) {
-        return state + 1
-    } else if (t == dec) {
-        return state - 1
-    } else {
-        return state
-    }
+    if t == inc return state + 1
+    if t == dec return state - 1
+    return state
 };
 
 let store = create_state(counter, 0)

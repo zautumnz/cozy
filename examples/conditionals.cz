@@ -25,5 +25,10 @@ print(
 let asdf = if 1 > 2 { true } else { false };
 print(asdf);
 
-# braces are optional, so this also works:
-if 1 == 2 print("1 == 2") else if 1 == 1 print("correct!") else print("whoops")
+# braces are optional, so this also works
+# (note that whitespace is essentially ignored if there
+# are no braces, so consequences can only be one statement):
+if 1 == 2 print("1 == 2") else
+if 3 == 4
+print("oh boy")
+else if 1 == 1 print("correct!") else print("whoops")

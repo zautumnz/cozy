@@ -201,8 +201,8 @@ func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) obje
 
 // EvalModule evaluates the named module and returns a *object.Module object
 // This creates a whole new cozy instance (lexer, parser, env, and evaluator),
-// which isn't ideal, but we also do this with calls to stdlib's `eval()` and
-// when interpreting interpolated strings.
+// which isn't ideal, but we also do this when working with string
+// interpolation.
 func EvalModule(name string) object.Object {
 	filename := FindModule(name)
 	if filename == "" {
