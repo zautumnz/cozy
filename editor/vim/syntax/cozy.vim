@@ -35,6 +35,7 @@ syn keyword     cozyBuiltins
             \ print
             \ sys
             \ time
+            \ type
 syn keyword     cozyBoolean             true false
 hi def link     cozyBuiltins            Identifier
 hi def link     cozyBoolean             Boolean

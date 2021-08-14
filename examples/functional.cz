@@ -102,9 +102,9 @@ print(memoized(1, 2, 3))
 print(memoized(1, 2, 3))
 
 # curry
-# TODO: not quite correct yet
+# TODO: spread isn't working in the stdlib
 # let curried = curry(adder)
 # let first = curried(1)
-# let second = first(1)
-# let third = second(1)()
+# let second = first(2)
+# let third = second(3)()
 # print(third)

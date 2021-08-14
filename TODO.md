@@ -10,15 +10,15 @@ v1 work:
 * Improve all Go error messages
 * Remove other extraneous things from readline fork
 * Find and remove any unused Go code
-* Remove requirement for braces in if/else expressions
 * Nested interpolations
 * Maybe combine float/integer to just one number type?
-* Convenience method for creating new hashes
+* Convenience method for creating new hashes (in Go code)
 * Assertions are somehow creating globals? Reproduction:
     * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
         inline IIFEs
 
 v2 work:
+* Date object or additions to core time module
 * Markdown parser
 * Move as much of the stdlib into cozy (out of Go) as possible
 * Optionally indent json in json.serialize

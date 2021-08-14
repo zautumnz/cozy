@@ -438,15 +438,13 @@ func (p *Parser) parseIfExpression() ast.Expression {
 		return nil
 	}
 
-	// Now "{"
-	if !p.expectPeek(token.LBRACE) {
-		msg := fmt.Sprintf("expected '{' but got %s", p.curToken.Literal)
-		p.errors = append(p.errors, msg)
-		return nil
-	}
-
 	// The consequence
-	expression.Consequence = p.parseBlockStatement()
+	if !p.peekTokenIs(token.LBRACE) {
+		expression.Consequence = p.parseBlockStatementWithoutBraces()
+	} else {
+		p.nextToken()
+		expression.Consequence = p.parseBlockStatement()
+	}
 	if expression.Consequence == nil {
 		p.errors = append(p.errors, "unexpected nil expression")
 		return nil
@@ -458,9 +456,7 @@ func (p *Parser) parseIfExpression() ast.Expression {
 
 		// else if
 		if p.peekTokenIs(token.IF) {
-
 			p.nextToken()
-
 			expression.Alternative = &ast.BlockStatement{
 				Statements: []ast.Statement{
 					&ast.ExpressionStatement{
@@ -468,22 +464,23 @@ func (p *Parser) parseIfExpression() ast.Expression {
 					},
 				},
 			}
-
 			return expression
 		}
 
 		// else { block }
-		if !p.expectPeek(token.LBRACE) {
-			msg := fmt.Sprintf("expected '{' but got %s", p.curToken.Literal)
-			p.errors = append(p.errors, msg)
-			return nil
+		if !p.peekTokenIs(token.LBRACE) {
+			expression.Alternative = p.parseBlockStatementWithoutBraces()
+		} else {
+			p.nextToken()
+			expression.Alternative = p.parseBlockStatement()
 		}
-		expression.Alternative = p.parseBlockStatement()
+
 		if expression.Alternative == nil {
 			p.errors = append(p.errors, "unexpected nil expression")
 			return nil
 		}
 	}
+
 	return expression
 }
 
@@ -622,6 +619,17 @@ func (p *Parser) parseImportExpression() ast.Expression {
 	}
 
 	return expression
+}
+
+// parseBlockStatementWithoutBraces parses a block.
+func (p *Parser) parseBlockStatementWithoutBraces() *ast.BlockStatement {
+	block := &ast.BlockStatement{Token: p.curToken}
+	block.Statements = []ast.Statement{}
+	p.nextToken()
+	stmt := p.parseStatement()
+	block.Statements = append(block.Statements, stmt)
+	// p.nextToken()
+	return block
 }
 
 // parseBlockStatement parses a block.

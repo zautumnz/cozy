@@ -108,7 +108,6 @@ let memoize = fn (f) {
     }
 }
 
-# TODO: this still needs work
 let curry = fn (f) {
     'curry takes a function and curries it so it can be applied gradually.'
     mutable f_args = []
@@ -122,6 +121,7 @@ let curry = fn (f) {
             return inner
         }
 
+        # TODO: why is spread not working here?
         let res = f(....f_args)
         f_args = []
         return res
