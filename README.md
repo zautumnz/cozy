@@ -21,6 +21,8 @@ standard library.
 ## Example
 
 ```cozy
+# contrived example to show off some features and syntax; see the ./examples
+# directory for more.
 # reduce is a built-in method on arrays, int? is a built-in type checking
 # function, and sum is a built-in method on arrays, but this example shows
 # how they might be implemented by a user.
@@ -119,7 +121,6 @@ entered code will be evaluated when you exit with `ctrl+d`.
 Global functions:
 
 * `async`/`await` for async functions
-* `eval` evals a cozy string
 * `float` converts to a float
 * `import` imports another cozy file as a module
 * `int` convert the given float/string to an integer

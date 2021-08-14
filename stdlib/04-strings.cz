@@ -121,7 +121,6 @@ let string.split = fn(sep = " \r\t\n") {
 
         # is the character one of our split-characters?
         if (sep.find(c) != -1) {
-
             # append any previously-accumulated token into our array.
             if (len(tmp) > 0) {
                 r = r.append(tmp);

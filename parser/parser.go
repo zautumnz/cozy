@@ -563,7 +563,6 @@ func (p *Parser) parseForEach() ast.Expression {
 
 	// If we find a "," we then get a second identifier too.
 	if p.peekTokenIs(token.COMMA) {
-
 		// Generally we have:
 		//    foreach IDENT in THING { .. }
 		// If we have two arguments the first becomes
@@ -637,7 +636,6 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 	block.Statements = []ast.Statement{}
 	p.nextToken()
 	for !p.curTokenIs(token.RBRACE) {
-
 		// Don't loop forever
 		if p.curTokenIs(token.EOF) {
 			p.errors = append(p.errors,
@@ -688,7 +686,6 @@ func (p *Parser) parseSpreadLiteral() ast.Expression {
 
 // parseFunctionParameters parses the parameters used for a function.
 func (p *Parser) parseFunctionParameters() (map[string]ast.Expression, []*ast.Identifier) {
-
 	// Any default parameters.
 	m := make(map[string]ast.Expression)
 
@@ -704,7 +701,6 @@ func (p *Parser) parseFunctionParameters() (map[string]ast.Expression, []*ast.Id
 
 	// Keep going until we find a ")"
 	for !p.curTokenIs(token.RPAREN) {
-
 		if p.curTokenIs(token.EOF) {
 			p.errors = append(p.errors, "unterminated function parameters")
 			return nil, nil

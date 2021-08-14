@@ -1,7 +1,7 @@
 # TODO
 
 v1 work:
-* Errors and exceptions: As values? Try/catch? Stack traces?
+* Gather most of stdlib_core into a namespaced module
 * At least 50% code coverage
 * More than one level of dot access doesn't seem to always work
 * Confirm that everything under ./examples works

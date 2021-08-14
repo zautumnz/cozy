@@ -19,7 +19,6 @@ func (r *ReturnValue) Inspect() string {
 // GetMethod returns a method against the object.
 // (Built-in methods only.)
 func (r *ReturnValue) GetMethod(string) BuiltinFunction {
-
 	// There are no methods available upon a return-object.
 	return nil
 }

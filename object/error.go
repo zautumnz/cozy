@@ -12,6 +12,12 @@ type Error struct {
 
 	// Optional exit code
 	Code *int
+
+	// If we're calling the error() builtin
+	BuiltinCall bool
+
+	// Any extra data
+	Data string
 }
 
 // Type returns the type of this object.
@@ -25,13 +31,15 @@ func (e *Error) Inspect() string {
 	if e.Code != nil {
 		msg += "; CODE: " + fmt.Sprint(*e.Code)
 	}
+	if e.Data != "" {
+		msg += "; DATA: " + fmt.Sprint(e.Data)
+	}
 	return msg
 }
 
 // GetMethod returns a method against the object.
 // (Built-in methods only.)
 func (e *Error) GetMethod(string) BuiltinFunction {
-
 	// There are no methods available upon a return-object.
 	return nil
 }
@@ -48,6 +56,10 @@ func (e *Error) Json() string {
 	if e.Code != nil {
 		s += `,"code":` + fmt.Sprint(*e.Code)
 	}
+	if e.Data != "" {
+		s += `,"data":` + fmt.Sprint(*e.Code)
+	}
+
 	s += "}"
 	return s
 }

@@ -1,0 +1,22 @@
+let asdf = fn () {
+    if 1 == 2 {
+        return error("oh no")
+    }
+}
+let e = asdf()
+if (e) {
+    print(e)
+}
+
+let ghjkl = fn () {
+    let err = error({
+        "message": "oh no!",
+        "code": 2,
+        "data": [1,2,3],
+    })
+    return err
+}
+
+let ee = ghjkl()
+print(json.serialize(ee))
+panic(ee)

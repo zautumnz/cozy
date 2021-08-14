@@ -93,7 +93,6 @@ func (s *String) Reset() {
 // Next implements the Iterable interface, and allows the contents
 // of our string to be iterated over.
 func (s *String) Next() (Object, Object, bool) {
-
 	if s.offset < utf8.RuneCountInString(s.Value) {
 		s.offset++
 

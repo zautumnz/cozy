@@ -26,12 +26,14 @@ syn keyword     cozyBuiltins
             \ async
             \ await
             \ background
+            \ error
             \ exit
             \ fs
             \ http
             \ json
             \ math
             \ net
+            \ panic
             \ print
             \ sys
             \ time

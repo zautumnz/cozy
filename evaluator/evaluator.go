@@ -30,13 +30,12 @@ var builtins = map[string]*object.Builtin{}
 
 // Eval is our core function for evaluating nodes.
 func Eval(node ast.Node, env *object.Environment) object.Object {
-	return EvalContext(context.Background(), node, env)
+	return evalContext(context.Background(), node, env)
 }
 
-// EvalContext is our core function for evaluating nodes.
+// evalContext is our core function for evaluating nodes.
 // The context.Context provided can be used to cancel a running script instance.
-func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) object.Object {
-
+func evalContext(ctx context.Context, node ast.Node, env *object.Environment) object.Object {
 	// We test our context at every iteration of our main-loop.
 	select {
 	case <-ctx.Done():
@@ -46,7 +45,6 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 	}
 
 	switch node := node.(type) {
-
 	//Statements
 	case *ast.Program:
 		return evalProgram(node, env)
@@ -98,22 +96,13 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		return evalForeachExpression(node, env)
 	case *ast.ReturnStatement:
 		val := Eval(node.ReturnValue, env)
-		if isError(val) {
-			return val
-		}
 		return &object.ReturnValue{Value: val}
 	case *ast.MutableStatement:
 		val := Eval(node.Value, env)
-		if isError(val) {
-			return val
-		}
 		env.Set(node.Name.Value, val)
 		return val
 	case *ast.LetStatement:
 		val := Eval(node.Value, env)
-		if isError(val) {
-			return val
-		}
 		env.SetLet(node.Name.Value, val)
 		return val
 	case *ast.Identifier:
@@ -141,15 +130,18 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 			}
 		}
 
-		if len(args) == 1 && isError(args[0]) {
-			return args[0]
-		}
-
 		res := ApplyFunction(env, function, args)
-		if isError(res) {
-			fmt.Fprintf(os.Stderr, "Error calling `%s` : %s\n", node.Function, res.Inspect())
-			utils.ExitConditionally(1)
-			return res
+
+		switch t := res.(type) {
+		case *object.Error:
+			c := 1
+			if t.Code != nil {
+				c = int(*t.Code)
+			}
+			if !t.BuiltinCall {
+				fmt.Fprintf(os.Stderr, "Error calling `%s` : %s\n", node.Function, res.Inspect())
+				utils.ExitConditionally(c)
+			}
 		}
 
 		return res
@@ -191,7 +183,7 @@ func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) obje
 		result = Eval(statement, env)
 		if result != nil {
 			rt := result.Type()
-			if rt == object.RETURN_VALUE_OBJ || rt == object.ERROR_OBJ {
+			if rt == object.RETURN_VALUE_OBJ {
 				return result
 			}
 		}
@@ -239,8 +231,10 @@ func evalImportExpression(ie *ast.ImportExpression, env *object.Environment) obj
 		if isError(attrs) {
 			return attrs
 		}
+
 		return &object.Module{Name: s.Value, Attrs: attrs}
 	}
+
 	return NewError("ImportError: invalid import path '%s'", name)
 }
 
@@ -584,11 +578,11 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 	}
 	if isTruthy(condition) {
 		return Eval(ie.Consequence, env)
-	} else if ie.Alternative != nil {
-		return Eval(ie.Alternative, env)
-	} else {
-		return NULL
 	}
+	if ie.Alternative != nil {
+		return Eval(ie.Alternative, env)
+	}
+	return NULL
 }
 
 func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val object.Object) {
@@ -620,7 +614,6 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 		return res
 
 	case "-=":
-
 		// Get the current value
 		current, ok := env.Get(a.Name.String())
 		if !ok {
@@ -653,7 +646,6 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 		return res
 
 	case "/=":
-
 		// Get the current value
 		current, ok := env.Get(a.Name.String())
 		if !ok {
@@ -678,6 +670,7 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 
 		env.Set(a.Name.String(), evaluated)
 	}
+
 	return evaluated
 }
 
@@ -702,7 +695,6 @@ func evalForLoopExpression(fle *ast.ForLoopExpression, env *object.Environment) 
 
 // handle "for x [,y] in .."
 func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) object.Object {
-
 	// expression
 	val := Eval(fle.Value, env)
 
@@ -730,7 +722,6 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) o
 	ret, idx, ok := helper.Next()
 
 	for ok {
-
 		// Set the index + name
 		child.Set(fle.Ident, ret)
 
@@ -774,10 +765,9 @@ func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 		switch result := result.(type) {
 		case *object.ReturnValue:
 			return result.Value
-		case *object.Error:
-			return result
 		}
 	}
+
 	return result
 }
 
@@ -809,6 +799,7 @@ func evalExpression(exps []ast.Expression, env *object.Environment) []object.Obj
 		}
 		result = append(result, evaluated)
 	}
+
 	return result
 }
 
@@ -927,8 +918,8 @@ func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Obje
 		pairs[hashed] = object.HashPair{Key: key, Value: value}
 
 	}
-	return &object.Hash{Pairs: pairs}
 
+	return &object.Hash{Pairs: pairs}
 }
 
 // ApplyFunction applies a function in an environment
@@ -1011,7 +1002,6 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 
 		// Look for "$type.name", or "object.name"
 		for _, prefix := range attempts {
-
 			// What we're attempting to execute.
 			name := prefix + "." + k.Value
 

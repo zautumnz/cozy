@@ -9,7 +9,7 @@ let b:did_ftplugin = 1
 let s:cpo_save = &cpo
 set cpo&vim
 
-let b:undo_ftplugin = "setl fo< com< cms< tw< tabstop< softtabtop< sw< et< smartindent< smarttab< autoindent<"
+let b:undo_ftplugin = "setl fo< com< cms< tw< tabstop< softtabstop< sw< et< smartindent< smarttab< autoindent<"
 
 setlocal comments=:#
 setlocal commentstring=#%s

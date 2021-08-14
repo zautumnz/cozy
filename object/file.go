@@ -36,7 +36,6 @@ func (f *File) Inspect() string {
 // Open opens the file - called only from the open-primitive where the
 // Filename will have been filled in for us.
 func (f *File) Open(mode string) error {
-
 	// Special case STDIN, STDOUT, STDERR.
 	// We only need to setup readers/writers for these.
 	if f.Filename == "!STDIN!" {

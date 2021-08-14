@@ -42,7 +42,6 @@ var SystemTypesMap = map[Type]Object{
 
 // Object is the interface that all of our various object-types must implmenet.
 type Object interface {
-
 	// Type returns the type of this object.
 	Type() Type
 
@@ -64,7 +63,6 @@ type Object interface {
 
 // Hashable type can be hashed
 type Hashable interface {
-
 	// HashKey returns a hash key for the given object.
 	HashKey() HashKey
 }
@@ -75,7 +73,6 @@ type Hashable interface {
 // the interface is not implemented then a run-time error will
 // be generated instead.
 type Iterable interface {
-
 	// Reset the state of any previous iteration.
 	Reset()
 

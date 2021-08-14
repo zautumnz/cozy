@@ -185,7 +185,6 @@ func (l *Lexer) NextToken() token.Token {
 				l.prevToken.Type == token.IDENT ||
 				l.prevToken.Type == token.INT ||
 				l.prevToken.Type == token.FLOAT {
-
 				tok = newToken(token.SLASH, l.ch)
 			}
 		}
@@ -315,7 +314,6 @@ func (l *Lexer) readIdentifier() string {
 
 	// Now we to see if our identifier had a period inside it.
 	if strings.Contains(id, ".") {
-
 		ok := false
 		for _, i := range types {
 			if strings.HasPrefix(id, i) {
@@ -392,7 +390,6 @@ func (l *Lexer) readNumber() string {
 
 // read decimal
 func (l *Lexer) readDecimal() token.Token {
-
 	// Read an integer-number.
 	integer := l.readNumber()
 
@@ -490,7 +487,6 @@ func (l *Lexer) peekChar() rune {
 
 // determinate ch is identifier or not
 func isIdentifier(ch rune) bool {
-
 	if unicode.IsLetter(ch) || unicode.IsDigit(ch) || ch == '.' || ch == '?' || ch == '$' || ch == '_' {
 		return true
 	}

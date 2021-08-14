@@ -5,7 +5,6 @@ let dump = fn(hsh) {
 
     mutable i = 0;
     for (i < len(k)) {
-
        # Show the name / type / value
        print("\tEntry has key:" , k[i] ,
              " (type:", type(k[i]), ")",

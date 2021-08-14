@@ -140,7 +140,6 @@ func (e *Environment) Set(name string, val Object) Object {
 // TODO: change this to just use Set, and store Constant as an optional
 // bool on all values
 func (e *Environment) SetLet(name string, val Object) Object {
-
 	// store the value
 	e.store[name] = val
 

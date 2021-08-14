@@ -44,7 +44,6 @@ func envFn(args ...object.Object) object.Object {
 	// First entry is the match, any additional parts
 	// are the capture-groups.
 	for i := 1; i < len(env); i++ {
-
 		// Capture groups start at index 0.
 		k := &object.String{Value: env[i]}
 		v := &object.String{Value: os.Getenv(env[i])}

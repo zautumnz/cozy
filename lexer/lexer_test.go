@@ -375,7 +375,6 @@ let c = 3.113;
 	l := New(input)
 	tok := l.NextToken()
 	for tok.Type != token.EOF {
-
 		tok = l.NextToken()
 	}
 }

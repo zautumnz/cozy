@@ -235,7 +235,6 @@ func (o *opHistory) Enable() {
 
 // save history
 func (o *opHistory) New(current []rune) (err error) {
-
 	// history deactivated
 	if !o.enable {
 		return nil

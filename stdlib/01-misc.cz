@@ -92,6 +92,10 @@ let string? = fn (x) {
     'string? returns true if the value provided is a string.'
     return type(x) == "string"
 };
+let error? = fn (x) {
+    'error? returns true if the value provided is an error.'
+    return type(x) == "error"
+};
 
 let memoize = fn (f) {
     'memoize takes a function and returns a new function,
