@@ -119,3 +119,18 @@ func NewError(format string, a ...interface{}) *object.Error {
 	fmt.Fprintf(os.Stderr, message+"\n")
 	return &object.Error{Message: message}
 }
+
+// StringObjectMap is a map of string keys to cozy objects
+type StringObjectMap map[string]object.Object
+
+// NewHash creates a new cozy Hash
+func NewHash(x StringObjectMap) *object.Hash {
+	res := make(map[object.HashKey]object.HashPair)
+	for k, v := range x {
+		key := &object.String{Value: k}
+		pair := object.HashPair{Key: key, Value: v}
+		res[key.HashKey()] = pair
+	}
+
+	return &object.Hash{Pairs: res}
+}

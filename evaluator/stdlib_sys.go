@@ -35,24 +35,18 @@ func splitCommand(input string) []string {
 	return result
 }
 
-// getenv() -> (Hash)
+// environment() -> (Hash)
 func envFn(args ...object.Object) object.Object {
 	env := os.Environ()
-	newHash := make(map[object.HashKey]object.HashPair)
+	vals := make(StringObjectMap)
 
 	// If we get a match then the output is an array
 	// First entry is the match, any additional parts
 	// are the capture-groups.
 	for i := 1; i < len(env); i++ {
-		// Capture groups start at index 0.
-		k := &object.String{Value: env[i]}
-		v := &object.String{Value: os.Getenv(env[i])}
-
-		newHashPair := object.HashPair{Key: k, Value: v}
-		newHash[k.HashKey()] = newHashPair
+		vals[env[i]] = &object.String{Value: os.Getenv(env[i])}
 	}
-
-	return &object.Hash{Pairs: newHash}
+	return NewHash(vals)
 }
 
 // getenv("PATH") -> string
@@ -146,19 +140,10 @@ func sysExec(args ...object.Object) object.Object {
 	stdout := &object.String{Value: outb.String()}
 	stderr := &object.String{Value: errb.String()}
 
-	// Create keys
-	stdoutKey := &object.String{Value: "stdout"}
-	stdoutHash := object.HashPair{Key: stdoutKey, Value: stdout}
-
-	stderrKey := &object.String{Value: "stderr"}
-	stderrHash := object.HashPair{Key: stderrKey, Value: stderr}
-
-	// Make a new hash, and populate it
-	newHash := make(map[object.HashKey]object.HashPair)
-	newHash[stdoutKey.HashKey()] = stdoutHash
-	newHash[stderrKey.HashKey()] = stderrHash
-
-	return &object.Hash{Pairs: newHash}
+	return NewHash(StringObjectMap{
+		"stdout": stdout,
+		"stderr": stderr,
+	})
 }
 
 // Implemention of "args()" function.
@@ -230,27 +215,11 @@ func cdFn(args ...object.Object) object.Object {
 }
 
 func infoFn(args ...object.Object) object.Object {
-	res := make(map[object.HashKey]object.HashPair)
-
-	os := runtime.GOOS
-	osKey := &object.String{Value: "os"}
-	osVal := &object.String{Value: os}
-	osPair := object.HashPair{Key: osKey, Value: osVal}
-	res[osKey.HashKey()] = osPair
-
-	arch := runtime.GOARCH
-	archKey := &object.String{Value: "arch"}
-	archVal := &object.String{Value: arch}
-	archPair := object.HashPair{Key: archKey, Value: archVal}
-	res[archKey.HashKey()] = archPair
-
-	cpus := runtime.NumCPU()
-	cpusKey := &object.String{Value: "cpus"}
-	cpusVal := &object.Integer{Value: int64(cpus)}
-	cpusPair := object.HashPair{Key: cpusKey, Value: cpusVal}
-	res[cpusKey.HashKey()] = cpusPair
-
-	return &object.Hash{Pairs: res}
+	return NewHash(StringObjectMap{
+		"os":   &object.String{Value: runtime.GOOS},
+		"arch": &object.String{Value: runtime.GOARCH},
+		"cpus": &object.Integer{Value: int64(runtime.NumCPU())},
+	})
 }
 
 func init() {

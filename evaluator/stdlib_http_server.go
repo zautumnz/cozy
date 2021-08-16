@@ -88,51 +88,30 @@ func registerRoute(env *object.Environment, args ...object.Object) object.Object
 }
 
 func httpContextToCozyReq(c *httpContext) object.Object {
-	cReq := make(map[object.HashKey]object.HashPair)
+	cReq := make(StringObjectMap)
 	originalReq := c.Request
+
+	cReq["content_length"] = &object.Integer{Value: originalReq.ContentLength}
+	cReq["content_type"] = &object.String{Value: originalReq.Header.Get("Content-Type")}
+	cReq["method"] = &object.String{Value: originalReq.Method}
+	cReq["url"] = &object.String{Value: string(originalReq.URL.String())}
 
 	// body
 	if originalReq.Body != nil {
-		cReqBodyKey := &object.String{Value: "body"}
 		buf := new(strings.Builder)
 		_, err := io.Copy(buf, originalReq.Body)
 		if err != nil {
 			return NewError("error in body!, %s", err.Error())
 		}
-		cReqBodyVal := &object.String{Value: buf.String()}
-		cReq[cReqBodyKey.HashKey()] = object.HashPair{Key: cReqBodyKey, Value: cReqBodyVal}
+		cReq["body"] = &object.String{Value: buf.String()}
 	}
-
-	// content-length
-	cReqContentLengthKey := &object.String{Value: "content_length"}
-	cReqContentLengthVal := &object.Integer{Value: originalReq.ContentLength}
-	cReq[cReqContentLengthKey.HashKey()] = object.HashPair{Key: cReqContentLengthKey, Value: cReqContentLengthVal}
-
-	// method
-	cReqMethodKey := &object.String{Value: "method"}
-	cReqMethodVal := &object.String{Value: originalReq.Method}
-	cReq[cReqMethodKey.HashKey()] = object.HashPair{Key: cReqMethodKey, Value: cReqMethodVal}
 
 	// headers
-	cReqHeaders := make(map[object.HashKey]object.HashPair)
+	cReqHeaders := make(StringObjectMap)
 	for k, v := range originalReq.Header {
-		key := &object.String{Value: k}
-		val := &object.String{Value: strings.Join(v, ",")}
-		cReqHeaders[key.HashKey()] = object.HashPair{Key: key, Value: val}
-
+		cReqHeaders[k] = &object.String{Value: strings.Join(v, ",")}
 	}
-	cReqHeadersKey := &object.String{Value: "headers"}
-	cReqHeadersVal := &object.Hash{Pairs: cReqHeaders}
-	cReq[cReqHeadersKey.HashKey()] = object.HashPair{Key: cReqHeadersKey, Value: cReqHeadersVal}
-
-	cReqContentTypeKey := &object.String{Value: "content_type"}
-	cReqContentTypeVal := &object.String{Value: originalReq.Header.Get("Content-Type")}
-	cReq[cReqContentTypeKey.HashKey()] = object.HashPair{Key: cReqContentTypeKey, Value: cReqContentTypeVal}
-
-	// url
-	cReqURLKey := &object.String{Value: "url"}
-	cReqURLVal := &object.String{Value: string(originalReq.URL.String())}
-	cReq[cReqURLKey.HashKey()] = object.HashPair{Key: cReqURLKey, Value: cReqURLVal}
+	cReq["headers"] = NewHash(cReqHeaders)
 
 	// params
 	if c.Params != nil {
@@ -140,23 +119,17 @@ func httpContextToCozyReq(c *httpContext) object.Object {
 		for _, el := range c.Params {
 			arr = append(arr, &object.String{Value: el})
 		}
-		cReqParamsKey := &object.String{Value: "params"}
-		cReqParamsVal := &object.Array{Elements: arr}
-		cReq[cReqParamsKey.HashKey()] = object.HashPair{Key: cReqParamsKey, Value: cReqParamsVal}
+		cReq["params"] = &object.Array{Elements: arr}
 	}
 
 	// query string
-	cReqQuery := make(map[object.HashKey]object.HashPair)
+	cReqQuery := make(StringObjectMap)
 	for k, v := range originalReq.URL.Query() {
-		key := &object.String{Value: k}
-		val := &object.String{Value: strings.Join(v, ",")}
-		cReqQuery[key.HashKey()] = object.HashPair{Key: key, Value: val}
+		cReqQuery[k] = &object.String{Value: strings.Join(v, ",")}
 	}
-	cReqQueryKey := &object.String{Value: "query"}
-	cReqQueryVal := &object.Hash{Pairs: cReqQuery}
-	cReq[cReqQueryKey.HashKey()] = object.HashPair{Key: cReqQueryKey, Value: cReqQueryVal}
+	cReq["query"] = NewHash(cReqQuery)
 
-	return &object.Hash{Pairs: cReq}
+	return NewHash(cReq)
 }
 
 func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -194,8 +167,7 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							contentType = &object.String{Value: "text/plain"}
 						}
 						if headers == nil {
-							emptyPairs := make(map[object.HashKey]object.HashPair)
-							headers = &object.Hash{Pairs: emptyPairs}
+							headers = NewHash(StringObjectMap{})
 						}
 						ctx.send(statusCode, body, contentType, headers)
 					default:
@@ -330,21 +302,12 @@ func listen(env *object.Environment, args ...object.Object) object.Object {
 
 func httpServer(env *object.Environment, args ...object.Object) object.Object {
 	httpServerEnv = env
-	res := make(map[object.HashKey]object.HashPair)
 
-	listenKey := &object.String{Value: "listen"}
-	listenVal := &object.Builtin{Fn: listen}
-	res[listenKey.HashKey()] = object.HashPair{Key: listenKey, Value: listenVal}
-
-	routeKey := &object.String{Value: "route"}
-	routeVal := &object.Builtin{Fn: registerRoute}
-	res[routeKey.HashKey()] = object.HashPair{Key: routeKey, Value: routeVal}
-
-	staticKey := &object.String{Value: "static"}
-	staticVal := &object.Builtin{Fn: staticHandler}
-	res[staticKey.HashKey()] = object.HashPair{Key: staticKey, Value: staticVal}
-
-	return &object.Hash{Pairs: res}
+	return NewHash(StringObjectMap{
+		"listen": &object.Builtin{Fn: listen},
+		"route":  &object.Builtin{Fn: registerRoute},
+		"static": &object.Builtin{Fn: staticHandler},
+	})
 }
 
 func init() {

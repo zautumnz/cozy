@@ -378,37 +378,23 @@ func httpClient(args ...object.Object) object.Object {
 	// inner http.Response struct
 	res := resp.resp
 
-	ret := make(map[object.HashKey]object.HashPair)
-
-	resStatusKey := &object.String{Value: "status_code"}
-	resStatusVal := &object.Integer{Value: int64(res.StatusCode)}
-	ret[resStatusKey.HashKey()] = object.HashPair{Key: resStatusKey, Value: resStatusVal}
-
-	resProtoKey := &object.String{Value: "protocol"}
-	resProtoVal := &object.String{Value: res.Proto}
-	ret[resProtoKey.HashKey()] = object.HashPair{Key: resProtoKey, Value: resProtoVal}
-
 	bod, err := resp.Content()
 	if err != nil {
 		return NewError(err.Error())
 	}
-	resBodyKey := &object.String{Value: "body"}
-	resBodyVal := &object.String{Value: bod}
-	ret[resBodyKey.HashKey()] = object.HashPair{Key: resBodyKey, Value: resBodyVal}
-
-	resHeaders := make(map[object.HashKey]object.HashPair)
+	resHeaders := make(StringObjectMap)
 	for k, v := range res.Header {
-		key := &object.String{Value: k}
-		val := &object.String{Value: strings.Join(v, ",")}
-		resHeaders[key.HashKey()] = object.HashPair{Key: key, Value: val}
-
+		resHeaders[k] = &object.String{Value: strings.Join(v, ",")}
 	}
-	resHeadersKey := &object.String{Value: "headers"}
-	resHeadersVal := &object.Hash{Pairs: resHeaders}
-	ret[resHeadersKey.HashKey()] = object.HashPair{Key: resHeadersKey, Value: resHeadersVal}
+	resHeadersVal := NewHash(resHeaders)
 
-	return &object.Hash{Pairs: ret}
+	ret := make(StringObjectMap)
+	ret["status_code"] = &object.Integer{Value: int64(res.StatusCode)}
+	ret["protocol"] = &object.String{Value: res.Proto}
+	ret["body"] = &object.String{Value: bod}
+	ret["headers"] = resHeadersVal
 
+	return NewHash(ret)
 }
 
 func init() {

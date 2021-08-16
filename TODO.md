@@ -12,7 +12,6 @@ v1 work:
 * Find and remove any unused Go code
 * Nested interpolations
 * Maybe combine float/integer to just one number type?
-* Convenience method for creating new hashes (in Go code)
 * Assertions are somehow creating globals? Reproduction:
     * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
         inline IIFEs

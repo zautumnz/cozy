@@ -141,38 +141,12 @@ func statFn(args ...object.Object) object.Object {
 	path := args[0].Inspect()
 	info, err := os.Stat(path)
 
-	res := make(map[object.HashKey]object.HashPair)
 	if err != nil {
 		// Empty hash as we've not yet set anything
-		return &object.Hash{Pairs: res}
+		return NewHash(StringObjectMap{})
 	}
 
-	// Populate the hash
-
-	// size -> int
-	sizeData := &object.Integer{Value: info.Size()}
-	sizeKey := &object.String{Value: "size"}
-	sizeHash := object.HashPair{Key: sizeKey, Value: sizeData}
-	res[sizeKey.HashKey()] = sizeHash
-
-	// mod-time -> int
-	mtimeData := &object.Integer{Value: info.ModTime().Unix()}
-	mtimeKey := &object.String{Value: "mtime"}
-	mtimeHash := object.HashPair{Key: mtimeKey, Value: mtimeData}
-	res[mtimeKey.HashKey()] = mtimeHash
-
-	// Perm -> string
-	permData := &object.String{Value: info.Mode().String()}
-	permKey := &object.String{Value: "perm"}
-	permHash := object.HashPair{Key: permKey, Value: permData}
-	res[permKey.HashKey()] = permHash
-
-	// Mode -> string  (because we want to emphasise the octal nature)
-	m := fmt.Sprintf("%04o", info.Mode().Perm())
-	modeData := &object.String{Value: m}
-	modeKey := &object.String{Value: "mode"}
-	modeHash := object.HashPair{Key: modeKey, Value: modeData}
-	res[modeKey.HashKey()] = modeHash
+	// Populate a hash
 
 	typeStr := "unknown"
 	if info.Mode().IsDir() {
@@ -182,14 +156,15 @@ func statFn(args ...object.Object) object.Object {
 		typeStr = "file"
 	}
 
-	// type: string
-	typeData := &object.String{Value: typeStr}
-	typeKey := &object.String{Value: "type"}
-	typeHash := object.HashPair{Key: typeKey, Value: typeData}
-	res[typeKey.HashKey()] = typeHash
+	res := NewHash(StringObjectMap{
+		"size":  &object.Integer{Value: info.Size()},
+		"mtime": &object.Integer{Value: info.ModTime().Unix()},
+		"perm":  &object.String{Value: info.Mode().String()},
+		"mode":  &object.String{Value: fmt.Sprintf("%04o", info.Mode().Perm())},
+		"type":  &object.String{Value: typeStr},
+	})
 
-	return &object.Hash{Pairs: res}
-
+	return res
 }
 
 // Remove a file/directory.
