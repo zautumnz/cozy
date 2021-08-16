@@ -213,7 +213,6 @@ func errorFn(args ...object.Object) object.Object {
 }
 
 // panic
-// TODO: this could probably be moved to cozy code stdlib
 func panicFn(args ...object.Object) object.Object {
 	switch e := args[0].(type) {
 	case *object.Error:

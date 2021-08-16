@@ -157,7 +157,6 @@ func argsFn(args ...object.Object) object.Object {
 }
 
 // flag("my-flag")
-// TODO: this could possibly be rewritten in cozy using sys.args()
 func flagFn(args ...object.Object) object.Object {
 	// flag we're trying to retrieve
 	name := args[0].(*object.String)

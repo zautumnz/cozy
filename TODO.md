@@ -8,6 +8,7 @@
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs
 * Chores:
+    * Clean up newerror and similar calls now that errors are useful values
     * Gather most of stdlib_core into a namespaced module
     * At least 50% code coverage
     * Confirm that everything under ./examples works
@@ -20,6 +21,7 @@
 ## Possible v2 Features
 
 * Nested interpolations
+* Add tab-completion to the REPL
 * Maybe combine float/integer to just one number type?
 * Date object or additions to core time module
 * Markdown parser

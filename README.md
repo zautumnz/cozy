@@ -80,7 +80,7 @@ Interpreters Book](https://interpreterbook.com), and also includes some pieces
 of [prologic's](https://github.com/prologic/monkey-lang) upstream version and
 [ABS](https://github.com/abs-lang), among others (see comments). The differences
 between cozy and Monkey are too numerous to list here; it's best to think of it
-as a totally separate language. It's written in pure Go with no third-party
+as a totally separate language. It's written in pure Go with minimal third-party
 dependencies, with a large amount of the standard library implemented in cozy
 itself.
 
@@ -111,8 +111,6 @@ entered code will be evaluated when you exit with `ctrl+d`.
     returns (without the `return` keyword) are possible
 * No top level mutable variables, because all top level variables are exported
 * Parens are optional in for and if conditions
-* No third-party libraries in this codebase; all you need to build is a current
-    version of Go
 * No ternary expressions, switch statements, or pattern matching; if statements
     are expressions, so they work for the same use cases
 
