@@ -18,8 +18,6 @@
 ;; (require 'cozy)
 ;; (setq auto-mode-alist (append '(("\\.mon$" . cozy-mode)) auto-mode-alist)))
 
-
-
 ;;; Code:
 
 (defvar cozy-constants
@@ -43,30 +41,25 @@
 ;; The language-core and functions from the standard-library.
 (defvar cozy-functions
   '(
-    "array_from"
-    "async"
-    "await"
-    "background"
+    "array"
+    "core"
     "error"
-    "exit"
-    "file"
-    "first"
+    "float"
+    "fs"
+    "hash"
     "http"
     "import"
-    "int"
-    "last"
-    "len"
-    "match"
+    "integer"
+    "json"
     "math"
     "net"
+    "object"
     "panic"
     "print"
-    "read"
-    "rest"
     "string"
     "sys"
-    "type"
-    "version"
+    "time"
+    "util"
     ))
 
 

@@ -1,4 +1,4 @@
-let create_state = fn(reducer, initial_state) {
+let core.create_state = fn(reducer, initial_state) {
     'create_state takes a reducer and an initial state,
     and returns an object containing methods for managing state.'
     mutable current_reducer = reducer;

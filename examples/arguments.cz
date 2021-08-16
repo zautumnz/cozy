@@ -4,9 +4,9 @@
 # all args
 let x = fn () {
     let a = sys.args();
-    print("We received ", len(a), " arguments to our script.");
+    print("We received ", util.len(a), " arguments to our script.");
     mutable i = 0;
-    for (i < len(a)) {
+    for (i < util.len(a)) {
         print("\t", i, " " , a[i]);
         i++
     }

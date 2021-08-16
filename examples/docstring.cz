@@ -12,7 +12,7 @@ print(id.doc());
 
 # these would be a syntax error; docstrings can _only_
 # appear as the first statement in functions
-# print(type('asdf'));
+# print(util.type('asdf'));
 # print('asdf');
 
 let without_ds = fn () {

@@ -2,24 +2,24 @@
 # and returns an array of matches
 
 # Substring match
-if (len(match("nge", "Zac Anger"))) {
+if (util.len(core.match("nge", "Zac Anger"))) {
    print("Match found");
 }
 
 # Suffix Match
-if (len(match("ger$", "Zac Anger"))) {
+if (util.len(core.match("ger$", "Zac Anger"))) {
    print("Suffix-match OK");
 }
 
 # Prefix-match
-if (len(match("^[A-Z]", "Zac Anger"))) {
+if (util.len(core.match("^[A-Z]", "Zac Anger"))) {
    print("Prefix-match OK");
 }
 
 # IP-address regexp
 let reg = "([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$";
-let out = match(reg, "12.23.21.224");
-if (len(out)) {
+let out = core.match(reg, "12.23.21.224");
+if (util.len(out)) {
    print("We matched an IP address succesfully.");
    print("Captures: ", out.rest().join(" . "))
 } else {

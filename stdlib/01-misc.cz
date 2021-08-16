@@ -16,7 +16,7 @@ let sys.in_repl = fn () {
     return sys.getenv("COZY_RUNNING_IN_REPL") == "true"
 };
 
-let array_from = fn () {
+let util.array_from = fn () {
     'array_from is a global function used to convert an unknown
     number of arguments into an array. It should be passed the ...
     literal representing the parent function\'s args.'
@@ -27,7 +27,7 @@ let array_from = fn () {
     return xs
 }
 
-let assert = fn(val, msg = "Result was not 'true'!") {
+let util.assert = fn(val, msg = "Result was not 'true'!") {
     'assert takes a value and an optional failure message.'
     if (!val) {
         print(msg);
@@ -37,72 +37,72 @@ let assert = fn(val, msg = "Result was not 'true'!") {
     }
 };
 
-assert("true");
-assert(true);
-assert(!false);
-assert(type(sys.STDIN) == "file");
-assert(type(sys.STDOUT) == "file");
-assert(type(sys.STDERR) == "file");
+util.assert("true");
+util.assert(true);
+util.assert(!false);
+util.assert(util.type(sys.STDIN) == "file");
+util.assert(util.type(sys.STDOUT) == "file");
+util.assert(util.type(sys.STDERR) == "file");
 
-let array? = fn (x) {
+let util.array? = fn (x) {
     'array? returns true if the value provided is an array.'
-    return type(x) == "array"
+    return util.type(x) == "array"
 };
-let boolean? = fn (x) {
+let util.boolean? = fn (x) {
     'boolean? returns true if the value provided is a boolean.'
-    return type(x) == "bool"
+    return util.type(x) == "bool"
 };
-let builtin? = fn (x) {
+let util.builtin? = fn (x) {
     'builtin? returns true if the value provided is a builtin.'
-    return type(x) == "builtin"
+    return util.type(x) == "builtin"
 };
-let docstring? = fn (x) {
+let util.docstring? = fn (x) {
     'docstring? returns true if the value provided is a docstring.'
-    return type(x) == "docstring"
+    return util.type(x) == "docstring"
 };
-let file? = fn (x) {
+let util.file? = fn (x) {
     'file? returns true if the value provided is a file.'
-    return type(x) == "file"
+    return util.type(x) == "file"
 };
-let float? = fn (x) {
+let util.float? = fn (x) {
     'float? returns true if the value provided is a float.'
-    return type(x) == "float"
+    return util.type(x) == "float"
 };
-let function? = fn (x) {
+let util.function? = fn (x) {
     'function? returns true if the value provided is a function.'
-    return type(x) == "function"
+    return util.type(x) == "function"
 };
-let hash? = fn (x) {
+let util.hash? = fn (x) {
     'hash? returns true if the value provided is a hash.'
-    return type(x) == "hash"
+    return util.type(x) == "hash"
 };
-let integer? = fn (x) {
+let util.integer? = fn (x) {
     'integer? returns true if the value provided is an integer.'
-    return type(x) == "integer"
+    return util.type(x) == "integer"
 };
-let module? = fn (x) {
+let util.module? = fn (x) {
     'module? returns true if the value provided is a module.'
-    return type(x) == "module"
+    return util.type(x) == "module"
 };
-let number? = fn (x) {
+let util.number? = fn (x) {
      'number? returns true if the value provided is an integer or a float.'
-    return integer?(x) || float?(x)
+    return util.integer?(x) || util.float?(x)
 };
-let string? = fn (x) {
+let util.string? = fn (x) {
     'string? returns true if the value provided is a string.'
-    return type(x) == "string"
+    return util.type(x) == "string"
 };
-let error? = fn (x) {
+let util.error? = fn (x) {
     'error? returns true if the value provided is an error.'
-    return type(x) == "error"
+    return util.type(x) == "error"
 };
 
-let memoize = fn (f) {
+let util.memoize = fn (f) {
     'memoize takes a function and returns a new function,
     and looks up results based on arguments in its internal cache.'
     mutable results = {}
     return fn () {
-        let res = array_from(...).join("__cozy__memo__arg__")
+        let res = util.array_from(...).join("__cozy__memo__arg__")
         if (results.keys().includes?(res)) {
             return results[res]
         }
@@ -112,13 +112,13 @@ let memoize = fn (f) {
     }
 }
 
-let curry = fn (f) {
+let util.curry = fn (f) {
     'curry takes a function and curries it so it can be applied gradually.'
     mutable f_args = []
     let inner = fn () {
-        let inner_args = array_from(...)
+        let inner_args = util.array_from(...)
 
-        if (len(inner_args) > 0) {
+        if (util.len(inner_args) > 0) {
             foreach x in inner_args {
                 f_args = f_args.append(x)
             }
@@ -134,27 +134,27 @@ let curry = fn (f) {
     return inner
 }
 
-let deep_equals = fn (a, b) {
+let util.deep_equals = fn (a, b) {
     'deep_equals takes two values and checks for deep equality.'
     if a == b {
         return true
     }
 
-    if type(a) != type(b) {
+    if util.type(a) != util.type(b) {
         return false
     }
 
     return json.serialize(a) == json.serialize(b)
 }
-assert(deep_equals(1, 1), "deep_equals works on ints")
-assert(deep_equals("a", "a"), "deep_equals works on strings")
-assert(deep_equals([1], [1]), "deep_equals works on arrays")
-assert(deep_equals(
+util.assert(util.deep_equals(1, 1), "deep_equals works on ints")
+util.assert(util.deep_equals("a", "a"), "deep_equals works on strings")
+util.assert(util.deep_equals([1], [1]), "deep_equals works on arrays")
+util.assert(util.deep_equals(
     {"x":[1],"y":{"z":fn(){true}}},
     {"x":[1],"y":{"z":fn(){true}}}
 ), "deep_equals works on complex hashes")
-assert(!deep_equals(1, 2), "deep_equals works negative ints")
-assert(!deep_equals(
+util.assert(!util.deep_equals(1, 2), "deep_equals works negative ints")
+util.assert(!util.deep_equals(
     {"x":[1],"y":{"z":fn(){true}}},
     {"x":[1],"y":{"z":fn(){false}}}
 ), "deep_equals works negative complex hashes")

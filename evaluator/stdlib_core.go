@@ -1,104 +1,92 @@
 package evaluator
 
 import (
-	"fmt"
+	"context"
+	"math/rand"
 	"regexp"
-	"strconv"
-	"strings"
-	"unicode/utf8"
 
 	"github.com/zacanger/cozy/object"
-	"github.com/zacanger/cozy/utils"
 )
 
-// convert a string to a float
-func floatFn(args ...object.Object) object.Object {
-	if len(args) != 1 {
-		return NewError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-	switch args[0].(type) {
-	case *object.String:
-		input := args[0].(*object.String).Value
-		i, err := strconv.Atoi(input)
-		if err == nil {
-			return &object.Float{Value: float64(i)}
-		}
-		return NewError("Converting string '%s' to float failed %s", input, err.Error())
+// Async and await are on code from github.com/Gurpartap/async, Apache 2.0
+// licensed.
 
-	case *object.Boolean:
-		input := args[0].(*object.Boolean).Value
-		if input {
-			return &object.Float{Value: float64(1)}
+type ValueFuture interface {
+	Await() interface{}
+}
 
-		}
-		return &object.Float{Value: float64(0)}
-	case *object.Float:
-		// noop
-		return args[0]
-	case *object.Integer:
-		input := args[0].(*object.Integer).Value
-		return &object.Float{Value: float64(input)}
-	default:
-		return NewError("argument to `float` not supported, got=%s",
-			args[0].Type())
+type valueFuture struct {
+	await func(ctx context.Context) interface{}
+}
+
+func (f valueFuture) Await() interface{} {
+	return f.await(context.Background())
+}
+
+func Async(f func() interface{}) ValueFuture {
+	var result interface{}
+	c := make(chan struct{}, 1)
+	go func() {
+		defer close(c)
+		result = f()
+	}()
+	return valueFuture{
+		await: func(ctx context.Context) interface{} {
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			case <-c:
+				return result
+			}
+		},
 	}
 }
 
-// convert a double/string to an int
-func intFn(args ...object.Object) object.Object {
-	if len(args) != 1 {
-		return NewError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-	switch args[0].(type) {
-	case *object.String:
-		input := args[0].(*object.String).Value
-		i, err := strconv.Atoi(input)
-		if err == nil {
-			return &object.Integer{Value: int64(i)}
-		}
-		return NewError("Converting string '%s' to int failed %s", input, err.Error())
+var asyncFunctions = make(map[int64]ValueFuture)
 
-	case *object.Boolean:
-		input := args[0].(*object.Boolean).Value
-		if input {
-			return &object.Integer{Value: 1}
-
-		}
-		return &object.Integer{Value: 0}
+func awaitFn(env *object.Environment, args ...object.Object) object.Object {
+	var res interface{}
+	var err error
+	switch t := args[0].(type) {
 	case *object.Integer:
-		// noop
-		return args[0]
-	case *object.Float:
-		input := args[0].(*object.Float).Value
-		return &object.Integer{Value: int64(input)}
+		f := asyncFunctions[t.Value]
+		res = f.Await()
 	default:
-		return NewError("argument to `int` not supported, got=%s",
-			args[0].Type())
+		return NewError("Expected async function id, got %s", args[0].Type())
+	}
+
+	if err != nil {
+		return &object.Error{Message: err.Error()}
+	}
+
+	switch x := res.(type) {
+	case object.Object:
+		return x
+	default:
+		return NewError("Something went wrong in await!")
+
 	}
 }
 
-// length of item
-func lenFn(args ...object.Object) object.Object {
-	if len(args) != 1 {
-		return NewError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-	switch arg := args[0].(type) {
-	case *object.String:
-		return &object.Integer{Value: int64(utf8.RuneCountInString(arg.Value))}
-	case *object.DocString:
-		return &object.Integer{Value: int64(utf8.RuneCountInString(arg.Value))}
-	case *object.Array:
-		return &object.Integer{Value: int64(len(arg.Elements))}
-	case *object.Null:
-		return &object.Integer{Value: 0}
-	case *object.Hash:
-		return &object.Integer{Value: int64(len(arg.Pairs))}
+func asyncFn(env *object.Environment, args ...object.Object) object.Object {
+	x := Async(func() interface{} {
+		return ApplyFunction(env, args[0], make([]object.Object, 0))
+	})
+
+	fnID := rand.Int63()
+	asyncFunctions[fnID] = x
+	return &object.Integer{Value: fnID}
+}
+
+func backgroundFn(env *object.Environment, args ...object.Object) object.Object {
+	switch a := args[0].(type) {
+	case *object.Function:
+		go func() {
+			ApplyFunction(env, a, make([]object.Object, 0))
+		}()
+		return NULL
 	default:
-		return NewError("argument to `len` not supported, got=%s",
-			args[0].Type())
+		return NewError("background expected function arg!")
 	}
 }
 
@@ -141,128 +129,21 @@ func matchFn(args ...object.Object) object.Object {
 	return &object.Array{Elements: make([]object.Object, 0)}
 }
 
-// output a string to stdout
-func printFn(args ...object.Object) object.Object {
-	for _, arg := range args {
-		fmt.Print(arg.Inspect() + " ")
-	}
-	fmt.Print("\n")
-	return NULL
-}
-
-func strFn(args ...object.Object) object.Object {
-	if len(args) != 1 {
-		return NewError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-
-	out := args[0].Inspect()
-	return &object.String{Value: out}
-}
-
-// type of an item
-func typeFn(args ...object.Object) object.Object {
-	if len(args) != 1 {
-		return NewError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-	return &object.String{Value: strings.ToLower(string(args[0].Type()))}
-}
-
-// error
-func errorFn(args ...object.Object) object.Object {
-	if len(args) != 1 {
-		return NewError("wrong number of arguments. got=%d, want=1",
-			len(args))
-	}
-	switch t := args[0].(type) {
-	case *object.String:
-		return &object.Error{Message: t.Value, BuiltinCall: true}
-	case *object.Hash:
-		msgStr := &object.String{Value: "message"}
-		codeStr := &object.String{Value: "code"}
-		dataStr := &object.String{Value: "data"}
-		msg := t.Pairs[msgStr.HashKey()].Value
-		code := t.Pairs[codeStr.HashKey()].Value
-		data := t.Pairs[dataStr.HashKey()].Value
-		e := &object.Error{BuiltinCall: true}
-		if msg != nil {
-			switch m := msg.(type) {
-			case *object.String:
-				e.Message = m.Value
-			default:
-				return NewError("error.message should be string!")
-			}
-		}
-		if code != nil {
-			switch c := code.(type) {
-			case *object.Integer:
-				cc := int(c.Value)
-				e.Code = &cc
-			default:
-				return NewError("error.code should be integer!")
-			}
-		}
-		if data != nil {
-			e.Data = data.Json()
-		}
-		return e
-	default:
-		return NewError("error() expected a string or hash!")
-	}
-}
-
-// panic
-func panicFn(args ...object.Object) object.Object {
-	switch e := args[0].(type) {
-	case *object.Error:
-		c := 1
-		fmt.Println(e.Message)
-		if e.Code != nil {
-			c = int(*e.Code)
-		}
-		utils.ExitConditionally(c)
-	default:
-		return NewError("panic expected an error!")
-	}
-	return NULL
-}
-
 func init() {
-	RegisterBuiltin("int",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return intFn(args...)
-		})
-	RegisterBuiltin("float",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return floatFn(args...)
-		})
-	RegisterBuiltin("len",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return lenFn(args...)
-		})
-	RegisterBuiltin("match",
+	RegisterBuiltin("core.match",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return matchFn(args...)
 		})
-	RegisterBuiltin("print",
+	RegisterBuiltin("core.async",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return printFn(args...)
+			return asyncFn(env, args...)
 		})
-	RegisterBuiltin("string",
+	RegisterBuiltin("core.await",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return strFn(args...)
+			return awaitFn(env, args...)
 		})
-	RegisterBuiltin("type",
+	RegisterBuiltin("core.background",
 		func(env *object.Environment, args ...object.Object) object.Object {
-			return typeFn(args...)
-		})
-	RegisterBuiltin("error",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return errorFn(args...)
-		})
-	RegisterBuiltin("panic",
-		func(env *object.Environment, args ...object.Object) object.Object {
-			return panicFn(args...)
+			return backgroundFn(env, args...)
 		})
 }

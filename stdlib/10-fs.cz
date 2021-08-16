@@ -2,11 +2,11 @@ let fs.ls = fn () {
     'fs.ls takes a path and an optional boolean,
     the equivalent of `ls` with an optional -A flag'
     mutable all = false;
-    let opts = array_from(...)
+    let opts = util.array_from(...)
 
     let p = opts[0];
 
-    if len(opts) > 1 {
+    if util.len(opts) > 1 {
         all = opts[1];
     }
 

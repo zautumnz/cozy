@@ -9,7 +9,7 @@ let counter = fn(state, action) {
     return state
 };
 
-let store = create_state(counter, 0)
+let store = core.create_state(counter, 0)
 
 store.subscribe(fn () {
     print("state is", store.get_state())

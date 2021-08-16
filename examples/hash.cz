@@ -1,13 +1,13 @@
 # Dump the hash specified
 let dump = fn(hsh) {
     let k = hsh.keys();
-    print("\tHash has ", len(k) , " keys.");
+    print("\tHash has ", util.len(k) , " keys.");
 
     mutable i = 0;
-    for (i < len(k)) {
+    for (i < util.len(k)) {
        # Show the name / type / value
        print("\tEntry has key:" , k[i] ,
-             " (type:", type(k[i]), ")",
+             " (type:", util.type(k[i]), ")",
              " with value:", h[k[i]]);
        i++;
     }

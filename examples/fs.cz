@@ -4,7 +4,7 @@ let fs_examples = fn () {
     mutable fh = fs.open(name, "w")
     # Now we have a handle we can write (strings) to it:
     fh.write("This is a test")
-    fh.write(string({"foo": "bar", "baz": 8}))
+    fh.write(util.string({"foo": "bar", "baz": 8}))
     # And close it.
     fh.close()
     # Appending
@@ -19,7 +19,7 @@ let fs_examples = fn () {
     # Read a line
     mutable r = fh.read()
     # Loop while that is non-empty
-    for (len(r) > 0) {
+    for (util.len(r) > 0) {
          # Bump the line-count
          lines++
          # strip newlines / space, and show the output
@@ -35,7 +35,7 @@ let fs_examples = fn () {
     fh = fs.open("/etc/passwd", "r")
     lines = fh.lines()
     fh.close()
-    print("Read ", len(lines), " lines")
+    print("Read ", util.len(lines), " lines")
 
     # other operations
     fh = fs.open(name, "w")

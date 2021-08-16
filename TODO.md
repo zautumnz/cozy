@@ -9,13 +9,13 @@
           inline IIFEs
 * Chores:
     * Clean up newerror and similar calls now that errors are useful values
-    * Gather most of stdlib_core into a namespaced module
     * At least 50% code coverage
     * Confirm that everything under ./examples works
     * Complete all lingering TODOs in the code
     * Add argument validation to all internal functions and stdlib
     * Improve all Go error messages
     * Remove other extraneous things from readline fork
+    * Add `name` property to functions
     * Find and remove any unused Go code
 
 ## Possible v2 Features
@@ -37,6 +37,3 @@
 * YAML support
 * TOML support
 * Multiple-db ORM
-* Add some properties to functions (and to all objects?):
-    * name
-    * maybe arguments as a named array, like es5

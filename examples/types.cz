@@ -2,8 +2,8 @@
 # The `type` function returns the type of an item.
 
 let show = fn(input) {
-   print("Type of input was", type(input));
-   print("\tAfter converting to string we found:", string(input));
+   print("Type of input was", util.type(input));
+   print("\tAfter converting to string we found:", util.string(input));
 };
 
 show("String input");

@@ -1,22 +1,22 @@
 let array.first = fn() {
     'array.first returns the first element.'
-    assert(len(self) >= 1, "Array contains no values!")
+    util.assert(util.len(self) >= 1, "Array contains no values!")
 
-    if (len(self) >= 1) {
-        return(self[0]);
+    if (util.len(self) >= 1) {
+        return self[0];
     }
 };
 
-assert([0,1].first() == 0);
-assert(["zac",1].first() == "zac");
+util.assert([0,1].first() == 0);
+util.assert(["zac",1].first() == "zac");
 
 let array.rest = fn() {
     'array.rest returns all but the first element.'
     mutable result = [];
 
-    if (len(self) >= 1) {
+    if (util.len(self) >= 1) {
         mutable i = 1;
-        for (i < len(self)) {
+        for (i < util.len(self)) {
             result = result.append(self[i]);
             i++;
         }
@@ -25,24 +25,24 @@ let array.rest = fn() {
     return result;
 };
 
-assert(len([0,2].rest()) == 1);
-assert(len([0,1,2].rest()) == 2);
-assert(len([0,1,2,3,4,5].rest()) == 5);
-assert(string(["zac", 1].rest()) == "[1]");
+util.assert(util.len([0,2].rest()) == 1);
+util.assert(util.len([0,1,2].rest()) == 2);
+util.assert(util.len([0,1,2,3,4,5].rest()) == 5);
+util.assert(util.string(["zac", 1].rest()) == "[1]");
 
 let array.last = fn() {
     'array.last returns the last element.'
-    assert(len(self) >= 1, "Array contains no values!")
-    return(self[len(self) - 1]);
+    util.assert(util.len(self) >= 1, "Array contains no values!")
+    return self[util.len(self) - 1];
 };
 
-assert([0,2].last() == 2);
+util.assert([0,2].last() == 2);
 
 let array.filter = fn(predicate) {
     'array.filter takes a predicate which should return a boolean,
     and returns a new array filtered based on the predicate.'
     mutable i = 0;
-    let l = len(self);
+    let l = util.len(self);
     mutable result = [];
 
     for (i < l) {
@@ -58,11 +58,11 @@ let array.filter = fn(predicate) {
 };
 
 # Filter an array and keep only values which are "2".
-assert(
+util.assert(
 fn () {
     mutable a = [ 1, 2, 3 , -1, "zac", 44 ];
     a = a.filter(fn(n) { return n == 2 ; });
-    if (string(a) == "[2]") {
+    if (util.string(a) == "[2]") {
         return true;
     } else {
         print(a);
@@ -84,24 +84,24 @@ let array.find = fn(item) {
     return -1;
 };
 
-assert([1,2,3].find(7) == -1);
-assert([1,2,3].find(1) == 0);
-assert([1,2,3].find(3) == 2);
-assert([1,2,3,3].find(3) == 2);
+util.assert([1,2,3].find(7) == -1);
+util.assert([1,2,3].find(1) == 0);
+util.assert([1,2,3].find(3) == 2);
+util.assert([1,2,3,3].find(3) == 2);
 
 let array.includes? = fn(obj) {
     'array.includes? returns a boolean if the array includes the passed element.'
-    return(self.find(obj) != -1);
+    return self.find(obj) != -1;
 };
 
-assert([1,2,3].includes?(2));
-assert(! [1,2,3].includes?(23));
+util.assert([1,2,3].includes?(2));
+util.assert(! [1,2,3].includes?(23));
 
 let array.min = fn() {
     'array.min returns the minimum value in the array, or 0.'
     mutable i = 0;
 
-    let l = len(self);
+    let l = util.len(self);
     if (l < 1) {
         return 0;
     }
@@ -110,8 +110,8 @@ let array.min = fn() {
     mutable min = self[0];
 
     # type checking.
-    if (type(min) != "integer" && type(min) != "float") {
-        print("array.min only works on numbers - not " , type(min));
+    if (util.type(min) != "integer" && util.type(min) != "float") {
+        print("array.min only works on numbers - not " , util.type(min));
         if !sys.in_repl() {
             sys.exit(1);
         }
@@ -120,8 +120,8 @@ let array.min = fn() {
     # If we find a smaller one, set it.
     for (i < l) {
         # type checking.
-        if (type(self[i]) != "integer" && type(self[i]) != "float") {
-            print("array.min only works on numbers - not " , type(self[i]));
+        if (util.type(self[i]) != "integer" && util.type(self[i]) != "float") {
+            print("array.min only works on numbers - not " , util.type(self[i]));
             if !sys.in_repl() {
                 sys.exit(1);
             }
@@ -137,16 +137,16 @@ let array.min = fn() {
     return min;
 };
 
-assert(([1,2,3].min() == 1));
-assert((1..10.min() == 1));
-assert(([-1,-2,-3].min() == -3));
-assert(([].min() == 0), "minimum of an empty array is zero");
+util.assert(([1,2,3].min() == 1));
+util.assert((1..10.min() == 1));
+util.assert(([-1,-2,-3].min() == -3));
+util.assert(([].min() == 0), "minimum of an empty array is zero");
 
 let array.max = fn() {
     'array.max returns the maximum value in the array, or 0.'
     mutable i = 0;
 
-    let l = len(self);
+    let l = util.len(self);
     if (l < 1) {
         return 0;
     }
@@ -155,8 +155,8 @@ let array.max = fn() {
     mutable max = self[0];
 
     # ensure we're dealing with types
-    if (type(max) != "integer" && type(max) != "float") {
-        print("array.max only works on numbers - not " , type(max));
+    if (util.type(max) != "integer" && util.type(max) != "float") {
+        print("array.max only works on numbers - not " , util.type(max));
         if !sys.in_repl() {
             sys.exit(1);
         }
@@ -165,8 +165,8 @@ let array.max = fn() {
     # If we find a greater one, set it.
     for (i < l) {
         # type checking.
-        if (type(self[i]) != "integer" && type(self[i]) != "float") {
-            print("array.max only works on numbers - not " , type(self[i]), "\n");
+        if (util.type(self[i]) != "integer" && util.type(self[i]) != "float") {
+            print("array.max only works on numbers - not " , util.type(self[i]), "\n");
             if !sys.in_repl() {
                 sys.exit(1);
             }
@@ -182,38 +182,38 @@ let array.max = fn() {
     return max;
 };
 
-assert((1..15.max() == 15));
-assert(([1,2,3].max() == 3));
-assert(([-1,-2,-3].max() == -1));
-assert(([].max() == 0), "maximum of an empty array is zero");
+util.assert((1..15.max() == 15));
+util.assert(([1,2,3].max() == 3));
+util.assert(([-1,-2,-3].max() == -1));
+util.assert(([].max() == 0), "maximum of an empty array is zero");
 
 let array.join = fn(char) {
     'array.join joins elements of an array on the passed string.'
     mutable r = "";
     mutable i = 0;
-    let l = len(self);
+    let l = util.len(self);
 
     for (i < l) {
         # If the result is non-empty add the separator.
-        if (len(r) > 0) {
+        if (util.len(r) > 0) {
             r+= char;
         }
 
         # add on the next element.
-        r += string(self[i]);
+        r += util.string(self[i]);
         i++;
     }
 
     return r;
 };
 
-assert([1,2,3].join(".") == "1.2.3");
-assert([1,2,3].join("") == "123");
+util.assert([1,2,3].join(".") == "1.2.3");
+util.assert([1,2,3].join("") == "123");
 
 let array.reverse = fn() {
     'array.reverse reverses the array.'
     mutable r = [];
-    mutable l = len(self);
+    mutable l = util.len(self);
 
     for (l > 0) {
         r = r.append(self[l-1]);
@@ -222,7 +222,7 @@ let array.reverse = fn() {
     return r;
 };
 
-assert(string([1,2,3].reverse()) == "[3, 2, 1]");
+util.assert(util.string([1,2,3].reverse()) == "[3, 2, 1]");
 
 let array.sorted? = fn() {
     'array.sorted? returns true if the array is sorted.'
@@ -232,22 +232,22 @@ let array.sorted? = fn() {
     mutable i = 0;
 
     # Record the types.
-    for (i < len(self)) {
-        tmp = tmp.set(type(self[i]), true);
+    for (i < util.len(self)) {
+        tmp = tmp.set(util.type(self[i]), true);
         i++;
     }
 
     # There can be only one!
-    if (len(tmp.keys()) > 1) {
+    if (util.len(tmp.keys()) > 1) {
         print("Attempting to check an array with mixed-type values!\n");
-        print(string(self));
+        print(util.string(self));
         if !sys.in_repl() {
             sys.exit(1);
         }
     }
 
     mutable i = 1;
-    let l = len(self);
+    let l = util.len(self);
 
     # Array of zero/one element is always sorted.
     if (l < 2) {
@@ -267,9 +267,9 @@ let array.sorted? = fn() {
     return true;
 };
 
-assert([-1,0,1].sorted?());
-assert([1].sorted?());
-assert([].sorted?());
+util.assert([-1,0,1].sorted?());
+util.assert([1].sorted?());
+util.assert([].sorted?());
 
 let array.swap = fn(a, b) {
     'array.swap swaps the value of two array indexes.'
@@ -278,7 +278,7 @@ let array.swap = fn(a, b) {
 
     mutable r = [];
     mutable i = 0;
-    let l = len(self);
+    let l = util.len(self);
 
     for (i < l) {
         if (i == a) {
@@ -295,14 +295,14 @@ let array.swap = fn(a, b) {
     return r;
 };
 
-assert(
+util.assert(
 fn () {
     mutable a = [10,20];
     a = a.swap(0,1);
     if (a[0] == 20) { true; } else { false; }
 }()
 );
-assert(
+util.assert(
 fn () {
     mutable a = [10,20];
     a = a.swap(0,1);
@@ -318,15 +318,15 @@ let array.sort = fn() {
     mutable i = 0;
 
     # Record the types.
-    for (i < len(self)) {
-        tmp = tmp.set(type(self[i]), true);
+    for (i < util.len(self)) {
+        tmp = tmp.set(util.type(self[i]), true);
         i++;
     }
 
     # There can be only one!
-    if (len(tmp.keys()) > 1) {
+    if (util.len(tmp.keys()) > 1) {
         print("Attempting to sort an array with mixed-type values!\n");
-        print(string(self));
+        print(util.string(self));
         if !sys.in_repl() {
             sys.exit(1);
         }
@@ -336,7 +336,7 @@ let array.sort = fn() {
     for (! self.sorted?()) {
         # make a pass over the array.
         mutable i = 1;
-        let l = len(self);
+        let l = util.len(self);
         for (i < l) {
             # if this element is wrong swap it.
             if (self[i] < self[i-1]) {
@@ -351,10 +351,10 @@ let array.sort = fn() {
     return self;
 };
 
-assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a.sorted?()}());
-assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[0] == 1}());
-assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[1] == 2}());
-assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3}());
+util.assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a.sorted?()}());
+util.assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[0] == 1}());
+util.assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[1] == 2}());
+util.assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3}());
 
 let array.map = fn(fnc) {
     'array.map returns an array which is the result of applying the
@@ -370,24 +370,24 @@ let array.map = fn(fnc) {
 };
 
 
-assert(
+util.assert(
 fn () {
     mutable a = [3,9,-4];
     a = a.map(fn(n) { return n * n; });
     a = a.sort();
-    if (string(a) == "[9, 16, 81]") {
+    if (util.string(a) == "[9, 16, 81]") {
         return true;
     } else {
         return false;
     }
 }()
 );
-assert(
+util.assert(
 fn () {
     mutable a = [2,-1,-12];
     a = a.map(fn(n) { return n +2; });
     a = a.sort();
-    if (string(a) == "[-10, 1, 4]") {
+    if (util.string(a) == "[-10, 1, 4]") {
         return true;
     } else {
         return false;
@@ -404,22 +404,22 @@ let array.uniq = fn() {
     }
 
     # return the sorted keys
-    return(tmp.keys().sort());
+    return tmp.keys().sort();
 };
 
-assert(string([1,1,1,1,2].uniq()) == "[1, 2]");
+util.assert(util.string([1,1,1,1,2].uniq()) == "[1, 2]");
 
 let array.empty? = fn() {
     'array.empty? returns true if the array is empty.'
-    if (len(self) == 0) {
+    if (util.len(self) == 0) {
         return true;
     }
     return false;
 };
 
-assert([].empty?());
-assert(![1,2].empty?());
-assert(!["zacanger",3].empty?());
+util.assert([].empty?());
+util.assert(![1,2].empty?());
+util.assert(!["zacanger",3].empty?());
 
 let array.reduce = fn(fun, init) {
     'array.reduce takes a function and an initial value. The function
@@ -435,8 +435,8 @@ let array.reduce = fn(fun, init) {
 let array.sum = fn() {
     'array.sum sums numbers in the array.'
     foreach x in self {
-        if (type(x) != "integer" && type(x) != "float") {
-            print("Sum expected only integers, got", type(x));
+        if (util.type(x) != "integer" && util.type(x) != "float") {
+            print("Sum expected only integers, got", util.type(x));
             if !sys.in_repl() {
                 sys.exit(1);
             }
@@ -449,4 +449,4 @@ let array.sum = fn() {
         }, 0);
 };
 
-assert([1, 2, 3, 4].sum() == 10, "reduce failed!");
+util.assert([1, 2, 3, 4].sum() == 10, "reduce failed!");

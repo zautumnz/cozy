@@ -9,11 +9,11 @@ print("maths.abs(-3.13) -> ", math.abs(-3.13));
 # To show a number from 0-10 we need to multiply and convert to an
 # integer.
 let rand = math.rand();
-let val = int(rand * 11) ;
+let val = util.int(rand * 11) ;
 print("math.rand() -> ", val);
 
 # We can convert numbers to strings easily enough too
-let str = string(3.14 * 22 + math.rand());
+let str = util.string(3.14 * 22 + math.rand());
 let str = "The result was : " + str;
 print(str);
 

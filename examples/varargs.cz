@@ -8,7 +8,7 @@ x("hi", 10.1, {"a": "b"});
 
 let y = fn () {
     # array_from is a global to gather elements into an array
-    print(array_from(...))
+    print(util.array_from(...))
 }
 y(1, 2, 3)
 
@@ -17,7 +17,7 @@ let whatever = fn () {
     print(...)
 }
 let thing = fn () {
-    let gathered = array_from(...)
+    let gathered = util.array_from(...)
     return whatever(....gathered)
 }
 thing(1, 2, 3)

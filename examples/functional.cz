@@ -23,7 +23,7 @@ let prime? = fn(n) {
     }
 
     # Now the rest - we're testing all factors between 2 & SQRT(n).
-    mutable i = int(math.sqrt(n)) + 1
+    mutable i = util.int(math.sqrt(n)) + 1
 
     for i > 2 {
         i--
@@ -96,14 +96,14 @@ print(lots_of_nesting()()())
 let adder = fn (q, w, e) {
     return q + w + e
 }
-let memoized = memoize(adder)
+let memoized = util.memoize(adder)
 print(memoized(1, 2, 3))
 # second call will fetch from in-mem cache
 print(memoized(1, 2, 3))
 
 # curry
 # TODO: spread isn't working in the stdlib
-# let curried = curry(adder)
+# let curried = util.curry(adder)
 # let first = curried(1)
 # let second = first(2)
 # let third = second(3)()

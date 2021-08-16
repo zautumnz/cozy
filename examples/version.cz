@@ -1,4 +1,4 @@
 # The cozy.go intepreter registers a new
 # custom function called `version()`.
 
-print("This is cozy version " + version())
+print("This is cozy version " + core.version())

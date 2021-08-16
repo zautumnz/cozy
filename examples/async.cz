@@ -4,11 +4,11 @@ let x = fn () {
     time.sleep(1000)
     return "bar"
 }
-let a = async(x)
+let a = core.async(x)
 print(a) # async function id (int)
 
 print("1")
-let res = await(a)
+let res = core.await(a)
 print("2")
 print(res) # bar
 print("3")
@@ -20,7 +20,7 @@ let to_bg = fn () {
     print("inside inner fn")
 }
 print("hello")
-background(to_bg)
+core.background(to_bg)
 print("what's up")
 print("still waiting")
 time.sleep(2000)

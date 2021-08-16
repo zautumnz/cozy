@@ -1,4 +1,4 @@
-let event_emitter = fn() {
+let core.event_emitter = fn() {
     'event_emitter returns an object containing methods for managing events.'
     mutable events = {};
     let data = {

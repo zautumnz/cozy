@@ -22,22 +22,25 @@ hi def link     cozyRepeat            Repeat
 
 " Predefined functions and values
 syn keyword     cozyBuiltins
-            \ array_from
-            \ async
-            \ await
-            \ background
+            \ array
+            \ core
             \ error
-            \ exit
+            \ float
             \ fs
+            \ hash
             \ http
+            \ import
+            \ integer
             \ json
             \ math
             \ net
+            \ object
             \ panic
             \ print
+            \ string
             \ sys
             \ time
-            \ type
+            \ util
 syn keyword     cozyBoolean             true false
 hi def link     cozyBuiltins            Identifier
 hi def link     cozyBoolean             Boolean

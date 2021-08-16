@@ -22,10 +22,10 @@ let x = fn () {
 
     # Now sort some ints
     a = [ "Zebra", "zebra", "x-ray", "Zac", "Anger", "Yan" ];
-    print("Original Array: " , string(a));
+    print("Original Array: " , util.string(a));
     dump(a);
     a = a.sort();
-    print("Sorted Array: " , string(a));
+    print("Sorted Array: " , util.string(a));
     dump(a);
 }
 x()

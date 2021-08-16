@@ -45,7 +45,7 @@ let reduce = fn(fun, xs, init) {
 let ints? = fn(xs) {
     foreach x in xs {
         # parens in if conditions and for loops are optional
-        if type(x) != "integer" && type(x) != "float" {
+        if util.type(x) != "integer" && util.type(x) != "float" {
             return false
         }
     }
@@ -56,7 +56,7 @@ let ints? = fn(xs) {
 
 let sum = fn(xs) {
     # basic assertions and a TAP-producing test library are built in
-    assert(ints?(xs), "expected only numbers!")
+    util.assert(ints?(xs), "expected only numbers!")
     return reduce(
         fn(x, acc) {
             return x + acc
@@ -100,7 +100,7 @@ entered code will be evaluated when you exit with `ctrl+d`.
 * `print` adds an ending newline, use  or `sys.STDOUT`/`sys.STDERR` for raw text
 * No undefined or uninitialized variables
 * Comments are Python/Shell style
-* No switch statements
+* Errors are values, so you can pass them around and use `panic` (like in Go)
 * Using `set` and `delete` on hashes returns a new hash
 * `let` is for immutable variables; `mutable` is for mutable ones; this is
     because setting mutable variables should be more annoying to do than
@@ -118,18 +118,14 @@ entered code will be evaluated when you exit with `ctrl+d`.
 
 Global functions:
 
-* `async`/`await` for async functions
-* `float` converts to a float
+* `error` creates a new error object
 * `import` imports another cozy file as a module
-* `int` convert the given float/string to an integer
-* `len` Yield the length of builtin containers
-* `match` Regular-expression matching
+* `panic` prints an error contents and exits
 * `print` Write values to STDOUT with newlines
-* `string` convert the given item to a string
-* `type` returns the type of a variable.
 
 Core modules (see examples for docs):
 
+* `core`
 * `fs`
 * `http`
 * `json`
@@ -137,6 +133,7 @@ Core modules (see examples for docs):
 * `net`
 * `sys`
 * `time`
+* `util`
 
 See also the standard library (written mostly in cozy itself).
 

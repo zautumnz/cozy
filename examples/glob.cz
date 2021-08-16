@@ -7,12 +7,12 @@ fn () {
     let files = fs.glob(pattern);
 
     # If that worked
-    if len(files) > 0 {
-        print("Pattern ", pattern, " matched " , len(files), " files");
+    if util.len(files) > 0 {
+        print("Pattern ", pattern, " matched " , util.len(files), " files");
 
         # Show each result.
         mutable i = 0;
-        for i < len(files) {
+        for i < util.len(files) {
             print("\t", files[i]);
             i++;
         }

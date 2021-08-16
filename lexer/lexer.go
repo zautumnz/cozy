@@ -283,6 +283,7 @@ func (l *Lexer) readIdentifier() string {
 	// Types and objects which will have valid methods.
 	types := []string{
 		"array.",
+		"core.",
 		"float.",
 		"fs.",
 		"hash.",
@@ -295,6 +296,7 @@ func (l *Lexer) readIdentifier() string {
 		"string.",
 		"sys.",
 		"time.",
+		"util.",
 	}
 
 	id := ""
