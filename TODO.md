@@ -1,22 +1,26 @@
 # TODO
 
-v1 work:
-* Gather most of stdlib_core into a namespaced module
-* At least 50% code coverage
-* More than one level of dot access doesn't seem to always work
-* Confirm that everything under ./examples works
-* Complete all lingering TODOs in the code
-* Add argument validation to all internal functions and stdlib
-* Improve all Go error messages
-* Remove other extraneous things from readline fork
-* Find and remove any unused Go code
+# Remaining v1 Work
+
+* Bugs:
+    * More than one level of dot access doesn't seem to always work
+    * Assertions are somehow creating globals? Reproduction:
+        * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
+          inline IIFEs
+* Chores:
+    * Gather most of stdlib_core into a namespaced module
+    * At least 50% code coverage
+    * Confirm that everything under ./examples works
+    * Complete all lingering TODOs in the code
+    * Add argument validation to all internal functions and stdlib
+    * Improve all Go error messages
+    * Remove other extraneous things from readline fork
+    * Find and remove any unused Go code
+
+## Possible v2 Features
+
 * Nested interpolations
 * Maybe combine float/integer to just one number type?
-* Assertions are somehow creating globals? Reproduction:
-    * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
-        inline IIFEs
-
-v2 work:
 * Date object or additions to core time module
 * Markdown parser
 * Move as much of the stdlib into cozy (out of Go) as possible
