@@ -10,7 +10,7 @@ import (
 )
 
 // Converts a valid JSON string to a cozy value
-func jsonDeserialize(args ...object.Object) object.Object {
+func jsonDeserialize(args ...O) O {
 	s := args[0].(*object.String)
 	str := strings.TrimSpace(s.Value)
 	env := object.NewEnvironment()
@@ -59,7 +59,7 @@ func jsonDeserialize(args ...object.Object) object.Object {
 
 // Converts a cozy value to a JSON string
 // Every cozy object (type) has a Json method, so this is easy
-func jsonSerialize(args ...object.Object) object.Object {
+func jsonSerialize(args ...O) O {
 	indent := false
 	if len(args) > 1 {
 		if isTruthy(args[1]) {
@@ -72,11 +72,11 @@ func jsonSerialize(args ...object.Object) object.Object {
 
 func init() {
 	RegisterBuiltin("json.deserialize",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...O) O {
 			return jsonDeserialize(args...)
 		})
 	RegisterBuiltin("json.serialize",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...O) O {
 			return jsonSerialize(args...)
 		})
 }

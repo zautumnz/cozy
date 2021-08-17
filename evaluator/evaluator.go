@@ -25,17 +25,21 @@ var (
 	CTX   = context.Background()
 )
 
+// O is a type alias so I don't have to write 'O' hundreds of times
+// in this module
+type O = object.Object
+
 // The built-in functions / standard-library methods are stored here.
 var builtins = map[string]*object.Builtin{}
 
 // Eval is our core function for evaluating nodes.
-func Eval(node ast.Node, env *object.Environment) object.Object {
+func Eval(node ast.Node, env *object.Environment) O {
 	return evalContext(context.Background(), node, env)
 }
 
 // evalContext is our core function for evaluating nodes.
 // The context.Context provided can be used to cancel a running script instance.
-func evalContext(ctx context.Context, node ast.Node, env *object.Environment) object.Object {
+func evalContext(ctx context.Context, node ast.Node, env *object.Environment) O {
 	// We test our context at every iteration of our main-loop.
 	select {
 	case <-ctx.Done():
@@ -177,8 +181,8 @@ func evalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 }
 
 // eval block statement
-func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) object.Object {
-	var result object.Object
+func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) O {
+	var result O
 	for _, statement := range block.Statements {
 		result = Eval(statement, env)
 		if result != nil {
@@ -195,7 +199,7 @@ func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) obje
 // This creates a whole new cozy instance (lexer, parser, env, and evaluator),
 // which isn't ideal, but we also do this when working with string
 // interpolation.
-func EvalModule(name string) object.Object {
+func EvalModule(name string) O {
 	filename := FindModule(name)
 	if filename == "" {
 		return NewError("ImportError: no module named '%s'", name)
@@ -220,9 +224,9 @@ func EvalModule(name string) object.Object {
 	return env.ExportedHash()
 }
 
-var importCache = make(map[string]object.Object)
+var importCache = make(map[string]O)
 
-func evalImportExpression(ie *ast.ImportExpression, env *object.Environment) object.Object {
+func evalImportExpression(ie *ast.ImportExpression, env *object.Environment) O {
 	// treat modules as singletons;
 	// we don't allow modifying anythig exported by modules, but this
 	// means we can skip re-evaling modules on subsequent imports
@@ -259,7 +263,7 @@ func nativeBoolToBooleanObject(input bool) *object.Boolean {
 }
 
 // eval prefix expression
-func evalPrefixExpression(operator string, right object.Object) object.Object {
+func evalPrefixExpression(operator string, right O) O {
 	switch operator {
 	case "!":
 		return evalBangOperatorExpression(right)
@@ -270,7 +274,7 @@ func evalPrefixExpression(operator string, right object.Object) object.Object {
 	}
 }
 
-func evalPostfixExpression(env *object.Environment, operator string, node *ast.PostfixExpression) object.Object {
+func evalPostfixExpression(env *object.Environment, operator string, node *ast.PostfixExpression) O {
 	switch operator {
 	case "++":
 		val, ok := env.Get(node.Token.Literal)
@@ -306,7 +310,7 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 	}
 }
 
-func evalBangOperatorExpression(right object.Object) object.Object {
+func evalBangOperatorExpression(right O) O {
 	switch right {
 	case TRUE:
 		return FALSE
@@ -319,7 +323,7 @@ func evalBangOperatorExpression(right object.Object) object.Object {
 	}
 }
 
-func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
+func evalMinusPrefixOperatorExpression(right O) O {
 	switch obj := right.(type) {
 	case *object.Integer:
 		return &object.Integer{Value: -obj.Value}
@@ -330,7 +334,7 @@ func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
 	}
 }
 
-func evalInfixExpression(operator string, left, right object.Object, env *object.Environment) object.Object {
+func evalInfixExpression(operator string, left, right O, env *object.Environment) O {
 	switch {
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
 		return evalIntegerInfixExpression(operator, left, right)
@@ -362,7 +366,7 @@ func evalInfixExpression(operator string, left, right object.Object, env *object
 }
 
 // boolean operations
-func evalBooleanInfixExpression(operator string, left, right object.Object) object.Object {
+func evalBooleanInfixExpression(operator string, left, right O) O {
 	// convert the bools to strings.
 	l := &object.String{Value: string(left.Inspect())}
 	r := &object.String{Value: string(right.Inspect())}
@@ -382,7 +386,7 @@ func evalBooleanInfixExpression(operator string, left, right object.Object) obje
 	}
 }
 
-func evalIntegerInfixExpression(operator string, left, right object.Object) object.Object {
+func evalIntegerInfixExpression(operator string, left, right O) O {
 	leftVal := left.(*object.Integer).Value
 	rightVal := right.(*object.Integer).Value
 	switch operator {
@@ -420,7 +424,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 		return nativeBoolToBooleanObject(leftVal != rightVal)
 	case "..":
 		len := int(rightVal-leftVal) + 1
-		array := make([]object.Object, len)
+		array := make([]O, len)
 		i := 0
 		for i < len {
 			array[i] = &object.Integer{Value: leftVal}
@@ -433,7 +437,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 			left.Type(), operator, right.Type())
 	}
 }
-func evalFloatInfixExpression(operator string, left, right object.Object) object.Object {
+func evalFloatInfixExpression(operator string, left, right O) O {
 	leftVal := left.(*object.Float).Value
 	rightVal := right.(*object.Float).Value
 	switch operator {
@@ -473,7 +477,7 @@ func evalFloatInfixExpression(operator string, left, right object.Object) object
 	}
 }
 
-func evalFloatIntegerInfixExpression(operator string, left, right object.Object) object.Object {
+func evalFloatIntegerInfixExpression(operator string, left, right O) O {
 	leftVal := left.(*object.Float).Value
 	rightVal := float64(right.(*object.Integer).Value)
 	switch operator {
@@ -513,7 +517,7 @@ func evalFloatIntegerInfixExpression(operator string, left, right object.Object)
 	}
 }
 
-func evalIntegerFloatInfixExpression(operator string, left, right object.Object) object.Object {
+func evalIntegerFloatInfixExpression(operator string, left, right O) O {
 	leftVal := float64(left.(*object.Integer).Value)
 	rightVal := right.(*object.Float).Value
 	switch operator {
@@ -553,7 +557,7 @@ func evalIntegerFloatInfixExpression(operator string, left, right object.Object)
 	}
 }
 
-func evalStringInfixExpression(operator string, left, right object.Object) object.Object {
+func evalStringInfixExpression(operator string, left, right O) O {
 	l := left.(*object.String)
 	r := right.(*object.String)
 
@@ -583,7 +587,7 @@ func evalStringInfixExpression(operator string, left, right object.Object) objec
 // evalIfExpression handles an `if` expression, running the block
 // if the condition matches, and running any optional else block
 // otherwise.
-func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Object {
+func evalIfExpression(ie *ast.IfExpression, env *object.Environment) O {
 	condition := Eval(ie.Condition, env)
 	if isError(condition) {
 		return condition
@@ -597,7 +601,7 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 	return NULL
 }
 
-func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val object.Object) {
+func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val O) {
 	evaluated := Eval(a.Value, env)
 	if isError(evaluated) {
 		return evaluated
@@ -686,8 +690,8 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val o
 	return evaluated
 }
 
-func evalForLoopExpression(fle *ast.ForLoopExpression, env *object.Environment) object.Object {
-	rt := &object.Boolean{Value: true}
+func evalForLoopExpression(fle *ast.ForLoopExpression, env *object.Environment) O {
+	rt := TRUE
 	for {
 		condition := Eval(fle.Condition, env)
 		if isError(condition) {
@@ -706,7 +710,7 @@ func evalForLoopExpression(fle *ast.ForLoopExpression, env *object.Environment) 
 }
 
 // handle "for x [,y] in .."
-func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) object.Object {
+func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) O {
 	// expression
 	val := Eval(fle.Value, env)
 
@@ -757,7 +761,7 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) o
 	return NULL
 }
 
-func isTruthy(obj object.Object) bool {
+func isTruthy(obj O) bool {
 	switch obj {
 	case TRUE:
 		return true
@@ -770,8 +774,8 @@ func isTruthy(obj object.Object) bool {
 	}
 }
 
-func evalProgram(program *ast.Program, env *object.Environment) object.Object {
-	var result object.Object
+func evalProgram(program *ast.Program, env *object.Environment) O {
+	var result O
 	for _, statement := range program.Statements {
 		result = Eval(statement, env)
 		switch result := result.(type) {
@@ -783,14 +787,14 @@ func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 	return result
 }
 
-func isError(obj object.Object) bool {
+func isError(obj O) bool {
 	if obj != nil {
 		return obj.Type() == object.ERROR_OBJ
 	}
 	return false
 }
 
-func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object {
+func evalIdentifier(node *ast.Identifier, env *object.Environment) O {
 	if val, ok := env.Get(node.Value); ok {
 		return val
 	}
@@ -802,12 +806,12 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 	return NewError("identifier not found: " + node.Value)
 }
 
-func evalExpression(exps []ast.Expression, env *object.Environment) []object.Object {
-	var result []object.Object
+func evalExpression(exps []ast.Expression, env *object.Environment) []O {
+	var result []O
 	for _, e := range exps {
 		evaluated := Eval(e, env)
 		if isError(evaluated) {
-			return []object.Object{evaluated}
+			return []O{evaluated}
 		}
 		result = append(result, evaluated)
 	}
@@ -825,7 +829,7 @@ func trimQuotes(in string, c byte) string {
 	return in
 }
 
-func evalIndexExpression(left, index object.Object, env *object.Environment) object.Object {
+func evalIndexExpression(left, index O, env *object.Environment) O {
 	switch {
 	case left.Type() == object.ARRAY_OBJ:
 		return evalArrayIndexExpression(left, index, env)
@@ -844,12 +848,12 @@ func evalIndexExpression(left, index object.Object, env *object.Environment) obj
 	}
 }
 
-func evalModuleIndexExpression(module, index object.Object, env *object.Environment) object.Object {
+func evalModuleIndexExpression(module, index O, env *object.Environment) O {
 	moduleObject := module.(*object.Module)
 	return evalHashIndexExpression(moduleObject.Attrs, index, env)
 }
 
-func evalArrayIndexExpression(array, index object.Object, env *object.Environment) object.Object {
+func evalArrayIndexExpression(array, index O, env *object.Environment) O {
 	arrayObject := array.(*object.Array)
 	switch t := index.(type) {
 	case *object.Integer:
@@ -867,7 +871,7 @@ func evalArrayIndexExpression(array, index object.Object, env *object.Environmen
 	}
 }
 
-func evalHashIndexExpression(hash, index object.Object, env *object.Environment) object.Object {
+func evalHashIndexExpression(hash, index O, env *object.Environment) O {
 	hashObject := hash.(*object.Hash)
 	key, ok := index.(object.Hashable)
 	if !ok {
@@ -875,7 +879,7 @@ func evalHashIndexExpression(hash, index object.Object, env *object.Environment)
 	}
 	pair, ok := hashObject.Pairs[key.HashKey()]
 	if !ok {
-		var fn object.Object
+		var fn O
 		if fn, ok = objectGetMethod(hash, index, env); ok {
 			return fn
 		}
@@ -884,7 +888,7 @@ func evalHashIndexExpression(hash, index object.Object, env *object.Environment)
 	return pair.Value
 }
 
-func evalStringIndexExpression(input, index object.Object, env *object.Environment) object.Object {
+func evalStringIndexExpression(input, index O, env *object.Environment) O {
 	str := input.(*object.String).Value
 	switch t := index.(type) {
 	case *object.Integer:
@@ -911,7 +915,7 @@ func evalStringIndexExpression(input, index object.Object, env *object.Environme
 	}
 }
 
-func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Object {
+func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) O {
 	pairs := make(map[object.HashKey]object.HashPair)
 	for keyNode, valueNode := range node.Pairs {
 		key := Eval(keyNode, env)
@@ -935,7 +939,7 @@ func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Obje
 }
 
 // ApplyFunction applies a function in an environment
-func ApplyFunction(env *object.Environment, fn object.Object, args []object.Object) object.Object {
+func ApplyFunction(env *object.Environment, fn O, args []O) O {
 	switch fn := fn.(type) {
 	case *object.Function:
 		extendEnv := extendFunctionEnv(fn, args)
@@ -948,7 +952,7 @@ func ApplyFunction(env *object.Environment, fn object.Object, args []object.Obje
 	}
 }
 
-func extendFunctionEnv(fn *object.Function, args []object.Object) *object.Environment {
+func extendFunctionEnv(fn *object.Function, args []O) *object.Environment {
 	env := object.NewEnclosedEnvironment(fn.Env, args)
 
 	// Set the defaults
@@ -963,7 +967,7 @@ func extendFunctionEnv(fn *object.Function, args []object.Object) *object.Enviro
 	return env
 }
 
-func upwrapReturnValue(obj object.Object) object.Object {
+func upwrapReturnValue(obj O) O {
 	if returnValue, ok := obj.(*object.ReturnValue); ok {
 		return returnValue.Value
 	}
@@ -976,7 +980,7 @@ func RegisterBuiltin(name string, fn object.BuiltinFunction) {
 	builtins[name] = &object.Builtin{Fn: fn}
 }
 
-func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.Object, ok bool) {
+func objectGetMethod(o, key O, env *object.Environment) (ret O, ok bool) {
 	switch k := key.(type) {
 	case *object.String:
 		var fn object.BuiltinFunction
@@ -1021,7 +1025,7 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 			if val, ok := env.Get(name); ok {
 				if fn, ok := val.(*object.Function); ok {
 					copyFn := *fn
-					emptyArgs := make([]object.Object, 0)
+					emptyArgs := make([]O, 0)
 					copyFn.Env = object.NewEnclosedEnvironment(fn.Env, emptyArgs)
 					copyFn.Env.Set("self", o)
 					return &copyFn, true
@@ -1033,7 +1037,7 @@ func objectGetMethod(o, key object.Object, env *object.Environment) (ret object.
 	return nil, false
 }
 
-func objectToNativeBoolean(o object.Object) bool {
+func objectToNativeBoolean(o O) bool {
 	if r, ok := o.(*object.ReturnValue); ok {
 		o = r.Value
 	}
@@ -1069,7 +1073,7 @@ func objectToNativeBoolean(o object.Object) bool {
 	}
 }
 
-func evalSpread(node ast.Node, env *object.Environment) object.Object {
+func evalSpread(node ast.Node, env *object.Environment) O {
 	switch n := node.(type) {
 	case *ast.SpreadLiteral:
 		a := n.Right.TokenLiteral()

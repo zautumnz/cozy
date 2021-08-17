@@ -52,7 +52,7 @@ func methodNotAllowed(ctx *httpContext) {
 	sendWrapper(ctx, http.StatusMethodNotAllowed, "Not allowed", "text/plain")
 }
 
-func registerRoute(env *object.Environment, args ...object.Object) object.Object {
+func registerRoute(env *object.Environment, args ...O) O {
 	var pattern string
 	var methods []string
 	var handler *object.Function
@@ -87,12 +87,12 @@ func registerRoute(env *object.Environment, args ...object.Object) object.Object
 
 	re := regexp.MustCompile(pattern)
 	route := httpRoute{Pattern: re, Handler: handler, Methods: methods}
-
 	routes = append(routes, route)
+
 	return NULL
 }
 
-func httpContextToCozyReq(c *httpContext) object.Object {
+func httpContextToCozyReq(c *httpContext) O {
 	cReq := make(StringObjectMap)
 	originalReq := c.Request
 
@@ -120,7 +120,7 @@ func httpContextToCozyReq(c *httpContext) object.Object {
 
 	// params
 	if c.Params != nil {
-		arr := make([]object.Object, 0)
+		arr := make([]O, 0)
 		for _, el := range c.Params {
 			arr = append(arr, &object.String{Value: el})
 		}
@@ -148,7 +148,7 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 			for _, m := range rt.Methods {
 				if m == r.Method {
-					applyArgs := make([]object.Object, 0)
+					applyArgs := make([]O, 0)
 					applyArgs = append(applyArgs, httpContextToCozyReq(ctx))
 					res := ApplyFunction(httpServerEnv, rt.Handler, applyArgs)
 					switch a := res.(type) {
@@ -216,7 +216,7 @@ var staticHandlers = make([]staticHandlerMount, 0)
 
 // static("./public")
 // static("./public", "/some-mount-point")
-func staticHandler(env *object.Environment, args ...object.Object) object.Object {
+func staticHandler(env *object.Environment, args ...O) O {
 	dir := ""
 	mount := "/"
 
@@ -246,7 +246,7 @@ func staticHandler(env *object.Environment, args ...object.Object) object.Object
 	return NULL
 }
 
-func (c *httpContext) send(args ...object.Object) object.Object {
+func (c *httpContext) send(args ...O) O {
 	code := 200
 	body := ""
 	contentType := "text/plain"
@@ -289,23 +289,24 @@ func (c *httpContext) send(args ...object.Object) object.Object {
 	if body != "" {
 		io.WriteString(c.ResponseWriter, fmt.Sprintf("%s\n", body))
 	}
-	return &object.Boolean{Value: true}
+
+	return NULL
 }
 
-func listen(env *object.Environment, args ...object.Object) object.Object {
+func listen(env *object.Environment, args ...O) O {
 	switch a := args[0].(type) {
 	case *object.Integer:
 		err := http.ListenAndServe(":"+fmt.Sprint(a.Value), appInstance)
 		if err != nil {
 			return NewError("Could not start server: %s\n", err.Error())
 		}
-		return &object.Boolean{Value: true}
+		return NULL
 	default:
 		return NewError("http.server.listen expected int port!")
 	}
 }
 
-func httpServer(env *object.Environment, args ...object.Object) object.Object {
+func httpServer(env *object.Environment, args ...O) O {
 	httpServerEnv = env
 
 	return NewHash(StringObjectMap{
@@ -317,7 +318,7 @@ func httpServer(env *object.Environment, args ...object.Object) object.Object {
 
 func init() {
 	RegisterBuiltin("http.create_server",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...O) O {
 			return httpServer(env, args...)
 		})
 }
