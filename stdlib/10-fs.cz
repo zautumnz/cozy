@@ -20,3 +20,19 @@ let fs.ls = fn () {
 
     return res.join("\n");
 };
+
+let fs.write_file = fn (f_name, contents) {
+    'write_file takes a file name and contents and writes
+    the contents to that file.'
+    let fh = fs.open(f_name, "w")
+    fh.write(contents)
+    fh.close()
+}
+
+let fs.write_json = fn (f_name, contents, indent = true) {
+    'write_json takes a file name, contents (any cozy value),
+    and a third argument to specify if the json should be indented
+    (default: true); serializes the cozy value; and writes the file.'
+    let c = json.serialize(contents, indent)
+    fs.write_file(f_name, c)
+}

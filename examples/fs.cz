@@ -62,5 +62,13 @@ let fs_examples = fn () {
     fh.write("testing")
     fh.close()
     fs.cp(name, name + "copied")
+
+    # write_file and write_json
+    # write a plain file
+    fs.write_file(name, "testing")
+    # write un-indented json
+    fs.write_json(name, {"foo": "bar"}, false)
+    # write indented json
+    fs.write_json(name, {"foo": "bar"})
 }
 fs_examples()
