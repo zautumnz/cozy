@@ -7,6 +7,10 @@
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs
+* Features:
+    * http.server: add form support
+    * http.client: add form support
+    * Http server middleware
 * Chores:
     * Clean up newerror and similar calls now that errors are useful values
     * At least 50% code coverage
@@ -36,4 +40,5 @@
     * aes stuff
 * YAML support
 * TOML support
+* Websocket support
 * Multiple-db ORM

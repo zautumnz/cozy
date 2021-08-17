@@ -220,7 +220,17 @@ func EvalModule(name string) object.Object {
 	return env.ExportedHash()
 }
 
+var importCache = make(map[string]object.Object)
+
 func evalImportExpression(ie *ast.ImportExpression, env *object.Environment) object.Object {
+	// treat modules as singletons;
+	// we don't allow modifying anythig exported by modules, but this
+	// means we can skip re-evaling modules on subsequent imports
+	ev, ok := importCache[ie.Name.String()]
+	if ok {
+		return ev
+	}
+
 	name := Eval(ie.Name, env)
 	if isError(name) {
 		return name
@@ -232,7 +242,9 @@ func evalImportExpression(ie *ast.ImportExpression, env *object.Environment) obj
 			return attrs
 		}
 
-		return &object.Module{Name: s.Value, Attrs: attrs}
+		m := &object.Module{Name: s.Value, Attrs: attrs}
+		importCache[ie.Name.String()] = m
+		return m
 	}
 
 	return NewError("ImportError: invalid import path '%s'", name)

@@ -16,4 +16,4 @@ let fizzbuzz = fn(n = 100) {
     return ret.join("\n");
 };
 
-print(fizzbuzz(10));
+# print(fizzbuzz(10));
