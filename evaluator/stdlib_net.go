@@ -75,7 +75,7 @@ func parseV6Address(address string) (addr [16]byte, port int, err error) {
 }
 
 // Socket is used like let f = socket("tcp4")
-func Socket(args ...O) O {
+func Socket(args ...object.Object) object.Object {
 	var (
 		domain int
 		typ    int
@@ -124,7 +124,7 @@ func Socket(args ...O) O {
 }
 
 // Listen used like listen(f, 1)
-func Listen(args ...O) O {
+func Listen(args ...object.Object) object.Object {
 	fd := int(args[0].(*object.Integer).Value)
 	backlog := int(args[1].(*object.Integer).Value)
 
@@ -136,7 +136,7 @@ func Listen(args ...O) O {
 }
 
 // Connect is used by the client, example: connect(fd, "0.0.0.0:8080")
-func Connect(args ...O) O {
+func Connect(args ...object.Object) object.Object {
 	var sa syscall.Sockaddr
 
 	fd := int(args[0].(*object.Integer).Value)
@@ -171,7 +171,7 @@ func Connect(args ...O) O {
 }
 
 // Close is for closing a connection
-func Close(args ...O) O {
+func Close(args ...object.Object) object.Object {
 	fd := int(args[0].(*object.Integer).Value)
 
 	err := syscall.Close(fd)
@@ -183,7 +183,7 @@ func Close(args ...O) O {
 }
 
 // Bind is used like bind(fd, "0.0.0.0:8080") server-side
-func Bind(args ...O) O {
+func Bind(args ...object.Object) object.Object {
 	var (
 		err      error
 		sockaddr syscall.Sockaddr
@@ -222,7 +222,7 @@ func Bind(args ...O) O {
 }
 
 // Accept takes requests
-func Accept(args ...O) O {
+func Accept(args ...object.Object) object.Object {
 	var (
 		nfd int
 		err error
@@ -239,7 +239,7 @@ func Accept(args ...O) O {
 }
 
 // Write to a socket
-func Write(args ...O) O {
+func Write(args ...object.Object) object.Object {
 	fd := int(args[0].(*object.Integer).Value)
 	data := []byte(args[1].(*object.String).Value)
 
@@ -255,7 +255,7 @@ func Write(args ...O) O {
 const DefaultBufferSize = 4096
 
 // Read from connection
-func Read(args ...O) O {
+func Read(args ...object.Object) object.Object {
 	var (
 		fd int
 		n  = DefaultBufferSize
@@ -278,35 +278,35 @@ func Read(args ...O) O {
 
 func init() {
 	RegisterBuiltin("net.socket",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return Socket(args...)
 		})
 	RegisterBuiltin("net.listen",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return Listen(args...)
 		})
 	RegisterBuiltin("net.connect",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return Connect(args...)
 		})
 	RegisterBuiltin("net.close",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return Close(args...)
 		})
 	RegisterBuiltin("net.bind",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return Bind(args...)
 		})
 	RegisterBuiltin("net.accept",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return Accept(args...)
 		})
 	RegisterBuiltin("net.write",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return Write(args...)
 		})
 	RegisterBuiltin("net.read",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return Read(args...)
 		})
 }

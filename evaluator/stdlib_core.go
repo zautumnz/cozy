@@ -44,7 +44,7 @@ func Async(f func() interface{}) ValueFuture {
 
 var asyncFunctions = make(map[int64]ValueFuture)
 
-func awaitFn(env *object.Environment, args ...O) O {
+func awaitFn(env *object.Environment, args ...object.Object) object.Object {
 	var res interface{}
 	var err error
 	switch t := args[0].(type) {
@@ -60,7 +60,7 @@ func awaitFn(env *object.Environment, args ...O) O {
 	}
 
 	switch x := res.(type) {
-	case O:
+	case object.Object:
 		return x
 	default:
 		return NewError("Something went wrong in await!")
@@ -68,9 +68,9 @@ func awaitFn(env *object.Environment, args ...O) O {
 	}
 }
 
-func asyncFn(env *object.Environment, args ...O) O {
+func asyncFn(env *object.Environment, args ...object.Object) object.Object {
 	x := Async(func() interface{} {
-		return ApplyFunction(env, args[0], make([]O, 0))
+		return ApplyFunction(env, args[0], make([]object.Object, 0))
 	})
 
 	fnID := rand.Int63()
@@ -78,11 +78,11 @@ func asyncFn(env *object.Environment, args ...O) O {
 	return &object.Integer{Value: fnID}
 }
 
-func backgroundFn(env *object.Environment, args ...O) O {
+func backgroundFn(env *object.Environment, args ...object.Object) object.Object {
 	switch a := args[0].(type) {
 	case *object.Function:
 		go func() {
-			ApplyFunction(env, a, make([]O, 0))
+			ApplyFunction(env, a, make([]object.Object, 0))
 		}()
 		return NULL
 	default:
@@ -91,7 +91,7 @@ func backgroundFn(env *object.Environment, args ...O) O {
 }
 
 // regular expression match
-func matchFn(args ...O) O {
+func matchFn(args ...object.Object) object.Object {
 	if len(args) != 2 {
 		return NewError("wrong number of arguments. got=%d, want=2",
 			len(args))
@@ -111,7 +111,7 @@ func matchFn(args ...O) O {
 	res := reg.FindStringSubmatch(args[1].(*object.String).Value)
 
 	if len(res) > 0 {
-		newArray := make([]O, len(res))
+		newArray := make([]object.Object, len(res))
 
 		// If we get a match then the output is an array
 		// First entry is the match, any additional parts
@@ -126,24 +126,24 @@ func matchFn(args ...O) O {
 	}
 
 	// No match
-	return &object.Array{Elements: make([]O, 0)}
+	return &object.Array{Elements: make([]object.Object, 0)}
 }
 
 func init() {
 	RegisterBuiltin("core.match",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return matchFn(args...)
 		})
 	RegisterBuiltin("core.async",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return asyncFn(env, args...)
 		})
 	RegisterBuiltin("core.await",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return awaitFn(env, args...)
 		})
 	RegisterBuiltin("core.background",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return backgroundFn(env, args...)
 		})
 }

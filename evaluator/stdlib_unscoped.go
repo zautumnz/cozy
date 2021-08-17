@@ -10,7 +10,7 @@ import (
 // These stdlib functions aren't scoped/namespaced
 
 // panic
-func panicFn(args ...O) O {
+func panicFn(args ...object.Object) object.Object {
 	switch e := args[0].(type) {
 	case *object.Error:
 		c := 1
@@ -26,7 +26,7 @@ func panicFn(args ...O) O {
 }
 
 // error
-func errorFn(args ...O) O {
+func errorFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -69,7 +69,7 @@ func errorFn(args ...O) O {
 }
 
 // output a string to stdout
-func printFn(args ...O) O {
+func printFn(args ...object.Object) object.Object {
 	for _, arg := range args {
 		fmt.Print(arg.Inspect() + " ")
 	}
@@ -79,15 +79,15 @@ func printFn(args ...O) O {
 
 func init() {
 	RegisterBuiltin("print",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return printFn(args...)
 		})
 	RegisterBuiltin("error",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return errorFn(args...)
 		})
 	RegisterBuiltin("panic",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return panicFn(args...)
 		})
 }

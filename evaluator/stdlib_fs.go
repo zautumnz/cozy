@@ -12,7 +12,7 @@ import (
 )
 
 // array = fs.glob("/etc/*.conf")
-func fsGlob(args ...O) O {
+func fsGlob(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -26,7 +26,7 @@ func fsGlob(args ...O) O {
 
 	// Create an array to hold the results and populate it
 	l := len(entries)
-	result := make([]O, l)
+	result := make([]object.Object, l)
 	for i, txt := range entries {
 		result[i] = &object.String{Value: txt}
 	}
@@ -35,7 +35,7 @@ func fsGlob(args ...O) O {
 
 // Change a mode of a file - note the second argument is a string
 // to emphasise octal.
-func chmodFn(args ...O) O {
+func chmodFn(args ...object.Object) object.Object {
 	if len(args) != 2 {
 		return NewError("wrong number of arguments. got=%d, want=2",
 			len(args))
@@ -54,19 +54,19 @@ func chmodFn(args ...O) O {
 	// convert from octal -> decimal
 	result, err := strconv.ParseInt(mode, 8, 64)
 	if err != nil {
-		return FALSE
+		return &object.Boolean{Value: false}
 	}
 
 	// Change the mode.
 	err = os.Chmod(path, os.FileMode(result))
 	if err != nil {
-		return FALSE
+		return &object.Boolean{Value: false}
 	}
-	return TRUE
+	return &object.Boolean{Value: true}
 }
 
 // mkdir
-func mkdirFn(args ...O) O {
+func mkdirFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -82,18 +82,19 @@ func mkdirFn(args ...O) O {
 	// Can't fail?
 	mode, err := strconv.ParseInt("755", 8, 64)
 	if err != nil {
-		return FALSE
+		return &object.Boolean{Value: false}
 	}
 
 	err = os.MkdirAll(path, os.FileMode(mode))
 	if err != nil {
-		return FALSE
+		return &object.Boolean{Value: false}
 	}
-	return TRUE
+	return &object.Boolean{Value: true}
+
 }
 
 // Open a file
-func openFn(args ...O) O {
+func openFn(args ...object.Object) object.Object {
 	path := ""
 	mode := "r"
 
@@ -132,7 +133,7 @@ func openFn(args ...O) O {
 }
 
 // Get file info.
-func statFn(args ...O) O {
+func statFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -167,7 +168,7 @@ func statFn(args ...O) O {
 }
 
 // Remove a file/directory.
-func rmFn(args ...O) O {
+func rmFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -177,12 +178,12 @@ func rmFn(args ...O) O {
 
 	err := os.Remove(path)
 	if err != nil {
-		return FALSE
+		return &object.Boolean{Value: false}
 	}
-	return TRUE
+	return &object.Boolean{Value: true}
 }
 
-func mvFn(args ...O) O {
+func mvFn(args ...object.Object) object.Object {
 	var from string
 	var to string
 	switch a := args[0].(type) {
@@ -206,7 +207,7 @@ func mvFn(args ...O) O {
 	return NULL
 }
 
-func cpFn(args ...O) O {
+func cpFn(args ...object.Object) object.Object {
 	var src string
 	var dst string
 	switch a := args[0].(type) {
@@ -276,7 +277,7 @@ func cpFn(args ...O) O {
 	return NULL
 }
 
-func templateFn(env *object.Environment, args ...O) O {
+func templateFn(env *object.Environment, args ...object.Object) object.Object {
 	switch a := args[0].(type) {
 	case *object.String:
 		b, err := ioutil.ReadFile(a.Value)
@@ -293,39 +294,39 @@ func templateFn(env *object.Environment, args ...O) O {
 
 func init() {
 	RegisterBuiltin("fs.glob",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return fsGlob(args...)
 		})
 	RegisterBuiltin("fs.chmod",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return chmodFn(args...)
 		})
 	RegisterBuiltin("fs.mkdir",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return mkdirFn(args...)
 		})
 	RegisterBuiltin("fs.open",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return openFn(args...)
 		})
 	RegisterBuiltin("fs.stat",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return statFn(args...)
 		})
 	RegisterBuiltin("fs.rm",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return rmFn(args...)
 		})
 	RegisterBuiltin("fs.mv",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return mvFn(args...)
 		})
 	RegisterBuiltin("fs.cp",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return cpFn(args...)
 		})
 	RegisterBuiltin("fs.tmpl",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return templateFn(env, args...)
 		})
 

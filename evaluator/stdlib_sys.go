@@ -36,7 +36,7 @@ func splitCommand(input string) []string {
 }
 
 // environment() -> (Hash)
-func envFn(args ...O) O {
+func envFn(args ...object.Object) object.Object {
 	env := os.Environ()
 	vals := make(StringObjectMap)
 
@@ -50,7 +50,7 @@ func envFn(args ...O) O {
 }
 
 // getenv("PATH") -> string
-func getEnvFn(args ...O) O {
+func getEnvFn(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -64,7 +64,7 @@ func getEnvFn(args ...O) O {
 }
 
 // setenv("PATH", "/home/z/bin:/usr/bin");
-func setEnvFn(args ...O) O {
+func setEnvFn(args ...object.Object) object.Object {
 	if len(args) != 2 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -83,7 +83,7 @@ func setEnvFn(args ...O) O {
 	return NULL
 }
 
-func sysExit(args ...O) O {
+func sysExit(args ...object.Object) object.Object {
 	code := 0
 
 	// Optionally an exit-code might be supplied as an argument
@@ -102,7 +102,7 @@ func sysExit(args ...O) O {
 
 // Run a command and return a hash containing the result.
 // `stderr`, `stdout`, and `error` will be the fields
-func sysExec(args ...O) O {
+func sysExec(args ...object.Object) object.Object {
 	if len(args) < 1 {
 		return NewError("`sys.exec` wanted string, got invalid argument")
 	}
@@ -147,9 +147,9 @@ func sysExec(args ...O) O {
 }
 
 // Implemention of "args()" function.
-func argsFn(args ...O) O {
+func argsFn(args ...object.Object) object.Object {
 	l := len(os.Args[1:])
-	result := make([]O, l)
+	result := make([]object.Object, l)
 	for i, txt := range os.Args[1:] {
 		result[i] = &object.String{Value: txt}
 	}
@@ -157,7 +157,7 @@ func argsFn(args ...O) O {
 }
 
 // flag("my-flag")
-func flagFn(args ...O) O {
+func flagFn(args ...object.Object) object.Object {
 	// flag we're trying to retrieve
 	name := args[0].(*object.String)
 	found := false
@@ -203,7 +203,7 @@ func flagFn(args ...O) O {
 	return FALSE
 }
 
-func cdFn(args ...O) O {
+func cdFn(args ...object.Object) object.Object {
 	switch a := args[0].(type) {
 	case *object.String:
 		os.Chdir(a.Value)
@@ -213,7 +213,7 @@ func cdFn(args ...O) O {
 	return NULL
 }
 
-func infoFn(args ...O) O {
+func infoFn(args ...object.Object) object.Object {
 	return NewHash(StringObjectMap{
 		"os":   &object.String{Value: runtime.GOOS},
 		"arch": &object.String{Value: runtime.GOARCH},
@@ -223,39 +223,39 @@ func infoFn(args ...O) O {
 
 func init() {
 	RegisterBuiltin("sys.getenv",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return getEnvFn(args...)
 		})
 	RegisterBuiltin("sys.setenv",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return setEnvFn(args...)
 		})
 	RegisterBuiltin("sys.environment",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return envFn(args...)
 		})
 	RegisterBuiltin("sys.exit",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return sysExit(args...)
 		})
 	RegisterBuiltin("sys.exec",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return sysExec(args...)
 		})
 	RegisterBuiltin("sys.flag",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return flagFn(args...)
 		})
 	RegisterBuiltin("sys.args",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return argsFn(args...)
 		})
 	RegisterBuiltin("sys.cd",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return cdFn(args...)
 		})
 	RegisterBuiltin("sys.info",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return infoFn(args...)
 		})
 }

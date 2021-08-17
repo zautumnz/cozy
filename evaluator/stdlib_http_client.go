@@ -317,7 +317,7 @@ func newRequest() *Request {
 	return r
 }
 
-func httpClient(args ...O) O {
+func httpClient(args ...object.Object) object.Object {
 	var uri string
 	var method string
 	var headers map[string]string
@@ -399,7 +399,7 @@ func httpClient(args ...O) O {
 
 func init() {
 	RegisterBuiltin("http.create_client",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return httpClient(args...)
 		})
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/zacanger/cozy/object"
 )
 
-func mathAbs(args ...O) O {
+func mathAbs(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -34,12 +34,12 @@ func mathAbs(args ...O) O {
 }
 
 // val = math.rand()
-func mathRandom(args ...O) O {
+func mathRandom(args ...object.Object) object.Object {
 	return &object.Float{Value: rand.Float64()}
 }
 
 // val = math.sqrt(int);
-func mathSqrt(args ...O) O {
+func mathSqrt(args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -62,15 +62,15 @@ func init() {
 	// Setup our random seed.
 	rand.Seed(time.Now().UnixNano())
 	RegisterBuiltin("math.abs",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return mathAbs(args...)
 		})
 	RegisterBuiltin("math.rand",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return mathRandom(args...)
 		})
 	RegisterBuiltin("math.sqrt",
-		func(env *object.Environment, args ...O) O {
+		func(env *object.Environment, args ...object.Object) object.Object {
 			return mathSqrt(args...)
 		})
 }

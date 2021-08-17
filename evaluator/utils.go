@@ -121,7 +121,7 @@ func NewError(format string, a ...interface{}) *object.Error {
 }
 
 // StringObjectMap is a map of string keys to cozy objects
-type StringObjectMap map[string]O
+type StringObjectMap map[string]object.Object
 
 // NewHash creates a new cozy Hash
 func NewHash(x StringObjectMap) *object.Hash {

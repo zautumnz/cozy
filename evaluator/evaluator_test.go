@@ -10,7 +10,7 @@ import (
 	"github.com/zacanger/cozy/utils"
 )
 
-func testEval(input string) O {
+func testEval(input string) object.Object {
 	l := lexer.New(input)
 	p := parser.New(l)
 	program := p.ParseProgram()
@@ -18,7 +18,7 @@ func testEval(input string) O {
 	return Eval(program, env)
 }
 
-func testDecimalObject(t *testing.T, obj O, expected interface{}) bool {
+func testDecimalObject(t *testing.T, obj object.Object, expected interface{}) bool {
 	switch exp := expected.(type) {
 	case int64:
 		return testIntegerObject(t, obj, exp)
@@ -29,7 +29,7 @@ func testDecimalObject(t *testing.T, obj O, expected interface{}) bool {
 	}
 }
 
-func testIntegerObject(t *testing.T, obj O, expected int64) bool {
+func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
 	result, ok := obj.(*object.Integer)
 	if !ok {
 		t.Errorf("obj is not Integer. got=%T(%+v)", obj, obj)
@@ -43,7 +43,7 @@ func testIntegerObject(t *testing.T, obj O, expected int64) bool {
 	return true
 }
 
-func testFloatObject(t *testing.T, obj O, expected float64) bool {
+func testFloatObject(t *testing.T, obj object.Object, expected float64) bool {
 	result, ok := obj.(*object.Float)
 	if !ok {
 		t.Errorf("obj is not Float. got=%T(%+v)", obj, obj)
@@ -57,7 +57,7 @@ func testFloatObject(t *testing.T, obj O, expected float64) bool {
 	return true
 }
 
-func testStringObject(t *testing.T, obj O, expected string) bool {
+func testStringObject(t *testing.T, obj object.Object, expected string) bool {
 	result, ok := obj.(*object.String)
 	if !ok {
 		t.Errorf("obj is not String. got=%T(%+v)", obj, obj)
@@ -71,7 +71,7 @@ func testStringObject(t *testing.T, obj O, expected string) bool {
 	return true
 }
 
-func testNullObject(t *testing.T, obj O) bool {
+func testNullObject(t *testing.T, obj object.Object) bool {
 	if obj != NULL {
 		t.Errorf("object is not NULL. got=%T(%+v)", obj, obj)
 		return false
@@ -79,7 +79,7 @@ func testNullObject(t *testing.T, obj O) bool {
 	return true
 }
 
-func testBooleanObject(t *testing.T, obj O, expected bool) bool {
+func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
 	result, ok := obj.(*object.Boolean)
 	if !ok {
 		t.Errorf("object is not boolean. got=%T(%+v)", obj, obj)
