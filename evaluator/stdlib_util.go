@@ -9,7 +9,7 @@ import (
 )
 
 // convert a string to a float
-func floatFn(args ...object.Object) object.Object {
+func floatFn(args ...OBJ) OBJ {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -43,7 +43,7 @@ func floatFn(args ...object.Object) object.Object {
 }
 
 // convert a double/string to an int
-func intFn(args ...object.Object) object.Object {
+func intFn(args ...OBJ) OBJ {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -77,7 +77,7 @@ func intFn(args ...object.Object) object.Object {
 }
 
 // length of item
-func lenFn(args ...object.Object) object.Object {
+func lenFn(args ...OBJ) OBJ {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -98,7 +98,7 @@ func lenFn(args ...object.Object) object.Object {
 			args[0].Type())
 	}
 }
-func strFn(args ...object.Object) object.Object {
+func strFn(args ...OBJ) OBJ {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -109,7 +109,7 @@ func strFn(args ...object.Object) object.Object {
 }
 
 // type of an item
-func typeFn(args ...object.Object) object.Object {
+func typeFn(args ...OBJ) OBJ {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",
 			len(args))
@@ -119,23 +119,23 @@ func typeFn(args ...object.Object) object.Object {
 
 func init() {
 	RegisterBuiltin("util.int",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return intFn(args...)
 		})
 	RegisterBuiltin("util.float",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return floatFn(args...)
 		})
 	RegisterBuiltin("util.len",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return lenFn(args...)
 		})
 	RegisterBuiltin("util.string",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return strFn(args...)
 		})
 	RegisterBuiltin("util.type",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return typeFn(args...)
 		})
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/zacanger/cozy/object"
 )
 
-func timeSleep(args ...object.Object) object.Object {
+func timeSleep(args ...OBJ) OBJ {
 	var ms int64
 	switch arg := args[0].(type) {
 	case *object.Integer:
@@ -20,18 +20,18 @@ func timeSleep(args ...object.Object) object.Object {
 	return &object.Integer{Value: ms}
 }
 
-func timeUnix(args ...object.Object) object.Object {
+func timeUnix(args ...OBJ) OBJ {
 	return &object.Float{Value: float64(time.Now().UnixNano() / 1000000)}
 }
 
-func timeUtc(args ...object.Object) object.Object {
+func timeUtc(args ...OBJ) OBJ {
 	return &object.String{Value: time.Now().Format(time.RFC3339)}
 }
 
 var intervalIDs = make(map[int64]chan bool)
 var timeoutIDs = make(map[int64]bool)
 
-func timeTimeout(env *object.Environment, args ...object.Object) object.Object {
+func timeTimeout(env *object.Environment, args ...OBJ) OBJ {
 	var ms int64
 	var f *object.Function
 	switch t := args[0].(type) {
@@ -53,14 +53,14 @@ func timeTimeout(env *object.Environment, args ...object.Object) object.Object {
 	time.AfterFunc(time.Duration(ms)*time.Millisecond, func() {
 		v, ok := timeoutIDs[timeoutID]
 		if ok && !v {
-			ApplyFunction(env, f, make([]object.Object, 0))
+			ApplyFunction(env, f, make([]OBJ, 0))
 		}
 	})
 
 	return &object.Integer{Value: timeoutID}
 }
 
-func timeInterval(env *object.Environment, args ...object.Object) object.Object {
+func timeInterval(env *object.Environment, args ...OBJ) OBJ {
 	var ms int64
 	var f *object.Function
 	switch t := args[0].(type) {
@@ -84,7 +84,7 @@ func timeInterval(env *object.Environment, args ...object.Object) object.Object 
 		for {
 			select {
 			case <-ticker.C:
-				go ApplyFunction(env, f, make([]object.Object, 0))
+				go ApplyFunction(env, f, make([]OBJ, 0))
 			case <-clear:
 				ticker.Stop()
 				return
@@ -97,7 +97,7 @@ func timeInterval(env *object.Environment, args ...object.Object) object.Object 
 	return &object.Integer{Value: intervalID}
 }
 
-func timeCancel(args ...object.Object) object.Object {
+func timeCancel(args ...OBJ) OBJ {
 	switch t := args[0].(type) {
 	case *object.Integer:
 		if intervalIDs[t.Value] != nil {
@@ -112,32 +112,32 @@ func timeCancel(args ...object.Object) object.Object {
 		return NewError("Expected timerid, got %s", args[0].Type())
 	}
 
-	return &object.Boolean{Value: true}
+	return NULL
 }
 
 func init() {
 	RegisterBuiltin("time.sleep",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return timeSleep(args...)
 		})
 	RegisterBuiltin("time.unix",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return timeUnix(args...)
 		})
 	RegisterBuiltin("time.utc",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return timeUtc(args...)
 		})
 	RegisterBuiltin("time.interval",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return timeInterval(env, args...)
 		})
 	RegisterBuiltin("time.timeout",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return timeTimeout(env, args...)
 		})
 	RegisterBuiltin("time.cancel",
-		func(env *object.Environment, args ...object.Object) object.Object {
+		func(env *object.Environment, args ...OBJ) OBJ {
 			return timeCancel(args...)
 		})
 }
