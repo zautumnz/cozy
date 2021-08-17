@@ -10,7 +10,6 @@
 * Features:
     * http.server: add form support
     * http.client: add form support
-    * Http server middleware
 * Chores:
     * Clean up newerror and similar calls now that errors are useful values
     * At least 50% code coverage

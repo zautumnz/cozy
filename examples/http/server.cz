@@ -29,8 +29,9 @@ app.route("^/quux$", ["GET", "POST"], fn (req) {
         }
     }
 })
-# TODO: finish this
-# app.use(fn (req) { })
+app.use(fn (req) { print(json.serialize(req)) })
+# this is equivalent to:
+app.log()
 # regex is necessary to capture params
 app.route("/test/(.*)", fn (req) { {"body": req.params.join("\n")} })
 app.listen(8000, fn (x) { print("listening on", x) })

@@ -31,7 +31,12 @@ func newApp() *app {
 
 var appInstance = newApp()
 
-func sendWrapper(ctx *httpContext, statusCode int, body string, contentType string) {
+func sendWrapper(
+	ctx *httpContext,
+	statusCode int,
+	body string,
+	contentType string,
+) {
 	ctx.send(
 		&object.Integer{Value: int64(statusCode)},
 		&object.String{Value: body},
@@ -45,19 +50,6 @@ func notFound(ctx *httpContext) {
 
 func methodNotAllowed(ctx *httpContext) {
 	sendWrapper(ctx, http.StatusMethodNotAllowed, "Not allowed", "text/plain")
-}
-
-func useMiddleware(env *object.Environment, args ...object.Object) object.Object {
-	var middleware *object.Function
-	switch m := args[0].(type) {
-	case *object.Function:
-		middleware = m
-	default:
-		return NewError("use expected a function!")
-	}
-	fmt.Println(middleware)
-	// TODO:
-	return NULL
 }
 
 func registerRoute(env *object.Environment, args ...object.Object) object.Object {
@@ -320,7 +312,6 @@ func httpServer(env *object.Environment, args ...object.Object) object.Object {
 		"listen": &object.Builtin{Fn: listen},
 		"route":  &object.Builtin{Fn: registerRoute},
 		"static": &object.Builtin{Fn: staticHandler},
-		"use":    &object.Builtin{Fn: useMiddleware},
 	})
 }
 

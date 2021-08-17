@@ -107,8 +107,28 @@ let http.server = fn () {
     'http.server returns a new app instance.
     Available methods: route, listen, static.'
     let instance = http.create_server()
+    mutable middleware = []
+    let apply_middleware = fn (req) {
+        foreach m in middleware {
+            m(req)
+        }
+    }
 
     return {
+        "use": fn (cb) {
+            'use takes a callback which takes a request and does something
+            with it, such as logging. Note that the req object cannot be
+            modified, and use does not apply to http.server().static.'
+            middleware = middleware.append(cb)
+        },
+
+        "log": fn () {
+            'log registers a json request logger on the app.'
+            middleware = middleware.append(fn (req) {
+                print(json.serialize(req))
+            })
+        },
+
         "route": fn () {
             'route takes a path, methods, and callback.
             Path can be a string or regex. If methods are not provided,
@@ -128,7 +148,10 @@ let http.server = fn () {
                 handler = opts[1]
             }
 
-            instance.route(path, mets, handler)
+            instance.route(path, mets, fn (req) {
+                apply_middleware(req)
+                handler(req)
+            })
         },
 
         "listen": fn () {
