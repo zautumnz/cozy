@@ -26,6 +26,6 @@ func (n *Null) ToInterface() interface{} {
 }
 
 // Json returns a json-friendly string
-func (n *Null) Json() string {
+func (n *Null) Json(indent bool) string {
 	return n.Inspect()
 }

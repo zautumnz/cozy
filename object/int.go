@@ -66,6 +66,6 @@ func (i *Integer) ToInterface() interface{} {
 }
 
 // Json returns a json-friendly string
-func (i *Integer) Json() string {
+func (i *Integer) Json(indent bool) string {
 	return i.Inspect()
 }

@@ -15,6 +15,6 @@ let x = {
     "foo": [1,2,"3"],
     "bar": { "baz": y },
     "asdf": null,
-    "re": /[a-z]/
 }
-print(json.serialize(x), "complex example")
+# a truthy second arg to serialize will indent the json string
+print(json.serialize(x, 1), "complex example also showing indent")

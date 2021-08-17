@@ -60,7 +60,14 @@ func jsonDeserialize(args ...object.Object) object.Object {
 // Converts a cozy value to a JSON string
 // Every cozy object (type) has a Json method, so this is easy
 func jsonSerialize(args ...object.Object) object.Object {
-	return &object.String{Value: args[0].Json()}
+	indent := false
+	if len(args) > 1 {
+		if isTruthy(args[1]) {
+			indent = true
+		}
+	}
+
+	return &object.String{Value: args[0].Json(indent)}
 }
 
 func init() {

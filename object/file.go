@@ -205,6 +205,6 @@ func (f *File) ToInterface() interface{} {
 }
 
 // Json returns a json-friendly string
-func (f *File) Json() string {
+func (f *File) Json(indent bool) string {
 	return f.Inspect()
 }

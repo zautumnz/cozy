@@ -43,6 +43,6 @@ func (b *Builtin) ToInterface() interface{} {
 }
 
 // Json returns a json-friendly string
-func (b *Builtin) Json() string {
+func (b *Builtin) Json(indent bool) string {
 	return b.Inspect()
 }

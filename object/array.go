@@ -102,17 +102,21 @@ func (ao *Array) ToInterface() interface{} {
 }
 
 // Json returns a json-friendly string
-func (ao *Array) Json() string {
+func (ao *Array) Json(indent bool) string {
 	var out bytes.Buffer
 
 	elements := []string{}
 	for _, e := range ao.Elements {
-		elements = append(elements, e.Json())
+		elements = append(elements, e.Json(indent))
 	}
 
 	out.WriteString("[")
 	out.WriteString(strings.Join(elements, ", "))
 	out.WriteString("]")
+
+	if indent {
+		return indentJSON(out.String())
+	}
 
 	return out.String()
 }

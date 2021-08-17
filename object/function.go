@@ -81,7 +81,7 @@ func (f *Function) ToInterface() interface{} {
 }
 
 // Json returns a json-friendly string
-func (f *Function) Json() string {
+func (f *Function) Json(indent bool) string {
 	var out bytes.Buffer
 
 	params := []string{}
@@ -92,12 +92,9 @@ func (f *Function) Json() string {
 	out.WriteString("\"")
 	out.WriteString("fn")
 	out.WriteString("(")
-	out.WriteString(
-		strings.ReplaceAll(
-			strings.Join(params, ", "), `"`, `\"`))
+	out.WriteString(escapeQuotes(strings.Join(params, ", ")))
 	out.WriteString(") {")
-	out.WriteString(
-		strings.ReplaceAll(f.Body.String(), `"`, `\"`))
+	out.WriteString(escapeQuotes(f.Body.String()))
 	out.WriteString("}")
 	out.WriteString("\"")
 
