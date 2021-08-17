@@ -276,7 +276,7 @@ func cpFn(args ...OBJ) OBJ {
 	return NULL
 }
 
-func templateFn(env *object.Environment, args ...OBJ) OBJ {
+func templateFn(env *ENV, args ...OBJ) OBJ {
 	switch a := args[0].(type) {
 	case *object.String:
 		b, err := ioutil.ReadFile(a.Value)
@@ -293,39 +293,39 @@ func templateFn(env *object.Environment, args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("fs.glob",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return fsGlob(args...)
 		})
 	RegisterBuiltin("fs.chmod",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return chmodFn(args...)
 		})
 	RegisterBuiltin("fs.mkdir",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return mkdirFn(args...)
 		})
 	RegisterBuiltin("fs.open",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return openFn(args...)
 		})
 	RegisterBuiltin("fs.stat",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return statFn(args...)
 		})
 	RegisterBuiltin("fs.rm",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return rmFn(args...)
 		})
 	RegisterBuiltin("fs.mv",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return mvFn(args...)
 		})
 	RegisterBuiltin("fs.cp",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return cpFn(args...)
 		})
 	RegisterBuiltin("fs.tmpl",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return templateFn(env, args...)
 		})
 

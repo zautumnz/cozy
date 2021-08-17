@@ -10,7 +10,7 @@ import (
 	"github.com/zacanger/cozy/object"
 )
 
-var httpServerEnv *object.Environment
+var httpServerEnv *ENV
 
 type httpRoute struct {
 	Pattern *regexp.Regexp
@@ -52,7 +52,7 @@ func methodNotAllowed(ctx *httpContext) {
 	sendWrapper(ctx, http.StatusMethodNotAllowed, "Not allowed", "text/plain")
 }
 
-func registerRoute(env *object.Environment, args ...OBJ) OBJ {
+func registerRoute(env *ENV, args ...OBJ) OBJ {
 	var pattern string
 	var methods []string
 	var handler *object.Function
@@ -216,7 +216,7 @@ var staticHandlers = make([]staticHandlerMount, 0)
 
 // static("./public")
 // static("./public", "/some-mount-point")
-func staticHandler(env *object.Environment, args ...OBJ) OBJ {
+func staticHandler(env *ENV, args ...OBJ) OBJ {
 	dir := ""
 	mount := "/"
 
@@ -292,7 +292,7 @@ func (c *httpContext) send(args ...OBJ) OBJ {
 	return NULL
 }
 
-func listen(env *object.Environment, args ...OBJ) OBJ {
+func listen(env *ENV, args ...OBJ) OBJ {
 	switch a := args[0].(type) {
 	case *object.Integer:
 		err := http.ListenAndServe(":"+fmt.Sprint(a.Value), appInstance)
@@ -305,7 +305,7 @@ func listen(env *object.Environment, args ...OBJ) OBJ {
 	}
 }
 
-func httpServer(env *object.Environment, args ...OBJ) OBJ {
+func httpServer(env *ENV, args ...OBJ) OBJ {
 	httpServerEnv = env
 
 	return NewHash(StringObjectMap{
@@ -317,7 +317,7 @@ func httpServer(env *object.Environment, args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("http.create_server",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return httpServer(env, args...)
 		})
 }

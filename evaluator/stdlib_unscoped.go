@@ -79,15 +79,15 @@ func printFn(args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("print",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return printFn(args...)
 		})
 	RegisterBuiltin("error",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return errorFn(args...)
 		})
 	RegisterBuiltin("panic",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return panicFn(args...)
 		})
 }

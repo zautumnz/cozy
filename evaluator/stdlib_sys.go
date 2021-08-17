@@ -223,39 +223,39 @@ func infoFn(args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("sys.getenv",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return getEnvFn(args...)
 		})
 	RegisterBuiltin("sys.setenv",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return setEnvFn(args...)
 		})
 	RegisterBuiltin("sys.environment",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return envFn(args...)
 		})
 	RegisterBuiltin("sys.exit",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return sysExit(args...)
 		})
 	RegisterBuiltin("sys.exec",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return sysExec(args...)
 		})
 	RegisterBuiltin("sys.flag",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return flagFn(args...)
 		})
 	RegisterBuiltin("sys.args",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return argsFn(args...)
 		})
 	RegisterBuiltin("sys.cd",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return cdFn(args...)
 		})
 	RegisterBuiltin("sys.info",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return infoFn(args...)
 		})
 }

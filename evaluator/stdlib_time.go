@@ -31,7 +31,7 @@ func timeUtc(args ...OBJ) OBJ {
 var intervalIDs = make(map[int64]chan bool)
 var timeoutIDs = make(map[int64]bool)
 
-func timeTimeout(env *object.Environment, args ...OBJ) OBJ {
+func timeTimeout(env *ENV, args ...OBJ) OBJ {
 	var ms int64
 	var f *object.Function
 	switch t := args[0].(type) {
@@ -60,7 +60,7 @@ func timeTimeout(env *object.Environment, args ...OBJ) OBJ {
 	return &object.Integer{Value: timeoutID}
 }
 
-func timeInterval(env *object.Environment, args ...OBJ) OBJ {
+func timeInterval(env *ENV, args ...OBJ) OBJ {
 	var ms int64
 	var f *object.Function
 	switch t := args[0].(type) {
@@ -117,27 +117,27 @@ func timeCancel(args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("time.sleep",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return timeSleep(args...)
 		})
 	RegisterBuiltin("time.unix",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return timeUnix(args...)
 		})
 	RegisterBuiltin("time.utc",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return timeUtc(args...)
 		})
 	RegisterBuiltin("time.interval",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return timeInterval(env, args...)
 		})
 	RegisterBuiltin("time.timeout",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return timeTimeout(env, args...)
 		})
 	RegisterBuiltin("time.cancel",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return timeCancel(args...)
 		})
 }

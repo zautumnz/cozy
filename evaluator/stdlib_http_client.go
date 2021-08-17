@@ -399,7 +399,7 @@ func httpClient(args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("http.create_client",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return httpClient(args...)
 		})
 }

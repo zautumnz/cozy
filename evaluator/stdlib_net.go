@@ -278,35 +278,35 @@ func Read(args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("net.socket",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return Socket(args...)
 		})
 	RegisterBuiltin("net.listen",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return Listen(args...)
 		})
 	RegisterBuiltin("net.connect",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return Connect(args...)
 		})
 	RegisterBuiltin("net.close",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return Close(args...)
 		})
 	RegisterBuiltin("net.bind",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return Bind(args...)
 		})
 	RegisterBuiltin("net.accept",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return Accept(args...)
 		})
 	RegisterBuiltin("net.write",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return Write(args...)
 		})
 	RegisterBuiltin("net.read",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return Read(args...)
 		})
 }

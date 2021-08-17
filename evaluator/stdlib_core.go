@@ -44,7 +44,7 @@ func Async(f func() interface{}) ValueFuture {
 
 var asyncFunctions = make(map[int64]ValueFuture)
 
-func awaitFn(env *object.Environment, args ...OBJ) OBJ {
+func awaitFn(env *ENV, args ...OBJ) OBJ {
 	var res interface{}
 	var err error
 	switch t := args[0].(type) {
@@ -68,7 +68,7 @@ func awaitFn(env *object.Environment, args ...OBJ) OBJ {
 	}
 }
 
-func asyncFn(env *object.Environment, args ...OBJ) OBJ {
+func asyncFn(env *ENV, args ...OBJ) OBJ {
 	x := Async(func() interface{} {
 		return ApplyFunction(env, args[0], make([]OBJ, 0))
 	})
@@ -78,7 +78,7 @@ func asyncFn(env *object.Environment, args ...OBJ) OBJ {
 	return &object.Integer{Value: fnID}
 }
 
-func backgroundFn(env *object.Environment, args ...OBJ) OBJ {
+func backgroundFn(env *ENV, args ...OBJ) OBJ {
 	switch a := args[0].(type) {
 	case *object.Function:
 		go func() {
@@ -131,19 +131,19 @@ func matchFn(args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("core.match",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return matchFn(args...)
 		})
 	RegisterBuiltin("core.async",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return asyncFn(env, args...)
 		})
 	RegisterBuiltin("core.await",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return awaitFn(env, args...)
 		})
 	RegisterBuiltin("core.background",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return backgroundFn(env, args...)
 		})
 }

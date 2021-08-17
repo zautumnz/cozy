@@ -72,11 +72,11 @@ func jsonSerialize(args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("json.deserialize",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return jsonDeserialize(args...)
 		})
 	RegisterBuiltin("json.serialize",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return jsonSerialize(args...)
 		})
 }

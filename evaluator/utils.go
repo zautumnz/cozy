@@ -67,7 +67,7 @@ func IsNumber(s string) bool {
 
 // Interpolate (str, env)
 // return input string with $vars interpolated from environment
-func Interpolate(str string, env *object.Environment) string {
+func Interpolate(str string, env *ENV) string {
 	// Match all strings preceded by {{
 	re := regexp.MustCompile(`(?s)(\\)?(\{\{)(.*?)(\}\})`)
 	str = re.ReplaceAllStringFunc(str, func(m string) string {

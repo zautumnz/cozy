@@ -25,20 +25,23 @@ var (
 	CTX   = context.Background()
 )
 
-// OBJ is a type alias to save typing OBJ so many times
+// OBJ is a type alias to save some typing
 type OBJ = object.Object
+
+// ENV is a type alias to save some typing
+type ENV = object.Environment
 
 // The built-in functions / standard-library methods are stored here.
 var builtins = map[string]*object.Builtin{}
 
 // Eval is our core function for evaluating nodes.
-func Eval(node ast.Node, env *object.Environment) OBJ {
+func Eval(node ast.Node, env *ENV) OBJ {
 	return evalContext(context.Background(), node, env)
 }
 
 // evalContext is our core function for evaluating nodes.
 // The context.Context provided can be used to cancel a running script instance.
-func evalContext(ctx context.Context, node ast.Node, env *object.Environment) OBJ {
+func evalContext(ctx context.Context, node ast.Node, env *ENV) OBJ {
 	// We test our context at every iteration of our main-loop.
 	select {
 	case <-ctx.Done():
@@ -180,7 +183,7 @@ func evalContext(ctx context.Context, node ast.Node, env *object.Environment) OB
 }
 
 // eval block statement
-func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) OBJ {
+func evalBlockStatement(block *ast.BlockStatement, env *ENV) OBJ {
 	var result OBJ
 	for _, statement := range block.Statements {
 		result = Eval(statement, env)
@@ -225,7 +228,7 @@ func EvalModule(name string) OBJ {
 
 var importCache = make(map[string]OBJ)
 
-func evalImportExpression(ie *ast.ImportExpression, env *object.Environment) OBJ {
+func evalImportExpression(ie *ast.ImportExpression, env *ENV) OBJ {
 	// treat modules as singletons;
 	// we don't allow modifying anythig exported by modules, but this
 	// means we can skip re-evaling modules on subsequent imports
@@ -273,7 +276,7 @@ func evalPrefixExpression(operator string, right OBJ) OBJ {
 	}
 }
 
-func evalPostfixExpression(env *object.Environment, operator string, node *ast.PostfixExpression) OBJ {
+func evalPostfixExpression(env *ENV, operator string, node *ast.PostfixExpression) OBJ {
 	switch operator {
 	case "++":
 		val, ok := env.Get(node.Token.Literal)
@@ -333,7 +336,7 @@ func evalMinusPrefixOperatorExpression(right OBJ) OBJ {
 	}
 }
 
-func evalInfixExpression(operator string, left, right OBJ, env *object.Environment) OBJ {
+func evalInfixExpression(operator string, left, right OBJ, env *ENV) OBJ {
 	switch {
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
 		return evalIntegerInfixExpression(operator, left, right)
@@ -586,7 +589,7 @@ func evalStringInfixExpression(operator string, left, right OBJ) OBJ {
 // evalIfExpression handles an `if` expression, running the block
 // if the condition matches, and running any optional else block
 // otherwise.
-func evalIfExpression(ie *ast.IfExpression, env *object.Environment) OBJ {
+func evalIfExpression(ie *ast.IfExpression, env *ENV) OBJ {
 	condition := Eval(ie.Condition, env)
 	if isError(condition) {
 		return condition
@@ -600,7 +603,7 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) OBJ {
 	return NULL
 }
 
-func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val OBJ) {
+func evalAssignStatement(a *ast.AssignStatement, env *ENV) (val OBJ) {
 	evaluated := Eval(a.Value, env)
 	if isError(evaluated) {
 		return evaluated
@@ -689,7 +692,7 @@ func evalAssignStatement(a *ast.AssignStatement, env *object.Environment) (val O
 	return evaluated
 }
 
-func evalForLoopExpression(fle *ast.ForLoopExpression, env *object.Environment) OBJ {
+func evalForLoopExpression(fle *ast.ForLoopExpression, env *ENV) OBJ {
 	rt := TRUE
 	for {
 		condition := Eval(fle.Condition, env)
@@ -709,7 +712,7 @@ func evalForLoopExpression(fle *ast.ForLoopExpression, env *object.Environment) 
 }
 
 // handle "for x [,y] in .."
-func evalForeachExpression(fle *ast.ForeachStatement, env *object.Environment) OBJ {
+func evalForeachExpression(fle *ast.ForeachStatement, env *ENV) OBJ {
 	// expression
 	val := Eval(fle.Value, env)
 
@@ -773,7 +776,7 @@ func isTruthy(obj OBJ) bool {
 	}
 }
 
-func evalProgram(program *ast.Program, env *object.Environment) OBJ {
+func evalProgram(program *ast.Program, env *ENV) OBJ {
 	var result OBJ
 	for _, statement := range program.Statements {
 		result = Eval(statement, env)
@@ -793,7 +796,7 @@ func isError(obj OBJ) bool {
 	return false
 }
 
-func evalIdentifier(node *ast.Identifier, env *object.Environment) OBJ {
+func evalIdentifier(node *ast.Identifier, env *ENV) OBJ {
 	if val, ok := env.Get(node.Value); ok {
 		return val
 	}
@@ -805,7 +808,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) OBJ {
 	return NewError("identifier not found: " + node.Value)
 }
 
-func evalExpression(exps []ast.Expression, env *object.Environment) []OBJ {
+func evalExpression(exps []ast.Expression, env *ENV) []OBJ {
 	var result []OBJ
 	for _, e := range exps {
 		evaluated := Eval(e, env)
@@ -828,7 +831,7 @@ func trimQuotes(in string, c byte) string {
 	return in
 }
 
-func evalIndexExpression(left, index OBJ, env *object.Environment) OBJ {
+func evalIndexExpression(left, index OBJ, env *ENV) OBJ {
 	switch {
 	case left.Type() == object.ARRAY_OBJ:
 		return evalArrayIndexExpression(left, index, env)
@@ -847,12 +850,12 @@ func evalIndexExpression(left, index OBJ, env *object.Environment) OBJ {
 	}
 }
 
-func evalModuleIndexExpression(module, index OBJ, env *object.Environment) OBJ {
+func evalModuleIndexExpression(module, index OBJ, env *ENV) OBJ {
 	moduleObject := module.(*object.Module)
 	return evalHashIndexExpression(moduleObject.Attrs, index, env)
 }
 
-func evalArrayIndexExpression(array, index OBJ, env *object.Environment) OBJ {
+func evalArrayIndexExpression(array, index OBJ, env *ENV) OBJ {
 	arrayObject := array.(*object.Array)
 	switch t := index.(type) {
 	case *object.Integer:
@@ -870,7 +873,7 @@ func evalArrayIndexExpression(array, index OBJ, env *object.Environment) OBJ {
 	}
 }
 
-func evalHashIndexExpression(hash, index OBJ, env *object.Environment) OBJ {
+func evalHashIndexExpression(hash, index OBJ, env *ENV) OBJ {
 	hashObject := hash.(*object.Hash)
 	key, ok := index.(object.Hashable)
 	if !ok {
@@ -887,7 +890,7 @@ func evalHashIndexExpression(hash, index OBJ, env *object.Environment) OBJ {
 	return pair.Value
 }
 
-func evalStringIndexExpression(input, index OBJ, env *object.Environment) OBJ {
+func evalStringIndexExpression(input, index OBJ, env *ENV) OBJ {
 	str := input.(*object.String).Value
 	switch t := index.(type) {
 	case *object.Integer:
@@ -914,7 +917,7 @@ func evalStringIndexExpression(input, index OBJ, env *object.Environment) OBJ {
 	}
 }
 
-func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) OBJ {
+func evalHashLiteral(node *ast.HashLiteral, env *ENV) OBJ {
 	pairs := make(map[object.HashKey]object.HashPair)
 	for keyNode, valueNode := range node.Pairs {
 		key := Eval(keyNode, env)
@@ -938,7 +941,7 @@ func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) OBJ {
 }
 
 // ApplyFunction applies a function in an environment
-func ApplyFunction(env *object.Environment, fn OBJ, args []OBJ) OBJ {
+func ApplyFunction(env *ENV, fn OBJ, args []OBJ) OBJ {
 	switch fn := fn.(type) {
 	case *object.Function:
 		extendEnv := extendFunctionEnv(fn, args)
@@ -951,7 +954,7 @@ func ApplyFunction(env *object.Environment, fn OBJ, args []OBJ) OBJ {
 	}
 }
 
-func extendFunctionEnv(fn *object.Function, args []OBJ) *object.Environment {
+func extendFunctionEnv(fn *object.Function, args []OBJ) *ENV {
 	env := object.NewEnclosedEnvironment(fn.Env, args)
 
 	// Set the defaults
@@ -979,7 +982,7 @@ func RegisterBuiltin(name string, fn object.BuiltinFunction) {
 	builtins[name] = &object.Builtin{Fn: fn}
 }
 
-func objectGetMethod(o, key OBJ, env *object.Environment) (ret OBJ, ok bool) {
+func objectGetMethod(o, key OBJ, env *ENV) (ret OBJ, ok bool) {
 	switch k := key.(type) {
 	case *object.String:
 		var fn object.BuiltinFunction
@@ -1072,7 +1075,7 @@ func objectToNativeBoolean(o OBJ) bool {
 	}
 }
 
-func evalSpread(node ast.Node, env *object.Environment) OBJ {
+func evalSpread(node ast.Node, env *ENV) OBJ {
 	switch n := node.(type) {
 	case *ast.SpreadLiteral:
 		a := n.Right.TokenLiteral()

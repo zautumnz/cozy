@@ -119,23 +119,23 @@ func typeFn(args ...OBJ) OBJ {
 
 func init() {
 	RegisterBuiltin("util.int",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return intFn(args...)
 		})
 	RegisterBuiltin("util.float",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return floatFn(args...)
 		})
 	RegisterBuiltin("util.len",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return lenFn(args...)
 		})
 	RegisterBuiltin("util.string",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return strFn(args...)
 		})
 	RegisterBuiltin("util.type",
-		func(env *object.Environment, args ...OBJ) OBJ {
+		func(env *ENV, args ...OBJ) OBJ {
 			return typeFn(args...)
 		})
 }
