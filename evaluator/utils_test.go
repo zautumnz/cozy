@@ -48,3 +48,22 @@ func TestInterpolate(t *testing.T) {
 		}
 	}
 }
+
+func TestNewHash(t *testing.T) {
+	res := NewHash(StringObjectMap{
+		"foo": &object.Integer{Value: 1},
+	})
+
+	f := &object.String{Value: "foo"}
+	p := res.Pairs[f.HashKey()]
+	v := p.Value
+	if v.Type() != object.INTEGER_OBJ {
+		t.Fatalf("NewHash failed, expected integer, got %s", v.Type())
+	}
+	switch x := v.(type) {
+	case *object.Integer:
+		if x.Value != 1 {
+			t.Fatalf("NewHash failed, expected value of 1, got %d", x.Value)
+		}
+	}
+}
