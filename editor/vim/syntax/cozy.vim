@@ -58,13 +58,25 @@ syn region      cozyDocString         start=+'+ skip=+\\\\\|\\'+ end=+'+ contain
 hi def link cozyString String
 hi def link cozyDocString String
 
-" TODO: this section copied from ruby.vim, needs work
-syn region cozyInterpolation   matchgroup=cozyInterpolationDelimiter start="${" end="}" contained contains=ALLBUT,@cozyComment
-syn match cozyInterpolation  "#\$\%(-\w\|[!$&"'*+,./0:;<>?@\`~_]\|\w\+\)" display contained contains=cozyInterpolationDelimiter,@cozyDeclaration
-syn match cozyInterpolation "#@@\=\w\+" display contained contains=cozyInterpolationDelimiter,cozyDeclaration,cozySingleDec
-syn match cozyInterpolationDelimiter "#\ze[$@]" display contained
-hi def link cozyInterpolation Special
-hi def link cozyInterpolationDelimiter Special
+" Fields;
+if cozy()
+  " 1. Match a sequence of word characters coming after a '.'
+  " 2. Require the following but dont match it: ( \@= see :h E59)
+  "    - The symbols: / - + * %   OR
+  "    - The symbols: [] {} <> )  OR
+  "    - The symbols: \n \r space OR
+  "    - The symbols: , : .
+  " 3. Have the start of highlight (hs) be the start of matched
+  "    pattern (s) offsetted one to the right (+1) (see :h E401)
+  syn match       cozyField   /\.\w\+\
+        \%(\%([\/\-\+*%]\)\|\
+        \%([\[\]{}<\>\)]\)\|\
+        \%([\!=\^|&]\)\|\
+        \%([\n\r\ ]\)\|\
+        \%([,\:.]\)\)\@=/hs=s+1
+endif
+hi def link    cozyField              Identifier
+
 
 " Regions
 syn region        cozyParen             start='(' end=')' transparent
@@ -128,22 +140,10 @@ hi def link     cozyFunction          Function
 syn match       cozyFunctionCall      /\w\+\ze(/ contains=cozyBuiltins,cozyDeclaration
 hi def link     cozyFunctionCall      Type
 
-" Fields;
-" 1. Match a sequence of word characters coming after a '.'
-" 2. Require the following but dont match it: ( \@= see :h E59)
-"    - The symbols: / - + * %   OR
-"    - The symbols: [] {} <> )  OR
-"    - The symbols: \n \r space OR
-"    - The symbols: , : .
-" 3. Have the start of highlight (hs) be the start of matched
-"    pattern (s) offsetted one to the right (+1) (see :h E401)
-syn match       cozyField   /\.\w\+\
-    \%(\%([\/\-\+*%]\)\|\
-    \%([\[\]{}<\>\)]\)\|\
-    \%([\!=\^|&]\)\|\
-    \%([\n\r\ ]\)\|\
-    \%([,\:.]\)\)\@=/hs=s+1
-hi def link    cozyField              Identifier
+" Interpolations
+" TODO: highlighting the things _inside_ the {{}} isn't working correctly
+syn region cozyInterp       matchgroup=cozyInterpDelim start="{{" end="}}" contained containedin=cozyString
+hi def link cozyInterpDelim Delimiter
 
 " Variable Assignments
 syn match cozyMutableAssign /\v[_.[:alnum:]]+(,\s*[_.[:alnum:]]+)*\ze(\s*([-^+|^\/%&]|\*|\<\<|\>\>|\&\^)?\=[^=])/
