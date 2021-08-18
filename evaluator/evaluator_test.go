@@ -237,11 +237,9 @@ func TestErrorHandling(t *testing.T) {
 		expectedMessage string
 	}{
 		{"5+true;", "type mismatch: INTEGER + BOOLEAN"},
-		{"5+true; 5;", "type mismatch: INTEGER + BOOLEAN"},
 		{"-true", "unknown operator: -BOOLEAN"},
 		{"3--", "3 is unknown"},
 		{"true+false", "unknown operator: BOOLEAN + BOOLEAN"},
-		{"5;true+false;5", "unknown operator: BOOLEAN + BOOLEAN"},
 		{"if (10>1) { true+false;}", "unknown operator: BOOLEAN + BOOLEAN"},
 		{`if (10 > 1) {
       if (10>1) {
@@ -353,13 +351,12 @@ func TestBuiltinFunction(t *testing.T) {
 		input    string
 		expected interface{}
 	}{
-		{`len("")`, 0},
-		{`len("four")`, 4},
-		{`len("天研")`, 2},
-		{`len("hello world")`, 11},
-		// TOOD: testing errors is broken
-		// {`len(1)`, "argument to `len` not supported, got=INTEGER"},
-		// {`len("one", "two")`, "wrong number of arguments. got=2, want=1"},
+		{`util.len("")`, 0},
+		{`util.len("four")`, 4},
+		{`util.len("天研")`, 2},
+		{`util.len("hello world")`, 11},
+		{`util.len(1)`, "argument to `len` not supported, got=INTEGER"},
+		{`util.len("one", "two")`, "wrong number of arguments. got=2, want=1"},
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
@@ -610,23 +607,23 @@ func TestTypeBuiltin(t *testing.T) {
 		expected interface{}
 	}{
 		{
-			"type(\"Zac\");",
+			"util.type(\"Zac\");",
 			"string",
 		},
 		{
-			"type(1);",
+			"util.type(1);",
 			"integer",
 		},
 		{
-			"type(3.14159);",
+			"util.type(3.14159);",
 			"float",
 		},
 		{
-			"type([1,2,3]);",
+			"util.type([1,2,3]);",
 			"array",
 		},
 		{
-			"type({\"name\":\"cozy\", true: 1, 7: \"seven\"});",
+			"util.type({\"name\":\"cozy\", true: 1, 7: \"seven\"});",
 			"hash",
 		},
 	}
