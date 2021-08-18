@@ -101,6 +101,10 @@ func (e *Environment) Set(name string, val Object) Object {
 		utils.ExitConditionally(3)
 	}
 
+	ff, ok := val.(*Function)
+	if ok {
+		ff.Name = name
+	}
 	// Store the (updated) value.
 
 	// This chunk is used for temporary environments (regex and loops)
@@ -135,6 +139,11 @@ func (e *Environment) Set(name string, val Object) Object {
 
 // SetLet sets the value of a constant by name.
 func (e *Environment) SetLet(name string, val Object) Object {
+	ff, ok := val.(*Function)
+	if ok {
+		ff.Name = name
+	}
+
 	// store the value
 	e.store[name] = val
 

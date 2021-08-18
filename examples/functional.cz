@@ -4,6 +4,8 @@
 let even? = fn(n) {
     return n % 2 == 0
 }
+# functions have names
+print(even?.name())
 
 # Return true if the given number is odd.
 let odd? = fn(n) {

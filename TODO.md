@@ -20,7 +20,6 @@
     * Add argument validation to all internal functions and stdlib
     * Improve all Go error messages
     * Remove other extraneous things from readline fork
-    * Add `name` property to functions
     * Find and remove any unused Go code
 
 ## Possible v2 Features

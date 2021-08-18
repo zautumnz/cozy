@@ -9,9 +9,6 @@ install:
 	@cp -f cozy $(PREFIX)/bin/cozy
 	@chmod 755 $(PREFIX)/bin/cozy
 
-fmt:
-	go fmt ./...
-
 clean:
 	@rm -f cozy coverage.out
 

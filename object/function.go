@@ -2,6 +2,7 @@ package object
 
 import (
 	"bytes"
+	"fmt"
 	"sort"
 	"strings"
 
@@ -15,16 +16,10 @@ type Function struct {
 	Defaults   map[string]ast.Expression
 	Env        *Environment
 	DocString  *ast.DocStringLiteral
+	Name       string
 }
 
-// Type returns the type of this object.
-func (f *Function) Type() Type {
-	return FUNCTION_OBJ
-}
-
-// Inspect returns a string-representation of the given object.
-// TODO: when f.Name exists, have this return f.Name || ANONYMOUS
-func (f *Function) Inspect() string {
+func (f *Function) stringify() string {
 	var out bytes.Buffer
 	parameters := make([]string, 0)
 	for _, p := range f.Parameters {
@@ -35,10 +30,41 @@ func (f *Function) Inspect() string {
 	out.WriteString(strings.Join(parameters, ", "))
 	out.WriteString(") {\n")
 	for _, s := range f.Body.Statements {
-		out.WriteString(s.String() + "\n")
+		out.WriteString(s.String())
 	}
 	out.WriteString("}")
 	return out.String()
+}
+
+var stringifiedAnonymousFunctionMap = make(map[string]int)
+
+func (f *Function) getNameOrDefault() string {
+	if f.Name != "" {
+		return f.Name
+	}
+
+	n := 1
+	if stringifiedAnonymousFunctionMap[f.stringify()] != 0 {
+		n = stringifiedAnonymousFunctionMap[f.stringify()]
+		fmt.Println("first")
+	} else {
+		x := len(stringifiedAnonymousFunctionMap) + 1
+		stringifiedAnonymousFunctionMap[f.stringify()] = x
+		n = x
+		fmt.Println("second")
+	}
+
+	return "ANON_FN_" + fmt.Sprint(n)
+}
+
+// Type returns the type of this object.
+func (f *Function) Type() Type {
+	return FUNCTION_OBJ
+}
+
+// Inspect returns a string-representation of the given object.
+func (f *Function) Inspect() string {
+	return f.getNameOrDefault()
 }
 
 // GetMethod returns a method against the object.
@@ -46,7 +72,7 @@ func (f *Function) Inspect() string {
 func (f *Function) GetMethod(method string) BuiltinFunction {
 	if method == "methods" {
 		return func(env *Environment, args ...Object) Object {
-			static := []string{"methods", "doc"}
+			static := []string{"methods", "doc", "name"}
 			dynamic := env.Names("function.")
 
 			var names []string
@@ -63,13 +89,22 @@ func (f *Function) GetMethod(method string) BuiltinFunction {
 			}
 			return &Array{Elements: result}
 		}
-	} else if method == "doc" {
+	}
+
+	if method == "doc" {
 		return func(env *Environment, args ...Object) Object {
 			if f.DocString != nil {
 				return &String{Value: f.DocString.Value}
 			}
 			return &String{Value: ""}
 		}
+	}
+
+	if method == "name" {
+		return func(env *Environment, args ...Object) Object {
+			return &String{Value: f.getNameOrDefault()}
+		}
+
 	}
 
 	return nil
@@ -82,23 +117,6 @@ func (f *Function) ToInterface() interface{} {
 }
 
 // JSON returns a json-friendly string
-// TODO: when f.Name exists, have this return f.Inspect()
 func (f *Function) JSON(indent bool) string {
-	var out bytes.Buffer
-
-	params := []string{}
-	for _, p := range f.Parameters {
-		params = append(params, p.String())
-	}
-
-	out.WriteString("\"")
-	out.WriteString("fn")
-	out.WriteString("(")
-	out.WriteString(escapeQuotes(strings.Join(params, ", ")))
-	out.WriteString(") {")
-	out.WriteString(escapeQuotes(f.Body.String()))
-	out.WriteString("}")
-	out.WriteString("\"")
-
-	return out.String()
+	return f.Inspect()
 }
