@@ -14,5 +14,5 @@
 
 # Checklist
 
-* [ ] Added tests / did not decrease code coverage
-* [ ] Tested in supported environments
+* [ ] If adding features, tests were also added
+* [ ] Test were run (`make test`)
