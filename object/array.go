@@ -101,13 +101,13 @@ func (ao *Array) ToInterface() interface{} {
 	return "<ARRAY>"
 }
 
-// Json returns a json-friendly string
-func (ao *Array) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (ao *Array) JSON(indent bool) string {
 	var out bytes.Buffer
 
 	elements := []string{}
 	for _, e := range ao.Elements {
-		elements = append(elements, e.Json(indent))
+		elements = append(elements, e.JSON(indent))
 	}
 
 	out.WriteString("[")

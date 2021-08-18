@@ -60,7 +60,7 @@ func errorFn(args ...OBJ) OBJ {
 			}
 		}
 		if data != nil {
-			e.Data = data.Json(false)
+			e.Data = data.JSON(false)
 		}
 		return e
 	default:

@@ -204,7 +204,7 @@ func (f *File) ToInterface() interface{} {
 	return "<FILE>"
 }
 
-// Json returns a json-friendly string
-func (f *File) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (f *File) JSON(indent bool) string {
 	return f.Inspect()
 }

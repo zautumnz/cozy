@@ -62,7 +62,7 @@ func (f *Float) ToInterface() interface{} {
 	return f.Value
 }
 
-// Json returns a json-friendly string
-func (f *Float) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (f *Float) JSON(indent bool) string {
 	return f.Inspect()
 }

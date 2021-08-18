@@ -57,7 +57,7 @@ func (r *Request) initHeaders(req *http.Request) {
 }
 
 // Check application/json
-func (r *Request) isJson() bool {
+func (r *Request) isJSON() bool {
 	if len(r.headers) > 0 {
 		for _, v := range r.headers {
 			if strings.Contains(strings.ToLower(v), "application/json") {
@@ -88,7 +88,7 @@ func (r *Request) buildBody(d ...interface{}) (io.Reader, error) {
 	case *bytes.Buffer:
 		return d[0].(*bytes.Buffer), nil
 	default:
-		if r.isJson() {
+		if r.isJSON() {
 			b, err := json.Marshal(d[0])
 			if err != nil {
 				return nil, err

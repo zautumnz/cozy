@@ -29,7 +29,7 @@ func (r *ReturnValue) ToInterface() interface{} {
 	return "<RETURN_VALUE>"
 }
 
-// Json returns a json-friendly string
-func (r *ReturnValue) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (r *ReturnValue) JSON(indent bool) string {
 	return r.Inspect()
 }

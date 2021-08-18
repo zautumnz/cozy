@@ -58,7 +58,7 @@ type Object interface {
 	ToInterface() interface{}
 
 	// Return a JSON-friendly string
-	Json(indent bool) string
+	JSON(indent bool) string
 }
 
 // Hashable type can be hashed

@@ -114,7 +114,7 @@ func (s *String) ToInterface() interface{} {
 	return s.Value
 }
 
-// Json returns a json-friendly string
-func (s *String) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (s *String) JSON(indent bool) string {
 	return `"` + escapeQuotes(s.Inspect()) + `"`
 }

@@ -16,7 +16,7 @@ func (b *Builtin) Type() Type {
 
 // Inspect returns a string-representation of the given object.
 func (b *Builtin) Inspect() string {
-	return "builtin function"
+	return "<builtin>"
 }
 
 // GetMethod returns a method against the object.
@@ -42,7 +42,7 @@ func (b *Builtin) ToInterface() interface{} {
 	return "<BUILTIN>"
 }
 
-// Json returns a json-friendly string
-func (b *Builtin) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (b *Builtin) JSON(indent bool) string {
 	return b.Inspect()
 }

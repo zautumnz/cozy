@@ -49,8 +49,8 @@ func (e *Error) ToInterface() interface{} {
 	return "<ERROR>"
 }
 
-// Json returns a json-friendly string
-func (e *Error) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (e *Error) JSON(indent bool) string {
 	s := `{"error":"` + escapeQuotes(e.Message) + `"`
 	if e.Code != nil {
 		s += `,"code":` + fmt.Sprint(*e.Code)

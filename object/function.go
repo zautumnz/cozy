@@ -23,6 +23,7 @@ func (f *Function) Type() Type {
 }
 
 // Inspect returns a string-representation of the given object.
+// TODO: when f.Name exists, have this return f.Name || ANONYMOUS
 func (f *Function) Inspect() string {
 	var out bytes.Buffer
 	parameters := make([]string, 0)
@@ -80,8 +81,9 @@ func (f *Function) ToInterface() interface{} {
 	return "<FUNCTION>"
 }
 
-// Json returns a json-friendly string
-func (f *Function) Json(indent bool) string {
+// JSON returns a json-friendly string
+// TODO: when f.Name exists, have this return f.Inspect()
+func (f *Function) JSON(indent bool) string {
 	var out bytes.Buffer
 
 	params := []string{}

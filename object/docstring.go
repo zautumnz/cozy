@@ -66,7 +66,7 @@ func (s *DocString) ToInterface() interface{} {
 	return s.Value
 }
 
-// Json returns a json-friendly string
-func (s *DocString) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (s *DocString) JSON(indent bool) string {
 	return s.Inspect()
 }

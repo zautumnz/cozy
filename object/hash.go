@@ -158,16 +158,16 @@ func (h *Hash) ToInterface() interface{} {
 	return "<HASH>"
 }
 
-// Json returns a json-friendly string
-func (h *Hash) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (h *Hash) JSON(indent bool) string {
 	var out bytes.Buffer
 
 	pairs := []string{}
 	for _, pair := range h.Pairs {
 		pairs = append(pairs, fmt.Sprintf(
 			`%s: %s`,
-			pair.Key.Json(indent),
-			pair.Value.Json(indent)))
+			pair.Key.JSON(indent),
+			pair.Value.JSON(indent)))
 	}
 	// create stable key ordered output
 	sort.Strings(pairs)

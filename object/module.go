@@ -31,7 +31,7 @@ func (m *Module) Type() Type {
 
 // Inspect returns a stringified version of the object for debugging
 func (m *Module) Inspect() string {
-	return fmt.Sprintf("<MODULE '%s'>", m.Name)
+	return fmt.Sprintf("<module:%s>", m.Name)
 }
 
 // GetMethod invokes a method against the object.
@@ -66,7 +66,7 @@ func (m *Module) ToInterface() interface{} {
 	return "<MODULE>"
 }
 
-// Json returns a json-friendly string
-func (m *Module) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (m *Module) JSON(indent bool) string {
 	return m.Inspect()
 }

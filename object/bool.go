@@ -65,7 +65,7 @@ func (b *Boolean) ToInterface() interface{} {
 	return b.Value
 }
 
-// Json returns a json-friendly string
-func (b *Boolean) Json(indent bool) string {
+// JSON returns a json-friendly string
+func (b *Boolean) JSON(indent bool) string {
 	return b.Inspect()
 }
