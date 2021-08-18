@@ -15,22 +15,20 @@ fmt:
 clean:
 	@rm -f cozy coverage.out
 
-test:
-	@go test ./...
-
 cover:
 	@go test -coverprofile=coverage.out ./...
 
-coverage:
+cover_open:
 	@go tool cover -html=coverage.out
 
 count:
 	@cloc --exclude-dir=x,.git,.github --read-lang-def=editor/cozy.cloc .
 
-lint:
+test:
 	@go fmt ./...
 	@go vet ./...
 	@staticcheck ./...
+	@go test ./...
 
 tags:
 	@ctags --exclude=x -R .
