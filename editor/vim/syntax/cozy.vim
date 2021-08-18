@@ -4,6 +4,9 @@ endif
 
 syn case match
 
+" used in interpolations
+syn cluster     cozyEverything      contains=cozyMutable,cozyLet,cozyDeclaration,cozyStatement,cozyConditional,cozyRepeat,cozyBuiltins,cozyBoolean,cozyString,cozyField,cozySingleDecl,cozyDecimalInt,cozyFloat,cozyOperator,cozyFunction,cozyFunctionCall
+
 syn keyword     cozyImport          import  contained
 syn keyword     cozyMutable         mutable contained
 syn keyword     cozyLet             let     contained
@@ -141,8 +144,7 @@ syn match       cozyFunctionCall      /\w\+\ze(/ contains=cozyBuiltins,cozyDecla
 hi def link     cozyFunctionCall      Type
 
 " Interpolations
-" TODO: highlighting the things _inside_ the {{}} isn't working correctly
-syn region cozyInterp       matchgroup=cozyInterpDelim start="{{" end="}}" contained containedin=cozyString
+syn region cozyInterp       matchgroup=cozyInterpDelim start="{{" end="}}" contained containedin=cozyString contains=@cozyEverything
 hi def link cozyInterpDelim Delimiter
 
 " Variable Assignments
