@@ -28,6 +28,6 @@ test:
 	@go test ./...
 
 tags:
-	@ctags --exclude=x -R .
+	@ctags --exclude=x --exclude=examples -R .
 
 .PHONY: clean install tags

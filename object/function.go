@@ -46,12 +46,10 @@ func (f *Function) getNameOrDefault() string {
 	n := 1
 	if stringifiedAnonymousFunctionMap[f.stringify()] != 0 {
 		n = stringifiedAnonymousFunctionMap[f.stringify()]
-		fmt.Println("first")
 	} else {
 		x := len(stringifiedAnonymousFunctionMap) + 1
 		stringifiedAnonymousFunctionMap[f.stringify()] = x
 		n = x
-		fmt.Println("second")
 	}
 
 	return "ANON_FN_" + fmt.Sprint(n)

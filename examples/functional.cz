@@ -103,10 +103,12 @@ print(memoized(1, 2, 3))
 # second call will fetch from in-mem cache
 print(memoized(1, 2, 3))
 
-# curry
-# TODO: spread isn't working in the stdlib
-# let curried = util.curry(adder)
-# let first = curried(1)
-# let second = first(2)
-# let third = second(3)()
-# print(third)
+# curry keeps returning a new function
+# as long as the result gets called with any args;
+# when it's called with no args, then it calls the
+# original function with all the collected args.
+let curried = util.curry(adder)
+let first = curried(1)
+let second = first(2)
+let third = second(3)()
+print(third)
