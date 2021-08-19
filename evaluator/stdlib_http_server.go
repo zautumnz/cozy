@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -187,13 +188,9 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// TODO: this still isn't quite right
-	// we need to disable file directory listings
-	// http.Handle(h.Mount, h.Handler).ServeHTTP(w, r)
-	// Also it falls through to both 404 and 405 sometimes?
 	for _, h := range staticHandlers {
 		if strings.HasPrefix(ctx.URL.Path, h.Mount) {
-			http.FileServer(http.Dir(h.Path)).ServeHTTP(w, r)
+			http.FileServer(neuteredFileSystem{http.Dir(h.Path)}).ServeHTTP(w, r)
 			return
 		}
 	}
@@ -205,6 +202,31 @@ type httpContext struct {
 	http.ResponseWriter
 	*http.Request
 	Params []string
+}
+type neuteredFileSystem struct {
+	fs http.FileSystem
+}
+
+func (nfs neuteredFileSystem) Open(path string) (http.File, error) {
+	f, err := nfs.fs.Open(path)
+	if err != nil {
+		return nil, err
+	}
+
+	s, err := f.Stat()
+	if s.IsDir() {
+		index := filepath.Join(path, "index.html")
+		if _, err := nfs.fs.Open(index); err != nil {
+			closeErr := f.Close()
+			if closeErr != nil {
+				return nil, closeErr
+			}
+
+			return nil, err
+		}
+	}
+
+	return f, nil
 }
 
 type staticHandlerMount struct {

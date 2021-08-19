@@ -3,7 +3,6 @@
 # Remaining v1 Work
 
 * Bugs:
-    * http.server().static isn't quite right, see the comment in that code
     * Spread isn't quite right, see the comment in curry in the stdlib
     * Vim syntax needs work: function definitions
     * More than one level of dot access doesn't seem to always work
