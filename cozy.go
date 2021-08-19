@@ -1,6 +1,5 @@
-// Simple, high-ish-level interpreted programming language that sits somewhere
-// between scripting and general-purpose programming.
-// For more details, see github.com/zacanger/cozy.
+// Simple general-purpose interpreted programming language.
+// See the docs at github.com/zacanger/cozy.
 
 package main
 

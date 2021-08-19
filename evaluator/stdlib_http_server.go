@@ -203,6 +203,7 @@ type httpContext struct {
 	*http.Request
 	Params []string
 }
+
 type neuteredFileSystem struct {
 	fs http.FileSystem
 }
