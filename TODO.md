@@ -22,21 +22,21 @@
 ## Possible Future Features
 
 * 80%+ code coverage
-* Consider rewriting as compiled (bytecode VM) lang (see 2nd Monkey book)
 * Nested interpolations
 * Add tab-completion to the REPL
 * Maybe combine float/integer to just one number type?
-* Date object or additions to core time module
-* Markdown parser
 * Move as much of the stdlib into cozy (out of Go) as possible
-* Simplify registerBuiltin calls so they can be looped over
-* Microblogging site real-life example, or something similar in scope
-* Cryptography builtins
-    * Guid
-    * crypto/rand
-    * common hashes
-    * aes stuff
-* YAML support
-* TOML support
-* Websocket support
-* Multiple-db ORM
+* Write in cozy stdlib:
+    * Date object or additions to core time module
+    * Markdown parser
+    * Simplify registerBuiltin calls so they can be looped over
+    * Microblogging site real-life example, or something similar in scope
+    * Cryptography builtins
+        * Guid
+        * crypto/rand
+        * common hashes
+        * aes stuff
+    * YAML support
+    * TOML support
+    * Websocket support
+    * Multiple-db ORM

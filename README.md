@@ -15,8 +15,10 @@ and file-based modules.
 It's meant to feel comfortable and familiar no matter what languages you might
 already know (hence the name). Performance isn't an explicit goal, but cozy is
 fairly fast (time the examples and try a benchmarking tool against the http
-server if you're curious). Documentation mostly lives in the examples and
-standard library.
+server if you're curious). It's also meant to have a relatively simple
+host-language implementation (for example, much of the standard libarary is
+written in cozy itself) to make debugging easy and porting to other host
+languages in the future straightforward.
 
 ## Example
 

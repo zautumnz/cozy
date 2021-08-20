@@ -1,6 +1,5 @@
 #!/usr/bin/env cozy
 
-
 # all args
 let x = fn () {
     let a = sys.args();
