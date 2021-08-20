@@ -9,14 +9,15 @@
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs
-* Chores:
-    * http.client: add form support
+* Features:
     * http.server: add form support
+    * http.client: add form support
+    * Utility like Node's `__filename` (which can also be used to get dirname)
+* Chores:
     * Clean up newerror and similar calls now that errors are useful values
     * Confirm that everything under ./examples works
     * Add argument validation to all internal functions and stdlib
     * Improve all Go error messages
-    * Find and remove any unused Go code
 
 ## Possible Future Features
 

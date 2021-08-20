@@ -141,7 +141,7 @@ func parseQuery(url string) ([]string, error) {
 }
 
 // Build GET request url
-func buildUrl(url string, data ...interface{}) (string, error) {
+func buildURL(url string, data ...interface{}) (string, error) {
 	query, err := parseQuery(url)
 	if err != nil {
 		return url, err
@@ -211,7 +211,7 @@ func (r *Request) request(method, url string, data ...interface{}) (*Response, e
 	r.method = method
 
 	if method == "GET" || method == "DELETE" {
-		url, err = buildUrl(url, data...)
+		url, err = buildURL(url, data...)
 		if err != nil {
 			return nil, err
 		}
