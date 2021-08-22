@@ -21,6 +21,12 @@
 
 ## Possible Future Features
 
+* Allow escape codes (for colors and whatnot) in print calls
+* Change import, http.server, and other paths to allow relative paths/from the
+    cozy file being executed
+* Add basic module management: some kind of module manifest, vcs manager, and
+    automatic COZYPATH modification
+* Add option to compile a program (along with cozy itself) to a binary
 * 80%+ code coverage
 * Nested interpolations
 * Add tab-completion to the REPL
