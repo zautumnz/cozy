@@ -34,4 +34,9 @@ app.use(fn (req) { print(json.serialize(req)) })
 app.log()
 # regex is necessary to capture params
 app.route("/test/(.*)", fn (req) { {"body": req.params.join("\n")} })
+app.route("/form", ["POST"], fn (req) {
+    # TODO:
+    print(req.form)
+    return { "status_code": 201 }
+})
 app.listen(8000, fn (x) { print("listening on", x) })

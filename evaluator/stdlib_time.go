@@ -28,8 +28,8 @@ func timeUtc(args ...OBJ) OBJ {
 	return &object.String{Value: time.Now().Format(time.RFC3339)}
 }
 
-var intervalIDs = make(map[int64]chan bool)
-var timeoutIDs = make(map[int64]bool)
+var intervalIDs map[int64]chan bool
+var timeoutIDs map[int64]bool
 
 func timeTimeout(env *ENV, args ...OBJ) OBJ {
 	var ms int64
@@ -116,6 +116,9 @@ func timeCancel(args ...OBJ) OBJ {
 }
 
 func init() {
+	intervalIDs = make(map[int64]chan bool)
+	timeoutIDs = make(map[int64]bool)
+
 	RegisterBuiltin("time.sleep",
 		func(env *ENV, args ...OBJ) OBJ {
 			return timeSleep(args...)

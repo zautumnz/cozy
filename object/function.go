@@ -9,6 +9,12 @@ import (
 	"github.com/zacanger/cozy/ast"
 )
 
+var stringifiedAnonymousFunctionMap map[string]int
+
+func init() {
+	stringifiedAnonymousFunctionMap = make(map[string]int)
+}
+
 // Function wraps ast.Identifier array, ast.BlockStatement and Environment and implements Object interface.
 type Function struct {
 	Parameters []*ast.Identifier
@@ -35,8 +41,6 @@ func (f *Function) stringify() string {
 	out.WriteString("}")
 	return out.String()
 }
-
-var stringifiedAnonymousFunctionMap = make(map[string]int)
 
 func (f *Function) getNameOrDefault() string {
 	if f.Name != "" {

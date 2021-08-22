@@ -42,7 +42,11 @@ func Async(f func() interface{}) ValueFuture {
 	}
 }
 
-var asyncFunctions = make(map[int64]ValueFuture)
+var asyncFunctions map[int64]ValueFuture
+
+func init() {
+	asyncFunctions = make(map[int64]ValueFuture)
+}
 
 func awaitFn(env *ENV, args ...OBJ) OBJ {
 	var res interface{}

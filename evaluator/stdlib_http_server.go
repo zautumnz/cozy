@@ -19,18 +19,12 @@ type httpRoute struct {
 	Methods []string
 }
 
-var routes = make([]httpRoute, 0)
+var routes []httpRoute
+var appInstance *app
 
 type app struct {
 	Routes []httpRoute
 }
-
-func newApp() *app {
-	app := &app{}
-	return app
-}
-
-var appInstance = newApp()
 
 func sendWrapper(
 	ctx *httpContext,
@@ -97,13 +91,30 @@ func httpContextToCozyReq(c *httpContext) OBJ {
 	cReq := make(StringObjectMap)
 	originalReq := c.Request
 
-	cReq["content_length"] = &object.Integer{Value: originalReq.ContentLength}
-	cReq["content_type"] = &object.String{Value: originalReq.Header.Get("Content-Type")}
-	cReq["method"] = &object.String{Value: originalReq.Method}
-	cReq["url"] = &object.String{Value: string(originalReq.URL.String())}
-
-	// body
-	if originalReq.Body != nil {
+	originalContentType := originalReq.Header.Get("Content-Type")
+	if originalContentType == "multipart/form-data" {
+		// 50 mb max memory; anything over this is written to a tmp file
+		// This could be configurable in the future
+		originalReq.ParseMultipartForm(50 << 20)
+		// TODO: put all the fields in PostForm on cReq
+		// Files should be FILE objects that can be worked with, if possible
+		// this should be a string:string map except the files
+		// what we can probably do is grab the file, write it to /tmp somewhere,
+		// use that as a cozy FILE, and then clean it up at the end of the
+		// request.
+		cReq["form"] = NewHash(StringObjectMap{})
+		// TODO: is the above enough or do we need more?
+		cReq["files"] = NewHash(StringObjectMap{})
+	} else if originalContentType == "application/x-www-form-urlencoded" {
+		originalReq.ParseForm()
+		formValues := make(StringObjectMap)
+		for k, v := range originalReq.PostForm {
+			formValues[k] = &object.String{Value: strings.Join(v, ",")}
+		}
+		cReq["form"] = NewHash(formValues)
+	} else if originalReq.Body != nil {
+		// we don't grab a body if there's a form, because otherwise we'd end up
+		// with form values, including form-data/uploads, on the body hash.
 		buf := new(strings.Builder)
 		_, err := io.Copy(buf, originalReq.Body)
 		if err != nil {
@@ -111,6 +122,11 @@ func httpContextToCozyReq(c *httpContext) OBJ {
 		}
 		cReq["body"] = &object.String{Value: buf.String()}
 	}
+
+	cReq["content_length"] = &object.Integer{Value: originalReq.ContentLength}
+	cReq["content_type"] = &object.String{Value: originalContentType}
+	cReq["method"] = &object.String{Value: originalReq.Method}
+	cReq["url"] = &object.String{Value: string(originalReq.URL.String())}
 
 	// headers
 	cReqHeaders := make(StringObjectMap)
@@ -235,7 +251,7 @@ type staticHandlerMount struct {
 	Path  string
 }
 
-var staticHandlers = make([]staticHandlerMount, 0)
+var staticHandlers []staticHandlerMount
 
 // static("./public")
 // static("./public", "/some-mount-point")
@@ -339,6 +355,10 @@ func httpServer(env *ENV, args ...OBJ) OBJ {
 }
 
 func init() {
+	routes = make([]httpRoute, 0)
+	appInstance = &app{}
+	staticHandlers = make([]staticHandlerMount, 0)
+
 	RegisterBuiltin("http.create_server",
 		func(env *ENV, args ...OBJ) OBJ {
 			return httpServer(env, args...)

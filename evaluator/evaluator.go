@@ -226,7 +226,11 @@ func EvalModule(name string) OBJ {
 	return env.ExportedHash()
 }
 
-var importCache = make(map[string]OBJ)
+var importCache map[string]OBJ
+
+func init() {
+	importCache = make(map[string]OBJ)
+}
 
 func evalImportExpression(ie *ast.ImportExpression, env *ENV) OBJ {
 	// treat modules as singletons;
