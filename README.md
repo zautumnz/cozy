@@ -46,7 +46,6 @@ let reduce = fn(fun, xs, init) {
 # and question marks
 let ints? = fn(xs) {
     foreach x in xs {
-        # parens in if conditions and for loops are optional
         if util.type(x) != "integer" && util.type(x) != "float" {
             return false
         }
@@ -100,21 +99,23 @@ entered code will be evaluated when you exit with `ctrl+d`.
 ### Important Notes
 
 * `print` adds an ending newline, use  or `sys.STDOUT`/`sys.STDERR` for raw text
-* No undefined or uninitialized variables
-* Comments are Python/Shell style
-* Errors are values, so you can pass them around and use `panic` (like in Go)
-* Using `set` and `delete` on hashes returns a new hash
-* `let` is for immutable variables; `mutable` is for mutable ones; this is
-    because setting mutable variables should be more annoying to do than
-    setting mutable ones.
+* No undefined or uninitialized variables Comments are Python/Shell style Errors
+* are values, so you can pass them around and use `panic` (like in Go) Using
+* `set` and `delete` on hashes returns a new hash `let` is for immutable
+* variables; `mutable` is for mutable ones; this is
+    because setting mutable variables should be more annoying to do than setting
+    mutable ones.
 * Uses Go's GC; porting to a different language might require writing a new GC.
-* Semicolons are optional
-* Most statements are expressions, including if/else; this also means implicit
+* Semicolons are optional Most statements are expressions, including if/else;
+* this also means implicit
     returns (without the `return` keyword) are possible
 * No top level mutable variables, because all top level variables are exported
-* Parens are optional in for and if conditions
+* Parens and braces are optional in `for`, `foreach`, and `if` expressions, as
+    long as what would be between them is only one expression (would normally be
+    typed on one line)
 * No ternary expressions, switch statements, or pattern matching; if statements
-    are expressions, so they work for the same use cases
+    are expressions and type-checking is dynamic, so there's no need for extra
+    keywords or syntax
 
 ### Builtins
 

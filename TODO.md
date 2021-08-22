@@ -15,6 +15,7 @@
     * http.client: add form support
     * Utility like Node's `__filename` (which can also be used to get dirname)
 * Chores:
+    * Remove required braces in for and foreach, for consistency
     * Consider changing how module exports work to allow top-level (but still
         non-exported) mutable variables; maybe a new keyword (capital letters
         aren't an option because we allow unicode identifiers)
