@@ -3,6 +3,7 @@
 # Remaining v1 Work
 
 * Bugs:
+    * Allow escape codes (for colors and whatnot) in print calls
     * Spread isn't quite right, see the comment in curry in the stdlib
     * Vim syntax needs work: function definitions
     * More than one level of dot access doesn't seem to always work
@@ -14,6 +15,9 @@
     * http.client: add form support
     * Utility like Node's `__filename` (which can also be used to get dirname)
 * Chores:
+    * Consider changing how module exports work to allow top-level (but still
+        non-exported) mutable variables; maybe a new keyword (capital letters
+        aren't an option because we allow unicode identifiers)
     * Clean up newerror and similar calls now that errors are useful values
     * Confirm that everything under ./examples works
     * Add argument validation to all internal functions and stdlib
@@ -21,7 +25,6 @@
 
 ## Possible Future Features
 
-* Allow escape codes (for colors and whatnot) in print calls
 * Change import, http.server, and other paths to allow relative paths/from the
     cozy file being executed
 * Add basic module management: some kind of module manifest, vcs manager, and
