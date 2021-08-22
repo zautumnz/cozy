@@ -545,11 +545,12 @@ func (p *Parser) parseForLoopExpression() ast.Expression {
 		p.nextToken()
 	}
 
-	if !p.expectPeek(token.LBRACE) {
-		return nil
+	if p.peekTokenIs(token.LBRACE) {
+		p.nextToken()
+		expression.Consequence = p.parseBlockStatement()
+	} else {
+		expression.Consequence = p.parseBlockStatementWithoutBraces()
 	}
-
-	expression.Consequence = p.parseBlockStatement()
 	return expression
 }
 
@@ -596,8 +597,12 @@ func (p *Parser) parseForEach() ast.Expression {
 	}
 
 	// parse the block
-	p.nextToken()
-	expression.Body = p.parseBlockStatement()
+	if p.peekTokenIs(token.LBRACE) {
+		p.nextToken()
+		expression.Body = p.parseBlockStatement()
+	} else {
+		expression.Body = p.parseBlockStatementWithoutBraces()
+	}
 
 	return expression
 }
