@@ -29,14 +29,18 @@ app.route("^/quux$", ["GET", "POST"], fn (req) {
         }
     }
 })
-app.use(fn (req) { print(json.serialize(req)) })
-# this is equivalent to:
 app.log()
+# this is equivalent to:
+# app.use(fn (req) { print(json.serialize(req)) })
 # regex is necessary to capture params
 app.route("/test/(.*)", fn (req) { {"body": req.params.join("\n")} })
 app.route("/form", ["POST"], fn (req) {
-    # TODO:
+    # req.form will be a hash of input_name (string) to input value (string)
     print(req.form)
+    # req.files will be a hash of input name (string) to array of hashes;
+    # the file hashes will be original file name (string) and
+    # a cozy file object (stored in the os tempdir)
+    print(req.files)
     return { "status_code": 201 }
 })
 app.listen(8000, fn (x) { print("listening on", x) })

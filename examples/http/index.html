@@ -1,9 +1,21 @@
 <!doctype html>
 <html>
-    <head><title>hi</title></head>
+    <head>
+        <title>hi</title>
+        <style type="text/css">
+            body {
+                max-width: 500px;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+        </style>
+    </head>
     <body>
         <form enctype="multipart/form-data" action="/form" method="post">
-            <input type="file" name="file-input" />
+            <input multiple type="file" name="file-input" />
+            <input type="file" name="foo" />
             <input type="text" name="text-example" value=""/>
             <input type="submit" value="upload" />
         </form>

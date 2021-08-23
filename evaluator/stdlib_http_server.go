@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/zacanger/cozy/object"
 )
@@ -87,31 +90,86 @@ func registerRoute(env *ENV, args ...OBJ) OBJ {
 	return NULL
 }
 
+func httpReqFormToCozyForm(c *httpContext) OBJ {
+	formValues := make(StringObjectMap)
+	for k, v := range c.Request.PostForm {
+		formValues[k] = &object.String{Value: strings.Join(v, ",")}
+	}
+	return NewHash(formValues)
+}
+
 func httpContextToCozyReq(c *httpContext) OBJ {
 	cReq := make(StringObjectMap)
 	originalReq := c.Request
 
 	originalContentType := originalReq.Header.Get("Content-Type")
-	if originalContentType == "multipart/form-data" {
+	if strings.HasPrefix(originalContentType, "multipart/form-data") {
 		// 50 mb max memory; anything over this is written to a tmp file
 		// This could be configurable in the future
 		originalReq.ParseMultipartForm(50 << 20)
-		// TODO: put all the fields in PostForm on cReq
-		// Files should be FILE objects that can be worked with, if possible
-		// this should be a string:string map except the files
-		// what we can probably do is grab the file, write it to /tmp somewhere,
-		// use that as a cozy FILE, and then clean it up at the end of the
-		// request.
-		cReq["form"] = NewHash(StringObjectMap{})
-		// TODO: is the above enough or do we need more?
-		cReq["files"] = NewHash(StringObjectMap{})
+		filesMap := make(StringObjectMap)
+
+		for inputName, files := range originalReq.MultipartForm.File {
+			filesArr := make([]OBJ, 0)
+
+			for _, fileHeader := range files {
+				file, err := fileHeader.Open()
+				if err != nil {
+					return NewError("error opening uploaded file header")
+				}
+				defer file.Close()
+
+				buff := make([]byte, 512)
+				_, err = file.Read(buff)
+				if err != nil {
+					return NewError("error reading uploaded file")
+				}
+
+				_, err = file.Seek(0, io.SeekStart)
+				if err != nil {
+					return NewError("error in reading uploaded file")
+				}
+
+				t := os.TempDir()
+				dir := t + "/cozy/http/uploads"
+				mode, _ := strconv.ParseInt("755", 8, 64)
+				err = os.MkdirAll(dir, os.FileMode(mode))
+				if err != nil {
+					return NewError("error ensuring temp dir")
+				}
+
+				p := fmt.Sprintf(
+					"%s/%d%s",
+					dir,
+					time.Now().UnixNano(),
+					filepath.Ext(fileHeader.Filename),
+				)
+				f, err := os.Create(p)
+				if err != nil {
+					return NewError("error saving uploaded file")
+				}
+				defer f.Close()
+
+				_, err = io.Copy(f, file)
+				if err != nil {
+					return NewError("error saving uploaded file")
+				}
+
+				fMap := NewHash(StringObjectMap{
+					"name": &object.String{Value: fileHeader.Filename},
+					"file": &object.File{Filename: p},
+				})
+				filesArr = append(filesArr, fMap)
+			}
+
+			filesMap[inputName] = &object.Array{Elements: filesArr}
+		}
+
+		cReq["files"] = NewHash(filesMap)
+		cReq["form"] = httpReqFormToCozyForm(c)
 	} else if originalContentType == "application/x-www-form-urlencoded" {
 		originalReq.ParseForm()
-		formValues := make(StringObjectMap)
-		for k, v := range originalReq.PostForm {
-			formValues[k] = &object.String{Value: strings.Join(v, ",")}
-		}
-		cReq["form"] = NewHash(formValues)
+		cReq["form"] = httpReqFormToCozyForm(c)
 	} else if originalReq.Body != nil {
 		// we don't grab a body if there's a form, because otherwise we'd end up
 		// with form values, including form-data/uploads, on the body hash.

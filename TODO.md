@@ -11,7 +11,6 @@
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs
 * Features:
-    * http.server: add form support
     * http.client: add form support
     * Utility like Node's `__filename` (which can also be used to get dirname)
 * Chores:
