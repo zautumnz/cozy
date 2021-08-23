@@ -7,7 +7,7 @@
     * Spread isn't quite right, see the comment in curry in the stdlib
     * Vim config bugs:
         * Function defs in syntax, see comment there
-        * Comments aren't indented when using `>>` and `<<`
+        * Comments aren't indented when using `>>`/`<<` and `=`
     * More than one level of dot access doesn't seem to always work
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have

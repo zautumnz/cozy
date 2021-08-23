@@ -16,5 +16,4 @@ let assignment_examples = fn () {
     let FOO = 123;
     print(FOO);
 }
-
 assignment_examples()
