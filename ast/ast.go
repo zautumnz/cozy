@@ -521,16 +521,22 @@ func (fl *FunctionLiteral) String() string {
 
 }
 
+// CurrentArgsLiteral holds the current args token
 type CurrentArgsLiteral struct {
 	Token token.Token // ...
 }
 
-func (cal *CurrentArgsLiteral) expressionNode()      {}
+func (cal *CurrentArgsLiteral) expressionNode() {}
+
+// TokenLiteral returns the literal token
 func (cal *CurrentArgsLiteral) TokenLiteral() string { return cal.Token.Literal }
+
+// String returns a string representation of the literal
 func (cal *CurrentArgsLiteral) String() string {
 	return "..."
 }
 
+// SpreadLiteral holds a spread node
 type SpreadLiteral struct {
 	// Token is ....
 	Token token.Token
@@ -539,8 +545,12 @@ type SpreadLiteral struct {
 	Right Expression
 }
 
-func (s *SpreadLiteral) expressionNode()      {}
+func (s *SpreadLiteral) expressionNode() {}
+
+// TokenLiteral returns the spread token
 func (s *SpreadLiteral) TokenLiteral() string { return s.Token.Literal }
+
+// String returns a string representation of the literal
 func (s *SpreadLiteral) String() string {
 	return "...."
 }

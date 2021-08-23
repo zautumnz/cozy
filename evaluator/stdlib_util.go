@@ -98,6 +98,7 @@ func lenFn(args ...OBJ) OBJ {
 			args[0].Type())
 	}
 }
+
 func strFn(args ...OBJ) OBJ {
 	if len(args) != 1 {
 		return NewError("wrong number of arguments. got=%d, want=1",

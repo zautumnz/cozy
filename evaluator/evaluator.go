@@ -443,6 +443,7 @@ func evalIntegerInfixExpression(operator string, left, right OBJ) OBJ {
 			left.Type(), operator, right.Type())
 	}
 }
+
 func evalFloatInfixExpression(operator string, left, right OBJ) OBJ {
 	leftVal := left.(*object.Float).Value
 	rightVal := right.(*object.Float).Value

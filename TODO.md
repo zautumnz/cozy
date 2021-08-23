@@ -5,7 +5,9 @@
 * Bugs:
     * Allow escape codes (for colors and whatnot) in print calls
     * Spread isn't quite right, see the comment in curry in the stdlib
-    * Vim syntax needs work: function definitions
+    * Vim config bugs:
+        * Function defs in syntax, see comment there
+        * Comments aren't indented when using `>>` and `<<`
     * More than one level of dot access doesn't seem to always work
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have

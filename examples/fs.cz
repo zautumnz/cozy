@@ -71,4 +71,5 @@ let fs_examples = fn () {
     # write indented json
     fs.write_json(name, {"foo": "bar"})
 }
+
 fs_examples()
