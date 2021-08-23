@@ -19,7 +19,7 @@ cover_open:
 	@go tool cover -html=coverage.out
 
 count:
-	@cloc --exclude-dir=x,.git,.github --read-lang-def=editor/cozy.cloc .
+	@cloc --exclude-dir=x,.git,.github,examples --read-lang-def=editor/cozy.cloc .
 
 test:
 	@go fmt ./...
