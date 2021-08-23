@@ -112,6 +112,8 @@ func evalContext(ctx context.Context, node ast.Node, env *ENV) OBJ {
 		env.SetLet(node.Name.Value, val)
 		return val
 	case *ast.Identifier:
+		// TODO: some index expressions are somehow
+		// ending up here when they're nested dot index expressions
 		return evalIdentifier(node, env)
 	case *ast.FunctionLiteral:
 		params := node.Parameters
@@ -808,7 +810,6 @@ func evalIdentifier(node *ast.Identifier, env *ENV) OBJ {
 	if builtin, ok := builtins[node.Value]; ok {
 		return builtin
 	}
-	fmt.Fprintf(os.Stderr, "identifier not found: %s\n", node.Value)
 	utils.ExitConditionally(1)
 	return NewError("identifier not found: " + node.Value)
 }
