@@ -71,8 +71,9 @@ func errorFn(args ...OBJ) OBJ {
 // output a string to stdout
 func printFn(args ...OBJ) OBJ {
 	for _, arg := range args {
-		fmt.Println(arg.Inspect() + " ")
+		fmt.Printf(arg.Inspect() + " ")
 	}
+	fmt.Println()
 	return NULL
 }
 

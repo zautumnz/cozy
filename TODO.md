@@ -8,6 +8,8 @@
         * Function defs in syntax, see comment there
         * Comments aren't indented when using `>>`/`<<` and `=`
     * More than one level of dot access doesn't seem to always work
+        * Assigning a variable at one level works, and brace-access works, just
+            not dot access
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs
