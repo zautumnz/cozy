@@ -116,6 +116,8 @@ entered code will be evaluated when you exit with `ctrl+d`.
 * No ternary expressions, switch statements, or pattern matching; if statements
     are expressions and type-checking is dynamic, so there's no need for extra
     keywords or syntax
+* REPL history is stored at `$HOME/.cozy_history`, and the size (in lines) can
+    be configured with the env var `COZY_HISTSIZE`
 
 ### Builtins
 

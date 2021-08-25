@@ -3,6 +3,7 @@ package repl
 import (
 	"io"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/chzyer/readline"
@@ -12,6 +13,15 @@ import (
 	"github.com/zacanger/cozy/parser"
 	"github.com/zacanger/cozy/utils"
 )
+
+func getHistorySize() int {
+	val := os.Getenv("COZY_HISTSIZE")
+	l, e := strconv.Atoi(val)
+	if e != nil || val == "" {
+		return 1000
+	}
+	return l
+}
 
 // Start runs the REPL
 func Start(in io.Reader, out io.Writer, stdlib string) {
@@ -24,7 +34,7 @@ func Start(in io.Reader, out io.Writer, stdlib string) {
 		InterruptPrompt:   "^C",
 		EOFPrompt:         "exit",
 		HistorySearchFold: true,
-		HistoryLimit:      1000,
+		HistoryLimit:      getHistorySize(),
 	})
 
 	if err != nil {

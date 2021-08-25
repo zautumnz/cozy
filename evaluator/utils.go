@@ -22,7 +22,7 @@ func init() {
 		log.Fatalf("error getting cwd: %s", err)
 	}
 
-	if e := os.Getenv("COZYPATH"); e != "" {
+	if e := os.Getenv("COZY_PATH"); e != "" {
 		tokens := strings.Split(e, ":")
 		for _, token := range tokens {
 			addPath(token) // ignore errors
