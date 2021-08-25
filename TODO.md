@@ -11,19 +11,17 @@
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs
-    * Allow listing empty root-level modules such as http (http itself isn't
-        anything, but http.server, etc, are)
-    * Evaluator errors are getting printed twice
 * Features:
     * http.client: add form support
 * Chores:
-    * Clean up newerror and similar calls now that errors are useful values
     * Confirm that everything under ./examples works
     * Add argument validation to all internal functions and stdlib
     * Improve all Go error messages
 
 ## Possible Future Features
 
+* Allow listing empty root-level modules and non-object modules such as http and
+    fs using just the root word (`http` or `fs`).
 * Consider changing how module exports work to allow top-level (but still
     non-exported) mutable variables; maybe a new keyword (capital letters aren't
     an option because we allow unicode identifiers)

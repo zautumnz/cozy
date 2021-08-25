@@ -116,7 +116,6 @@ func Interpolate(str string, env *ENV) string {
 // NewError prints and returns an error
 func NewError(format string, a ...interface{}) *object.Error {
 	message := fmt.Sprintf(format, a...)
-	fmt.Fprintf(os.Stderr, message+"\n")
 	return &object.Error{Message: message}
 }
 
