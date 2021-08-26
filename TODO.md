@@ -7,6 +7,8 @@
     * Vim config bugs:
         * Function defs in syntax, see comment there
         * Comments aren't indented when using `>>`/`<<` and `=`
+    * Cloc config:
+        * Identifiers can be unicode, and also can include dots
     * More than one level of dot access doesn't seem to always work
         * Assigning a variable at one level works, and brace-access works, just
             not dot access
