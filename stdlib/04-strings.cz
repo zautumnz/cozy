@@ -279,3 +279,4 @@ let string.includes? = fn(s) {
 };
 
 util.assert("123".includes?("1"));
+util.assert(!"123".includes?("4"));
