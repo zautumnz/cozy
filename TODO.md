@@ -7,11 +7,10 @@
     * Vim config bugs:
         * Function defs in syntax, see comment there
         * Comments aren't indented when using `>>`/`<<` and `=`
-    * Cloc config:
+    * Ctags config:
         * Identifiers can be unicode, and also can include dots
-    * More than one level of dot access doesn't seem to always work
-        * Assigning a variable at one level works, and brace-access works, just
-            not dot access
+    * More than one level of index access doesn't seem to always work on
+        non-standard objects (like files)
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs
@@ -41,18 +40,15 @@
 * Add tab-completion to the REPL
 * Maybe combine float/integer to just one number type?
 * Move as much of the stdlib into cozy (out of Go) as possible
-* Write in cozy stdlib:
-    * Date object or additions to core time module
-    * Markdown parser
-    * Simplify registerBuiltin calls so they can be looped over
-    * Microblogging site real-life example, or something similar in scope
-    * Cryptography builtins
-        * GUID
-        * crypto/rand
-        * common hashes
-        * AES
-        * RSA
-    * YAML support
-    * TOML support
-    * Websocket support
-    * Multiple-db ORM
+* Full-featured examples:
+    * Twitter/Tumblr clone
+    * Ranger clone
+    * Text editor
+* Date object or additions to core time module
+* Markdown parser
+* Simplify registerBuiltin calls so they can be looped over
+* Cryptography builtins: GUID, hashes, AES, RSA, crypto/rand, etc.
+* YAML support
+* TOML support
+* Websocket support
+* Multiple-db ORM

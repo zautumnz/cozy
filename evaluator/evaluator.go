@@ -810,6 +810,7 @@ func evalIdentifier(node *ast.Identifier, env *ENV) OBJ {
 	if builtin, ok := builtins[node.Value]; ok {
 		return builtin
 	}
+	fmt.Println("identifier not found: " + node.Value)
 	utils.ExitConditionally(1)
 	return NewError("identifier not found: " + node.Value)
 }
