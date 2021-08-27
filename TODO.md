@@ -14,7 +14,6 @@
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs
-    * util.colorize doesn't always have all keys; race condition or something?
 * Features:
     * http.client: add form support
 * Chores:
