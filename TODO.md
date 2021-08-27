@@ -3,9 +3,9 @@
 # Remaining v1 Work
 
 * Bugs:
-    * Spread isn't quite right, see the comment in curry in the stdlib
+    * Spread isn't quite right, see curry in stdlib
     * Vim config bugs:
-        * Function defs in syntax, see comment there
+        * Function group is matching `fn foo(x)` but we want `let foo = fn(x)`
         * Comments aren't indented when using `>>`/`<<` and `=`
     * Ctags config:
         * Identifiers can be unicode, and also can include dots

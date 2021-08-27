@@ -125,7 +125,6 @@ let util.curry = fn (f) {
             return inner
         }
 
-        # TODO: why is spread not working here?
         # foreach ff in ....f_args { print(ff) }
         let res = f(....f_args)
         f_args = []

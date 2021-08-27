@@ -121,9 +121,6 @@ hi def link     cozyMutableArgs       cozyOperator
 hi def link     cozyOperator          Operator
 
 " Functions;
-" TODO: due to order I think this is highlighting function names as generic
-" identifiers rather than functions, expecting
-" `fn foo(x)`, but it needs to match `let foo = fn(x)`.
 syn match cozyDeclaration       /\<fn\>/ nextgroup=cozyReceiver,cozyFunction,cozySimpleParams skipwhite skipnl
 syn match cozyFunction          /\w\+/ nextgroup=cozySimpleParams contained skipwhite skipnl
 syn match cozySimpleParams      /(\%(\w\|\_s\|[*\.\[\],\{\}<>-]\)*)/ contained contains=cozyParamName nextgroup=cozyFunctionReturn skipwhite skipnl
