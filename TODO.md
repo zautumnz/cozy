@@ -14,6 +14,7 @@
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs
+    * util.colorize doesn't always have all keys; race condition or something?
 * Features:
     * http.client: add form support
 * Chores:
@@ -29,7 +30,6 @@
     non-exported) mutable variables; maybe a new keyword (capital letters aren't
     an option because we allow unicode identifiers)
 * Utility like Node's `__filename` (which can also be used to get dirname)
-* Allow ANSI escape codes (for colors and whatnot) in print calls
 * Change import, http.server, and other paths to allow relative paths/from the
     cozy file being executed
 * Add basic module management: some kind of module manifest, vcs manager, and

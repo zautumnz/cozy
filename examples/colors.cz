@@ -1,0 +1,3 @@
+let c = util.colorize
+print(c.bold(c.green("hello") + " " + c.blue("world")))
+print(c.red_bright("colors work!"))

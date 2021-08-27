@@ -2,6 +2,8 @@ package evaluator
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/zacanger/cozy/object"
 	"github.com/zacanger/cozy/utils"
@@ -71,9 +73,27 @@ func errorFn(args ...OBJ) OBJ {
 // output a string to stdout
 func printFn(args ...OBJ) OBJ {
 	for _, arg := range args {
-		fmt.Printf(arg.Inspect() + " ")
+		s := ""
+		var e error
+
+		if arg.Type() == object.STRING_OBJ {
+			s = arg.Inspect()
+			if strings.Contains(s, "\\") {
+				// double escape; ansi escape codes
+				s, e = strconv.Unquote(`"` + s + `"`)
+				if e != nil {
+					return NewError("error unquoting string in print")
+				}
+				fmt.Println(s + " ")
+				return NULL
+			}
+		} else {
+			s = arg.Inspect()
+		}
+
+		fmt.Printf(s + " ")
 	}
-	fmt.Println()
+
 	return NULL
 }
 
