@@ -9,8 +9,8 @@
         * Comments aren't indented when using `>>`/`<<` and `=`
     * Ctags config:
         * Identifiers can be unicode, and also can include dots
-    * More than one level of index access doesn't seem to always work on
-        non-standard objects (like files)
+    * More than one level of dot access on stdlib and non-standard objects (like
+        files) gets parsed as an IDENT which causes a failure
     * Assertions are somehow creating globals? Reproduction:
         * `let a = 1; a` in REPL. Same with `let b`... see assertions that have
           inline IIFEs

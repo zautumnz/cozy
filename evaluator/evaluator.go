@@ -112,8 +112,6 @@ func evalContext(ctx context.Context, node ast.Node, env *ENV) OBJ {
 		env.SetLet(node.Name.Value, val)
 		return val
 	case *ast.Identifier:
-		// TODO: some index expressions are somehow
-		// ending up here when they're nested dot index expressions
 		return evalIdentifier(node, env)
 	case *ast.FunctionLiteral:
 		params := node.Parameters
