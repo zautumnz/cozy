@@ -3,18 +3,18 @@
 
 fn () {
     # Find all the files matching the glob-pattern "/etc/*.conf".
-    let pattern = "/etc/*.conf";
-    let files = fs.glob(pattern);
+    let pattern = "/etc/*.conf"
+    let files = fs.glob(pattern)
 
     # If that worked
     if util.len(files) > 0 {
-        print("Pattern ", pattern, " matched " , util.len(files), " files");
+        print("Pattern ", pattern, " matched " , util.len(files), " files")
 
         # Show each result.
-        mutable i = 0;
+        mutable i = 0
         for i < util.len(files) {
-            print("\t", files[i]);
-            i++;
+            print("\t", files[i])
+            i++
         }
     }
 }()

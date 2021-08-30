@@ -1,19 +1,19 @@
-let fb = fn(n) {
-    if (n % 15 == 0) { return "Fizzbuzz"; }
-    if (n % 3 == 0) { return "Fizz"; }
-    if (n % 5 == 0) { return "Buzz"; }
+let fb = fn (n) {
+    if (n % 15 == 0) { return "Fizzbuzz" }
+    if (n % 3 == 0) { return "Fizz" }
+    if (n % 5 == 0) { return "Buzz" }
     # implicit return
-    util.string(n);
-};
+    util.string(n)
+}
 
-let fizzbuzz = fn(n = 100) {
-    mutable ret = [];
+let fizzbuzz = fn (n = 100) {
+    mutable ret = []
 
     foreach i in 0..n {
-        ret = ret.append(fb(i));
+        ret = ret.append(fb(i))
     }
 
-    return ret.join("\n");
-};
+    return ret.join("\n")
+}
 
-# print(fizzbuzz(10));
+# print(fizzbuzz(10))

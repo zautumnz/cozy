@@ -6,7 +6,7 @@ print(request.get("http://localhost:8000/foo").body)
 
 # using http.create_client directly
 let r = http.create_client
-let res = r("GET", "http://localhost:8000/quux");
+let res = r("GET", "http://localhost:8000/quux")
 print(res.body)
 
 let post_res = request.post(

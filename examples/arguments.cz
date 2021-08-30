@@ -2,11 +2,11 @@
 
 # all args
 let x = fn () {
-    let a = sys.args();
-    print("We received ", util.len(a), " arguments to our script.");
-    mutable i = 0;
+    let a = sys.args()
+    print("We received ", util.len(a), " arguments to our script.")
+    mutable i = 0
     for (i < util.len(a)) {
-        print("\t", i, " " , a[i]);
+        print("\t", i, " " , a[i])
         i++
     }
 }
@@ -15,8 +15,8 @@ x()
 # flags by name
 # try with:
 # ./cozy ./examples/arguments.cz --foo=bar --asdf ghjkl --qwerty -x
-print(sys.flag("foo"));
-print(sys.flag("asdf"));
-print(sys.flag("qwerty"));
-print(sys.flag("x"));
-print(sys.flag("absent-flag"));
+print(sys.flag("foo"))
+print(sys.flag("asdf"))
+print(sys.flag("qwerty"))
+print(sys.flag("x"))
+print(sys.flag("absent-flag"))

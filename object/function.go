@@ -44,7 +44,7 @@ func (f *Function) stringify() string {
 
 func (f *Function) getNameOrDefault() string {
 	if f.Name != "" {
-		return f.Name
+		return "FN_" + f.Name
 	}
 
 	n := 1

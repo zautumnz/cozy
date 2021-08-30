@@ -1,39 +1,39 @@
 # Sample function showing some simple math operations
 
-print("maths.abs(1)     -> ", math.abs(1));
-print("maths.abs(-1)    -> ", math.abs(-1));
-print("maths.abs(3.13)  -> ", math.abs(3.13));
-print("maths.abs(-3.13) -> ", math.abs(-3.13));
+print("maths.abs(1)     -> ", math.abs(1))
+print("maths.abs(-1)    -> ", math.abs(-1))
+print("maths.abs(3.13)  -> ", math.abs(3.13))
+print("maths.abs(-3.13) -> ", math.abs(-3.13))
 
 # The rand function returns a floating-point number between 0 & 1
 # To show a number from 0-10 we need to multiply and convert to an
 # integer.
-let rand = math.rand();
-let val = util.int(rand * 11) ;
-print("math.rand() -> ", val);
+let rand = math.rand()
+let val = util.int(rand * 11)
+print("math.rand() -> ", val)
 
 # We can convert numbers to strings easily enough too
-let str = util.string(3.14 * 22 + math.rand());
-let str = "The result was : " + str;
-print(str);
+let str = util.string(3.14 * 22 + math.rand())
+let str = "The result was : " + str
+print(str)
 
 let ops_example = fn () {
 # Operations
-    let a = 3;
-    let b = 1.2;
-    print(a + b);
-    print(a - b);
-    print(a * b);
-    print(a / b);
-    print(2 ** 3);
-    print(15 % 3);
-    mutable ops = 1;
-    ops++;
-    ops--;
-    ops += 1;
-    ops -= 1;
-    ops *= 1;
-    ops /= 1;
-    print(ops == 1);
+    let a = 3
+    let b = 1.2
+    print(a + b)
+    print(a - b)
+    print(a * b)
+    print(a / b)
+    print(2 ** 3)
+    print(15 % 3)
+    mutable ops = 1
+    ops++
+    ops--
+    ops += 1
+    ops -= 1
+    ops *= 1
+    ops /= 1
+    print(ops == 1)
 }
 ops_example()

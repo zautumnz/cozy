@@ -9,11 +9,11 @@ util.assert(1 + 1 == 2, "math doesn't work")
 # TAP-producting test suites
 let x = fn (a) { a }
 
-core.test("test suite", fn(t) {
+core.test("test suite", fn (t) {
     t(1 + 1 == 2, "one plus one is two")
 })
 
-core.test("second suite", fn(t) {
+core.test("second suite", fn (t) {
     t(x(3) == 2, "three does not equal two")
     t("a" + "b" == "ab", "a + b == ab")
 })

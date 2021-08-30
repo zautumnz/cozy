@@ -1,2 +1,2 @@
 #!/usr/bin/env cozy
-print("Hello, world!");
+print("Hello, world!")

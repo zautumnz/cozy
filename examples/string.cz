@@ -1,38 +1,38 @@
-let input = "  Zac Anger  ";
+let input = "  Zac Anger  "
 
-print("Input: '", input, "'");
+print("Input: '", input, "'")
 
 # Case-conversion
-print("Upper: '", input.toupper(), "'");
-print("Lower: '", input.tolower(), "'");
+print("Upper: '", input.toupper(), "'")
+print("Lower: '", input.tolower(), "'")
 
 # Removing whitespace
-print("ltrim: '", input.ltrim(), "'");
-print("rtrim: '", input.rtrim(), "'");
-print("trim: '",  input.trim(), "'");
+print("ltrim: '", input.ltrim(), "'")
+print("rtrim: '", input.rtrim(), "'")
+print("trim: '",  input.trim(), "'")
 
 # Reversing
-let str = "The quick brown 狐 jumped over the lazy 犬";
-print("String  : '" + str + "'");
-print("Reversed: '" + str.reverse() + "'");
+let str = "The quick brown 狐 jumped over the lazy 犬"
+print("String  : '" + str + "'")
+print("Reversed: '" + str.reverse() + "'")
 
 # Escapes are good.
-print("We also allow escaping quotes, like so: \"");
+print("We also allow escaping quotes, like so: \"")
 
 # Multiline strings
 let multiLine = "foo
-bar";
-print(multiLine);
+bar"
+print(multiLine)
 
 # Indexing
-let indexed = "asdf";
-print(indexed[1]);
+let indexed = "asdf"
+print(indexed[1])
 
 fn () {
     # Appending
-    mutable root = "a";
-    root += "s";
-    print(root + "d", "f");
+    mutable root = "a"
+    root += "s"
+    print(root + "d", "f")
 }()
 
 # Interpolation
@@ -41,7 +41,7 @@ fn () {
 let me = {"first": "Zac", "last": "Anger", "loc": "USA", "age": 999}
 let foods = ["pizza", "chocolate"]
 let activity = "movies"
-let s = "My name is {{me.first}} {{me.last}};
+let s = "My name is {{me.first}} {{me.last}}
 I live in {{me.loc}} and am {{me[\"age\"]}} years old.
 I like {{foods.join(\", \")}}, and {{activity}}."
 print(s)

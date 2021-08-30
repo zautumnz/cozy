@@ -74,8 +74,8 @@ func TestNextToken2(t *testing.T) {
 a[b].c;
 let five = 5;
 let ten =10;
-let add = fn(x, y){
-  x+y;
+let add = fn (x, y){
+    x+y;
 };
 let result = add(five, ten);
 !- *5;

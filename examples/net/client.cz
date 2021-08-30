@@ -1,7 +1,7 @@
 # run server first, then run this
-let fd = net.socket("tcp4");
-net.bind(fd, "127.0.0.1:9081");
-net.connect(fd, "127.0.0.1:9000");
-net.write(fd, "Hello World");
-print(net.read(fd));
-net.close(fd);
+let fd = net.socket("tcp4")
+net.bind(fd, "127.0.0.1:9081")
+net.connect(fd, "127.0.0.1:9000")
+net.write(fd, "Hello World")
+print(net.read(fd))
+net.close(fd)

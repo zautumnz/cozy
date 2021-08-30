@@ -2,20 +2,20 @@
 # They don't show up when you print functions, but do
 # show up using the global `doc()` function.
 let id = fn (a) {
-    'id is the identity function';
-    a;
-};
+    'id is the identity function'
+    a
+}
 
 # global function prints docstring
-print(id);
-print(id.doc());
+print(id)
+print(id.doc())
 
 # these would be a syntax error; docstrings can _only_
 # appear as the first statement in functions
-# print(util.type('asdf'));
-# print('asdf');
+# print(util.type('asdf'))
+# print('asdf')
 
 let without_ds = fn () {
-    return true;
-};
-print("no docstring:", without_ds.doc());
+    return true
+}
+print("no docstring:", without_ds.doc())

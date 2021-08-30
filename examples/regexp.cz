@@ -3,25 +3,25 @@
 
 # Substring match
 if (util.len(core.match("nge", "Zac Anger"))) {
-   print("Match found");
+   print("Match found")
 }
 
 # Suffix Match
 if (util.len(core.match("ger$", "Zac Anger"))) {
-   print("Suffix-match OK");
+   print("Suffix-match OK")
 }
 
 # Prefix-match
 if (util.len(core.match("^[A-Z]", "Zac Anger"))) {
-   print("Prefix-match OK");
+   print("Prefix-match OK")
 }
 
 # IP-address regexp
-let reg = "([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$";
-let out = core.match(reg, "12.23.21.224");
+let reg = "([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$"
+let out = core.match(reg, "12.23.21.224")
 if (util.len(out)) {
-   print("We matched an IP address succesfully.");
+   print("We matched an IP address succesfully.")
    print("Captures: ", out.rest().join(" . "))
 } else {
-   print("Not true!");
+   print("Not true!")
 }

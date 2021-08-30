@@ -2,12 +2,12 @@
 let inc = "INCREMENT"
 let dec = "DECREMENT"
 
-let counter = fn(state, action) {
+let counter = fn (state, action) {
     let t = action.type
     if t == inc return state + 1
     if t == dec return state - 1
     return state
-};
+}
 
 let store = core.create_state(counter, 0)
 

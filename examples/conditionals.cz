@@ -1,29 +1,29 @@
 #!/usr/bin/env cozy
 
 # if/else if/else
-let x = "x";
+let x = "x"
 if (x == "y") {
-    print("x is somehow y");
+    print("x is somehow y")
 } else if (x == "z") {
-    print("this isn't right either");
+    print("this isn't right either")
 } else {
-    print("x == x");
+    print("x == x")
 }
 
 # ternary-like
-let max = fn(a, b) {
+let max = fn (a, b) {
     if a > b { a } else { b }
-};
-print(max(1, 2));
+}
+print(max(1, 2))
 # nested works fine too
 print(
     if false { 1 } else if false { 2 } else { 3 }
-);
+)
 
 # these are expressions, not statements
 # note that parens in if statement conditions are optional
-let asdf = if 1 > 2 { true } else { false };
-print(asdf);
+let asdf = if 1 > 2 { true } else { false }
+print(asdf)
 
 # braces are optional, so this also works
 # (note that whitespace is essentially ignored if there

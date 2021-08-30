@@ -1,10 +1,10 @@
-let x = fn() {
-    print(...);
-};
+let x = fn () {
+    print(...)
+}
 
-x(1);
-x(1, 2);
-x("hi", 10.1, {"a": "b"});
+x(1)
+x(1, 2)
+x("hi", 10.1, {"a": "b"})
 
 let y = fn () {
     # array_from is a global to gather elements into an array

@@ -1,16 +1,16 @@
 # The `string` function allow something to be converted to a string.
 # The `type` function returns the type of an item.
 
-let show = fn(input) {
-   print("Type of input was", util.type(input));
-   print("\tAfter converting to string we found:", util.string(input));
-};
+let show = fn (input) {
+   print("Type of input was", util.type(input))
+   print("\tAfter converting to string we found:", util.string(input))
+}
 
-show("String input");
-show(3.14);
-show(3);
-show(0..10);
-show({"Name": "Zac", "Email": "foo@bar.com"});
+show("String input")
+show(3.14)
+show(3)
+show(0..10)
+show({"Name": "Zac", "Email": "foo@bar.com"})
 
-let g = fn() { "Hello, world!" };
-show(g);
+let g = fn () { "Hello, world!" }
+show(g)

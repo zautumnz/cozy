@@ -1,45 +1,45 @@
 # Iterating over the contents of an array
 print("Array: value")
-let a = [ "My", "name", "is", "Zac" ];
+let a = [ "My", "name", "is", "Zac" ]
 foreach item in a {
-     print("\t",  item);
+     print("\t",  item)
 }
 print("Array: index/value")
 foreach index, item in a {
-     print("\t", index, "\t",  item);
+     print("\t", index, "\t",  item)
 }
 
 # Iterating over the contents of a string.
 print("String: value")
 foreach char in "Zac Anger" {
-     print("\t", char);
+     print("\t", char)
 }
 
 # character + index
 print("String: index/value")
 foreach idx, char in "Zac Anger" {
-     print("\t", idx, "\t", char);
+     print("\t", idx, "\t", char)
 }
 
 # Iterating over a hash
-let h = {"Foo": "Bar", "Zac": "Anger"};
+let h = {"Foo": "Bar", "Zac": "Anger"}
 print("Hash: key")
 foreach key in h {
-     print("\t", key);
+     print("\t", key)
 }
 print("Hash: key/value")
 foreach key, val in h {
-     print("\t", key, "\t=>\t", val);
-};
+     print("\t", key, "\t=>\t", val)
+}
 
 let for_loop = fn () {
     # While
-    mutable q = 0;
+    mutable q = 0
     # parens in for loop conditions are optional
     for q < 10 {
-        q++;
-        print("q", q);
-    };
+        q++
+        print("q", q)
+    }
 }
 
 for_loop()

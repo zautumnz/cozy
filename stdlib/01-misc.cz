@@ -27,7 +27,7 @@ let util.array_from = fn () {
     return xs
 }
 
-let util.assert = fn(val, msg = "Result was not 'true'!") {
+let util.assert = fn (val, msg = "Result was not 'true'!") {
     'assert takes a value and an optional failure message.'
     if (!val) {
         print(msg);

@@ -285,7 +285,7 @@ func TestMutableStatements(t *testing.T) {
 }
 
 func TestFunctionObject(t *testing.T) {
-	input := `fn(x) { x+2; };`
+	input := `fn (x) { x+2; };`
 	evaluated := testEval(input)
 	fn, ok := evaluated.(*object.Function)
 	if !ok {
@@ -313,7 +313,7 @@ func TestFunctionApplication(t *testing.T) {
 		{"let identity=fn(x){x;}; identity(5);", 5},
 		{"let identity=fn(x){return x;}; identity(5);", 5},
 		{"let double=fn(x){x*2;}; double(5);", 10},
-		{"let add = fn(x, y) { x+y;}; add(5,5);", 10},
+		{"let add=fn(x,y){x+y;}; add(5,5);", 10},
 		{"let add=fn(x,y){x+y;}; add(5+5, add(5,5));", 20},
 		{"fn(x){x;}(5)", 5},
 	}
@@ -324,8 +324,8 @@ func TestFunctionApplication(t *testing.T) {
 
 func TestClosures(t *testing.T) {
 	input := `
-let newAdder = fn(x) {
-	fn(y) { x+y };
+let newAdder = fn (x) {
+	fn (y) { x+y };
 };
 let addTwo = newAdder(2);
 addTwo(2);

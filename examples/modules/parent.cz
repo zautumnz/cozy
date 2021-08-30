@@ -1,9 +1,9 @@
-let foo = import("examples/modules/first-child");
+let foo = import("examples/modules/first-child")
 
-print("should be type module:", util.type(foo));
-print("should be module identifier:", foo);
-print("should be bar:", foo["foo"]);
-print("should be y:", foo.y);
+print("should be type module:", util.type(foo))
+print("should be module identifier:", foo)
+print("should be bar:", foo["foo"])
+print("should be y:", foo.y)
 
 # Not top level, so not imported
 

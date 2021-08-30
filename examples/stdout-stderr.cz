@@ -1,5 +1,5 @@
 # STDIN / STDOUT / STDERR are available by default
 let out = sys.STDOUT
 let err = sys.STDERR
-let result = out.write("This is a test to STDOUT\n");
-let result = err.write("This is a test to STDERR\n");
+let result = out.write("This is a test to STDOUT\n")
+let result = err.write("This is a test to STDERR\n")

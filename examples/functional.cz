@@ -1,19 +1,19 @@
 # Note: semicolons are optional, most of the time!
 
 # Return true if the given number is even
-let even? = fn(n) {
+let even? = fn (n) {
     return n % 2 == 0
 }
 # functions have names
 print(even?.name())
 
 # Return true if the given number is odd.
-let odd? = fn(n) {
+let odd? = fn (n) {
     return n % 2 == 1
 }
 
 # Return true if the given number is prime
-let prime? = fn(n) {
+let prime? = fn (n) {
     # negative numbers are not prime
     if n < 0 {
         return false
@@ -37,7 +37,7 @@ let prime? = fn(n) {
 }
 
 # Square the given number.
-let square = fn(n) { return n * n }
+let square = fn (n) { return n * n }
 
 # The list of numbers we'll operate upon.
 let ints = [
@@ -57,9 +57,9 @@ print("\t", ints.map(square))
 
 # Show their cubes, using an anonymous function
 print("\nCubes:")
-print("\t", ints.map(fn(n) { return n * n * n }))
+print("\t", ints.map(fn (n) { return n * n * n }))
 print("\nCubes via POW:")
-print("\t", ints.map(fn(n) { return n ** 3 }))
+print("\t", ints.map(fn (n) { return n ** 3 }))
 
 # Now use our functional-methods to show odd/even/prime
 # numbers contained in our list.

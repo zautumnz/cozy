@@ -1,4 +1,4 @@
-let core.test = fn(suite, cb) {
+let core.test = fn (suite, cb) {
     'test takes a suite name and a callback. The callback should
     take a parameter which is an assertion, which takes a value and optionally
     a message to print on failure.'
@@ -8,7 +8,7 @@ let core.test = fn(suite, cb) {
 
     print("# {{suite}}");
 
-    let handle_assertion = fn(val, msg = "Result was not 'true'!") {
+    let handle_assertion = fn (val, msg = "Result was not 'true'!") {
         id++;
         if (!val) {
             print("not ok {{id}} - {{msg}}");

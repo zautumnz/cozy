@@ -48,19 +48,19 @@ let util.colorize = (fn () {
 
     let apply_col = fn (col) {
         return fn (content) {
-            let code = color_codes[col]
-            let s = "\\033[1;"
-            let col_s = s + util.string(code) + "m"
-            let reset_s = s + util.string(color_codes["reset"]) + "m"
-            return col_s + content + reset_s
+            let code = color_codes[col];
+            let s = "\\033[1;";
+            let col_s = s + util.string(code) + "m";
+            let reset_s = s + util.string(color_codes["reset"]) + "m";
+            return col_s + content + reset_s;
         };
     };
 
-    let k = color_codes.keys()
+    let k = color_codes.keys();
     let ret = k.reduce(fn (x, acc) {
         acc = acc.set(x, apply_col(x))
-        return acc
+        return acc;
     }, {});
 
-    return ret
+    return ret;
 })();

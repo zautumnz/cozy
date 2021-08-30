@@ -1,4 +1,4 @@
-let array.first = fn() {
+let array.first = fn () {
     'array.first returns the first element.'
     util.assert(util.len(self) >= 1, "Array contains no values!")
 
@@ -10,7 +10,7 @@ let array.first = fn() {
 util.assert([0,1].first() == 0);
 util.assert(["zac",1].first() == "zac");
 
-let array.rest = fn() {
+let array.rest = fn () {
     'array.rest returns all but the first element.'
     mutable result = [];
 
@@ -30,7 +30,7 @@ util.assert(util.len([0,1,2].rest()) == 2);
 util.assert(util.len([0,1,2,3,4,5].rest()) == 5);
 util.assert(util.string(["zac", 1].rest()) == "[1]");
 
-let array.last = fn() {
+let array.last = fn () {
     'array.last returns the last element.'
     util.assert(util.len(self) >= 1, "Array contains no values!")
     return self[util.len(self) - 1];
@@ -38,7 +38,7 @@ let array.last = fn() {
 
 util.assert([0,2].last() == 2);
 
-let array.filter = fn(predicate) {
+let array.filter = fn (predicate) {
     'array.filter takes a predicate which should return a boolean,
     and returns a new array filtered based on the predicate.'
     mutable i = 0;
@@ -61,13 +61,13 @@ let array.filter = fn(predicate) {
 util.assert(
 fn () {
     mutable a = [ 1, 2, 3 , -1, "zac", 44 ];
-    a = a.filter(fn(n) { return n == 2 ; });
+    a = a.filter(fn (n) { return n == 2 ; });
     return util.string(a) == "[2]";
 }()
 );
 
 
-let array.find = fn(item) {
+let array.find = fn (item) {
     'array.find returns the offset, or -1, of the specified item in the array.'
     foreach index, value in self {
         if (value == item) {
@@ -84,7 +84,7 @@ util.assert([1,2,3].find(1) == 0);
 util.assert([1,2,3].find(3) == 2);
 util.assert([1,2,3,3].find(3) == 2);
 
-let array.includes? = fn(obj) {
+let array.includes? = fn (obj) {
     'array.includes? returns a boolean if the array includes the passed element.'
     return self.find(obj) != -1;
 };
@@ -92,7 +92,7 @@ let array.includes? = fn(obj) {
 util.assert([1,2,3].includes?(2));
 util.assert(! [1,2,3].includes?(23));
 
-let array.min = fn() {
+let array.min = fn () {
     'array.min returns the minimum value in the array, or 0.'
     mutable i = 0;
 
@@ -137,7 +137,7 @@ util.assert((1..10.min() == 1));
 util.assert(([-1,-2,-3].min() == -3));
 util.assert(([].min() == 0), "minimum of an empty array is zero");
 
-let array.max = fn() {
+let array.max = fn () {
     'array.max returns the maximum value in the array, or 0.'
     mutable i = 0;
 
@@ -182,7 +182,7 @@ util.assert(([1,2,3].max() == 3));
 util.assert(([-1,-2,-3].max() == -1));
 util.assert(([].max() == 0), "maximum of an empty array is zero");
 
-let array.join = fn(char) {
+let array.join = fn (char) {
     'array.join joins elements of an array on the passed string.'
     mutable r = "";
     mutable i = 0;
@@ -205,7 +205,7 @@ let array.join = fn(char) {
 util.assert([1,2,3].join(".") == "1.2.3");
 util.assert([1,2,3].join("") == "123");
 
-let array.reverse = fn() {
+let array.reverse = fn () {
     'array.reverse reverses the array.'
     mutable r = [];
     mutable l = util.len(self);
@@ -219,7 +219,7 @@ let array.reverse = fn() {
 
 util.assert(util.string([1,2,3].reverse()) == "[3, 2, 1]");
 
-let array.sorted? = fn() {
+let array.sorted? = fn () {
     'array.sorted? returns true if the array is sorted.'
 
     # Ensure each array-member has the same type.
@@ -266,7 +266,7 @@ util.assert([-1,0,1].sorted?());
 util.assert([1].sorted?());
 util.assert([].sorted?());
 
-let array.swap = fn(a, b) {
+let array.swap = fn (a, b) {
     'array.swap swaps the value of two array indexes.'
     let aVal = self[b];
     let bVal = self[a];
@@ -305,7 +305,7 @@ fn () {
 }()
 );
 
-let array.sort = fn() {
+let array.sort = fn () {
     'array.sort sorts the array.'
 
     # Ensure each array-member has the same type.
@@ -351,7 +351,7 @@ util.assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[0] == 1}());
 util.assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[1] == 2}());
 util.assert(fn () {mutable a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3}());
 
-let array.map = fn(fnc) {
+let array.map = fn (fnc) {
     'array.map returns an array which is the result of applying the
     passed function to each element in the array. The function should take an
     item and optionally the index.'
@@ -368,7 +368,7 @@ let array.map = fn(fnc) {
 util.assert(
 fn () {
     mutable a = [3,9,-4];
-    a = a.map(fn(n) { return n * n; });
+    a = a.map(fn (n) { return n * n; });
     a = a.sort();
     return util.string(a) == "[9, 16, 81]";
 }()
@@ -376,13 +376,13 @@ fn () {
 util.assert(
 fn () {
     mutable a = [2,-1,-12];
-    a = a.map(fn(n) { return n +2; });
+    a = a.map(fn (n) { return n +2; });
     a = a.sort();
     return util.string(a) == "[-10, 1, 4]";
 }()
 );
 
-let array.uniq = fn() {
+let array.uniq = fn () {
     'array.uniq returns the unique members of an array.'
     mutable tmp = {};
 
@@ -396,7 +396,7 @@ let array.uniq = fn() {
 
 util.assert(util.string([1,1,1,1,2].uniq()) == "[1, 2]");
 
-let array.empty? = fn() {
+let array.empty? = fn () {
     'array.empty? returns true if the array is empty.'
     return util.len(self) == 0
 };
@@ -405,7 +405,7 @@ util.assert([].empty?());
 util.assert(![1,2].empty?());
 util.assert(!["zacanger",3].empty?());
 
-let array.reduce = fn(fun, init) {
+let array.reduce = fn (fun, init) {
     'array.reduce takes a function and an initial value. The function
     is passed the current item, the accumulated value, and the current index.'
     mutable acc = init;
@@ -416,7 +416,7 @@ let array.reduce = fn(fun, init) {
     return acc;
 };
 
-let array.sum = fn() {
+let array.sum = fn () {
     'array.sum sums numbers in the array.'
     foreach x in self {
         if (util.type(x) != "integer" && util.type(x) != "float") {
@@ -428,7 +428,7 @@ let array.sum = fn() {
     }
 
     return self.reduce(
-        fn(x, acc) {
+        fn (x, acc) {
             return x + acc;
         }, 0);
 };

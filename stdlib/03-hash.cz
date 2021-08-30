@@ -1,4 +1,4 @@
-let hash.empty? = fn() {
+let hash.empty? = fn () {
     'hash.empty? returns true if the hash is empty.'
     return util.len(self.keys()) == 0;
 };

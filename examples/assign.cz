@@ -1,19 +1,19 @@
 #!/usr/bin/env cozy
 
 let assignment_examples = fn () {
-    let constants = math.constants;
-    mutable i = 3;
-    i = 2 * constants.PI ;
-    print("2xPI ", i);
+    let constants = math.constants
+    mutable i = 3
+    i = 2 * constants.PI
+    print("2xPI ", i)
 
-    let x = 3;
-    print("X:", x);
+    let x = 3
+    print("X:", x)
 
     # Unicode works fine in identifiers
-    let 天 = "tian";
-    print(天);
+    let 天 = "tian"
+    print(天)
 
-    let FOO = 123;
-    print(FOO);
+    let FOO = 123
+    print(FOO)
 }
 assignment_examples()

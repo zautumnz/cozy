@@ -30,7 +30,7 @@ languages in the future straightforward.
 # how they might be implemented by a user.
 
 # let is for immutable variables
-let reduce = fn(fun, xs, init) {
+let reduce = fn (fun, xs, init) {
     # mutable obvious
     # mutable is only available within blocks, not at at the top level
     mutable acc = init
@@ -44,7 +44,7 @@ let reduce = fn(fun, xs, init) {
 
 # identifiers can have unicode (for example, chinese characters),
 # and question marks
-let ints? = fn(xs) {
+let ints? = fn (xs) {
     foreach x in xs {
         if util.type(x) != "integer" && util.type(x) != "float" {
             return false
@@ -55,11 +55,11 @@ let ints? = fn(xs) {
     true
 }
 
-let sum = fn(xs) {
+let sum = fn (xs) {
     # basic assertions and a TAP-producing test library are built in
     util.assert(ints?(xs), "expected only numbers!")
     return reduce(
-        fn(x, acc) {
+        fn (x, acc) {
             return x + acc
         }, xs, 0)
 }
@@ -141,6 +141,27 @@ Builtin modules (see examples for docs):
 * `util`
 
 See also the standard library (written mostly in cozy itself).
+
+### Code Style
+
+cozy doesn't care about formatting. You can use two spaces, four spaces,
+seventeen spaces, three spaces and a tab, or whatever. Semicolons are also
+optional in most cases (similar to the rules in JavaScript), and parenthesis and
+curly braces are also optional in conditions and loops.
+
+The semi-official style which should be followed when submitting changes is
+fairly obvious from the examples and standard library:
+
+* Four spaces to indent
+* Use a space between identifiers and operators, with the exception of mutating
+    postfix operators
+* Use a space between the `fn` keyword and opening paren
+* Use a space between opening/closing parens and opening/closing braces
+* Docstrings should be at the top of the function
+* Imports should be at the top of the module
+* Line length should not exceed 80 characters
+* Semicolons should not be used except in ambiguous situations
+* Identifiers should use `snake_case`
 
 ## License
 

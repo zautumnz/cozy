@@ -3,9 +3,11 @@
 # Remaining v1 Work
 
 * Bugs:
+    * `print()` issue, run examples/http to reproduce
+    * `json.serialize` issue on functions
     * Spread isn't quite right, see curry in stdlib
     * Vim config bugs:
-        * Function group is matching `fn foo(x)` but we want `let foo = fn(x)`
+        * Function group is matching `fn foo (x)` but we want `let foo = fn (x)`
         * Comments aren't indented when using `>>`/`<<` and `=`
     * Ctags config:
         * Identifiers can be unicode, and also can include dots
@@ -17,6 +19,7 @@
 * Features:
     * http.client: add form support
 * Chores:
+    * Finish removing semicolons in stdlib
     * Fix long lines (`\grep '.\{80\}' -r .`)
     * Confirm that everything under ./examples works
     * Add argument validation to all internal functions and stdlib

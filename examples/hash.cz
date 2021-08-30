@@ -1,50 +1,50 @@
 # Dump the hash specified
-let dump = fn(hsh) {
-    let k = hsh.keys();
-    print("\tHash has ", util.len(k) , " keys.");
+let dump = fn (hsh) {
+    let k = hsh.keys()
+    print("\tHash has ", util.len(k) , " keys.")
 
-    mutable i = 0;
+    mutable i = 0
     for (i < util.len(k)) {
        # Show the name / type / value
        print("\tEntry has key:" , k[i] ,
              " (type:", util.type(k[i]), ")",
-             " with value:", h[k[i]]);
-       i++;
+             " with value:", h[k[i]])
+       i++
     }
-};
+}
 
 # Here is a sample hash
-let h = {"Zac": "Anger", "seven": 7, 3.14: "pi-ish"};
+let h = {"Zac": "Anger", "seven": 7, 3.14: "pi-ish"}
 
 # Show it.
-print("The original hash:");
-dump(h);
+print("The original hash:")
+dump(h)
 
 # Add a new key
-let h = h.set("Updated", "Value");
+let h = h.set("Updated", "Value")
 
 # Show it
-print("After adding a new key:");
-dump(h);
+print("After adding a new key:")
+dump(h)
 
 # Delete two keys
-let h = h.delete("seven");
-let h = h.delete(3.14);
-print("After deleting two keys:");
-dump(h);
+let h = h.delete("seven")
+let h = h.delete(3.14)
+print("After deleting two keys:")
+dump(h)
 
-print("Running command: /bin/ls");
-let h = sys.exec("/bin/ls / /fdsf");
-dump(h);
+print("Running command: /bin/ls")
+let h = sys.exec("/bin/ls / /fdsf")
+dump(h)
 
-print("Running via bash:");
+print("Running via bash:")
 let h = sys.exec("/bin/sh -c \"/bin/ls /etc\"")
-dump(h);
+dump(h)
 
 # Using dot access
-let a = {"name": "foo", "point": { "x": 1, "y": 2 }};
-print(a.name);
-print(a["point"].x);
-print(a.point["y"]);
-print(a["point"]["x"]);
-print(a.point.y);
+let a = {"name": "foo", "point": { "x": 1, "y": 2 }}
+print(a.name)
+print(a["point"].x)
+print(a.point["y"])
+print(a["point"]["x"])
+print(a.point.y)
