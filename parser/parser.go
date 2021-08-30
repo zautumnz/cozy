@@ -190,7 +190,12 @@ func (p *Parser) Errors() []string {
 
 // peekError raises an error if the next token is not the expected type.
 func (p *Parser) peekError(t token.Type) {
-	msg := fmt.Sprintf("expected next token to be %s, got %s instead around line %d", t, p.curToken.Type, p.l.GetLine())
+	msg := fmt.Sprintf(
+		"expected next token to be %s, got %s instead around line %d",
+		t,
+		p.curToken.Type,
+		p.l.GetLine(),
+	)
 	p.errors = append(p.errors, msg)
 }
 
@@ -282,7 +287,11 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 
 // no prefix parse function error
 func (p *Parser) noPrefixParseFnError(t token.Type) {
-	msg := fmt.Sprintf("no prefix parse function for %s found around line %d", t, p.l.GetLine())
+	msg := fmt.Sprintf(
+		"no prefix parse function for %s found around line %d",
+		t,
+		p.l.GetLine(),
+	)
 	p.errors = append(p.errors, msg)
 }
 
@@ -347,7 +356,11 @@ func (p *Parser) ParseIntegerLiteral() ast.Expression {
 	}
 
 	if err != nil {
-		msg := fmt.Sprintf("could not parse %q as integer around line %d", p.curToken.Literal, p.l.GetLine())
+		msg := fmt.Sprintf(
+			"could not parse %q as integer around line %d",
+			p.curToken.Literal,
+			p.l.GetLine(),
+		)
 		p.errors = append(p.errors, msg)
 		return nil
 	}
@@ -360,7 +373,11 @@ func (p *Parser) ParseFloatLiteral() ast.Expression {
 	flo := &ast.FloatLiteral{Token: p.curToken}
 	value, err := strconv.ParseFloat(p.curToken.Literal, 64)
 	if err != nil {
-		msg := fmt.Sprintf("could not parse %q as float around line %d", p.curToken.Literal, p.l.GetLine())
+		msg := fmt.Sprintf(
+			"could not parse %q as float around line %d",
+			p.curToken.Literal,
+			p.l.GetLine(),
+		)
 		p.errors = append(p.errors, msg)
 		return nil
 	}
@@ -573,7 +590,13 @@ func (p *Parser) parseForEach() ast.Expression {
 		p.nextToken()
 
 		if !p.peekTokenIs(token.IDENT) {
-			p.errors = append(p.errors, fmt.Sprintf("second argument to foreach must be ident, got %v", p.peekToken))
+			p.errors = append(
+				p.errors,
+				fmt.Sprintf(
+					"second argument to foreach must be ident, got %v",
+					p.peekToken,
+				),
+			)
 			return nil
 		}
 		p.nextToken()
@@ -690,7 +713,10 @@ func (p *Parser) parseSpreadLiteral() ast.Expression {
 }
 
 // parseFunctionParameters parses the parameters used for a function.
-func (p *Parser) parseFunctionParameters() (map[string]ast.Expression, []*ast.Identifier) {
+func (p *Parser) parseFunctionParameters() (
+	map[string]ast.Expression,
+	[]*ast.Identifier,
+) {
 	// Any default parameters.
 	m := make(map[string]ast.Expression)
 
@@ -793,7 +819,11 @@ func (p *Parser) parseAssignExpression(name ast.Expression) ast.Expression {
 	if n, ok := name.(*ast.Identifier); ok {
 		stmt.Name = n
 	} else {
-		msg := fmt.Sprintf("expected assign token to be IDENT, got %s instead around line %d", name.TokenLiteral(), p.l.GetLine())
+		msg := fmt.Sprintf(
+			"expected assign token to be IDENT, got %s instead around line %d",
+			name.TokenLiteral(),
+			p.l.GetLine(),
+		)
 		p.errors = append(p.errors, msg)
 	}
 

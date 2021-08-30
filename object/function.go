@@ -15,7 +15,8 @@ func init() {
 	stringifiedAnonymousFunctionMap = make(map[string]int)
 }
 
-// Function wraps ast.Identifier array, ast.BlockStatement and Environment and implements Object interface.
+// Function wraps ast.Identifier array, ast.BlockStatement and Environment
+// and implements Object interface.
 type Function struct {
 	Parameters []*ast.Identifier
 	Body       *ast.BlockStatement

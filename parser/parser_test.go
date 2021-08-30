@@ -40,7 +40,8 @@ func TestMutableStatements(t *testing.T) {
 	}
 }
 
-// Test that errors are returned when incomplete mutable/let expressions are seen
+// Test that errors are returned when
+// incomplete mutable/let expressions are seen
 func TestBadMutableLetStatement(t *testing.T) {
 	input := []string{"mutable", "let", "mutable x;", "let x;"}
 
@@ -146,7 +147,10 @@ return 993322;
 	program := p.ParseProgram()
 	checkParserErrors(t, p)
 	if len(program.Statements) != 3 {
-		t.Errorf("program does not contain 3 statements, got=%d", len(program.Statements))
+		t.Errorf(
+			"program does not contain 3 statements, got=%d",
+			len(program.Statements),
+		)
 	}
 	for _, stmt := range program.Statements {
 		returnStatement, ok := stmt.(*ast.ReturnStatement)
@@ -154,7 +158,10 @@ return 993322;
 			t.Errorf("stmt not *ast.ReturnStatement. got %T", stmt)
 		}
 		if returnStatement.TokenLiteral() != "return" {
-			t.Errorf("returnStatement.TokenLiteral not 'return', got %q", returnStatement.TokenLiteral())
+			t.Errorf(
+				"returnStatement.TokenLiteral not 'return', got %q",
+				returnStatement.TokenLiteral(),
+			)
 		}
 	}
 }
@@ -228,7 +235,11 @@ func TestBooleanExpression(t *testing.T) {
 		program := p.ParseProgram()
 		checkParserErrors(t, p)
 		if len(program.Statements) != 1 {
-			t.Fatalf("program.Statements does not contain %d statement. got=%d", 1, len(program.Statements))
+			t.Fatalf(
+				"program.Statements does not contain %d statement. got=%d",
+				1,
+				len(program.Statements),
+			)
 		}
 		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
 		if !ok {
@@ -351,7 +362,13 @@ func TestParsingInfixExpression(t *testing.T) {
 			t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
 				program.Statements[0])
 		}
-		if !testInfixExpression(t, stmt.Expression, tt.leftValue, tt.operator, tt.rightValue) {
+		if !testInfixExpression(
+			t,
+			stmt.Expression,
+			tt.leftValue,
+			tt.operator,
+			tt.rightValue,
+		) {
 			return
 		}
 	}
@@ -386,7 +403,10 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 		{"!(true==true)", "(!(true == true))"},
 		{"a + add(b*c)+d", "((a + add((b * c))) + d)"},
 		{"a*[1,2,3,4][b*c]*d", "((a * ([1, 2, 3, 4][(b * c)])) * d)"},
-		{"add(a*b[2], b[1], 2 * [1,2][1])", "add((a * (b[2])), (b[1]), (2 * ([1, 2][1])))"},
+		{
+			"add(a*b[2], b[1], 2 * [1,2][1])",
+			"add((a * (b[2])), (b[1]), (2 * ([1, 2][1])))",
+		},
 	}
 	for _, tt := range tests {
 		l := lexer.New(tt.input)
@@ -435,7 +455,11 @@ func testBooleanLiteral(t *testing.T, exp ast.Expression, value bool) bool {
 	return true
 }
 
-func testLiteralExpression(t *testing.T, exp ast.Expression, expected interface{}) bool {
+func testLiteralExpression(
+	t *testing.T,
+	exp ast.Expression,
+	expected interface{},
+) bool {
 	switch v := expected.(type) {
 	case int:
 		return testIntegerLiteral(t, exp, int64(v))
@@ -543,8 +567,10 @@ func TestForLoopExpression(t *testing.T) {
 	}
 	consequence, ok := exp.Consequence.Statements[0].(*ast.MutableStatement)
 	if !ok {
-		t.Fatalf("exp.Consequence.Statement[0] is not ast.ExpressionStatement. got=%T",
-			exp.Consequence.Statements[0])
+		t.Fatalf(
+			"exp.Consequence.Statement[0] is not ast.ExpressionStatement. got=%T",
+			exp.Consequence.Statements[0],
+		)
 	}
 	if !testMutableStatement(t, consequence, "x") {
 		t.Fatalf("exp.Consequence is not MutableStatement")

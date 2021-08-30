@@ -22,10 +22,20 @@ func TestNull(t *testing.T) {
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt.expectedLiteral,
+				tok.Literal,
+			)
 		}
 	}
 }
@@ -60,10 +70,20 @@ func TestNextToken1(t *testing.T) {
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt.expectedLiteral,
+				tok.Literal,
+			)
 		}
 	}
 }
@@ -226,10 +246,20 @@ foo
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt.expectedLiteral,
+				tok.Literal,
+			)
 		}
 	}
 }
@@ -239,10 +269,18 @@ func TestUnicodeLexer(t *testing.T) {
 	l := New(input)
 	tok := l.NextToken()
 	if tok.Type != token.IDENT {
-		t.Fatalf("token type wrong, expected=%q, got=%q", token.IDENT, tok.Type)
+		t.Fatalf(
+			"token type wrong, expected=%q, got=%q",
+			token.IDENT,
+			tok.Type,
+		)
 	}
 	if tok.Literal != "世界" {
-		t.Fatalf("token literal wrong, expected=%q, got=%q", "世界", tok.Literal)
+		t.Fatalf(
+			"token literal wrong, expected=%q, got=%q",
+			"世界",
+			tok.Literal,
+		)
 	}
 }
 
@@ -270,10 +308,20 @@ let a = 1; # This is a comment
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt.expectedLiteral,
+				tok.Literal,
+			)
 		}
 	}
 }
@@ -300,10 +348,20 @@ func TestIntegers(t *testing.T) {
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt.expectedLiteral,
+				tok.Literal,
+			)
 		}
 	}
 }
@@ -325,10 +383,20 @@ func TestShebang(t *testing.T) {
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt.expectedLiteral,
+				tok.Literal,
+			)
 		}
 	}
 }
@@ -424,10 +492,20 @@ foo.bar
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt, tok)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt,
+				tok,
+			)
 		}
 	}
 }
@@ -462,10 +540,20 @@ a?.b?();
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt, tok)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt,
+				tok,
+			)
 		}
 	}
 }
@@ -500,10 +588,20 @@ func TestIntDotMethod(t *testing.T) {
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt, tok)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt,
+				tok,
+			)
 		}
 	}
 }
@@ -536,10 +634,20 @@ a = 3/4;
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt.expectedLiteral,
+				tok.Literal,
+			)
 		}
 	}
 }
@@ -564,10 +672,20 @@ func TestRangeDots(t *testing.T) {
 	for i, tt := range tests {
 		tok := l.NextToken()
 		if tok.Type != tt.expectedType {
-			t.Fatalf("tests[%d] - tokentype wrong, expected=%q, got=%q", i, tt.expectedType, tok.Type)
+			t.Fatalf(
+				"tests[%d] - tokentype wrong, expected=%q, got=%q",
+				i,
+				tt.expectedType,
+				tok.Type,
+			)
 		}
 		if tok.Literal != tt.expectedLiteral {
-			t.Fatalf("tests[%d] - Literal wrong, expected=%q, got=%q", i, tt.expectedLiteral, tok.Literal)
+			t.Fatalf(
+				"tests[%d] - Literal wrong, expected=%q, got=%q",
+				i,
+				tt.expectedLiteral,
+				tok.Literal,
+			)
 		}
 	}
 }

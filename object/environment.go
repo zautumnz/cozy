@@ -92,14 +92,20 @@ func (e *Environment) Set(name string, val Object) Object {
 	cur := e.store[name]
 
 	if e.outer == nil && !utils.IsRepl {
-		fmt.Printf("No mutable variables at the top level! %s must be bound with let!\n", name)
+		fmt.Printf(
+			"No mutable variables at the top level! %s must be bound with let!\n",
+			name,
+		)
 		utils.ExitConditionally(3)
 	}
 
 	if (cur != nil && e.readonly[name]) ||
 		(e.outer != nil && e.outer.store[name] != nil &&
 			e.outer.readonly[name]) {
-		fmt.Printf("Attempting to modify '%s' denied; it was defined as a constant.\n", name)
+		fmt.Printf(
+			"Attempting to modify '%s' denied; it was defined as a constant.\n",
+			name,
+		)
 		utils.ExitConditionally(3)
 	}
 

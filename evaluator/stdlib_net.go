@@ -115,7 +115,12 @@ func Socket(args ...OBJ) OBJ {
 	}
 
 	if domain == syscall.AF_INET || domain == syscall.AF_INET6 {
-		if err = syscall.SetsockoptInt(fd, syscall.SOL_SOCKET, syscall.SO_REUSEADDR, 1); err != nil {
+		if err = syscall.SetsockoptInt(
+			fd,
+			syscall.SOL_SOCKET,
+			syscall.SO_REUSEADDR,
+			1,
+		); err != nil {
 			return NewError("SocketError: cannot enable SO_REUSEADDR: %s", err)
 		}
 	}
@@ -150,17 +155,29 @@ func Connect(args ...OBJ) OBJ {
 	if _, ok := sockaddr.(*syscall.SockaddrInet4); ok {
 		addr, port, err := parseV4Address(address)
 		if err != nil {
-			return NewError("ValueError: Invalid IPv4 address '%s': %s", address, err)
+			return NewError(
+				"ValueError: Invalid IPv4 address '%s': %s",
+				address,
+				err,
+			)
 		}
 		sa = &syscall.SockaddrInet4{Addr: addr, Port: port}
 	} else if _, ok := sockaddr.(*syscall.SockaddrInet6); ok {
 		addr, port, err := parseV6Address(address)
 		if err != nil {
-			return NewError("ValueError: Invalid IPv6 address '%s': %s", address, err)
+			return NewError(
+				"ValueError: Invalid IPv6 address '%s': %s",
+				address,
+				err,
+			)
 		}
 		sa = &syscall.SockaddrInet6{Addr: addr, Port: port}
 	} else {
-		return NewError("ValueError: Invalid socket type %T for bind '%s'", sockaddr, address)
+		return NewError(
+			"ValueError: Invalid socket type %T for bind '%s'",
+			sockaddr,
+			address,
+		)
 	}
 
 	if err = syscall.Connect(fd, sa); err != nil {
@@ -210,7 +227,11 @@ func Bind(args ...OBJ) OBJ {
 		}
 		sockaddr = &syscall.SockaddrInet6{Addr: addr, Port: port}
 	} else {
-		return NewError("ValueError: Invalid socket type %T for bind '%s'", sockaddr, address)
+		return NewError(
+			"ValueError: Invalid socket type %T for bind '%s'",
+			sockaddr,
+			address,
+		)
 	}
 
 	err = syscall.Bind(fd, sockaddr)

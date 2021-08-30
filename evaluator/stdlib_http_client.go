@@ -70,7 +70,10 @@ func (r *Request) isJSON() bool {
 
 // Build query data
 func (r *Request) buildBody(d ...interface{}) (io.Reader, error) {
-	if r.method == "GET" || r.method == "DELETE" || len(d) == 0 || (len(d) > 0 && d[0] == nil) {
+	if r.method == "GET" ||
+		r.method == "DELETE" ||
+		len(d) == 0 ||
+		(len(d) > 0 && d[0] == nil) {
 		return nil, nil
 	}
 
@@ -185,7 +188,11 @@ func buildURL(url string, data ...interface{}) (string, error) {
 }
 
 // Send http request
-func (r *Request) request(method, url string, data ...interface{}) (*Response, error) {
+func (r *Request) request(
+	method,
+	url string,
+	data ...interface{},
+) (*Response, error) {
 	// Build Response
 	response := &Response{}
 

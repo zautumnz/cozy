@@ -54,7 +54,10 @@ func jsonDeserialize(args ...OBJ) OBJ {
 		return Eval(node, env)
 	}
 
-	return NewError("argument to `json` must be a valid JSON object, got '%s'", s.Value)
+	return NewError(
+		"argument to `json` must be a valid JSON object, got '%s'",
+		s.Value,
+	)
 }
 
 // Converts a cozy value to a JSON string

@@ -44,7 +44,12 @@ func TestInterpolate(t *testing.T) {
 	for _, tt := range tests {
 		output := Interpolate(tt.input, env)
 		if tt.expected != output {
-			t.Fatalf("expected '%v', got '%v' (original: %s)", tt.expected, output, tt.input)
+			t.Fatalf(
+				"expected '%v', got '%v' (original: %s)",
+				tt.expected,
+				output,
+				tt.input,
+			)
 		}
 	}
 }

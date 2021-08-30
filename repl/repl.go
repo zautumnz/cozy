@@ -59,7 +59,9 @@ func Start(in io.Reader, out io.Writer, stdlib string) {
 		p := parser.New(lex)
 		program := p.ParseProgram()
 		if len(p.Errors()) != 0 {
-			parser.PrintParserErrors(parser.ParserErrorsParams{Errors: p.Errors(), Out: out})
+			parser.PrintParserErrors(
+				parser.ParserErrorsParams{Errors: p.Errors(), Out: out},
+			)
 			continue
 		}
 		evaluated := evaluator.Eval(program, env)

@@ -529,7 +529,9 @@ type CurrentArgsLiteral struct {
 func (cal *CurrentArgsLiteral) expressionNode() {}
 
 // TokenLiteral returns the literal token
-func (cal *CurrentArgsLiteral) TokenLiteral() string { return cal.Token.Literal }
+func (cal *CurrentArgsLiteral) TokenLiteral() string {
+	return cal.Token.Literal
+}
 
 // String returns a string representation of the literal
 func (cal *CurrentArgsLiteral) String() string {

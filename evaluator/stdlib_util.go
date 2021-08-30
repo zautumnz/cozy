@@ -21,7 +21,11 @@ func floatFn(args ...OBJ) OBJ {
 		if err == nil {
 			return &object.Float{Value: float64(i)}
 		}
-		return NewError("Converting string '%s' to float failed %s", input, err.Error())
+		return NewError(
+			"Converting string '%s' to float failed %s",
+			input,
+			err.Error(),
+		)
 
 	case *object.Boolean:
 		input := args[0].(*object.Boolean).Value

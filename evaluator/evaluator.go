@@ -118,7 +118,13 @@ func evalContext(ctx context.Context, node ast.Node, env *ENV) OBJ {
 		body := node.Body
 		defaults := node.Defaults
 		docstring := node.DocString
-		return &object.Function{Parameters: params, Env: env, Body: body, Defaults: defaults, DocString: docstring}
+		return &object.Function{
+			Parameters: params,
+			Env:        env,
+			Body:       body,
+			Defaults:   defaults,
+			DocString:  docstring,
+		}
 	case *ast.CallExpression:
 		function := Eval(node.Function, env)
 		if isError(function) {
@@ -145,7 +151,12 @@ func evalContext(ctx context.Context, node ast.Node, env *ENV) OBJ {
 				c = int(*t.Code)
 			}
 			if !t.BuiltinCall {
-				fmt.Fprintf(os.Stderr, "Error calling `%s` : %s\n", node.Function, res.Inspect())
+				fmt.Fprintf(
+					os.Stderr,
+					"Error calling `%s` : %s\n",
+					node.Function,
+					res.Inspect(),
+				)
 				utils.ExitConditionally(c)
 			}
 		}
@@ -163,7 +174,11 @@ func evalContext(ctx context.Context, node ast.Node, env *ENV) OBJ {
 	case *ast.SpreadLiteral:
 		return evalSpread(node, env)
 	case *ast.CurrentArgsLiteral:
-		return &object.Array{Token: node.Token, Elements: env.CurrentArgs, IsCurrentArgs: true}
+		return &object.Array{
+			Token:         node.Token,
+			Elements:      env.CurrentArgs,
+			IsCurrentArgs: true,
+		}
 	case *ast.IndexExpression:
 		left := Eval(node.Left, env)
 		if isError(left) {
@@ -280,7 +295,11 @@ func evalPrefixExpression(operator string, right OBJ) OBJ {
 	}
 }
 
-func evalPostfixExpression(env *ENV, operator string, node *ast.PostfixExpression) OBJ {
+func evalPostfixExpression(
+	env *ENV,
+	operator string,
+	node *ast.PostfixExpression,
+) OBJ {
 	switch operator {
 	case "++":
 		val, ok := env.Get(node.Token.Literal)
@@ -353,9 +372,13 @@ func evalInfixExpression(operator string, left, right OBJ, env *ENV) OBJ {
 	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
 		return evalStringInfixExpression(operator, left, right)
 	case operator == "&&":
-		return nativeBoolToBooleanObject(objectToNativeBoolean(left) && objectToNativeBoolean(right))
+		return nativeBoolToBooleanObject(
+			objectToNativeBoolean(left) && objectToNativeBoolean(right),
+		)
 	case operator == "||":
-		return nativeBoolToBooleanObject(objectToNativeBoolean(left) || objectToNativeBoolean(right))
+		return nativeBoolToBooleanObject(
+			objectToNativeBoolean(left) || objectToNativeBoolean(right),
+		)
 	case operator == "==":
 		return nativeBoolToBooleanObject(left == right)
 	case operator == "!=":
@@ -403,7 +426,9 @@ func evalIntegerInfixExpression(operator string, left, right OBJ) OBJ {
 	case "%":
 		return &object.Integer{Value: leftVal % rightVal}
 	case "**":
-		return &object.Integer{Value: int64(math.Pow(float64(leftVal), float64(rightVal)))}
+		return &object.Integer{
+			Value: int64(math.Pow(float64(leftVal), float64(rightVal))),
+		}
 	case "-":
 		return &object.Integer{Value: leftVal - rightVal}
 	case "-=":
@@ -706,7 +731,8 @@ func evalForLoopExpression(fle *ast.ForLoopExpression, env *ENV) OBJ {
 		}
 		if isTruthy(condition) {
 			rt := Eval(fle.Consequence, env)
-			if !isError(rt) && (rt.Type() == object.RETURN_VALUE_OBJ || rt.Type() == object.ERROR_OBJ) {
+			if !isError(rt) &&
+				(rt.Type() == object.RETURN_VALUE_OBJ || rt.Type() == object.ERROR_OBJ) {
 				return rt
 			}
 		} else {
@@ -723,7 +749,10 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *ENV) OBJ {
 
 	helper, ok := val.(object.Iterable)
 	if !ok {
-		return NewError("%s object doesn't implement the Iterable interface", val.Type())
+		return NewError(
+			"%s object doesn't implement the Iterable interface",
+			val.Type(),
+		)
 	}
 
 	// The one/two values we're going to permit
@@ -757,7 +786,9 @@ func evalForeachExpression(fle *ast.ForeachStatement, env *ENV) OBJ {
 		rt := Eval(fle.Body, child)
 
 		// If we got an error/return then we handle it.
-		if !isError(rt) && (rt.Type() == object.RETURN_VALUE_OBJ || rt.Type() == object.ERROR_OBJ) {
+		if !isError(rt) &&
+			(rt.Type() == object.RETURN_VALUE_OBJ ||
+				rt.Type() == object.ERROR_OBJ) {
 			return rt
 		}
 
