@@ -73,11 +73,10 @@ func errorFn(args ...OBJ) OBJ {
 // output a string to stdout
 func printFn(args ...OBJ) OBJ {
 	for _, arg := range args {
-		s := ""
 		var e error
+		s := arg.Inspect()
 
 		if arg.Type() == object.STRING_OBJ {
-			s = arg.Inspect()
 			if strings.Contains(s, "\\") {
 				// double escape; ansi escape codes
 				s, e = strconv.Unquote(`"` + s + `"`)
@@ -87,13 +86,12 @@ func printFn(args ...OBJ) OBJ {
 				fmt.Println(s + " ")
 				return NULL
 			}
-		} else {
-			s = arg.Inspect()
 		}
 
 		fmt.Printf(s + " ")
 	}
 
+	fmt.Println()
 	return NULL
 }
 
