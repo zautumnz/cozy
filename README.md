@@ -69,8 +69,8 @@ print(sum([1, 2, 3, 4]) == 10) # true
 ```
 
 For more examples and documentation, see the [examples](./examples) and
-[stdlib](./stdlib) directories. For vim, CLOC, Ctags, and Emacs support, see the
-[editor](./editor) directory.
+[stdlib](./stdlib) directories. The examples also serve as a second test suite.
+For vim, CLOC, Ctags, and Emacs support, see the [editor](./editor) directory.
 
 ## About
 
