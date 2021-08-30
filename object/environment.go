@@ -96,7 +96,9 @@ func (e *Environment) Set(name string, val Object) Object {
 		utils.ExitConditionally(3)
 	}
 
-	if (cur != nil && e.readonly[name]) || (e.outer != nil && e.outer.store[name] != nil && e.outer.readonly[name]) {
+	if (cur != nil && e.readonly[name]) ||
+		(e.outer != nil && e.outer.store[name] != nil &&
+			e.outer.readonly[name]) {
 		fmt.Printf("Attempting to modify '%s' denied; it was defined as a constant.\n", name)
 		utils.ExitConditionally(3)
 	}
@@ -107,7 +109,7 @@ func (e *Environment) Set(name string, val Object) Object {
 	}
 	// Store the (updated) value.
 
-	// This chunk is used for temporary environments (regex and loops)
+	// This chunk is used for temporary environments (foreach loops)
 	if len(e.permit) > 0 {
 		for _, v := range e.permit {
 			// we're permitted to store this variable

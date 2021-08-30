@@ -17,6 +17,7 @@
 * Features:
     * http.client: add form support
 * Chores:
+    * Fix long lines (`\grep '.\{80\}' -r .`)
     * Confirm that everything under ./examples works
     * Add argument validation to all internal functions and stdlib
     * Improve all Go error messages

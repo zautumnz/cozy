@@ -716,7 +716,7 @@ func evalForLoopExpression(fle *ast.ForLoopExpression, env *ENV) OBJ {
 	return rt
 }
 
-// handle "for x [,y] in .."
+// handle "foreach x [,y] in .."
 func evalForeachExpression(fle *ast.ForeachStatement, env *ENV) OBJ {
 	// expression
 	val := Eval(fle.Value, env)
