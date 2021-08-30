@@ -10,5 +10,5 @@ print("should be y:", foo.y)
 # `import()` is just a regular builtin function,
 # not a special statement, so you could use it in other expressions:
 # let mods = ["foo/bar", "quux/baz"].map(fn (x) { import(x) })
-# Note that because it's a core function (defined in the implementation language)
-# it can't be used like `.map(import)`; this would be a syntax error
+# Note that because it's a core function (defined in the implementation
+# language) it can't be used like `.map(import)`; this would be a syntax error

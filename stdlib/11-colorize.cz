@@ -44,23 +44,23 @@ let util.colorize = (fn () {
         "bg_magenta_bright": 105,
         "bg_cyan_bright": 106,
         "bg_white_bright": 107
-    };
+    }
 
     let apply_col = fn (col) {
         return fn (content) {
-            let code = color_codes[col];
-            let s = "\\033[1;";
-            let col_s = s + util.string(code) + "m";
-            let reset_s = s + util.string(color_codes["reset"]) + "m";
-            return col_s + content + reset_s;
-        };
-    };
+            let code = color_codes[col]
+            let s = "\\033[1;"
+            let col_s = s + util.string(code) + "m"
+            let reset_s = s + util.string(color_codes["reset"]) + "m"
+            return col_s + content + reset_s
+        }
+    }
 
-    let k = color_codes.keys();
+    let k = color_codes.keys()
     let ret = k.reduce(fn (x, acc) {
         acc = acc.set(x, apply_col(x))
-        return acc;
-    }, {});
+        return acc
+    }, {})
 
-    return ret;
-})();
+    return ret
+})()

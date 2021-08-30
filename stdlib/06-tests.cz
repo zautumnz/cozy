@@ -3,23 +3,23 @@ let core.test = fn (suite, cb) {
     take a parameter which is an assertion, which takes a value and optionally
     a message to print on failure.'
 
-    mutable id = 0;
-    mutable failed = 0;
+    mutable id = 0
+    mutable failed = 0
 
-    print("# {{suite}}");
+    print("# {{suite}}")
 
     let handle_assertion = fn (val, msg = "Result was not 'true'!") {
-        id++;
+        id++
         if (!val) {
-            print("not ok {{id}} - {{msg}}");
-            failed++;
+            print("not ok {{id}} - {{msg}}")
+            failed++
         } else {
-            print("ok {{id}} - {{msg}}");
+            print("ok {{id}} - {{msg}}")
         }
-    };
+    }
 
-    cb(handle_assertion);
+    cb(handle_assertion)
 
     # Print total amount of tests
-    print("1..{{id}}", id);
-};
+    print("1..{{id}}", id)
+}

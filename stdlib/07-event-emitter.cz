@@ -1,12 +1,12 @@
 let core.event_emitter = fn () {
     'event_emitter returns an object containing methods for managing events.'
-    mutable events = {};
+    mutable events = {}
     let data = {
         "subscribe": fn (name, f) {
             'subscribe takes an event name and a function,
             and subscribes that function to emitted events with that name.'
             if (!events.keys().includes?(name)) {
-                events = events.set(name, [f]);
+                events = events.set(name, [f])
             } else {
                 mutable ets = events[name]
                 ets = ets.append(f)
@@ -24,7 +24,7 @@ let core.event_emitter = fn () {
             'get_events returns all events'
             return events
         }
-    };
+    }
 
-    return data;
-};
+    return data
+}

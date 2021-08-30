@@ -2,19 +2,19 @@
 let math.constants = {
     "PI": 3.141592653589793,
     "E": 2.718281828459045,
-};
+}
 
 # File-objects for STDIN, STDOUT, and STDERR.
 # Rather than opening these by name/path we have magic-strings which
 # are recognized by our "open" primitive.
-let sys.STDIN = fs.open("!STDIN!");
-let sys.STDOUT = fs.open("!STDOUT!");
-let sys.STDERR = fs.open("!STDERR!");
+let sys.STDIN = fs.open("!STDIN!")
+let sys.STDOUT = fs.open("!STDOUT!")
+let sys.STDERR = fs.open("!STDERR!")
 
 let sys.in_repl = fn () {
     'sys.in_repl returns true if the current cozy process is in a repl'
     return sys.getenv("COZY_RUNNING_IN_REPL") == "true"
-};
+}
 
 let util.array_from = fn () {
     'array_from is a global function used to convert an unknown
@@ -30,72 +30,72 @@ let util.array_from = fn () {
 let util.assert = fn (val, msg = "Result was not 'true'!") {
     'assert takes a value and an optional failure message.'
     if (!val) {
-        print(msg);
+        print(msg)
         if (!sys.in_repl()) {
-            sys.exit(1);
+            sys.exit(1)
         }
     }
-};
+}
 
-util.assert("true");
-util.assert(true);
-util.assert(!false);
-util.assert(util.type(sys.STDIN) == "file");
-util.assert(util.type(sys.STDOUT) == "file");
-util.assert(util.type(sys.STDERR) == "file");
+util.assert("true")
+util.assert(true)
+util.assert(!false)
+util.assert(util.type(sys.STDIN) == "file")
+util.assert(util.type(sys.STDOUT) == "file")
+util.assert(util.type(sys.STDERR) == "file")
 
 let util.array? = fn (x) {
     'array? returns true if the value provided is an array.'
     return util.type(x) == "array"
-};
+}
 let util.boolean? = fn (x) {
     'boolean? returns true if the value provided is a boolean.'
     return util.type(x) == "bool"
-};
+}
 let util.builtin? = fn (x) {
     'builtin? returns true if the value provided is a builtin.'
     return util.type(x) == "builtin"
-};
+}
 let util.docstring? = fn (x) {
     'docstring? returns true if the value provided is a docstring.'
     return util.type(x) == "docstring"
-};
+}
 let util.file? = fn (x) {
     'file? returns true if the value provided is a file.'
     return util.type(x) == "file"
-};
+}
 let util.float? = fn (x) {
     'float? returns true if the value provided is a float.'
     return util.type(x) == "float"
-};
+}
 let util.function? = fn (x) {
     'function? returns true if the value provided is a function.'
     return util.type(x) == "function"
-};
+}
 let util.hash? = fn (x) {
     'hash? returns true if the value provided is a hash.'
     return util.type(x) == "hash"
-};
+}
 let util.integer? = fn (x) {
     'integer? returns true if the value provided is an integer.'
     return util.type(x) == "integer"
-};
+}
 let util.module? = fn (x) {
     'module? returns true if the value provided is a module.'
     return util.type(x) == "module"
-};
+}
 let util.number? = fn (x) {
      'number? returns true if the value provided is an integer or a float.'
     return util.integer?(x) || util.float?(x)
-};
+}
 let util.string? = fn (x) {
     'string? returns true if the value provided is a string.'
     return util.type(x) == "string"
-};
+}
 let util.error? = fn (x) {
     'error? returns true if the value provided is an error.'
     return util.type(x) == "error"
-};
+}
 
 let util.memoize = fn (f) {
     'memoize takes a function and returns a new function,

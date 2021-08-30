@@ -1,7 +1,7 @@
 let hash.empty? = fn () {
     'hash.empty? returns true if the hash is empty.'
-    return util.len(self.keys()) == 0;
-};
+    return util.len(self.keys()) == 0
+}
 
-util.assert({}.empty?());
-util.assert(! {"name":"zac"}.empty?());
+util.assert({}.empty?())
+util.assert(! {"name":"zac"}.empty?())

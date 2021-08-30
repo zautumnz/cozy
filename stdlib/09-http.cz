@@ -101,7 +101,7 @@ let http.constants = {
         "UNLOCK",
         "UNSUBSCRIBE"
     ]
-};
+}
 
 let http.server = fn () {
     'http.server returns a new app instance.

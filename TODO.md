@@ -19,14 +19,18 @@
 * Features:
     * http.client: add form support
 * Chores:
-    * Finish removing semicolons in stdlib
-    * Fix long lines (`\grep '.\{80\}' -r .`)
+    * http.server should emit errors rather than crash
+    * Fix long lines (`\grep '.\{81\}' -r .`)
     * Confirm that everything under ./examples works
     * Add argument validation to all internal functions and stdlib
     * Improve all Go error messages
 
 ## Possible Future Features
 
+* Tests written in cozy
+    * If they can somehow count towards coverage from `go test` that would be
+        cool
+* Possible `break` keyword to get out of loops
 * Allow listing empty root-level modules and non-object modules such as http and
     fs using just the root word (`http` or `fs`).
 * Consider changing how module exports work to allow top-level (but still
