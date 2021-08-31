@@ -290,6 +290,8 @@ func evalPrefixExpression(operator string, right OBJ) OBJ {
 		return evalBangOperatorExpression(right)
 	case "-":
 		return evalMinusPrefixOperatorExpression(right)
+	case "~":
+		return evalNotPrefixOperatorExpression(right)
 	default:
 		return NewError("unknown operator: %s%s", operator, right.Type())
 	}
@@ -357,6 +359,14 @@ func evalMinusPrefixOperatorExpression(right OBJ) OBJ {
 	default:
 		return NewError("unknown operator: -%s", right.Type())
 	}
+}
+
+func evalNotPrefixOperatorExpression(right OBJ) OBJ {
+	if right.Type() != object.INTEGER_OBJ {
+		return NewError("expected integer, got %s", right.Type())
+	}
+	value := right.(*object.Integer).Value
+	return &object.Integer{Value: ^value}
 }
 
 func evalInfixExpression(operator string, left, right OBJ, env *ENV) OBJ {
@@ -453,6 +463,17 @@ func evalIntegerInfixExpression(operator string, left, right OBJ) OBJ {
 		return nativeBoolToBooleanObject(leftVal == rightVal)
 	case "!=":
 		return nativeBoolToBooleanObject(leftVal != rightVal)
+	case "|":
+		return &object.Integer{Value: leftVal | rightVal}
+	case "^":
+		return &object.Integer{Value: leftVal ^ rightVal}
+	case "&":
+		return &object.Integer{Value: leftVal & rightVal}
+	case "<<":
+		return &object.Integer{Value: leftVal << uint64(rightVal)}
+	case ">>":
+		return &object.Integer{Value: leftVal >> uint64(rightVal)}
+
 	case "..":
 		len := int(rightVal-leftVal) + 1
 		array := make([]OBJ, len)

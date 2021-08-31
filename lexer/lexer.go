@@ -87,6 +87,11 @@ func (l *Lexer) NextToken() token.Token {
 				Type:    token.AND,
 				Literal: string(ch) + string(l.ch),
 			}
+		} else {
+			tok = token.Token{
+				Type:    token.BIT_AND,
+				Literal: string(l.ch),
+			}
 		}
 	case rune('|'):
 		if l.peekChar() == rune('|') {
@@ -96,8 +101,22 @@ func (l *Lexer) NextToken() token.Token {
 				Type:    token.OR,
 				Literal: string(ch) + string(l.ch),
 			}
+		} else {
+			tok = token.Token{
+				Type:    token.BIT_OR,
+				Literal: string(l.ch),
+			}
 		}
-
+	case rune('^'):
+		tok = token.Token{
+			Type:    token.BIT_XOR,
+			Literal: string(l.ch),
+		}
+	case rune('~'):
+		tok = token.Token{
+			Type:    token.BIT_NOT,
+			Literal: string(l.ch),
+		}
 	case rune('='):
 		tok = newToken(token.ASSIGN, l.ch)
 		if l.peekChar() == rune('=') {
@@ -238,6 +257,12 @@ func (l *Lexer) NextToken() token.Token {
 				Type:    token.LT_EQUALS,
 				Literal: string(ch) + string(l.ch),
 			}
+		} else if l.peekChar() == rune('<') {
+			l.readChar()
+			tok = token.Token{
+				Type:    token.BIT_LEFT_SHIFT,
+				Literal: "<<",
+			}
 		} else {
 			tok = newToken(token.LT, l.ch)
 		}
@@ -248,6 +273,12 @@ func (l *Lexer) NextToken() token.Token {
 			tok = token.Token{
 				Type:    token.GT_EQUALS,
 				Literal: string(ch) + string(l.ch),
+			}
+		} else if l.peekChar() == rune('>') {
+			l.readChar()
+			tok = token.Token{
+				Type:    token.BIT_RIGHT_SHIFT,
+				Literal: ">>",
 			}
 		} else {
 			tok = newToken(token.GT, l.ch)

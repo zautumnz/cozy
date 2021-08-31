@@ -40,6 +40,11 @@ const (
 	RANGE       // ..
 	INDEX       // array[index], map[key], map.key
 	HIGHEST
+	BIT_OR
+	BIT_XOR
+	BIT_AND
+	BIT_SHIFT
+	BIT_NOT
 )
 
 // each token precedence
@@ -68,6 +73,13 @@ var precedences = map[token.Type]int{
 	token.LPAREN:          CALL,
 	token.PERIOD:          CALL,
 	token.LBRACKET:        INDEX,
+
+	token.BIT_OR:          BIT_OR,
+	token.BIT_XOR:         BIT_XOR,
+	token.BIT_AND:         BIT_AND,
+	token.BIT_NOT:         BIT_NOT,
+	token.BIT_LEFT_SHIFT:  BIT_SHIFT,
+	token.BIT_RIGHT_SHIFT: BIT_SHIFT,
 }
 
 // Parser object
@@ -132,6 +144,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.STRING, p.ParseStringLiteral)
 	p.registerPrefix(token.DOCSTRING, p.parseDocStringLiteral)
 	p.registerPrefix(token.TRUE, p.ParseBoolean)
+	p.registerPrefix(token.BIT_NOT, p.parsePrefixExpression)
 
 	// Register infix functions
 	p.infixParseFns = make(map[token.Type]infixParseFn)
@@ -158,6 +171,11 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.POW, p.parseInfixExpression)
 	p.registerInfix(token.SLASH, p.parseInfixExpression)
 	p.registerInfix(token.SLASH_EQUALS, p.parseAssignExpression)
+	p.registerInfix(token.BIT_OR, p.parseInfixExpression)
+	p.registerInfix(token.BIT_XOR, p.parseInfixExpression)
+	p.registerInfix(token.BIT_AND, p.parseInfixExpression)
+	p.registerInfix(token.BIT_LEFT_SHIFT, p.parseInfixExpression)
+	p.registerInfix(token.BIT_RIGHT_SHIFT, p.parseInfixExpression)
 
 	// Register postfix functions.
 	p.postfixParseFns = make(map[token.Type]postfixParseFn)

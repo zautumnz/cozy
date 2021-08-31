@@ -41,7 +41,7 @@ func TestNull(t *testing.T) {
 }
 
 func TestNextToken1(t *testing.T) {
-	input := "%=+(){},;?|| &&++--***=.."
+	input := "%=+(){},;?|| &&++--***=..>>"
 
 	tests := []struct {
 		expectedType    token.Type
@@ -64,6 +64,7 @@ func TestNextToken1(t *testing.T) {
 		{token.POW, "**"},
 		{token.ASTERISK_EQUALS, "*="},
 		{token.RANGE, ".."},
+		{token.BIT_RIGHT_SHIFT, ">>"},
 		{token.EOF, ""},
 	}
 	l := New(input)

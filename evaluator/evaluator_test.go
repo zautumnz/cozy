@@ -123,6 +123,12 @@ func TestEvalArithmeticExpression(t *testing.T) {
 		{"2**3", 8},
 		{"2.0**3", 8},
 		{"2**3.0", 8},
+		{"~1", -2},
+		{"1 | 2", 3},
+		{"2 ^ 4", 6},
+		{"3 & 6", 2},
+		{"1 << 2", 4},
+		{"4 >> 2", 1},
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
