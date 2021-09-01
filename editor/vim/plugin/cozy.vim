@@ -28,8 +28,13 @@ augroup vim-cozy
     autocmd!
 
     autocmd BufNewFile *.cz if &modifiable | setlocal fileencoding=utf-8 fileformat=unix | endif
+    autocmd BufNewFile .cozy_init if &modifiable | setlocal fileencoding=utf-8 fileformat=unix | endif
+
     autocmd BufRead *.cz call s:cozyfiletype_pre()
+    autocmd BufRead .cozy_init call s:cozyfiletype_pre()
+
     autocmd BufReadPost *.cz call s:cozyfiletype_post()
+    autocmd BufReadPost .cozy_init call s:cozyfiletype_post()
 augroup end
 
 " restore Vi compatibility settings

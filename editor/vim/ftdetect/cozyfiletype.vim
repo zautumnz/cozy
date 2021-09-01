@@ -4,6 +4,7 @@ set cpo&vim
 
 " Note: should not use augroup in ftdetect (see :help ftdetect)
 au BufRead,BufNewFile *.cz setfiletype cozy
+au BufRead,BufNewFile .cozy_init setfiletype cozy
 
 " restore Vi compatibility settings
 let &cpo = s:cpo_save

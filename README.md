@@ -70,7 +70,7 @@ print(sum([1, 2, 3, 4]) == 10) # true
 
 For more examples and documentation, see the [examples](./examples) and
 [stdlib](./stdlib) directories. The examples also serve as a second test suite.
-For vim, CLOC, Ctags, and Emacs support, see the [editor](./editor) directory.
+For vim, CLOC, and Ctags support, see the [editor](./editor) directory.
 
 ## About
 
@@ -118,6 +118,8 @@ entered code will be evaluated when you exit with `ctrl+d`.
     keywords or syntax
 * REPL history is stored at `$HOME/.cozy_history`, and the size (in lines) can
     be configured with the env var `COZY_HISTSIZE`
+* REPL config is stored at `$HOME/.cozy_init` and can contain any valid cozy
+    code
 
 ### Builtins
 

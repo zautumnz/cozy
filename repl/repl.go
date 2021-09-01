@@ -1,8 +1,11 @@
 package repl
 
 import (
+	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"os/user"
 	"strconv"
 	"strings"
 
@@ -23,14 +26,48 @@ func getHistorySize() int {
 	return l
 }
 
+func getUserHome() (string, error) {
+	h := os.Getenv("HOME")
+	if h == "" {
+		usr, err := user.Current()
+		if err != nil {
+			return "", err
+		}
+
+		h = usr.HomeDir
+	}
+
+	return h, nil
+}
+
+func getHomeBasedFile(path string) string {
+	userHome, err := getUserHome()
+	if err != nil {
+		fmt.Println("The current user has no home directory!")
+		os.Exit(1)
+	}
+	return userHome + "/" + path
+}
+
+// init file idea, but not code, taken from github.com/abs
+func getInitFile() string {
+	filePath := getHomeBasedFile(".cozy_init")
+	s, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return ""
+	}
+	return string(s)
+}
+
 // Start runs the REPL
 func Start(in io.Reader, out io.Writer, stdlib string) {
 	utils.SetReplOrRun(true)
 	env := object.NewEnvironment()
+	initConfig := getInitFile()
 
 	l, err := readline.NewEx(&readline.Config{
 		Prompt:            "> ",
-		HistoryFile:       os.Getenv("HOME") + "/.cozy_history",
+		HistoryFile:       getHomeBasedFile(".cozy_history"),
 		InterruptPrompt:   "^C",
 		EOFPrompt:         "exit",
 		HistorySearchFold: true,
@@ -55,7 +92,7 @@ func Start(in io.Reader, out io.Writer, stdlib string) {
 		}
 
 		line = strings.TrimSpace(line)
-		lex := lexer.New(stdlib + "\n\n" + line)
+		lex := lexer.New(stdlib + "\n" + initConfig + "\n" + line)
 		p := parser.New(lex)
 		program := p.ParseProgram()
 		if len(p.Errors()) != 0 {
