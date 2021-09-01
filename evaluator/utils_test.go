@@ -30,8 +30,8 @@ func TestInterpolate(t *testing.T) {
 	}{
 		{"string", "string"},
 		{"{string}", "{string}"},
-		{"\\{{string}}", "{{string}}"},
-		{"xy\\z", "xy\\z"},
+		{`\{{string}}`, "{{string}}"},
+		{`xy\z`, `xy\z`},
 		{"{{string}}", "test"},
 		{"{{string}}_", "test_"},
 		{"{{string x", "{{string x"},

@@ -52,3 +52,4 @@ print("
     }()
 }}
 ")
+print("this string is not interpolated: \{{activity}}")

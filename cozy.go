@@ -75,7 +75,8 @@ func Execute(input string) int {
 		})
 
 	//  Parse and evaluate our standard-library.
-	initL := lexer.New(getStdlibString())
+	// initL := lexer.New(getStdlibString())
+	initL := lexer.New()
 	initP := parser.New(initL)
 	initProg := initP.ParseProgram()
 	evaluator.Eval(initProg, env)

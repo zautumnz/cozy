@@ -5,6 +5,8 @@
 * Bugs:
     * `print()` issue, run examples/http to reproduce
     * `json.serialize` issue on functions
+    * Strings need a double escape when they should need one (see last string
+        example and colorize in stdlib)
     * Spread isn't quite right, see curry in stdlib
     * Vim config bugs:
         * Function group is matching `fn foo (x)` but we want `let foo = fn (x)`
