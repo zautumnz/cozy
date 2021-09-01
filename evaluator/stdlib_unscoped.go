@@ -78,10 +78,14 @@ func printFn(args ...OBJ) OBJ {
 
 		if arg.Type() == object.STRING_OBJ {
 			if strings.Contains(s, "\\") {
-				// double escape; ansi escape codes
+				orig := s
+				// double escape;
+				// used for ansi escape codes and some other things
 				s, e = strconv.Unquote(`"` + s + `"`)
 				if e != nil {
-					return NewError("error unquoting string in print")
+					// this happens sometimes when working on things like
+					// nested json, so we just use the original string instead
+					fmt.Printf(orig + " ")
 				}
 				fmt.Println(s + " ")
 				return NULL

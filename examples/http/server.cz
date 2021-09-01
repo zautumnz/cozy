@@ -14,7 +14,6 @@ app.route("^/bar$", ["POST"], fn (req) {
     return { "body": "posted!" }
 })
 app.route("^/quux$", ["GET", "POST"], fn (req) {
-    print(req)
     let content_type = "application/json"
     if req.method == "GET" {
         return {

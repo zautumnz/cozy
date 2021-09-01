@@ -3,8 +3,6 @@
 # Remaining v1 Work
 
 * Bugs:
-    * `print()` issue, run examples/http to reproduce
-    * `json.serialize` issue on functions
     * Strings need a double escape when they should need one (see last string
         example and colorize in stdlib)
     * Spread isn't quite right, see curry in stdlib

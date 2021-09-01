@@ -121,5 +121,5 @@ func (f *Function) ToInterface() interface{} {
 
 // JSON returns a json-friendly string
 func (f *Function) JSON(indent bool) string {
-	return f.Inspect()
+	return `"` + f.Inspect() + `"`
 }
