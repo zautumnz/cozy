@@ -49,7 +49,7 @@ func getHomeBasedFile(path string) string {
 	return userHome + "/" + path
 }
 
-// init file idea, but not code, taken from github.com/abs
+// init file idea, but not code, taken from github.com/abs-lang
 func getInitFile() string {
 	filePath := getHomeBasedFile(".cozy_init")
 	s, err := ioutil.ReadFile(filePath)

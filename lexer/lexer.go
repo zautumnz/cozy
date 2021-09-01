@@ -296,10 +296,10 @@ func (l *Lexer) NextToken() token.Token {
 		}
 	case rune('"'):
 		tok.Type = token.STRING
-		tok.Literal = l.readString()
+		tok.Literal = l.readString(false)
 	case rune('\''):
 		tok.Type = token.DOCSTRING
-		tok.Literal = l.readDocString()
+		tok.Literal = l.readString(true)
 	case rune('['):
 		tok = newToken(token.LBRACKET, l.ch)
 	case rune(']'):
@@ -477,49 +477,17 @@ func (l *Lexer) readDecimal() token.Token {
 	return token.Token{Type: token.INT, Literal: integer}
 }
 
-// read string
-func (l *Lexer) readString() string {
+// read strings and docstrings
+func (l *Lexer) readString(isDocString bool) string {
 	out := ""
-
-	for {
-		l.readChar()
-		if l.ch == '"' {
-			break
-		}
-
-		// Handle \n, \r, \t, \", etc.
-		if l.ch == '\\' {
-			l.readChar()
-
-			if l.ch == rune('n') {
-				l.ch = '\n'
-			}
-			if l.ch == rune('r') {
-				l.ch = '\r'
-			}
-			if l.ch == rune('t') {
-				l.ch = '\t'
-			}
-			if l.ch == rune('"') {
-				l.ch = '"'
-			}
-			if l.ch == rune('\\') {
-				l.ch = '\\'
-			}
-		}
-		out = out + string(l.ch)
+	delim := '"'
+	if isDocString {
+		delim = '\''
 	}
 
-	return out
-}
-
-// read docstrings
-func (l *Lexer) readDocString() string {
-	out := ""
-
 	for {
 		l.readChar()
-		if l.ch == '\'' {
+		if l.ch == delim {
 			break
 		}
 
@@ -527,6 +495,18 @@ func (l *Lexer) readDocString() string {
 		if l.ch == '\\' {
 			l.readChar()
 
+			// escaped string delimiters
+			if isDocString {
+				if l.ch == rune('\'') {
+					l.ch = '\''
+				}
+			} else {
+				if l.ch == rune('"') {
+					l.ch = '"'
+				}
+			}
+
+			// other escapes
 			if l.ch == rune('n') {
 				l.ch = '\n'
 			}
@@ -536,13 +516,11 @@ func (l *Lexer) readDocString() string {
 			if l.ch == rune('t') {
 				l.ch = '\t'
 			}
-			if l.ch == rune('\'') {
-				l.ch = '\''
-			}
 			if l.ch == rune('\\') {
 				l.ch = '\\'
 			}
 		}
+
 		out = out + string(l.ch)
 	}
 
