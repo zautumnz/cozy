@@ -104,8 +104,7 @@ let http.constants = {
 }
 
 let http.server = fn () {
-    'http.server returns a new app instance.
-    Available methods: route, listen, static.'
+    'http.server returns a new app instance.'
     let instance = http.create_server()
     let e = core.event_emitter()
     let error_key = "error"
@@ -121,6 +120,11 @@ let http.server = fn () {
     }
 
     return {
+        "emit": fn (ev, d) {
+            'emit takes an event name and and emits the data at that name.'
+            e.emit(ev, d)
+        },
+
         "on": fn (ev, cb) {
             'on takes an event name and a callback to subscribe to.'
             e.subscribe(ev, cb)
