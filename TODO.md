@@ -19,7 +19,6 @@
 * Features:
     * http.client: add form support
 * Chores:
-    * http.server should emit errors rather than crash
     * Confirm that everything under ./examples works
     * Add argument validation to all internal functions and stdlib
     * Improve all Go error messages

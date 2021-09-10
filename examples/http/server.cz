@@ -42,4 +42,7 @@ app.route("/form", ["POST"], fn (req) {
     print(req.files)
     return { "status_code": 201 }
 })
+# app.error subscribes the callback to the error event.
+# this is identitcal to `app.on("error", cb)`
+app.error(fn (e) { print("oh no!", e) })
 app.listen(8000, fn (x) { print("listening on", x) })

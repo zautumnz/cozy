@@ -107,14 +107,30 @@ let http.server = fn () {
     'http.server returns a new app instance.
     Available methods: route, listen, static.'
     let instance = http.create_server()
+    let e = core.event_emitter()
+    let error_key = "error"
+    let emit_error = fn (v) { e.emit(error_key, v) }
+
     mutable middleware = []
+
     let apply_middleware = fn (req) {
         foreach m in middleware {
-            m(req)
+            let x = m(req)
+            if util.error?(x) emit_error(x)
         }
     }
 
     return {
+        "on": fn (ev, cb) {
+            'on takes an event name and a callback to subscribe to.'
+            e.subscribe(ev, cb)
+        },
+
+        "error": fn (cb) {
+            'error takes a callback to subscribe to the error event.'
+            e.subscribe(error_key, cb)
+        },
+
         "use": fn (cb) {
             'use takes a callback which takes a request and does something
             with it, such as logging. Note that the req object cannot be
@@ -150,7 +166,9 @@ let http.server = fn () {
 
             instance.route(path, mets, fn (req) {
                 apply_middleware(req)
-                handler(req)
+                let x = handler(req)
+                if util.error?(x) emit_error(x)
+                else return x
             })
         },
 
