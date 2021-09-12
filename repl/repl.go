@@ -61,9 +61,17 @@ func getInitFile() string {
 
 // Start runs the REPL
 func Start(in io.Reader, out io.Writer, stdlib string) {
+	// set so we don't os.Exit on errors
 	utils.SetReplOrRun(true)
 	env := object.NewEnvironment()
+
+	// set up initial program with stdlib and optional init file
 	initConfig := getInitFile()
+	initLex := lexer.New(stdlib + "\n" + initConfig + "\n")
+	initPars := parser.New(initLex)
+	initProg := initPars.ParseProgram()
+	// put the initial program in the env
+	evaluator.Eval(initProg, env)
 
 	l, err := readline.NewEx(&readline.Config{
 		Prompt:            "> ",
@@ -92,7 +100,7 @@ func Start(in io.Reader, out io.Writer, stdlib string) {
 		}
 
 		line = strings.TrimSpace(line)
-		lex := lexer.New(stdlib + "\n" + initConfig + "\n" + line)
+		lex := lexer.New(line)
 		p := parser.New(lex)
 		program := p.ParseProgram()
 		if len(p.Errors()) != 0 {
