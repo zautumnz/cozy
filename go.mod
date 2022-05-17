@@ -1,6 +1,6 @@
 module github.com/zacanger/cozy
 
-go 1.16
+go 1.18
 
 require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
