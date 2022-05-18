@@ -462,6 +462,7 @@ func (p *Parser) parseGroupedExpression() ast.Expression {
 // parseIfCondition parses an if-expression.
 func (p *Parser) parseIfExpression() ast.Expression {
 	expression := &ast.IfExpression{Token: p.curToken}
+	//lint:ignore SA4031 this actually _can_ be nil sometimes
 	if expression == nil {
 		p.errors = append(p.errors, "unexpected nil expression")
 		return nil
