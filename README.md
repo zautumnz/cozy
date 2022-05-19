@@ -36,7 +36,6 @@ languages in the future straightforward.
 
 # let is for immutable variables
 let reduce = fn (fun, xs, init) {
-    # mutable obvious
     # mutable is only available within blocks, not at at the top level
     mutable acc = init
 
@@ -51,6 +50,7 @@ let reduce = fn (fun, xs, init) {
 # and question marks
 let ints? = fn (xs) {
     foreach x in xs {
+        # util is a builtin module
         if util.type(x) != "integer" && util.type(x) != "float" {
             return false
         }
