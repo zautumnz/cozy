@@ -76,6 +76,9 @@ print(sum([1, 2, 3, 4]) == 10) # true
 For more examples and documentation, see the [examples](./examples) and
 [stdlib](./stdlib) directories. The examples also serve as a second test suite.
 For vim, CLOC, and Ctags support, see the [editor](./editor) directory.
+Screenshot in vim:
+
+![vim plugin](/vim-screenshot.png?raw=true)
 
 ## About
 
