@@ -1,5 +1,14 @@
 # cozy
 
+## Abandoned
+
+This was a fun project to help me learn more about PLD and Go, but I don't
+really have much time for it or interest in it anymore. You are more than
+welcome to fork it, or check out [ABS](https://github.com/abs-lang) which
+accomplishes many of the same goals and has an active developer community.
+
+----
+
 Simple interpreted programming language for similar use-cases as Python and
 Node. Meant to be `cozy` no matter what languages you already know.
 
@@ -175,6 +184,6 @@ fairly obvious from the examples and standard library:
 
 ## License
 
-This code is licensed [LGPL-3.0](./LICENSE.md). I've used code from various
-Monkey implementations, which are usually licensed MIT. Other code used in cozy
+This code is licensed [MIT](./LICENSE.md). I've used code from various Monkey
+implementations, which are usually licensed MIT. Other code used in cozy
 includes comments with notes on the licenses.
