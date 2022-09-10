@@ -1,0 +1,11 @@
+# See lexer.readIdentifer and parser functions.
+
+# works
+let foo = { "a": { "b": { "c": fn () { print("c") } } } }
+foo.a.b.c()
+
+let sys.STDOUT = fs.open("!STDOUT!")
+# works
+# let sys.STDOUT.write = fn (s) { let ss = sys.STDOUT; ss.write(s); }
+# fails
+sys.STDOUT.write("hello\n")

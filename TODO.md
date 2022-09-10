@@ -1,8 +1,16 @@
 # TODO
 
+# Sources (Interesting stuff to check out)
+
+* go-mustache
+* prologic's version
+* skx's version
+* abs
+* the book
+
 # Remaining v1 Work
 
-* Bugs:
+* Bugs (see bugs directory for details on some of them):
     * Strings need a double escape when they should need one (see last string
         example and colorize in stdlib)
     * Spread isn't quite right, see curry in stdlib

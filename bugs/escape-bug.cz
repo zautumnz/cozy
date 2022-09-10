@@ -1,0 +1,5 @@
+# abs and prologic's version both have this working
+# also see abs for autocomplete goodness for the repl
+
+let asdf = "one two three"
+print("\{{asdf}}")

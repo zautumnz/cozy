@@ -1,0 +1,27 @@
+# issue with the env.CurrentArgs set by the .... operator
+
+let asdf = fn (f) {
+    mutable f_args = []
+    let inner = fn () {
+        let inner_args = util.array_from(...)
+
+        if (util.len(inner_args) > 0) {
+            foreach x in inner_args {
+                f_args = f_args.append(x)
+            }
+            return inner
+        }
+
+        print(....f_args)
+        foreach ff in ....f_args { print(util.type(ff)) }
+        let res = f(....f_args)
+        f_args = []
+        return res
+    }
+
+    return inner
+}
+
+let inner_thing = fn (x) { print(x) }
+let called = asdf(inner_thing)
+called(1)()
