@@ -16,11 +16,14 @@ import (
 // Split a line of text into tokens, but keep anything "quoted"
 // together..
 // So this input:
-//   /bin/sh -c "ls /etc"
+//
+//	/bin/sh -c "ls /etc"
+//
 // Would give output of the form:
-//   /bin/sh
-//   -c
-//   ls /etc
+//
+//	/bin/sh
+//	-c
+//	ls /etc
 func splitCommand(input string) []string {
 	// This does the split into an array
 	r := regexp.MustCompile(`[^\s"']+|"([^"]*)"|'([^']*)`)

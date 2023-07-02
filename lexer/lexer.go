@@ -118,7 +118,6 @@ func (l *Lexer) NextToken() token.Token {
 			Literal: string(l.ch),
 		}
 	case rune('='):
-		tok = newToken(token.ASSIGN, l.ch)
 		if l.peekChar() == rune('=') {
 			ch := l.ch
 			l.readChar()
@@ -341,14 +340,17 @@ func newToken(tokenType token.Type, ch rune) token.Token {
 // a period, to allow method-calls to work on objects.
 //
 // So with input like this:
-//   a.blah();
+//
+//	a.blah();
+//
 // Our identifier should be "a" (then we have a period, then a second
 // identifier "blah", followed by opening & closing parenthesis).
 //
 // However we also have to cover the case of:
-//    string.toupper("blah");
-//    os.getenv("PATH");
-//    etc.
+//
+//	string.toupper("blah");
+//	os.getenv("PATH");
+//	etc.
 func (l *Lexer) readIdentifier() string {
 	// Types and objects which will have valid methods.
 	types := []string{

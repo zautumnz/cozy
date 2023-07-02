@@ -61,7 +61,7 @@ func TestBadMutableLetStatement(t *testing.T) {
 	}
 }
 
-//TestLetStatements tests the "let" token.
+// TestLetStatements tests the "let" token.
 func TestLetStatements(t *testing.T) {
 	tests := []struct {
 		input              string
