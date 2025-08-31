@@ -10,11 +10,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zacanger/cozy/ast"
-	"github.com/zacanger/cozy/lexer"
-	"github.com/zacanger/cozy/object"
-	"github.com/zacanger/cozy/parser"
-	"github.com/zacanger/cozy/utils"
+	"github.com/zautumnz/cozy/ast"
+	"github.com/zautumnz/cozy/lexer"
+	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/cozy/parser"
+	"github.com/zautumnz/cozy/utils"
 )
 
 // pre-defined objects
@@ -1061,7 +1061,7 @@ func objectGetMethod(o, key OBJ, env *ENV) (ret OBJ, ok bool) {
 		// to invoke. For example in this case we'll invoke
 		// `string.foo()` - because the type of the object we're
 		// invoking-against is string:
-		//  "zac".foo();
+		//  "autumn".foo();
 		// For this case we'll be looking for `array.foo()`.
 		//   let a = [ 1, 2, 3 ];
 		//   print(a.foo());

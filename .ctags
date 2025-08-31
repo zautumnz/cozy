@@ -1,1 +1,6 @@
-editor/cozy.ctags
+--langdef=cozy
+--langmap=cozy:.cz
+--regex-cozy=/^(mutable)[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\2/v,variable/
+--regex-cozy=/^(let)[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\2/c,constant/
+--regex-cozy=/([A-Za-z0-9._$]+)[ \t]*=[ \t]*\(fn \(\)/\1/f,function/
+--regex-cozy=/['"]*([A-Za-z0-9_$]+)['"]*:[ \t]*\(fn \(\)/\1/f,function/

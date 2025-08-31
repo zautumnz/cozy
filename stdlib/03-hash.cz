@@ -4,4 +4,4 @@ let hash.empty? = fn () {
 }
 
 util.assert({}.empty?())
-util.assert(! {"name":"zac"}.empty?())
+util.assert(! {"name":"autumn"}.empty?())

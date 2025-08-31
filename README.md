@@ -16,8 +16,6 @@ Node. Meant to be `cozy` no matter what languages you already know.
 
 This is a WIP. See the [TODO](./TODO.md).
 
-[![Support with PayPal](https://img.shields.io/badge/paypal-donate-yellow.png)](https://paypal.me/zacanger) [![Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/zacanger) [![ko-fi](https://img.shields.io/badge/donate-KoFi-yellow.svg)](https://ko-fi.com/U7U2110VB)
-
 `cozy` (always spelled all-lowercase) is a simple, medium-to-high-level,
 interpreted, general purpose programming language. It can be used for many of
 the same tasks as shell scripts, Python, Node, and Ruby. It's dynamically and

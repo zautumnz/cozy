@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zacanger/cozy/object"
-	"github.com/zacanger/cozy/utils"
+	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/cozy/utils"
 )
 
 // These stdlib functions aren't scoped/namespaced

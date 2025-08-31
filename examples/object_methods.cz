@@ -11,7 +11,7 @@
 # for each type.
 
 # Create an array holding various types
-let t = [ [], 3.13, fn(){} , {} , 3, "zac" ]
+let t = [ [], 3.13, fn(){} , {} , 3, "Autumn" ]
 
 let object_methods = fn () {
     # Walk over the types

@@ -10,11 +10,11 @@ import (
 	"strings"
 
 	"github.com/chzyer/readline"
-	"github.com/zacanger/cozy/evaluator"
-	"github.com/zacanger/cozy/lexer"
-	"github.com/zacanger/cozy/object"
-	"github.com/zacanger/cozy/parser"
-	"github.com/zacanger/cozy/utils"
+	"github.com/zautumnz/cozy/evaluator"
+	"github.com/zautumnz/cozy/lexer"
+	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/cozy/parser"
+	"github.com/zautumnz/cozy/utils"
 )
 
 func getHistorySize() int {

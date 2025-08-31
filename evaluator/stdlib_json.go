@@ -3,10 +3,10 @@ package evaluator
 import (
 	"strings"
 
-	"github.com/zacanger/cozy/ast"
-	"github.com/zacanger/cozy/lexer"
-	"github.com/zacanger/cozy/object"
-	"github.com/zacanger/cozy/parser"
+	"github.com/zautumnz/cozy/ast"
+	"github.com/zautumnz/cozy/lexer"
+	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/cozy/parser"
 )
 
 // Converts a valid JSON string to a cozy value

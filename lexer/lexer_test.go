@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/zacanger/cozy/token"
+	"github.com/zautumnz/cozy/token"
 )
 
 func TestNull(t *testing.T) {
@@ -432,12 +432,12 @@ b *= 3;
 if (b <= 3) { print "blah\n" }
 if (b >= 3) { print "blah\n" }
 
-let a = "zac";
-let a = "zac\n";
-let a = "zac\t";
-let a = "zac\r";
-let a = "zac\\";
-let a = "zac\"";
+let a = "autumn";
+let a = "autumn\n";
+let a = "autumn\t";
+let a = "autumn\r";
+let a = "autumn\\";
+let a = "autumn\"";
 let c = 3.113;
 .;`
 

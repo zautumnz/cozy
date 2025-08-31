@@ -8,7 +8,7 @@ let array.first = fn () {
 }
 
 util.assert([0,1].first() == 0)
-util.assert(["zac",1].first() == "zac")
+util.assert(["autumn",1].first() == "autumn")
 
 let array.rest = fn () {
     'array.rest returns all but the first element.'
@@ -28,7 +28,7 @@ let array.rest = fn () {
 util.assert(util.len([0,2].rest()) == 1)
 util.assert(util.len([0,1,2].rest()) == 2)
 util.assert(util.len([0,1,2,3,4,5].rest()) == 5)
-util.assert(util.string(["zac", 1].rest()) == "[1]")
+util.assert(util.string(["autumn", 1].rest()) == "[1]")
 
 let array.last = fn () {
     'array.last returns the last element.'
@@ -60,7 +60,7 @@ let array.filter = fn (predicate) {
 # Filter an array and keep only values which are "2".
 util.assert(
 fn () {
-    mutable a = [ 1, 2, 3 , -1, "zac", 44 ]
+    mutable a = [ 1, 2, 3 , -1, "autumn", 44 ]
     a = a.filter(fn (n) { return n == 2 })
     return util.string(a) == "[2]"
 }()
@@ -406,7 +406,7 @@ let array.empty? = fn () {
 
 util.assert([].empty?())
 util.assert(![1,2].empty?())
-util.assert(!["zacanger",3].empty?())
+util.assert(!["zautumnz",3].empty?())
 
 let array.reduce = fn (fun, init) {
     'array.reduce takes a function and an initial value. The function

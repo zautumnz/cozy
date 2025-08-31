@@ -2,17 +2,17 @@
 # and returns an array of matches
 
 # Substring match
-if (util.len(core.match("nge", "Zac Anger"))) {
+if (util.len(core.match("tum", "Autumn Z"))) {
    print("Match found")
 }
 
 # Suffix Match
-if (util.len(core.match("ger$", "Zac Anger"))) {
+if (util.len(core.match("Z$", "Autumn Z"))) {
    print("Suffix-match OK")
 }
 
 # Prefix-match
-if (util.len(core.match("^[A-Z]", "Zac Anger"))) {
+if (util.len(core.match("^[A-Z]", "Autumn Z"))) {
    print("Prefix-match OK")
 }
 

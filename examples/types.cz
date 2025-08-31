@@ -10,7 +10,7 @@ show("String input")
 show(3.14)
 show(3)
 show(0..10)
-show({"Name": "Zac", "Email": "foo@bar.com"})
+show({"Name": "Autumn", "Email": "foo@bar.com"})
 
 let g = fn () { "Hello, world!" }
 show(g)

@@ -4,10 +4,10 @@ import (
 	"math"
 	"testing"
 
-	"github.com/zacanger/cozy/lexer"
-	"github.com/zacanger/cozy/object"
-	"github.com/zacanger/cozy/parser"
-	"github.com/zacanger/cozy/utils"
+	"github.com/zautumnz/cozy/lexer"
+	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/cozy/parser"
+	"github.com/zautumnz/cozy/utils"
 )
 
 func testEval(input string) OBJ {
@@ -150,9 +150,9 @@ func TestEvalBooleanExpression(t *testing.T) {
 		{"1==1", true},
 		{"\"a\">=\"A\"", true},
 		{"\"a\"<=\"A\"", false},
-		{"\"zac\"==\"zac\"", true},
-		{"\"zac\"!=\"Zac\"", true},
-		{"\"zac\"==\"anger\"", false},
+		{"\"autumn\"==\"autumn\"", true},
+		{"\"autumn\"!=\"Autumn\"", true},
+		{"\"z\"==\"autumn\"", false},
 		{"\"abc123\"==\"abc\" + \"123\"", true},
 		{"1!=1", false},
 		{"1==2", false},
@@ -463,19 +463,19 @@ func TestStringIndexExpression(t *testing.T) {
 		expected interface{}
 	}{
 		{
-			"\"Zac\"[0]",
-			"Z",
+			"\"Autumn\"[0]",
+			"A",
 		},
 		{
-			"\"Zac\"[1]",
-			"a",
+			"\"Autumn\"[1]",
+			"u",
 		},
 		{
-			"\"Zac\"[101]",
+			"\"Autumn\"[101]",
 			nil,
 		},
 		{
-			"\"Zac\"[-1]",
+			"\"Autumn\"[-1]",
 			nil,
 		},
 		{
@@ -613,7 +613,7 @@ func TestTypeBuiltin(t *testing.T) {
 		expected interface{}
 	}{
 		{
-			"util.type(\"Zac\");",
+			"util.type(\"Autumn\");",
 			"string",
 		},
 		{

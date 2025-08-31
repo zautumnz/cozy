@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/zacanger/cozy/token"
+	"github.com/zautumnz/cozy/token"
 )
 
 // Lexer holds our object-state.

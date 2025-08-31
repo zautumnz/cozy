@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zacanger/cozy/ast"
-	"github.com/zacanger/cozy/lexer"
+	"github.com/zautumnz/cozy/ast"
+	"github.com/zautumnz/cozy/lexer"
 )
 
 func TestMutableStatements(t *testing.T) {
@@ -879,7 +879,7 @@ func TestMutators(t *testing.T) {
 
 // Test method-call operation.
 func TestObjectMethodCall(t *testing.T) {
-	input := []string{"\"zac\".ord()",
+	input := []string{"\"autumn\".ord()",
 		"let x = {}; x.keys();"}
 
 	for _, txt := range input {
@@ -894,7 +894,7 @@ func TestIncompleThings(t *testing.T) {
 	input := []string{
 		`if (true) { `,
 		`if (true) { print("OK") ; } else { `,
-		`let foo = fn(a, b ="zac", `,
+		`let foo = fn(a, b ="autumn", `,
 	}
 
 	for _, str := range input {

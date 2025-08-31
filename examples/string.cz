@@ -1,4 +1,4 @@
-let input = "  Zac Anger  "
+let input = "  Autumn Z  "
 
 print("Input: '", input, "'")
 
@@ -38,7 +38,7 @@ fn () {
 # Interpolation
 # Note that interpolations only work at one level, that is
 # "{{foo {{bar}}}}" will not work!
-let me = {"first": "Zac", "last": "Anger", "loc": "USA", "age": 999}
+let me = {"first": "Autumn", "last": "Z", "loc": "USA", "age": 999}
 let foods = ["pizza", "chocolate"]
 let activity = "movies"
 let s = "My name is {{me.first}} {{me.last}}

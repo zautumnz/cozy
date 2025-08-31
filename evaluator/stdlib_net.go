@@ -7,7 +7,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/zacanger/cozy/object"
+	"github.com/zautumnz/cozy/object"
 )
 
 // Almost all of this is copy-pasted from the upstream, Prologic's version,

@@ -20,8 +20,8 @@ let x = fn () {
     print("The sorted array : ", a)
     dump(a)
 
-    # Now sort some ints
-    a = [ "Zebra", "zebra", "x-ray", "Zac", "Anger", "Yan" ]
+    # Now sort some strings
+    a = [ "Zebra", "zebra", "x-ray", "Autumn", "Z", "Yan" ]
     print("Original Array: " , util.string(a))
     dump(a)
     a = a.sort()

@@ -3,7 +3,7 @@ package evaluator
 import (
 	"testing"
 
-	"github.com/zacanger/cozy/object"
+	"github.com/zautumnz/cozy/object"
 )
 
 func TestIsNumber(t *testing.T) {

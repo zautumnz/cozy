@@ -1,4 +1,4 @@
-module github.com/zacanger/cozy
+module github.com/zautumnz/cozy
 
 go 1.18
 

@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zacanger/cozy/ast"
-	"github.com/zacanger/cozy/lexer"
-	"github.com/zacanger/cozy/token"
-	"github.com/zacanger/cozy/utils"
+	"github.com/zautumnz/cozy/ast"
+	"github.com/zautumnz/cozy/lexer"
+	"github.com/zautumnz/cozy/token"
+	"github.com/zautumnz/cozy/utils"
 )
 
 // prefix Parse function

@@ -58,7 +58,7 @@ let string.ltrim = fn () {
 }
 
 util.assert(("  天研  ".ltrim() == "天研  "), "string.ltrim failed")
-util.assert(("  zac  ".ltrim() == "zac  "), "string.ltrim failed")
+util.assert(("  autumn  ".ltrim() == "autumn  "), "string.ltrim failed")
 
 let string.rtrim = fn () {
     'string.rtrim removes trailing whitespace from the string.'
@@ -98,9 +98,9 @@ let string.find = fn (needle) {
     return -1
 }
 
-util.assert("zac".find("a") == 1)
-util.assert("zac".find("c") == 2)
-util.assert("zac".find("anger") == -1)
+util.assert("autumn".find("a") == 0)
+util.assert("autumn".find("t") == 2)
+util.assert("autumn".find("z") == -1)
 util.assert("天研".find("天研") == 0)
 util.assert("st天eve研es".find("研") == 6)
 
@@ -167,8 +167,8 @@ let string.replace = fn (old, new) {
     return s
 }
 
-util.assert("zac".replace("a", "A") == "zAc", "string.replace() failed")
-util.assert("zac".replace("A", "Q") == "zac", "string.replace() failed")
+util.assert("autumn".replace("a", "A") == "Autumn", "string.replace() failed")
+util.assert("autumn".replace("A", "Q") == "autumn", "string.replace() failed")
 
 let string.trim = fn () {
     'string.trim trims whitespace from both ends of the string.'
@@ -195,7 +195,7 @@ let string.tolower = fn () {
     return r
 }
 
-util.assert("Zac".tolower() == "zac", "string.tolower() failed")
+util.assert("Autumn".tolower() == "autumn", "string.tolower() failed")
 util.assert("天研".tolower() == "天研", "string.tolower() failed")
 
 let string.toupper = fn () {
@@ -215,7 +215,7 @@ let string.toupper = fn () {
     return r
 }
 
-util.assert("zac".toupper() == "ZAC", "string.toupper() failed")
+util.assert("autumn".toupper() == "AUTUMN", "string.toupper() failed")
 util.assert("天研".toupper() == "天研", "string.toupper() failed")
 
 let string.count = fn (char) {
@@ -231,8 +231,8 @@ let string.count = fn (char) {
     return c
 }
 
-util.assert("zac".count("a") == 1)
-util.assert("zac".count("E") == 0)
+util.assert("autumn".count("a") == 1)
+util.assert("autumn".count("E") == 0)
 util.assert("研天".count("天") == 1)
 util.assert("研研研研研研天".count("研") == 6)
 
