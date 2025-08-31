@@ -1,5 +1,5 @@
 // Package token contains constants which are used when lexing a program
-// written in the cozy language, as done by the parser.
+// written in the keai language, as done by the parser.
 package token
 
 // Type is a string

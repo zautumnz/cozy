@@ -9,9 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zautumnz/cozy/lexer"
-	"github.com/zautumnz/cozy/object"
-	"github.com/zautumnz/cozy/parser"
+	"github.com/zautumnz/keai/lexer"
+	"github.com/zautumnz/keai/object"
+	"github.com/zautumnz/keai/parser"
 )
 
 var searchPaths []string
@@ -22,7 +22,7 @@ func init() {
 		log.Fatalf("error getting cwd: %s", err)
 	}
 
-	if e := os.Getenv("COZY_PATH"); e != "" {
+	if e := os.Getenv("KEAI_PATH"); e != "" {
 		tokens := strings.Split(e, ":")
 		for _, token := range tokens {
 			addPath(token) // ignore errors
@@ -49,7 +49,7 @@ func exists(path string) bool {
 
 // FindModule finds a module based on name, used by the evaluator
 func FindModule(name string) string {
-	basename := fmt.Sprintf("%s.cz", name)
+	basename := fmt.Sprintf("%s.keai", name)
 	for _, p := range searchPaths {
 		filename := filepath.Join(p, basename)
 		if exists(filename) {
@@ -93,7 +93,7 @@ func Interpolate(str string, env *ENV) string {
 
 		// The variable might be an index expression
 		if !ok {
-			// Basically just spinning up a whole new instance of cozy; very
+			// Basically just spinning up a whole new instance of keai; very
 			// inefficient, but it's the same thing we do on every module import
 			l := lexer.New(string(varName))
 			p := parser.New(l)
@@ -119,10 +119,10 @@ func NewError(format string, a ...interface{}) *object.Error {
 	return &object.Error{Message: message}
 }
 
-// StringObjectMap is a map of string keys to cozy objects
+// StringObjectMap is a map of string keys to keai objects
 type StringObjectMap map[string]OBJ
 
-// NewHash creates a new cozy Hash
+// NewHash creates a new keai Hash
 func NewHash(x StringObjectMap) *object.Hash {
 	res := make(map[object.HashKey]object.HashPair)
 	for k, v := range x {

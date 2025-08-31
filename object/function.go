@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/zautumnz/cozy/ast"
+	"github.com/zautumnz/keai/ast"
 )
 
 var stringifiedAnonymousFunctionMap map[string]int

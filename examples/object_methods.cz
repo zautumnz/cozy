@@ -1,6 +1,6 @@
-#!/usr/bin/env cozy
+#!/usr/bin/env keai
 
-# Object-methods are defined against types in cozy.
+# Object-methods are defined against types in keai.
 # For example if you defined the function string.blah():
 #  let string.blah = fn () { print("OK") }
 # You could then invoke it via:

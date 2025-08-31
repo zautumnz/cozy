@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/keai/object"
 )
 
 var httpServerEnv *ENV
@@ -90,7 +90,7 @@ func registerRoute(env *ENV, args ...OBJ) OBJ {
 	return NULL
 }
 
-func httpReqFormToCozyForm(c *httpContext) OBJ {
+func httpReqFormToKeaiForm(c *httpContext) OBJ {
 	formValues := make(StringObjectMap)
 	for k, v := range c.Request.PostForm {
 		formValues[k] = &object.String{Value: strings.Join(v, ",")}
@@ -98,7 +98,7 @@ func httpReqFormToCozyForm(c *httpContext) OBJ {
 	return NewHash(formValues)
 }
 
-func httpContextToCozyReq(c *httpContext) OBJ {
+func httpContextToKeaiReq(c *httpContext) OBJ {
 	cReq := make(StringObjectMap)
 	originalReq := c.Request
 
@@ -131,7 +131,7 @@ func httpContextToCozyReq(c *httpContext) OBJ {
 				}
 
 				t := os.TempDir()
-				dir := t + "/cozy/http/uploads"
+				dir := t + "/keai/http/uploads"
 				mode, _ := strconv.ParseInt("755", 8, 64)
 				err = os.MkdirAll(dir, os.FileMode(mode))
 				if err != nil {
@@ -166,10 +166,10 @@ func httpContextToCozyReq(c *httpContext) OBJ {
 		}
 
 		cReq["files"] = NewHash(filesMap)
-		cReq["form"] = httpReqFormToCozyForm(c)
+		cReq["form"] = httpReqFormToKeaiForm(c)
 	} else if originalContentType == "application/x-www-form-urlencoded" {
 		originalReq.ParseForm()
-		cReq["form"] = httpReqFormToCozyForm(c)
+		cReq["form"] = httpReqFormToKeaiForm(c)
 	} else if originalReq.Body != nil {
 		// we don't grab a body if there's a form, because otherwise we'd end up
 		// with form values, including form-data/uploads, on the body hash.
@@ -224,7 +224,7 @@ func (a *app) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			for _, m := range rt.Methods {
 				if m == r.Method {
 					applyArgs := make([]OBJ, 0)
-					applyArgs = append(applyArgs, httpContextToCozyReq(ctx))
+					applyArgs = append(applyArgs, httpContextToKeaiReq(ctx))
 					res := ApplyFunction(httpServerEnv, rt.Handler, applyArgs)
 					switch a := res.(type) {
 					case *object.Hash:

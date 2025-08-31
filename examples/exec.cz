@@ -1,4 +1,4 @@
-#!/usr/bin/env cozy
+#!/usr/bin/env keai
 
 # Run a simple command
 let uptime = sys.exec("uptime")

@@ -1,4 +1,4 @@
-" cozy.vim: Vim filetype plugin for Cozy.
+" keai.vim: Vim filetype plugin for keai.
 
 if exists("b:did_ftplugin")
   finish

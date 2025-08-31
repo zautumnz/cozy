@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/zautumnz/cozy/token"
+	"github.com/zautumnz/keai/token"
 )
 
 // Array wraps Object array and implements Object interface.

@@ -1,2 +1,2 @@
-#!/usr/bin/env cozy
+#!/usr/bin/env keai
 print("Hello, world!")

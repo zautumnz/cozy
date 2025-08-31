@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/zautumnz/cozy/token"
+	"github.com/zautumnz/keai/token"
 )
 
 func TestNull(t *testing.T) {
@@ -369,7 +369,7 @@ func TestIntegers(t *testing.T) {
 
 // Test that the shebang-line is handled specially.
 func TestShebang(t *testing.T) {
-	input := `#!/bin/cozy
+	input := `#!/bin/keai
 10;`
 
 	tests := []struct {
@@ -404,7 +404,7 @@ func TestShebang(t *testing.T) {
 
 // TestMoreHandling does nothing real, but it bumps our coverage!
 func TestMoreHandling(t *testing.T) {
-	input := `#!/bin/cozy
+	input := `#!/bin/keai
 1 += 1;
 2 -= 2;
 3 /= 3;

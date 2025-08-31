@@ -9,8 +9,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/zautumnz/cozy/object"
-	"github.com/zautumnz/cozy/utils"
+	"github.com/zautumnz/keai/object"
+	"github.com/zautumnz/keai/utils"
 )
 
 // Split a line of text into tokens, but keep anything "quoted"

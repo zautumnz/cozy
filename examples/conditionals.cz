@@ -1,4 +1,4 @@
-#!/usr/bin/env cozy
+#!/usr/bin/env keai
 
 # if/else if/else
 let x = "x"

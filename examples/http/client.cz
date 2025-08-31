@@ -1,4 +1,4 @@
-# run cozy examples/http/server.cz to test this
+# run keai examples/http/server.keai to test this
 
 let request = http.client()
 # using http.client wrapper

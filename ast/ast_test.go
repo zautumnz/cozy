@@ -3,7 +3,7 @@ package ast
 import (
 	"testing"
 
-	"github.com/zautumnz/cozy/token"
+	"github.com/zautumnz/keai/token"
 )
 
 func TestString(t *testing.T) {

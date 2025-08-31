@@ -1,4 +1,4 @@
-# cozy
+# keai (可爱)
 
 ## Abandoned
 
@@ -10,13 +10,13 @@ accomplishes many of the same goals and has an active developer community.
 ----
 
 Simple interpreted programming language for similar use-cases as Python and
-Node. Meant to be `cozy` no matter what languages you already know.
+Node. Meant to be comfortable no matter what languages you already know.
 
 ----
 
 This is a WIP. See the [TODO](./TODO.md).
 
-`cozy` (always spelled all-lowercase) is a simple, medium-to-high-level,
+`keai` (always spelled all-lowercase) is a simple, medium-to-high-level,
 interpreted, general purpose programming language. It can be used for many of
 the same tasks as shell scripts, Python, Node, and Ruby. It's dynamically and
 strongly typed, with some with features that work well with pseudo-functional
@@ -25,16 +25,16 @@ classes; instead we have first-class functions, closures, plain data structures,
 and file-based modules.
 
 It's meant to feel comfortable and familiar no matter what languages you might
-already know (hence the name). Performance isn't an explicit goal, but cozy is
+already know (hence the name). Performance isn't an explicit goal, but keai is
 fairly fast (time the examples and try a benchmarking tool against the http
 server if you're curious). It's also meant to have a relatively simple
 host-language implementation (for example, much of the standard libarary is
-written in cozy itself) to make debugging easy and porting to other host
+written in keai itself) to make debugging easy and porting to other host
 languages in the future straightforward.
 
 ## Example
 
-```cozy
+```keai
 # contrived example to show off some features and syntax; see the ./examples
 # directory for more.
 # reduce is a built-in method on arrays, int? is a built-in type checking
@@ -95,9 +95,9 @@ version](https://github.com/skx/monkey) of the language from the [Go
 Interpreters Book](https://interpreterbook.com), and also includes some pieces
 of [prologic's](https://github.com/prologic/monkey-lang) upstream version and
 [ABS](https://github.com/abs-lang), among others (see comments). The differences
-between cozy and Monkey are too numerous to list here; it's best to think of it
+between keai and Monkey are too numerous to list here; it's best to think of it
 as a totally separate language. It's written in pure Go with minimal third-party
-dependencies, with a large amount of the standard library implemented in cozy
+dependencies, with a large amount of the standard library implemented in keai
 itself.
 
 This is the first large Go program I've worked on, so contributions, especially
@@ -107,8 +107,8 @@ in areas where I didn't write idiomatic Go, are definitely welcome. See
 ## Usage
 
 Clone the repo and run `make`, and either copy the binary to somewhere in your
-path or run `make install`. Write some code (see the examples), and run `cozy
-./your-code.cz`. You can also run without a specified file, in which case your
+path or run `make install`. Write some code (see the examples), and run `keai
+./your-code.keai`. You can also run without a specified file, in which case your
 entered code will be evaluated when you exit with `ctrl+d`.
 
 ### Important Notes
@@ -131,9 +131,9 @@ entered code will be evaluated when you exit with `ctrl+d`.
 * No ternary expressions, switch statements, or pattern matching; if statements
     are expressions and type-checking is dynamic, so there's no need for extra
     keywords or syntax
-* REPL history is stored at `$HOME/.cozy_history`, and the size (in lines) can
-    be configured with the env var `COZY_HISTSIZE`
-* REPL config is stored at `$HOME/.cozy_init` and can contain any valid cozy
+* REPL history is stored at `$HOME/.keai_history`, and the size (in lines) can
+    be configured with the env var `KEAI_HISTSIZE`
+* REPL config is stored at `$HOME/.keai_init` and can contain any valid keai
     code
 
 ### Builtins
@@ -141,7 +141,7 @@ entered code will be evaluated when you exit with `ctrl+d`.
 Global functions:
 
 * `error` creates a new error object
-* `import` imports another cozy file as a module
+* `import` imports another keai file as a module
 * `panic` prints an error contents and exits
 * `print` Write values to STDOUT with newlines
 
@@ -157,11 +157,11 @@ Builtin modules (see examples for docs):
 * `time`
 * `util`
 
-See also the standard library (written mostly in cozy itself).
+See also the standard library (written mostly in keai itself).
 
 ### Code Style
 
-cozy doesn't care about formatting. You can use two spaces, four spaces,
+keai doesn't care about formatting. You can use two spaces, four spaces,
 seventeen spaces, three spaces and a tab, or whatever. Semicolons are also
 optional in most cases (similar to the rules in JavaScript), and parenthesis and
 curly braces are also optional in conditions and loops.
@@ -183,5 +183,5 @@ fairly obvious from the examples and standard library:
 ## License
 
 This code is licensed [MIT](./LICENSE.md). I've used code from various Monkey
-implementations, which are usually licensed MIT. Other code used in cozy
+implementations, which are usually licensed MIT. Other code used in keai
 includes comments with notes on the licenses.

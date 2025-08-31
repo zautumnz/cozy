@@ -1,4 +1,4 @@
-# The cozy.go intepreter registers a new
+# The keai.go intepreter registers a new
 # custom function called `version()`.
 
-print("This is cozy version " + core.version())
+print("This is keai version " + core.version())

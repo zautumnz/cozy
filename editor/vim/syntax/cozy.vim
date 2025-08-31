@@ -5,26 +5,26 @@ endif
 syn case match
 
 " used in interpolations
-syn cluster     cozyEverything      contains=cozyMutable,cozyLet,cozyDeclaration,cozyStatement,cozyConditional,cozyRepeat,cozyBuiltins,cozyBoolean,cozyString,cozyField,cozySingleDecl,cozyDecimalInt,cozyFloat,cozyOperator,cozyFunction,cozyFunctionCall
+syn cluster     keaiEverything      contains=keaiMutable,keaiLet,keaiDeclaration,keaiStatement,keaiConditional,keaiRepeat,keaiBuiltins,keaiBoolean,keaiString,keaiField,keaiSingleDecl,keaiDecimalInt,keaiFloat,keaiOperator,keaiFunction,keaiFunctionCall
 
-syn keyword     cozyImport          import  contained
-syn keyword     cozyMutable         mutable contained
-syn keyword     cozyLet             let     contained
-hi def link     cozyImport          Statement
-hi def link     cozyMutable         Keyword
-hi def link     cozyLet             Keyword
-hi def link     cozyDeclaration     Keyword
+syn keyword     keaiImport          import  contained
+syn keyword     keaiMutable         mutable contained
+syn keyword     keaiLet             let     contained
+hi def link     keaiImport          Statement
+hi def link     keaiMutable         Keyword
+hi def link     keaiLet             Keyword
+hi def link     keaiDeclaration     Keyword
 
 " Keywords within functions
-syn keyword     cozyStatement         return null
-syn keyword     cozyConditional       if else
-syn keyword     cozyRepeat            for foreach in
-hi def link     cozyStatement         Statement
-hi def link     cozyConditional       Conditional
-hi def link     cozyRepeat            Repeat
+syn keyword     keaiStatement         return null
+syn keyword     keaiConditional       if else
+syn keyword     keaiRepeat            for foreach in
+hi def link     keaiStatement         Statement
+hi def link     keaiConditional       Conditional
+hi def link     keaiRepeat            Repeat
 
 " Predefined functions and values
-syn keyword     cozyBuiltins
+syn keyword     keaiBuiltins
             \ array
             \ core
             \ error
@@ -44,22 +44,22 @@ syn keyword     cozyBuiltins
             \ sys
             \ time
             \ util
-syn keyword     cozyBoolean             true false
-hi def link     cozyBuiltins            Identifier
-hi def link     cozyBoolean             Boolean
+syn keyword     keaiBoolean             true false
+hi def link     keaiBuiltins            Identifier
+hi def link     keaiBoolean             Boolean
 
 " Comments; their contents
-syn keyword     cozyTodo              contained TODO
-syn cluster     cozyCommentGroup      contains=cozyTodo
-syn region      cozyComment           start="#" end="$" contains=@cozyCommentGroup,@Spell
-hi def link     cozyComment           Comment
-hi def link     cozyTodo              Todo
+syn keyword     keaiTodo              contained TODO
+syn cluster     keaiCommentGroup      contains=keaiTodo
+syn region      keaiComment           start="#" end="$" contains=@keaiCommentGroup,@Spell
+hi def link     keaiComment           Comment
+hi def link     keaiTodo              Todo
 
 " Strings and their contents
-syn region      cozyString            start=+"+ skip=+\\\\\|\\"+ end=+"+ contains=@Spell
-syn region      cozyDocString         start=+'+ skip=+\\\\\|\\'+ end=+'+ contains=@Spell
-hi def link cozyString String
-hi def link cozyDocString String
+syn region      keaiString            start=+"+ skip=+\\\\\|\\"+ end=+"+ contains=@Spell
+syn region      keaiDocString         start=+'+ skip=+\\\\\|\\'+ end=+'+ contains=@Spell
+hi def link keaiString String
+hi def link keaiDocString String
 
 " 1. Match a sequence of word characters coming after a '.'
 " 2. Require the following but dont match it: ( \@= see :h E59)
@@ -69,104 +69,104 @@ hi def link cozyDocString String
 "    - The symbols: , : .
 " 3. Have the start of highlight (hs) be the start of matched
 "    pattern (s) offsetted one to the right (+1) (see :h E401)
-syn match   cozyField   /\.\w\+\
+syn match   keaiField   /\.\w\+\
             \%(\%([\/\-\+*%]\)\|\
             \%([\[\]{}<\>\)]\)\|\
             \%([\!=\^|&]\)\|\
             \%([\n\r\ ]\)\|\
             \%([,\:.]\)\)\@=/hs=s+1
-hi def link    cozyField              Identifier
+hi def link    keaiField              Identifier
 
 " Regions
-syn region        cozyParen             start='(' end=')' transparent
-syn region        cozyBlock             start="{" end="}" transparent
+syn region        keaiParen             start='(' end=')' transparent
+syn region        keaiBlock             start="{" end="}" transparent
 
 " import
-syn region    cozyImport            start='import (' end=')' transparent contains=cozyImport,cozyString,cozyComment
+syn region    keaiImport            start='import (' end=')' transparent contains=keaiImport,keaiString,keaiComment
 
 " mutable, let, and import.
-syn match       cozySingleDecl        /\%(import\|mutable\|let\) [^(]\@=/ contains=cozyImport,cozyMutable,cozyLet
+syn match       keaiSingleDecl        /\%(import\|mutable\|let\) [^(]\@=/ contains=keaiImport,keaiMutable,keaiLet
 
 " Integers
-syn match       cozyDecimalInt        "\<-\=\(0\|[1-9]_\?\(\d\|\d\+_\?\d\+\)*\)\%([Ee][-+]\=\d\+\)\=\>"
+syn match       keaiDecimalInt        "\<-\=\(0\|[1-9]_\?\(\d\|\d\+_\?\d\+\)*\)\%([Ee][-+]\=\d\+\)\=\>"
 
-hi def link     cozyDecimalInt        Integer
+hi def link     keaiDecimalInt        Integer
 hi def link     Integer               Number
 
 " Floating point
-syn match       cozyFloat             "\<-\=\d\+\.\d*\%([Ee][-+]\=\d\+\)\=\>"
-syn match       cozyFloat             "\<-\=\.\d\+\%([Ee][-+]\=\d\+\)\=\>"
+syn match       keaiFloat             "\<-\=\d\+\.\d*\%([Ee][-+]\=\d\+\)\=\>"
+syn match       keaiFloat             "\<-\=\.\d\+\%([Ee][-+]\=\d\+\)\=\>"
 
-hi def link     cozyFloat             Float
+hi def link     keaiFloat             Float
 
 " Comments; their contents
-syn keyword     cozyTodo              contained NOTE
-hi def link     cozyTodo              Todo
+syn keyword     keaiTodo              contained NOTE
+hi def link     keaiTodo              Todo
 
-syn match cozyMutableArgs /\.\.\./
+syn match keaiMutableArgs /\.\.\./
 
 " Operators;
 " match single-char operators:          - + % < > ! & | ^ * =
 " and corresponding two-char operators: -= += %= <= >= != &= |= ^= *= ==
-syn match cozyOperator /[-+%<>!&|^*=]=\?/
+syn match keaiOperator /[-+%<>!&|^*=]=\?/
 " match / and /=
-syn match cozyOperator /\/\%(=\|\ze[^/*]\)/
+syn match keaiOperator /\/\%(=\|\ze[^/*]\)/
 " match two-char operators:               << >> &^
 " and corresponding three-char operators: <<= >>= &^=
-syn match cozyOperator /\%(<<\|>>\|&^\)=\?/
+syn match keaiOperator /\%(<<\|>>\|&^\)=\?/
 " match remaining two-char operators: := && || <- ++ --
-syn match cozyOperator /:=\|||\|<-\|++\|--/
+syn match keaiOperator /:=\|||\|<-\|++\|--/
 " match ...
-hi def link     cozyMutableArgs       cozyOperator
-hi def link     cozyOperator          Operator
+hi def link     keaiMutableArgs       keaiOperator
+hi def link     keaiOperator          Operator
 
 " Functions;
-syn match cozyDeclaration       /\<fn\>/ nextgroup=cozyReceiver,cozyFunction,cozySimpleParams skipwhite skipnl
-syn match cozyFunction          /\w\+/ nextgroup=cozySimpleParams contained skipwhite skipnl
-syn match cozySimpleParams      /(\%(\w\|\_s\|[*\.\[\],\{\}<>-]\)*)/ contained contains=cozyParamName nextgroup=cozyFunctionReturn skipwhite skipnl
-syn match cozyFunctionReturn   /(\%(\w\|\_s\|[*\.\[\],\{\}<>-]\)*)/ contained contains=cozyParamName skipwhite skipnl
-syn match cozyParamName        /\w\+\%(\s*,\s*\w\+\)*\ze\s\+\%(\w\|\.\|\*\|\[\)/ contained nextgroup=cozyParamName skipwhite skipnl
-            \ contains=cozyMutableArgs,cozyBlock
-hi def link   cozyReceiverVar    cozyParamName
-hi def link   cozyParamName      Identifier
-syn match cozyReceiver          /(\s*\w\+\%(\s\+\*\?\s*\w\+\)\?\s*)\ze\s*\w/ contained nextgroup=cozyFunction contains=cozyReceiverVar skipwhite skipnl
-hi def link     cozyFunction          Function
+syn match keaiDeclaration       /\<fn\>/ nextgroup=keaiReceiver,keaiFunction,keaiSimpleParams skipwhite skipnl
+syn match keaiFunction          /\w\+/ nextgroup=keaiSimpleParams contained skipwhite skipnl
+syn match keaiSimpleParams      /(\%(\w\|\_s\|[*\.\[\],\{\}<>-]\)*)/ contained contains=keaiParamName nextgroup=keaiFunctionReturn skipwhite skipnl
+syn match keaiFunctionReturn   /(\%(\w\|\_s\|[*\.\[\],\{\}<>-]\)*)/ contained contains=keaiParamName skipwhite skipnl
+syn match keaiParamName        /\w\+\%(\s*,\s*\w\+\)*\ze\s\+\%(\w\|\.\|\*\|\[\)/ contained nextgroup=keaiParamName skipwhite skipnl
+            \ contains=keaiMutableArgs,keaiBlock
+hi def link   keaiReceiverVar    keaiParamName
+hi def link   keaiParamName      Identifier
+syn match keaiReceiver          /(\s*\w\+\%(\s\+\*\?\s*\w\+\)\?\s*)\ze\s*\w/ contained nextgroup=keaiFunction contains=keaiReceiverVar skipwhite skipnl
+hi def link     keaiFunction          Function
 
 " Function calls;
-syn match       cozyFunctionCall      /\w\+\ze(/ contains=cozyBuiltins,cozyDeclaration
-hi def link     cozyFunctionCall      Type
+syn match       keaiFunctionCall      /\w\+\ze(/ contains=keaiBuiltins,keaiDeclaration
+hi def link     keaiFunctionCall      Type
 
 " Interpolations
-syn region cozyInterp       matchgroup=cozyInterpDelim start="{{" end="}}" contained containedin=cozyString contains=@cozyEverything
-hi def link cozyInterpDelim Delimiter
+syn region keaiInterp       matchgroup=keaiInterpDelim start="{{" end="}}" contained containedin=keaiString contains=@keaiEverything
+hi def link keaiInterpDelim Delimiter
 
 " Variable Assignments
-syn match cozyMutableAssign /\v[_.[:alnum:]]+(,\s*[_.[:alnum:]]+)*\ze(\s*([-^+|^\/%&]|\*|\<\<|\>\>|\&\^)?\=[^=])/
-hi def link   cozyMutableAssign         Special
+syn match keaiMutableAssign /\v[_.[:alnum:]]+(,\s*[_.[:alnum:]]+)*\ze(\s*([-^+|^\/%&]|\*|\<\<|\>\>|\&\^)?\=[^=])/
+hi def link   keaiMutableAssign         Special
 
 " Variable Declarations
-syn match cozyMutableDefs /\v\w+(,\s*\w+)*\ze(\s*:\=)/
-hi def link   cozyMutableDefs           Special
+syn match keaiMutableDefs /\v\w+(,\s*\w+)*\ze(\s*:\=)/
+hi def link   keaiMutableDefs           Special
 
 function! s:hi()
-    hi def link cozySameId Search
-    hi def link cozyDiagnosticError SpellBad
-    hi def link cozyDiagnosticWarning SpellRare
+    hi def link keaiSameId Search
+    hi def link keaiDiagnosticError SpellBad
+    hi def link keaiDiagnosticWarning SpellRare
 
     if has('textprop')
-        if empty(prop_type_get('cozySameId'))
-            call prop_type_add('cozySameId', {'highlight': 'cozySameId'})
+        if empty(prop_type_get('keaiSameId'))
+            call prop_type_add('keaiSameId', {'highlight': 'keaiSameId'})
         endif
-        if empty(prop_type_get('cozyDiagnosticError'))
-            call prop_type_add('cozyDiagnosticError', {'highlight': 'cozyDiagnosticError'})
+        if empty(prop_type_get('keaiDiagnosticError'))
+            call prop_type_add('keaiDiagnosticError', {'highlight': 'keaiDiagnosticError'})
         endif
-        if empty(prop_type_get('cozyDiagnosticWarning'))
-            call prop_type_add('cozyDiagnosticWarning', {'highlight': 'cozyDiagnosticWarning'})
+        if empty(prop_type_get('keaiDiagnosticWarning'))
+            call prop_type_add('keaiDiagnosticWarning', {'highlight': 'keaiDiagnosticWarning'})
         endif
     endif
 endfunction
 
-augroup vim-cozy-hi
+augroup vim-keai-hi
     autocmd!
     autocmd ColorScheme * call s:hi()
 augroup end
@@ -174,4 +174,4 @@ call s:hi()
 
 syn sync minlines=200
 
-let b:current_syntax = "cozy"
+let b:current_syntax = "keai"

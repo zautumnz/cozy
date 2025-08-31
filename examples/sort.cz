@@ -1,4 +1,4 @@
-#!/usr/bin/env cozy
+#!/usr/bin/env keai
 
 # Dump the array.
 let dump = fn (i) {

@@ -31,9 +31,9 @@ let fs.write_file = fn (f_name, contents) {
 }
 
 let fs.write_json = fn (f_name, contents, indent = true) {
-    'write_json takes a file name, contents (any cozy value),
+    'write_json takes a file name, contents (any keai value),
     and a third argument to specify if the json should be indented
-    (default: true); serializes the cozy value; and writes the file.
+    (default: true); serializes the keai value; and writes the file.
     It\'s a light wrapper over fs.write_file.'
     let c = json.serialize(contents, indent)
     fs.write_file(f_name, c)

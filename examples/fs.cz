@@ -1,6 +1,6 @@
 let fs_examples = fn () {
     # writing
-    let name = "/tmp/cozy-file-write-test"
+    let name = "/tmp/keai-file-write-test"
     mutable fh = fs.open(name, "w")
     # Now we have a handle we can write (strings) to it:
     fh.write("This is a test")

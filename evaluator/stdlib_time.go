@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/keai/object"
 )
 
 func timeSleep(args ...OBJ) OBJ {

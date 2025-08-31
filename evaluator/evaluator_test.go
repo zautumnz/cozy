@@ -4,10 +4,10 @@ import (
 	"math"
 	"testing"
 
-	"github.com/zautumnz/cozy/lexer"
-	"github.com/zautumnz/cozy/object"
-	"github.com/zautumnz/cozy/parser"
-	"github.com/zautumnz/cozy/utils"
+	"github.com/zautumnz/keai/lexer"
+	"github.com/zautumnz/keai/object"
+	"github.com/zautumnz/keai/parser"
+	"github.com/zautumnz/keai/utils"
 )
 
 func testEval(input string) OBJ {
@@ -629,7 +629,7 @@ func TestTypeBuiltin(t *testing.T) {
 			"array",
 		},
 		{
-			"util.type({\"name\":\"cozy\", true: 1, 7: \"seven\"});",
+			"util.type({\"name\":\"keai\", true: 1, 7: \"seven\"});",
 			"hash",
 		},
 	}

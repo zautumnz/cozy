@@ -10,7 +10,7 @@ func TestGetHistorySize(t *testing.T) {
 	if v1 != 1000 {
 		t.Fatalf("expected default history size to be 1000")
 	}
-	os.Setenv("COZY_HISTSIZE", "500")
+	os.Setenv("KEAI_HISTSIZE", "500")
 	v2 := getHistorySize()
 	if v2 != 500 {
 		t.Fatalf("excpted history size to be 500")

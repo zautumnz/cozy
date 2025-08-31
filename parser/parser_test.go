@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zautumnz/cozy/ast"
-	"github.com/zautumnz/cozy/lexer"
+	"github.com/zautumnz/keai/ast"
+	"github.com/zautumnz/keai/lexer"
 )
 
 func TestMutableStatements(t *testing.T) {

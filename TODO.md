@@ -30,7 +30,7 @@
 
 ## Possible Future Features
 
-* Tests written in cozy
+* Tests written in keai
     * If they can somehow count towards coverage from `go test` that would be
         cool
 * Possible `break` keyword to get out of loops
@@ -41,15 +41,15 @@
     an option because we allow unicode identifiers)
 * Utility like Node's `__filename` (which can also be used to get dirname)
 * Change import, http.server, and other paths to allow relative paths/from the
-    cozy file being executed
+    keai file being executed
 * Add basic module management: some kind of module manifest, vcs manager, and
-    automatic COZY_PATH modification
-* Add option to compile a program (along with cozy itself) to a binary
+    automatic KEAI_PATH modification
+* Add option to compile a program (along with keai itself) to a binary
 * 80%+ code coverage
 * Nested interpolations
 * Add tab-completion to the REPL
 * Maybe combine float/integer to just one number type?
-* Move as much of the stdlib into cozy (out of Go) as possible
+* Move as much of the stdlib into keai (out of Go) as possible
 * Full-featured examples:
     * Twitter/Tumblr clone
     * Ranger clone

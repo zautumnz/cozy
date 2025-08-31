@@ -1,13 +1,13 @@
-*vim-cozy.txt* cozy language support plugin
-*vim-cozy*
+*vim-keai.txt* keai language support plugin
+*vim-keai*
 
-CONTENTS                                                         *cozy-contents*
+CONTENTS                                                         *keai-contents*
 
-  1. cozy-vim.....................................|cozy-vim|
+  1. keai-vim.....................................|keai-vim|
 
 ==============================================================================
-COZY-VIM                                                             *cozy-vim*
+KEAI-VIM                                                             *keai-vim*
 
-Language support for cozy. This is an extremely basic plugin, just providing
+Language support for keai. This is an extremely basic plugin, just providing
 syntax and indent, more or less. Portions of the plugin are based on vim-go
 (https://github.com/fatih/vim-go), which is under the BSD 3-Clause license.

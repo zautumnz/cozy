@@ -1,4 +1,4 @@
-module github.com/zautumnz/cozy
+module github.com/zautumnz/keai
 
 go 1.18
 

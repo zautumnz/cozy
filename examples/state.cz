@@ -1,4 +1,4 @@
-# cozy includes a miniature version of Redux built in.
+# keai includes a miniature version of Redux built in.
 let inc = "INCREMENT"
 let dec = "DECREMENT"
 

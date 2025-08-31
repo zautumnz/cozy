@@ -5,7 +5,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/keai/object"
 )
 
 // convert a string to a float

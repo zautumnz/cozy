@@ -15,7 +15,7 @@ var IsRepl = false
 func SetReplOrRun(rep bool) {
 	IsRepl = rep
 	if IsRepl {
-		os.Setenv("COZY_RUNNING_IN_REPL", "true")
+		os.Setenv("KEAI_RUNNING_IN_REPL", "true")
 	}
 }
 

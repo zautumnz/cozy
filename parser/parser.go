@@ -1,4 +1,4 @@
-// Package parser is used to parse input-programs written in cozy
+// Package parser is used to parse input-programs written in keai
 // and convert them to an abstract-syntax tree.
 package parser
 
@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zautumnz/cozy/ast"
-	"github.com/zautumnz/cozy/lexer"
-	"github.com/zautumnz/cozy/token"
-	"github.com/zautumnz/cozy/utils"
+	"github.com/zautumnz/keai/ast"
+	"github.com/zautumnz/keai/lexer"
+	"github.com/zautumnz/keai/token"
+	"github.com/zautumnz/keai/utils"
 )
 
 // prefix Parse function

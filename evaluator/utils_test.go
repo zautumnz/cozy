@@ -3,7 +3,7 @@ package evaluator
 import (
 	"testing"
 
-	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/keai/object"
 )
 
 func TestIsNumber(t *testing.T) {

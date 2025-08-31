@@ -5,10 +5,10 @@ let b:did_indent = 1
 
 setlocal nolisp
 setlocal autoindent
-setlocal indentexpr=CozyIndent(v:lnum)
+setlocal indentexpr=KeaiIndent(v:lnum)
 setlocal indentkeys+=<:>,0=},0=)
 
-if exists("*CozyIndent")
+if exists("*KeaiIndent")
     finish
 endif
 
@@ -16,7 +16,7 @@ endif
 let s:cpo_save = &cpo
 set cpo&vim
 
-function! CozyIndent(lnum) abort
+function! KeaiIndent(lnum) abort
     let prevlnum = prevnonblank(a:lnum-1)
     if prevlnum == 0
         " top of file

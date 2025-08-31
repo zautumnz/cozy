@@ -1,6 +1,6 @@
-# cozy's built-in http server is significantly faster than node with express,
+# keai's built-in http server is significantly faster than node with express,
 # with a similar API, at least for simple examples.
-# ab shows roughly 5000 rps for express, and 14000 for cozy.
+# ab shows roughly 5000 rps for express, and 14000 for keai.
 
 let app = http.server()
 app.static("./")
@@ -38,7 +38,7 @@ app.route("/form", ["POST"], fn (req) {
     print(req.form)
     # req.files will be a hash of input name (string) to array of hashes;
     # the file hashes will be original file name (string) and
-    # a cozy file object (stored in the os tempdir)
+    # a keai file object (stored in the os tempdir)
     print(req.files)
     return { "status_code": 201 }
 })

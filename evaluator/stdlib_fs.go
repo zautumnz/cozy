@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/keai/object"
 )
 
 // array = fs.glob("/etc/*.conf")

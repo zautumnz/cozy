@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/keai/object"
 )
 
 // Code based on github.com/kirinlabs/HttpRequest, apache 2.0 licensed

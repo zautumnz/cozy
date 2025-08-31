@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zautumnz/cozy/token"
+	"github.com/zautumnz/keai/token"
 )
 
 // Node reresents a node.

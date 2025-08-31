@@ -10,15 +10,15 @@ import (
 	"strings"
 
 	"github.com/chzyer/readline"
-	"github.com/zautumnz/cozy/evaluator"
-	"github.com/zautumnz/cozy/lexer"
-	"github.com/zautumnz/cozy/object"
-	"github.com/zautumnz/cozy/parser"
-	"github.com/zautumnz/cozy/utils"
+	"github.com/zautumnz/keai/evaluator"
+	"github.com/zautumnz/keai/lexer"
+	"github.com/zautumnz/keai/object"
+	"github.com/zautumnz/keai/parser"
+	"github.com/zautumnz/keai/utils"
 )
 
 func getHistorySize() int {
-	val := os.Getenv("COZY_HISTSIZE")
+	val := os.Getenv("KEAI_HISTSIZE")
 	l, e := strconv.Atoi(val)
 	if e != nil || val == "" {
 		return 1000
@@ -51,7 +51,7 @@ func getHomeBasedFile(path string) string {
 
 // init file idea, but not code, taken from github.com/abs-lang
 func getInitFile() string {
-	filePath := getHomeBasedFile(".cozy_init")
+	filePath := getHomeBasedFile(".keai_init")
 	s, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		return ""
@@ -75,7 +75,7 @@ func Start(in io.Reader, out io.Writer, stdlib string) {
 
 	l, err := readline.NewEx(&readline.Config{
 		Prompt:            "> ",
-		HistoryFile:       getHomeBasedFile(".cozy_history"),
+		HistoryFile:       getHomeBasedFile(".keai_history"),
 		InterruptPrompt:   "^C",
 		EOFPrompt:         "exit",
 		HistorySearchFold: true,

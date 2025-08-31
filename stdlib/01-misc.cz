@@ -12,8 +12,8 @@ let sys.STDOUT = fs.open("!STDOUT!")
 let sys.STDERR = fs.open("!STDERR!")
 
 let sys.in_repl = fn () {
-    'sys.in_repl returns true if the current cozy process is in a repl'
-    return sys.getenv("COZY_RUNNING_IN_REPL") == "true"
+    'sys.in_repl returns true if the current keai process is in a repl'
+    return sys.getenv("KEAI_RUNNING_IN_REPL") == "true"
 }
 
 let util.array_from = fn () {
@@ -102,7 +102,7 @@ let util.memoize = fn (f) {
     and looks up results based on arguments in its internal cache.'
     mutable results = {}
     return fn () {
-        let res = util.array_from(...).join("__cozy__memo__arg__")
+        let res = util.array_from(...).join("__keai__memo__arg__")
         if (results.keys().includes?(res)) {
             return results[res]
         }

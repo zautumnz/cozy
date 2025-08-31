@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zautumnz/cozy/utils"
+	"github.com/zautumnz/keai/utils"
 )
 
 // Environment stores our functions, variables, constants, etc.

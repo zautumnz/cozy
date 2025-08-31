@@ -3,13 +3,13 @@ package evaluator
 import (
 	"strings"
 
-	"github.com/zautumnz/cozy/ast"
-	"github.com/zautumnz/cozy/lexer"
-	"github.com/zautumnz/cozy/object"
-	"github.com/zautumnz/cozy/parser"
+	"github.com/zautumnz/keai/ast"
+	"github.com/zautumnz/keai/lexer"
+	"github.com/zautumnz/keai/object"
+	"github.com/zautumnz/keai/parser"
 )
 
-// Converts a valid JSON string to a cozy value
+// Converts a valid JSON string to a keai value
 func jsonDeserialize(args ...OBJ) OBJ {
 	s := args[0].(*object.String)
 	str := strings.TrimSpace(s.Value)
@@ -60,8 +60,8 @@ func jsonDeserialize(args ...OBJ) OBJ {
 	)
 }
 
-// Converts a cozy value to a JSON string
-// Every cozy object (type) has a JSON method, so this is easy
+// Converts a keai value to a JSON string
+// Every keai object (type) has a JSON method, so this is easy
 func jsonSerialize(args ...OBJ) OBJ {
 	indent := false
 	if len(args) > 1 {

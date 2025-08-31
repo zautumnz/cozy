@@ -1,4 +1,4 @@
-#!/usr/bin/env cozy
+#!/usr/bin/env keai
 
 # all args
 let x = fn () {
@@ -14,7 +14,7 @@ x()
 
 # flags by name
 # try with:
-# ./cozy ./examples/arguments.cz --foo=bar --asdf ghjkl --qwerty -x
+# ./keai ./examples/arguments.keai --foo=bar --asdf ghjkl --qwerty -x
 print(sys.flag("foo"))
 print(sys.flag("asdf"))
 print(sys.flag("qwerty"))

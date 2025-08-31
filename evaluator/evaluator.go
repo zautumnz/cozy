@@ -10,11 +10,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zautumnz/cozy/ast"
-	"github.com/zautumnz/cozy/lexer"
-	"github.com/zautumnz/cozy/object"
-	"github.com/zautumnz/cozy/parser"
-	"github.com/zautumnz/cozy/utils"
+	"github.com/zautumnz/keai/ast"
+	"github.com/zautumnz/keai/lexer"
+	"github.com/zautumnz/keai/object"
+	"github.com/zautumnz/keai/parser"
+	"github.com/zautumnz/keai/utils"
 )
 
 // pre-defined objects
@@ -213,7 +213,7 @@ func evalBlockStatement(block *ast.BlockStatement, env *ENV) OBJ {
 }
 
 // EvalModule evaluates the named module and returns a *object.Module object
-// This creates a whole new cozy instance (lexer, parser, env, and evaluator),
+// This creates a whole new keai instance (lexer, parser, env, and evaluator),
 // which isn't ideal, but we also do this when working with string
 // interpolation.
 func EvalModule(name string) OBJ {
@@ -1050,7 +1050,7 @@ func objectGetMethod(o, key OBJ, env *ENV) (ret OBJ, ok bool) {
 		// If we reach this point then the invokation didn't
 		// succeed, that probably means that the function wasn't
 		// implemented in go.
-		// So now we want to look for it in cozy, and we have
+		// So now we want to look for it in keai, and we have
 		// enough details to find the appropriate function.
 		//  * We have the object involved.
 		//  * We have the type of that object.

@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"regexp"
 
-	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/keai/object"
 )
 
 // Async and await are on code from github.com/Gurpartap/async, Apache 2.0

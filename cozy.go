@@ -1,5 +1,5 @@
 // Simple general-purpose interpreted programming language.
-// See the docs at github.com/zautumnz/cozy.
+// See the docs at github.com/zautumnz/keai.
 
 package main
 
@@ -12,16 +12,16 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zautumnz/cozy/evaluator"
-	"github.com/zautumnz/cozy/lexer"
-	"github.com/zautumnz/cozy/object"
-	"github.com/zautumnz/cozy/parser"
-	"github.com/zautumnz/cozy/repl"
-	"github.com/zautumnz/cozy/utils"
+	"github.com/zautumnz/keai/evaluator"
+	"github.com/zautumnz/keai/lexer"
+	"github.com/zautumnz/keai/object"
+	"github.com/zautumnz/keai/parser"
+	"github.com/zautumnz/keai/repl"
+	"github.com/zautumnz/keai/utils"
 )
 
-// COZY_VERSION is replaced by go build in makefile
-var COZY_VERSION = "cozy-version"
+// KEAI_VERSION is replaced by go build in makefile
+var KEAI_VERSION = "keai-version"
 
 //go:embed stdlib
 var stdlibFs embed.FS
@@ -36,7 +36,7 @@ func getStdlibString() string {
 			if err != nil {
 				return err
 			}
-			if strings.HasSuffix(path, ".cz") {
+			if strings.HasSuffix(path, ".keai") {
 				c, err := ioutil.ReadFile(path)
 				if err != nil {
 					return err
@@ -53,7 +53,7 @@ func getStdlibString() string {
 
 // Implemention of "version()" function.
 func versionFn(args ...object.Object) object.Object {
-	return &object.String{Value: COZY_VERSION}
+	return &object.String{Value: KEAI_VERSION}
 }
 
 // Execute the supplied string as a program.
@@ -83,7 +83,7 @@ func Execute(input string) int {
 	//  Now evaluate the code the user wanted to load.
 	//  Note that here our environment will still contain
 	// the code we just loaded from our data-resource
-	//  (i.e. Our cozy-based standard library.)
+	//  (i.e. Our keai-based standard library.)
 	evaluator.Eval(program, env)
 	return 0
 }
@@ -102,7 +102,7 @@ func main() {
 
 	// Showing the version?
 	if *vers {
-		fmt.Printf("cozy %s\n", COZY_VERSION)
+		fmt.Printf("keai %s\n", KEAI_VERSION)
 		utils.ExitConditionally(0)
 	}
 
@@ -120,7 +120,7 @@ func main() {
 	if len(flag.Args()) > 0 {
 		input, err = ioutil.ReadFile(os.Args[1])
 	} else {
-		fmt.Printf("cozy version %s\n", COZY_VERSION)
+		fmt.Printf("keai version %s\n", KEAI_VERSION)
 		fmt.Println("Use ctrl+d to quit")
 		repl.Start(os.Stdin, os.Stdout, getStdlibString())
 	}

@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/zautumnz/cozy/object"
+	"github.com/zautumnz/keai/object"
 )
 
 func mathAbs(args ...OBJ) OBJ {
